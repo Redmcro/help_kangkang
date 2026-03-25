@@ -89,13 +89,30 @@ help_kangkang/
 ```
 
 **核心循环 `processAge()`**：
-1. 执行年龄衰减 (`property.ageDecay()`)
-2. 计算被动收入 (`property.earnPassiveIncome()`)
-3. 死亡检查 (hp ≤ 0 或 age > 100)
-4. 获取当前年龄事件池 (`eventMgr.getPool()`)
-5. 优先级选取事件 (`eventMgr.pickPrioritized()`)
-6. 执行事件 → 应用效果 → 记录时间线
-7. 年龄 +1，调度下一轮
+1. 获取当前年龄 `age`
+2. 执行年龄衰减 (`property.ageDecay()`)
+3. 计算被动收入 (`property.earnPassiveIncome()`)
+4. 死亡检查 (`isDead()` → hp ≤ 0，`isMaxAge()` → age > 100)
+5. 取最新状态快照 (`property.toJSON()`)
+6. 获取当前年龄事件池 (`eventMgr.getPool(age, state)`)
+7. 优先级选取事件 (`eventMgr.pickPrioritized(pool)`)
+8. 执行事件 → 应用效果 → 记录时间线
+9. 调用 `advanceAge()` → age +1 + 调度下一轮
+
+**引擎核心方法**：
+
+| 方法 | 功能 |
+|:---|:---|
+| `init()` | 异步加载 stages/buffs/events 数据 |
+| `start()` | 开局：扣金币、重置状态、应用 Buff、启动循环 |
+| `processAge()` | 单轮核心循环（衰减→收入→事件→递进） |
+| `advanceAge()` | 统一的年龄 +1 + `scheduleNext()` 调度 |
+| `showChoice(ev)` | 暂停循环，通过回调显示选择面板 |
+| `makeChoice(choice)` | 处理玩家选择，应用效果和 Flag |
+| `endGame(cause, isWin)` | 结算：更新传世数据 + 触发结束回调 |
+| `emitEvent(text, type)` | 触发 `onEvent` 回调的辅助方法 |
+| `emitUI()` | 触发 `onUpdateUI` 回调的辅助方法 |
+| `backToStart()` | 重新加载传世存档（返回开始界面用） |
 
 **回调机制**（引擎不直接操作 DOM，通过回调通知 UI）：
 
@@ -107,6 +124,7 @@ help_kangkang/
 | `onHideChoice()` | 选择完成 | 隐藏选择面板 |
 | `onGameEnd(data)` | 游戏结束 | 显示结束画面 |
 | `onAchievement(text)` | 成就解锁 | 弹出成就提示 |
+| `onError(msg)` | 初始化失败 / 金币不足 | 显示错误提示 |
 
 ---
 
@@ -118,14 +136,23 @@ help_kangkang/
 
 | 方法 | 功能 |
 |:---|:---|
-| `load()` | 异步加载 `events.json` |
+| `load()` | 异步加载 `events.json`（含 try/catch 错误处理） |
 | `reset()` | 清空已触发事件集合 |
 | `getPool(age, state)` | 获取当前年龄 + 状态下可触发的事件池 |
 | `pick(pool)` | 加权随机选取一个事件 |
 | `pickPrioritized(pool)` | 优先级选取：choice > special > 普通 > filler |
 | `execute(id, ev, state)` | 执行事件，处理分支条件，返回结果 |
-| `executeChoice(choice, state)` | 处理玩家选择，支持三种模式 |
+| `executeChoice(choice, state)` | 处理玩家选择，支持三种模式（含 luck 修正） |
 | `isChoiceLocked(choice, state)` | 检查选项是否因属性不足被锁定 |
+| `getLockReason(choice)` | 获取选项锁定原因的提示文本 |
+
+#### 分支 Fallback 机制
+
+`execute()` 处理 `branch` 数组时：
+- 遍历每个分支，**跳过** `cond` 为空对象 `{}` 的分支
+- 第一个满足条件的分支被选中
+- 如果所有有条件的分支都不满足，返回事件的主 `text`
+- **约定**：空 `cond` 分支放在数组最后作为 fallback（不会被条件匹配选中）
 
 #### 条件检查系统
 
@@ -159,31 +186,32 @@ help_kangkang/
 
 #### 属性定义
 
-| 属性 | 键名 | 范围 | lifeRestart 对应 |
-|:---|:---|:---|:---|
-| 健康 | `hp` | 0-100 (clamp) | STR (体质) |
-| 智力 | `int` | 0-100 (clamp) | INT |
-| 快乐 | `hap` | 0-100 (clamp) | SPR (精神) |
-| 魅力 | `chr` | 0-100 (clamp) | CHR |
-| 运气 | `luck` | 无限制 | — |
-| 存款 | `money` | 无限制 | MNY (家境) |
-| 总收入 | `earned` | 累计 | — |
-| 年龄 | `age` | 0-100+ | AGE |
-| 存活 | `alive` | bool | LIF |
-| 职业 | `job` | string | — |
-| 月薪 | `salary` | number | — |
+| 属性 | 键名 | 初始值 | 范围 | lifeRestart 对应 |
+|:---|:---|:---|:---|:---|
+| 健康 | `hp` | 55 | 0-100 (clamp) | STR (体质) |
+| 智力 | `int` | 50 | 0-100 (clamp) | INT |
+| 快乐 | `hap` | 60 | 0-100 (clamp) | SPR (精神) |
+| 魅力 | `chr` | 45 | 0-100 (clamp) | CHR |
+| 运气 | `luck` | 50 | 无限制 | — |
+| 存款 | `money` | 0 | 无限制 | MNY (家境) |
+| 总收入 | `earned` | 0 | 累计 | — |
+| 年龄 | `age` | 0 | 0-100+ | AGE |
+| 存活 | `alive` | true | bool | LIF |
+| 职业 | `job` | `'none'` | string | — |
+| 月薪 | `salary` | 0 | number | — |
 
 #### 特殊 Flag 系统
 
 游戏通过 `property.set(key, val)` 设置逻辑标记：
 
-| Flag | 含义 | 设置时机 |
-|:---|:---|:---|
-| `aiSurvived` | 是否成功抵抗AI浪潮 | `ai_choice` 选择成功 |
-| `job` | 当前职业 | `first_job` / `ai_replace` / `rider_fate` |
-| `college` | 大学类型 | 高考结果 |
-| `married` | 婚姻状态 | 结婚事件 |
-| `indieSuccess` | 独立游戏成功 | 独立游戏事件 |
+| Flag | 初始值 | 含义 | 设置时机 |
+|:---|:---|:---|:---|
+| `aiSurvived` | `false` | 是否成功抵抗AI浪潮 | `ai_choice` 选择成功 |
+| `job` | `'none'` | 当前职业 | `first_job` / `ai_replace` / `rider_fate` |
+| `college` | `''` | 大学类型 | 高考结果 |
+| `highSchool` | `''` | 高中类型 | 中考结果 |
+| `married` | `false` | 婚姻状态 | 结婚事件 |
+| `indieSuccess` | `false` | 独立游戏成功 | 独立游戏事件 |
 
 #### 年龄衰减机制
 
@@ -195,11 +223,20 @@ age >= 80: hp 额外 -3~6
 
 #### 被动收入公式
 
+**前置条件**：`age >= 23` 且 `salary > 0` 且 `job !== '失业'`
+
 ```
 收入 = floor(salary × 0.2 × 年龄系数 × (1 + int/200))
 
-年龄系数：16岁=1.5, 23岁=3, 30岁=5, 40岁=6, 50岁=4
+年龄系数（累进覆盖）：
+  age >= 16 → 1.5
+  age >= 23 → 3
+  age >= 30 → 5
+  age >= 40 → 6
+  age >= 50 → 4（下降，模拟职业后期）
 ```
+
+> **注意**：退休事件会将 `salary` 归零，从而自动停止被动收入。加薪/跳槽事件会修改 `salary` 影响后续收入。
 
 ---
 
@@ -216,6 +253,8 @@ age >= 80: hp 额外 -3~6
   "wins": 0       // 改命成功次数
 }
 ```
+
+**防护机制**：`loadLegacy()` 和 `saveLegacy()` 均包含 `try/catch`，存档损坏时自动回退到默认值。
 
 ---
 
@@ -272,7 +311,8 @@ age >= 80: hp 额外 -3~6
   "text": "🤝 分享玩具",
   "hint": "魅力+10",
   "result": "小霸王哭了，你们成了好朋友",
-  "effect": { "chr": 10 }
+  "effect": { "chr": 10 },
+  "setFlag": "sharedToy"   // 可选：设置逻辑标记
 }
 ```
 
@@ -288,6 +328,14 @@ age >= 80: hp 额外 -3~6
   ]
 }
 ```
+
+**Luck 修正**：`luck` 属性会影响概率权重：
+```
+luckMod = (luck - 50) / 100    // luck 50 = 中性，范围 -0.5 ~ +0.5
+第一个分支权重 × (1 + luckMod)  // luck 高 → 更可能触发靠前（通常更好）的结果
+其他分支权重 × (1 - luckMod×0.5)
+```
+> "欧皇附体" Buff（luck +20）会让 luckMod = +0.2，第一个分支概率提升 ~20%。
 
 #### 模式C：条件判定（require）
 ```jsonc
@@ -352,7 +400,18 @@ startScreen ──(开始)──▶ gameScreen ──(死亡/通关)──▶ en
      └──────────────────(重新开始)──────────────────────┘
 ```
 
-### 4.3 事件类型 → 视觉映射
+### 4.3 已实现的 UI 功能
+
+| 功能 | 实现方式 |
+|:---|:---|
+| **属性变化动画** | `updateStat()` 比较新旧值，增加加 `.stat-change-up`（绿闪）/ `.stat-change-down`（红闪）CSS 类 |
+| **速度控制** | 三档速度按钮 (慢速 1500ms / 正常 800ms / 快速 300ms)，事件委派绑定 |
+| **事件流限制** | `while (children.length > 100)` 移除最早的 DOM 节点 |
+| **选择面板** | 显示时自动 `scrollIntoView`，锁定选项显示原因 |
+| **成就/错误提示** | 复用 Achievement Toast 组件，`onError` 前缀 ⚠️ |
+| **星空背景** | 60 个随机定位 `.star` 元素 + CSS 动画 |
+
+### 4.4 事件类型 → 视觉映射
 
 | type | 左边框颜色 | 背景渐变 | 文字权重 |
 |:---|:---|:---|:---|
@@ -524,9 +583,18 @@ startScreen ──(开始)──▶ gameScreen ──(死亡/通关)──▶ en
 - [x] 中考/高考结果显示内部标记文本 → 已替换为正常描述
 - [x] `uni_start` 分支用 `_flag` 键名导致 985 分支失效 → 已改为 `gaokao_hard: true`
 - [x] `exam1`/`hs_game`/`science` 叙事事件可重复触发 → 已加 `once: true`
+- [x] `processAge()` 中 `toJSON()` 快照时机过早 → 移至衰减/收入后取
+- [x] `rider_life` 空 `cond` 分支放在首位导致其余分支不执行 → 已移至最后
+- [x] `luck` 属性无实际效果 → 已影响 `chanceBased` 概率
+- [x] 年龄递增逻辑分散三处 → 统一为 `advanceAge()` 方法
+- [x] `start()` 缺少 `clearTimeout` → 已添加
+- [x] `fetch` 无错误处理 → engine.js / events.js 已添加 try/catch
+- [x] `localStorage` 无防护 → save.js 已添加 try/catch
+- [x] 加薪/跳槽不修改 salary → 已修复
+- [x] 退休后仍有被动收入 → 退休事件已归零 salary
 
 ### 待处理
-- [ ] 分支事件的 fallback（空 `cond`）行为需验证边界情况
+- [ ] 验证所有分支事件的空 `cond` fallback 是否均在最后位置
 
 ### 第三阶段：内容扩充
 - [ ] 更多童年事件（丰富 0-12 岁体验）

@@ -29,13 +29,20 @@ export class GameEngine {
     }
 
     async init() {
-        const [stagesResp, buffsResp] = await Promise.all([
-            fetch('./data/stages.json'),
-            fetch('./data/buffs.json'),
-            this.eventMgr.load()
-        ]);
-        this.stages = await stagesResp.json();
-        this.buffs = await buffsResp.json();
+        try {
+            const [stagesResp, buffsResp] = await Promise.all([
+                fetch('./data/stages.json'),
+                fetch('./data/buffs.json'),
+                this.eventMgr.load()
+            ]);
+            if (!stagesResp.ok) throw new Error('Failed to load stages.json');
+            if (!buffsResp.ok) throw new Error('Failed to load buffs.json');
+            this.stages = await stagesResp.json();
+            this.buffs = await buffsResp.json();
+        } catch (e) {
+            console.error('Game init failed:', e);
+            if (this.onError) this.onError('游戏数据加载失败，请刷新重试');
+        }
     }
 
     getStage(age) {
@@ -81,6 +88,9 @@ export class GameEngine {
             saveLegacy(this.legacy);
         }
 
+        // Clear any running timer from previous game
+        clearTimeout(this.autoTimer);
+
         this.property.reset();
         this.eventMgr.reset();
         this.timeline = [];
@@ -110,8 +120,7 @@ export class GameEngine {
 
     processAge() {
         if (!this.property.get('alive')) return;
-        const state = this.property.toJSON();
-        const age = state.age;
+        const age = this.property.get('age');
 
         // Age decay
         this.property.ageDecay();
@@ -119,7 +128,7 @@ export class GameEngine {
         // Passive income
         this.property.earnPassiveIncome();
 
-        // Death check
+        // Death check (after decay)
         if (this.property.isDead()) {
             this.endGame(pick(['体力不支', '在睡梦中安详离去', '心脏骤停']));
             return;
@@ -129,21 +138,20 @@ export class GameEngine {
             return;
         }
 
-        // Get event pool
-        const pool = this.eventMgr.getPool(age, this.property.toJSON());
+        // Get event pool (fresh state after decay/income)
+        const state = this.property.toJSON();
+        const pool = this.eventMgr.getPool(age, state);
         if (!pool.length) {
             this.emitEvent('平平淡淡的一年。', 'neutral');
             this.emitUI();
-            this.property.set('age', age + 1);
-            this.scheduleNext();
+            this.advanceAge();
             return;
         }
 
         // Pick event (prioritized)
         const picked = this.eventMgr.pickPrioritized(pool);
         if (!picked) {
-            this.property.set('age', age + 1);
-            this.scheduleNext();
+            this.advanceAge();
             return;
         }
 
@@ -151,7 +159,7 @@ export class GameEngine {
 
         // Choice event = pause for user input
         if (ev.type === 'choice' && ev.choices) {
-            const result = this.eventMgr.execute(id, ev, this.property.toJSON());
+            const result = this.eventMgr.execute(id, ev, state);
             this.emitEvent(result.text, 'special');
             this.emitUI();
             this.showChoice(ev);
@@ -159,7 +167,7 @@ export class GameEngine {
         }
 
         // Normal event = execute and continue
-        const result = this.eventMgr.execute(id, ev, this.property.toJSON());
+        const result = this.eventMgr.execute(id, ev, state);
         this.property.applyEffect(result.effect);
 
         this.emitEvent(result.text, result.type || 'neutral');
@@ -180,8 +188,7 @@ export class GameEngine {
             return;
         }
 
-        this.property.set('age', age + 1);
-        this.scheduleNext();
+        this.advanceAge();
     }
 
     // Show choice panel
@@ -229,8 +236,7 @@ export class GameEngine {
             return;
         }
 
-        this.property.set('age', this.property.get('age') + 1);
-        this.scheduleNext();
+        this.advanceAge();
     }
 
     // End the game
@@ -258,6 +264,12 @@ export class GameEngine {
                 timeline: this.timeline.slice(-8)
             });
         }
+    }
+
+    // Advance age and schedule next tick
+    advanceAge() {
+        this.property.set('age', this.property.get('age') + 1);
+        this.scheduleNext();
     }
 
     // Helpers

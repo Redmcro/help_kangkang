@@ -311,11 +311,11 @@
     "type": "choice", "title": "📈 加薪谈判", "desc": "你要跟老板谈加薪吗？",
     "choices": [
       {"text":"💪 据理力争","hint":"魅力判定","require":{"chr":50},
-        "success":"加薪成功！月薪涨了50%！","successEffect":{"money":300},
+        "success":"加薪成功！月薪涨了50%！","successEffect":{"money":300,"salary":75},
         "fail":"老板：\"公司今年效益不好...\"你默默回到工位","failEffect":{"hap":-5}},
       {"text":"🤐 算了不提了","hint":"安全","result":"又是佛系的一年。工资不变，物价在涨","effect":{"hap":-5}},
       {"text":"🚀 跳槽！","hint":"需要¥1000","require":{"money":1000},
-        "success":"裸辞+面试，成功跳槽！薪资翻倍！","successEffect":{"money":500},
+        "success":"裸辞+面试，成功跳槽！薪资翻倍！","successEffect":{"money":500,"salary":100},
         "fail":"面试全挂了...只好灰溜溜回去上班","failEffect":{"hap":-10,"money":-500}}
     ]
   },
@@ -418,10 +418,10 @@
     "text": "送外卖的日子...风里雨里，日复一日。",
     "type": "bad", "effect": {"hp":-8,"hap":-5,"money":40},
     "branch": [
-      {"cond":{},"text":"暴雨中送外卖，淋成落汤鸡。顾客说：你怎么才来？","type":"bad","effect":{"hp":-8,"hap":-5,"money":40}},
       {"cond":{"hp":">40"},"text":"送餐路上摔了一跤，外卖洒了，赔了¥30","type":"bad","effect":{"hp":-10,"money":-30}},
       {"cond":{"hap":">30"},"text":"今天跑了58单，赚了¥200。腿已经不是自己的了","effect":{"hp":-5,"money":200}},
-      {"cond":{"int":">50"},"text":"导航让你逆行，差点被交警抓到","type":"bad","effect":{"hap":-5,"money":40}}
+      {"cond":{"int":">50"},"text":"导航让你逆行，差点被交警抓到","type":"bad","effect":{"hap":-5,"money":40}},
+      {"cond":{},"text":"暴雨中送外卖，淋成落汤鸡。顾客说：你怎么才来？","type":"bad","effect":{"hp":-8,"hap":-5,"money":40}}
     ]
   },
 
@@ -525,10 +525,10 @@
   "retire": {
     "age": [55,65], "once": true,
     "text": "康康退休了。回顾一生...",
-    "type": "good", "effect": {"hap":10},
+    "type": "good", "effect": {"hap":10,"salary":0},
     "branch": [
-      {"cond":{"job":"=外卖骑手"},"text":"康康终于跑不动了，退休了。膝盖已经废了。","effect":{"hap":5}},
-      {"cond":{"aiSurvived":true},"text":"康康光荣退休了！作为技术大拿的职业生涯画上完美句号。","type":"special","effect":{"hap":15}}
+      {"cond":{"job":"=外卖骑手"},"text":"康康终于跑不动了，退休了。膝盖已经废了。","effect":{"hap":5,"salary":0}},
+      {"cond":{"aiSurvived":true},"text":"康康光荣退休了！作为技术大拿的职业生涯画上完美句号。","type":"special","effect":{"hap":15,"salary":0}}
     ]
   },
   "health_check": {

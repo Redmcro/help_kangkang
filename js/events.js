@@ -6,8 +6,14 @@ export class EventManager {
     #usedEvents = new Set();
 
     async load() {
-        const resp = await fetch('./data/events.json');
-        this.#events = await resp.json();
+        try {
+            const resp = await fetch('./data/events.json');
+            if (!resp.ok) throw new Error('Failed to load events.json');
+            this.#events = await resp.json();
+        } catch (e) {
+            console.error('Event loading failed:', e);
+            this.#events = {};
+        }
     }
 
     reset() {
@@ -86,17 +92,25 @@ export class EventManager {
 
     // Execute a choice option
     executeChoice(choice, state) {
-        // Chance-based choices (random outcome)
+        // Chance-based choices (random outcome, affected by luck)
         if (choice.chanceBased && choice.branches) {
-            const total = choice.branches.reduce((s, b) => s + (b.chance || 1), 0);
+            // Luck modifier: luck 50 = neutral, >50 favors first branch, <50 favors last
+            const luckMod = ((state.luck || 50) - 50) / 100; // -0.5 to +0.5
+            const branches = choice.branches.map((b, i) => {
+                const baseChance = b.chance || 1;
+                // Positive luck boosts earlier (better) branches
+                const modifier = 1 + luckMod * (i === 0 ? 1 : -0.5);
+                return { ...b, adjustedChance: Math.max(0.1, baseChance * modifier) };
+            });
+            const total = branches.reduce((s, b) => s + b.adjustedChance, 0);
             let r = Math.random() * total;
-            for (const b of choice.branches) {
-                r -= (b.chance || 1);
+            for (const b of branches) {
+                r -= b.adjustedChance;
                 if (r <= 0) {
                     return { text: b.result, effect: b.effect || {}, type: b.type };
                 }
             }
-            const last = choice.branches[choice.branches.length - 1];
+            const last = branches[branches.length - 1];
             return { text: last.result, effect: last.effect || {}, type: last.type };
         }
 
