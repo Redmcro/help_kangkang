@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🐷 康康逆天改命</title>
+<meta name="description" content="帮助Unity游戏程序员康康改变被AI取代的命运！一款趣味人生模拟游戏。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="stars" id="stars"></div>
+
+<!-- ===== START SCREEN ===== -->
+<div class="screen active" id="startScreen"><div class="container">
+  <header class="logo">
+    <h1>🐷 康康逆天改命</h1>
+    <div class="sub">康康是一名Unity游戏程序员<br>但命运的尽头是<em>被AI取代，沦为外卖骑手</em><br>帮助康康改变命运！</div>
+  </header>
+  <section class="buff-section">
+    <h3>🪙 转世加持 <span class="coins" id="legacyCoins">0</span></h3>
+    <div class="buff-grid" id="buffGrid"></div>
+  </section>
+  <button class="start-btn" id="startBtn">🚀 开始康康的人生</button>
+  <p class="best-record" id="bestRecord"></p>
+</div></div>
+
+<!-- ===== GAME SCREEN ===== -->
+<div class="screen" id="gameScreen"><div class="container">
+  <div class="game-top">
+    <div><div class="gt-stage" id="gStage">👶 婴幼儿</div></div>
+    <div style="text-align:center"><div class="gt-age" id="gAge">0</div><div class="gt-label">岁</div></div>
+    <div style="text-align:right"><div class="gt-money" id="gMoney">¥0</div><div class="gt-label">存款</div></div>
+  </div>
+  <div class="stats-bar">
+    <div class="sb-item si-hp"><div class="si-icon">❤️</div><div class="si-val" id="vHp">50</div><div class="si-bar"><div class="si-fill" id="bHp" style="width:50%"></div></div></div>
+    <div class="sb-item si-int"><div class="si-icon">🧠</div><div class="si-val" id="vInt">50</div><div class="si-bar"><div class="si-fill" id="bInt" style="width:50%"></div></div></div>
+    <div class="sb-item si-hap"><div class="si-icon">😊</div><div class="si-val" id="vHap">50</div><div class="si-bar"><div class="si-fill" id="bHap" style="width:50%"></div></div></div>
+    <div class="sb-item si-chr"><div class="si-icon">✨</div><div class="si-val" id="vChr">50</div><div class="si-bar"><div class="si-fill" id="bChr" style="width:50%"></div></div></div>
+  </div>
+  <div class="speed-ctrl">
+    <button data-speed="1500" id="sp1">慢速</button>
+    <button data-speed="800" class="active" id="sp2">正常</button>
+    <button data-speed="300" id="sp3">快速</button>
+  </div>
+  <div class="event-stream" id="eventStream"></div>
+  <div class="choice-panel" id="choicePanel">
+    <div class="cp-title" id="cpTitle"></div>
+    <div class="cp-desc" id="cpDesc"></div>
+    <div id="cpBtns"></div>
+  </div>
+</div></div>
+
+<!-- ===== END SCREEN ===== -->
+<div class="screen" id="endScreen"><div class="end-screen">
+  <div class="end-card">
+    <div class="big-icon" id="endIcon">💀</div>
+    <h2 id="endTitle" class="lose">康康的人生结束了</h2>
+    <div class="end-desc" id="endDesc"></div>
+    <div class="end-grid" id="endGrid"></div>
+    <div class="end-timeline" id="endTimeline" style="display:none"></div>
+    <div class="legacy-earned" id="endLegacy"></div>
+    <button class="restart-btn" id="restartBtn">🔄 转世重来</button>
+  </div>
+</div></div>
+
+<!-- ===== ACHIEVEMENT TOAST ===== -->
+<div class="achievement-toast" id="achieveToast">
+  <div class="at-icon">🏆</div>
+  <div class="at-info">
+    <div class="at-title">成就解锁！</div>
+    <div class="at-name" id="achieveName"></div>
+  </div>
+</div>
+
+<!-- Module script — no inline JS! -->
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

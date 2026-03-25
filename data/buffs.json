@@ -1,0 +1,8 @@
+[
+  {"id":"school","icon":"🎓","name":"重点小学","desc":"智力+10","cost":0,"effect":{"int":10}},
+  {"id":"health","icon":"💪","name":"强壮体质","desc":"健康+15","cost":20,"effect":{"hp":15}},
+  {"id":"charm","icon":"🌟","name":"颜值逆袭","desc":"魅力+15","cost":20,"effect":{"chr":15}},
+  {"id":"rich","icon":"💰","name":"小金库","desc":"初始¥500","cost":30,"effect":{"money":500}},
+  {"id":"genius","icon":"🧠","name":"天才大脑","desc":"智力+25","cost":50,"effect":{"int":25}},
+  {"id":"lucky","icon":"🍀","name":"欧皇附体","desc":"运气+30","cost":40,"effect":{"luck":30}}
+]
