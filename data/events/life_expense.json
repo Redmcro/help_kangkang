@@ -321,5 +321,151 @@
     "weight": 0.6,
     "effect": {"money": -300, "hp": -3},
     "postEvent": "第二天康康买了个智能门锁，刷手机就能开门。——又是一笔大开销。"
+  },
+  "life_salary_review_q1": {
+    "month": [3, 3],
+    "text": "第一季度考核结果出来了。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 90,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">60"},
+        "text": "考核优秀！老板大手一挥：'涨薪！从下个月起月薪+2000。' 康康差点跪下来磕头。",
+        "type": "good",
+        "effect": {"salary": 2000, "bossSatisfy": 3}
+      },
+      {
+        "cond": {"bossSatisfy": ">40"},
+        "text": "考核合格。老板说：'保持。' 工资不涨不跌，也算一种稳定。",
+        "type": "neutral",
+        "effect": {}
+      },
+      {
+        "cond": {},
+        "text": "考核不及格。HR委婉地说：'公司对你的薪资做了调整。' 翻译：降薪500。",
+        "type": "bad",
+        "effect": {"salary": -500, "bossSatisfy": -3}
+      }
+    ]
+  },
+  "life_salary_review_q2": {
+    "month": [6, 6],
+    "text": "半年度考核来了。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 90,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">60"},
+        "text": "半年考核优秀！老板说：'表现不错，涨薪2000。' 康康感觉自己离财务自由又近了一小步。",
+        "type": "good",
+        "effect": {"salary": 2000, "bossSatisfy": 3}
+      },
+      {
+        "cond": {"bossSatisfy": ">40"},
+        "text": "半年考核合格。老板点了点头：'继续努力。' 工资不变，至少没降。",
+        "type": "neutral",
+        "effect": {}
+      },
+      {
+        "cond": {},
+        "text": "半年考核不及格。HR约了个会议室谈话：'希望你下半年能有所改善。' 月薪降了500。",
+        "type": "bad",
+        "effect": {"salary": -500, "bossSatisfy": -3}
+      }
+    ]
+  },
+  "life_salary_review_q3": {
+    "month": [9, 9],
+    "text": "第三季度考核结果出来了。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 90,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">60"},
+        "text": "考核优秀！老板说：'年底再加把劲，涨薪2000！' 康康觉得这一年的加班没白费。",
+        "type": "good",
+        "effect": {"salary": 2000, "bossSatisfy": 3}
+      },
+      {
+        "cond": {"bossSatisfy": ">40"},
+        "text": "考核合格。不好不坏。老板说：'年底冲刺一下。' 工资维持现状。",
+        "type": "neutral",
+        "effect": {}
+      },
+      {
+        "cond": {},
+        "text": "考核不及格。老板面色铁青：'再这样下去，你自己想想后果。' 月薪又降了500。",
+        "type": "bad",
+        "effect": {"salary": -500, "bossSatisfy": -3}
+      }
+    ]
+  },
+  "life_rent_increase_01": {
+    "month": [4, 8],
+    "text": "房东发来微信：'小康啊，周边房租都涨了，下个月起涨500吧。' 语气不容商量。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"living_cost": 500}
+  },
+  "life_raise_bonus_01": {
+    "month": [6, 12],
+    "text": "老板心情好，发了一笔项目奖金！虽然不多，但蚊子腿也是肉。",
+    "type": "good",
+    "system": "economy",
+    "weight": 0.5,
+    "include": {"bossSatisfy": ">55"},
+    "effect": {"money": 2000},
+    "postEvent": "康康拿到奖金的第一反应是：够交两个月房租了。"
+  },
+  "life_cost_inflation_01": {
+    "month": [6, 12],
+    "text": "楼下便利店的三明治从8块涨到了12块。奶茶从15涨到了18。康康感受到了通货膨胀的力量。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.7,
+    "once": true,
+    "effect": {"living_cost": 300},
+    "postEvent": "康康开始自己带饭了。虽然只会做蛋炒饭。"
+  },
+  "life_roommate_move_01": {
+    "month": [5, 10],
+    "text": "室友突然说下个月要搬走了！房租从合租变成了独租，直接翻倍。康康紧急在小红书上发了找室友帖。",
+    "type": "choice",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "title": "🏠 室友跑路",
+    "desc": "室友搬走了，房租压力骤增。怎么办？",
+    "choices": [
+      {
+        "text": "🔍 赶紧找新室友",
+        "hint": "碰运气，可能遇到奇葩",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 60, "result": "找到了一个安静的程序员室友，完美！房租恢复正常。", "type": "good", "effect": {"hp": 3, "charm": 2}},
+          {"chance": 40, "result": "新室友每天凌晨打游戏喊麦……康康开始怀念从前安静的日子。", "type": "bad", "effect": {"hp": -5, "brain": -3}}
+        ]
+      },
+      {
+        "text": "💪 咬牙独租",
+        "hint": "自由是贵的",
+        "result": "独享整个房子！虽然贵了不少，但再也不用抢厕所了。",
+        "effect": {"living_cost": 1500, "hp": 5}
+      },
+      {
+        "text": "📦 搬去更便宜的地方",
+        "hint": "省钱但通勤变长",
+        "result": "搬到了郊区，每天通勤两小时。但房租便宜了一半。",
+        "effect": {"living_cost": -500, "hp": -3, "brain": -2}
+      }
+    ]
   }
 }

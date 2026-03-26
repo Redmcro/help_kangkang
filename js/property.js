@@ -40,9 +40,9 @@ export class PropertyManager {
             consecutive_overtime: 0,
             avg_quality: 50,
             total_bugs: 0,
-            salary: 12000,
+            salary: 3000,
             months_bankrupt: 0,
-            living_cost: 6000,
+            living_cost: 2500,
 
             // Story flags
             gamejam_won: false,
@@ -130,8 +130,8 @@ export class PropertyManager {
      * salary (default 15000), living cost -5000.
      */
     monthlyExpense() {
-        const salary = this.#data.salary || 15000;
-        const cost = this.#data.living_cost || 5000;
+        const salary = this.#data.salary || 3000;
+        const cost = this.#data.living_cost || 2500;
         this.set('money', this.#data.money + salary - cost);
     }
 

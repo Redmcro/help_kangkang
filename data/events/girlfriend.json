@@ -603,6 +603,58 @@
     "effect": { "brain": 5, "hp": 3, "gf_rel": 3 },
     "postEvent": "她给你泡了杯热茶：'打不死你的会让你更强。' 你笑了——这鸡汤比真鸡汤管用。"
   },
+  "gf_bigger_house_01": {
+    "month": [4, 12],
+    "text": "女朋友来康康的出租屋看了一眼：'这……这也太小了吧？连个衣柜都没有。我们能不能换个大点的？'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 0.7,
+    "once": true,
+    "include": {"has_girlfriend": true, "month": ">3"},
+    "title": "🏠 换房之争",
+    "desc": "女朋友想换个大点的房子。但大房子意味着更高的房租...",
+    "choices": [
+      {
+        "text": "🏠 换！每月多花1500",
+        "hint": "女朋友开心，但钱包哭泣",
+        "result": "搬进了两室一厅，女朋友开心得不行，当天就网购了一车家具。康康看着账单默默流泪。",
+        "effect": {"living_cost": 1500, "gf_rel": 15, "money": -3000, "hp": 3}
+      },
+      {
+        "text": "💬 商量着来，换个稍大的",
+        "hint": "折中方案，各退一步",
+        "result": "找了个一室一厅带阳台的，月租多800。女朋友说：'勉强吧。' 康康觉得这已经是极限了。",
+        "effect": {"living_cost": 800, "gf_rel": 5, "money": -1500}
+      },
+      {
+        "text": "🙅 现在换不起，再等等",
+        "hint": "实话实说，但女朋友可能不高兴",
+        "result": "女朋友沉默了很久，说了句'好吧'。但之后一个星期都没怎么说话。",
+        "effect": {"gf_rel": -10}
+      }
+    ]
+  },
+  "gf_utility_war_01": {
+    "month": [3, 12],
+    "text": "女朋友说：'空调不能省！你天天加班不在家，我一个人在家热死了你管不管？' 电费水费又要涨了。",
+    "type": "bad",
+    "system": "girlfriend",
+    "weight": 0.6,
+    "include": {"has_girlfriend": true},
+    "filler": true,
+    "effect": {"living_cost": 200, "gf_rel": -3}
+  },
+  "gf_shopping_together_01": {
+    "month": [2, 12],
+    "text": "女朋友拉着康康去逛宜家，说要'提升生活品质'。出来的时候推车上堆了一座小山。",
+    "type": "bad",
+    "system": "girlfriend",
+    "weight": 0.8,
+    "include": {"has_girlfriend": true},
+    "once": true,
+    "effect": {"money": -2500, "gf_rel": 8, "hp": -2, "charm": 2},
+    "postEvent": "康康看着银行卡余额，决定下个月午饭从外卖降级到食堂。"
+  },
   "gf_cooking_01": {
     "month": [1, 12],
     "text": "女朋友心血来潮要给你做一顿大餐。厨房传来乒乒乓乓的声音和一声惨叫。",

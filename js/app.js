@@ -448,8 +448,14 @@ game.onDaySummary = (data) => {
     addEventLineHTML(data.month, data.day, html, data.overtime ? 'bad' : 'neutral');
 };
 game.onChoiceResult = ({ text, deltas }) => {
-    // R3: Show only narrative text, no numeric deltas
-    addEventLine(game.property.get('month'), game.property.get('day'), '→ ' + text, 'choice-made');
+    let deltaStr = '';
+    if (deltas && Object.keys(deltas).length > 0) {
+        const emojiMap = { hp:'❤️', brain:'🧠', money:'💰', bossSatisfy:'👔', shaoye_rel:'🤝少', yimin_rel:'🤝亿', gf_rel:'💕' };
+        deltaStr = ' ' + Object.entries(deltas)
+            .map(([k, v]) => colorDelta(emojiMap[k] || k, v, k === 'money'))
+            .join(' ');
+    }
+    addEventLineHTML(game.property.get('month'), game.property.get('day'), '→ ' + text + deltaStr, 'choice-made');
 };
 game.onError = (msg) => showToast('⚠️ ' + msg);
 

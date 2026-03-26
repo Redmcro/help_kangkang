@@ -26,6 +26,33 @@ const TASK_COMPLEXITY = {
 
 function rng(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
 
+const IDLE_DAY_PHRASES = [
+    '平平无奇的一天。',
+    '今天什么都没发生，康康摸了一天鱼。',
+    '写了几行代码，删了几行代码，净产出为零。',
+    '康康盯着屏幕发呆了一会儿，然后继续发呆。',
+    '今天的咖啡比昨天好喝一点。仅此而已。',
+    'IDE 开了八个小时，有效编码时间：47分钟。',
+    '又是和 Bug 和平共处的一天。',
+    '康康今天的代码提交记录：0 commits。但他很忙。',
+    '今天的站会只开了两分钟，创下了新纪录。',
+    '康康在工位上睡着了，醒来发现没人注意到。'
+];
+
+const STAT_EMOJI = {
+    hp: '❤️', brain: '🧠', money: '💰', bossSatisfy: '👔',
+    shaoye_rel: '🤝少', yimin_rel: '🤝亿', gf_rel: '💕'
+};
+
+function buildDeltaStr(effect) {
+    if (!effect) return '';
+    let parts = [];
+    for (const [key, emoji] of Object.entries(STAT_EMOJI)) {
+        if (effect[key]) parts.push(`${emoji}${effect[key] > 0 ? '+' : ''}${effect[key]}`);
+    }
+    return parts.length > 0 ? ' ' + parts.join(' ') : '';
+}
+
 export class GameEngine {
     constructor() {
         this.property = new PropertyManager();
@@ -80,7 +107,12 @@ export class GameEngine {
         else if (this.selectedBuffs.size < 3) this.selectedBuffs.add(id);
     }
     isBuffSelected(id) { return this.selectedBuffs.has(id); }
-    isBuffLocked(buff) { return buff.cost > this.legacy.coins && !this.selectedBuffs.has(buff.id); }
+    isBuffLocked(buff) {
+        if (this.selectedBuffs.has(buff.id)) return false;
+        let committed = 0;
+        this.selectedBuffs.forEach(id => { const b = this.buffs.find(x => x.id === id); if (b) committed += b.cost; });
+        return buff.cost > (this.legacy.coins - committed);
+    }
     getBuffCost() {
         let cost = 0;
         this.selectedBuffs.forEach(id => { const b = this.buffs.find(x => x.id === id); if (b) cost += b.cost; });
@@ -225,10 +257,11 @@ export class GameEngine {
             const bc = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 5);
             this.property.applyEffect({ brain: -bc });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
+            const bugDelta = buildDeltaStr({ brain: -bc });
             if (stars >= 3) {
-                this.dayReport.events.push('🐛 复杂Bug！康康debug了两小时才找到问题');
+                this.dayReport.events.push('🐛 复杂Bug！康康debug了两小时才找到问题' + bugDelta);
             } else {
-                this.dayReport.events.push('🐛 代码出了Bug，康康花了30分钟手动排查修复');
+                this.dayReport.events.push('🐛 代码出了Bug，康康花了30分钟手动排查修复' + bugDelta);
             }
         }
 
@@ -241,16 +274,18 @@ export class GameEngine {
             this.property.applyEffect({ hp: -hpLoss, brain: -brainLoss });
             this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
             this.dayReport.overtime = true;
+            const overtimeDelta = buildDeltaStr({ hp: -hpLoss, brain: -brainLoss });
 
             const overtime = this.property.get('consecutive_overtime');
             if (overtime >= 5) {
                 this.property.set('consecutive_overtime', 0);
-                this.property.applyEffect({ hp: -rng(5, 10) });
-                this.dayReport.events.push('⚠️ 连续加班5天！强制休息');
+                const extraHpLoss = rng(5, 10);
+                this.property.applyEffect({ hp: -extraHpLoss });
+                this.dayReport.events.push('⚠️ 连续加班5天！强制休息' + buildDeltaStr({ hp: -(hpLoss + extraHpLoss), brain: -brainLoss }));
             } else if (overtime >= 3) {
-                this.dayReport.events.push('⚠️ 连续加班3天，康康的黑眼圈已经遮不住了');
+                this.dayReport.events.push('⚠️ 连续加班3天，康康的黑眼圈已经遮不住了' + overtimeDelta);
             } else {
-                this.dayReport.events.push('⚠️ 质量不达标，康康不得不加班到凌晨');
+                this.dayReport.events.push('⚠️ 质量不达标，康康不得不加班到凌晨' + overtimeDelta);
             }
         } else {
             this.property.set('consecutive_overtime', 0);
@@ -294,9 +329,18 @@ export class GameEngine {
                 }
 
                 this.property.applyEffect(result.effect);
+                const deltaStr = buildDeltaStr(result.effect);
                 if (result.setFlag) this.property.setFlag(result.setFlag);
-                this.emitEvent(result.text, result.type || 'neutral');
-                if (result.postEvent) this.emitEvent(result.postEvent, 'neutral');
+                // Push event text to dayReport only (displayed via emitDayReport)
+                this.dayReport.events.push(result.text + deltaStr);
+                if (result.postEvent) this.dayReport.events.push(result.postEvent);
+                // Event-token linkage: events with tokenCost add to daily usage
+                if (ev.tokenCost) {
+                    this.dayReport.tokensUsed += ev.tokenCost;
+                    const modelId = this.property.get('current_model');
+                    const model = AI_MODELS[modelId];
+                    if (model) this.property.applyEffect({ money: -(ev.tokenCost * model.tokenPrice) });
+                }
                 if (['special', 'good'].includes(result.type)) this.timeline.push({ month, day, text: result.text, type: result.type });
                 this.emitUI();
                 const go = this.property.isGameOver();
@@ -361,11 +405,6 @@ export class GameEngine {
         }
         if (this.onChoiceResult) this.onChoiceResult({ text: result.text, deltas });
         if (this.onHideChoice) this.onHideChoice();
-        if (result.text) {
-            // R7: push choice result into dayReport so it appears in day summary
-            // Note: onChoiceResult already handles immediate display, no emitEvent needed
-            this.dayReport.events.push(result.text);
-        }
         const month = this.property.get('month');
         this.timeline.push({ month, text: result.text, type: 'choice-made' });
         this.emitUI();
@@ -474,7 +513,9 @@ export class GameEngine {
 
     emitDayReport(month, day) {
         const r = this.dayReport;
-        if (r.tokensUsed === 0 && r.events.length === 0) return; // skip empty reports
+        if (r.tokensUsed === 0 && r.events.length === 0) {
+            r.events.push(IDLE_DAY_PHRASES[Math.floor(Math.random() * IDLE_DAY_PHRASES.length)]);
+        }
         // Call onDaySummary with simplified data structure (R5)
         if (this.onDaySummary) {
             this.onDaySummary({

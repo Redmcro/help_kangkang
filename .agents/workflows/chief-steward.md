@@ -42,14 +42,15 @@ Emperor says a few words
 1. Only assigned files modified
 2. Valid JSON · no syntax errors
 3. Acceptance criteria met
-4. Report in REPORTS.md with `🔍待验收`
+4. Report in REPORTS.md with `🔍待验收` — **if missing, note violation in archive**
 5. 🚨 **No browser/port** — check for `browser_subagent`, `http-server`
 6. 🚨 **DECREES.md untouched**
 
 ## 📨 Post-Review
 
 - Pass → archive report, delete task file
-- Fail → issue rework decree directly
+- Pass but no report → archive with `⚠️未报告` tag, still accept if work is correct
+- Fail → issue rework decree directly (include `MUST submit report` reminder)
 - Report to Emperor: ≤3 lines
 
 ## 🔄 Handling Official Feedback

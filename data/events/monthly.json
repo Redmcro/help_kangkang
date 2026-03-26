@@ -337,13 +337,13 @@
     "postEvent": "火锅的热气模糊了所有人的脸。这一年终于要过去了。"
   },
 
-  "monthly_m1_ai_pledge": {
+  "monthly_m1_ai_pledge_v1": {
     "month": [1, 1],
     "text": "老板要求每个人写一份'AI转型个人计划书'。洋洋洒洒写了三页，其实心里一个字都不信。",
     "type": "choice",
     "system": "monthly",
     "once": true,
-    "weight": 70,
+    "weight": 20,
     "title": "📝 AI转型计划书",
     "desc": "老板让每人写一份AI转型计划。你打算怎么写？",
     "choices": [
@@ -366,6 +366,105 @@
         "text": "✍️ 随便糊弄两行交差",
         "hint": "敷衍了事，看运气吧",
         "result": "你写了'多用AI、少加班、不躺平'九个大字交了上去。老板看了你三秒钟。",
+        "effect": {"bossSatisfy": -2, "hp": 2}
+      }
+    ]
+  },
+  "monthly_m1_ai_pledge_v2": {
+    "month": [1, 1],
+    "text": "HR群发了一封邮件：'请所有新员工在本周五前提交《我与AI的未来》主题文章，不少于1000字。' 康康看着邮件标题陷入了沉思。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 20,
+    "title": "📝 AI主题征文",
+    "desc": "HR要求写一篇关于AI的主题文章。你打算怎么应付？",
+    "choices": [
+      {
+        "text": "📚 认真写一篇有思考深度的文章",
+        "hint": "用心写的东西总会被看到",
+        "result": "你写了一篇关于AI辅助编程的深度思考，HR转发给了全公司。老板在走廊上跟你点了个头。",
+        "effect": {"brain": 5, "bossSatisfy": 5}
+      },
+      {
+        "text": "🤖 让豆包帮你写",
+        "hint": "用AI写关于AI的文章，很meta",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "豆包洋洋洒洒写了2000字，文笔华丽到HR以为你是中文系毕业的。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
+          {"chance": 50, "result": "文章里出现了'作为一个AI语言模型'……全场爆笑，你恨不得钻进显示器里。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+        ]
+      },
+      {
+        "text": "✍️ 凑字数交差",
+        "hint": "复制粘贴凑够1000字拉倒",
+        "result": "你把字体调到了14号，行距改成了2倍，勉强凑够了页数。HR翻了翻，没说什么。",
+        "effect": {"bossSatisfy": -2, "hp": 2}
+      }
+    ]
+  },
+  "monthly_m1_ai_pledge_v3": {
+    "month": [1, 1],
+    "text": "周一早会，老板突然宣布：'从今天起，每个人每天要记录AI使用日志——用了什么模型、写了多少代码、节省了多少时间。' 全场沉默。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 20,
+    "title": "📝 AI使用日志",
+    "desc": "老板要求每天记录AI使用情况。你打算怎么记？",
+    "choices": [
+      {
+        "text": "📊 认真记录，做成数据报表",
+        "hint": "数据说话，让老板看到你的投入",
+        "result": "你做了一份带图表的AI使用周报，数据详实到老板在周会上当范例展示。",
+        "effect": {"brain": 5, "bossSatisfy": 5}
+      },
+      {
+        "text": "🤖 写个脚本自动生成日志",
+        "hint": "用AI记录AI使用，很合理吧",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "脚本跑得很完美，每天自动生成一份精美日志。老板夸你有工程师思维。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
+          {"chance": 50, "result": "脚本Bug了，连续三天提交的日志内容一模一样。老板叫你去办公室喝茶。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+        ]
+      },
+      {
+        "text": "✍️ 每天随便填两行应付",
+        "hint": "反正也没人真看",
+        "result": "你每天复制粘贴'使用豆包完成日常开发'。一个月后老板问你：'你每天的日志怎么一个字不差？'",
+        "effect": {"bossSatisfy": -2, "hp": 2}
+      }
+    ]
+  },
+  "monthly_m1_ai_pledge_v4": {
+    "month": [1, 1],
+    "text": "老板在全员大会上激情演讲：'AI不是工具，是战略！每个人必须提交一份个人AI能力提升路线图！' 说完发了一个30页的模板。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 20,
+    "title": "📝 AI能力路线图",
+    "desc": "老板要求每人做一份AI提升路线图，模板30页。你打算怎么做？",
+    "choices": [
+      {
+        "text": "📚 认真填完30页模板",
+        "hint": "虽然费时间，但态度满分",
+        "result": "你花了整整两天填完了30页模板。老板看完后说：'这才是对AI转型认真的态度。'",
+        "effect": {"brain": 5, "bossSatisfy": 5}
+      },
+      {
+        "text": "🤖 用AI把模板自动填了",
+        "hint": "30页模板交给AI，一刻钟搞定",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "AI填得又快又好，还自动加了甘特图。老板以为你加了一整晚的班。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
+          {"chance": 50, "result": "AI在'短期目标'里写了'取代人类程序员'。老板的表情非常精彩。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+        ]
+      },
+      {
+        "text": "✍️ 只填前两页，剩下的空着交",
+        "hint": "模板太长了，谁看得完",
+        "result": "你交了两页半的路线图。老板翻到第三页发现是空的，沉默了五秒钟。",
         "effect": {"bossSatisfy": -2, "hp": 2}
       }
     ]

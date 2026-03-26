@@ -47,7 +47,9 @@ Your task file lists **Assigned Files**. You may ONLY modify those files.
 
 Write code, modify files. Follow the task spec precisely.
 
-### Step 5: REPORT to HQ
+### Step 5: REPORT to HQ — ⛔ MANDATORY, NO EXCEPTIONS
+
+> 🚨 **No report = work NOT accepted.** Even if your code is perfect, the Steward will NOT review it until you submit a report. This is non-negotiable.
 
 Append to `.agents/REPORTS.md` under `## 🔍 Pending Reports`:
 

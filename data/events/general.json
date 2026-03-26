@@ -1,10 +1,46 @@
 {
-  "month1_start": {
+  "month1_start_v1": {
     "month": [1, 1],
     "text": "康康正式入职第一天！HR带他参观了工位，一台崭新的MacBook Pro，但只装了豆包AI。",
     "type": "special",
     "system": "monthly",
-    "weight": 100,
+    "weight": 20,
+    "once": true,
+    "effect": {}
+  },
+  "month1_start_v2": {
+    "month": [1, 1],
+    "text": "入职第一天，康康提前半小时到了公司。前台姐姐递给他一张工牌和一个写着'AI改变世界'的马克杯。工位上的电脑已经开好了——桌面只有一个图标：豆包。",
+    "type": "special",
+    "system": "monthly",
+    "weight": 20,
+    "once": true,
+    "effect": {}
+  },
+  "month1_start_v3": {
+    "month": [1, 1],
+    "text": "康康推开办公室的门，迎面撞上了一面写满OKR的白板。带他的前辈说：'欢迎来到AI时代的搬砖现场。你的装备在那儿——一台MacBook和一个叫豆包的AI。'",
+    "type": "special",
+    "system": "monthly",
+    "weight": 20,
+    "once": true,
+    "effect": {}
+  },
+  "month1_start_v4": {
+    "month": [1, 1],
+    "text": "第一天上班，康康在工位上找到了一封欢迎信、一包零食和一台MacBook Pro。信上写着：'你的AI助手豆包已就位，其他模型需自费。祝你在AI时代活下来。'",
+    "type": "special",
+    "system": "monthly",
+    "weight": 20,
+    "once": true,
+    "effect": {}
+  },
+  "month1_start_v5": {
+    "month": [1, 1],
+    "text": "康康到公司的时候，整层楼安静得像图书馆。每个人都戴着耳机对着屏幕敲代码——不对，是对着AI敲提示词。IT小哥递过来一台MacBook：'豆包已经装好了，密码是123456，记得改。'",
+    "type": "special",
+    "system": "monthly",
+    "weight": 20,
     "once": true,
     "effect": {}
   },
