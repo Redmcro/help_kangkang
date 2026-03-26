@@ -359,5 +359,196 @@
     "weight": 0.5,
     "effect": {"brain": -10, "hp": -5, "bossSatisfy": -3},
     "postEvent": "康康深刻体会到了一个事实：离开AI，他已经不会写代码了。"
+  },
+
+  "model_doubao_apology_01": {
+    "month": [1, 12],
+    "text": "豆包今天每段代码都以'// 抱歉，以下代码可能不够优雅'开头。你数了一下——一个文件里道了47次歉。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_doubao_unlocked": true},
+    "effect": {"brain": 1},
+    "postEvent": "🐳 康康：'你是代码生成器还是道歉生成器？' 豆包：'// 抱歉让您产生了这种困惑。'"
+  },
+  "model_doubao_unsure_03": {
+    "month": [2, 12],
+    "text": "豆包写了一个完美的分布式锁实现，但在最后一行加了注释：'// 以上仅为个人浅见，如有不妥请指正。' 亿民Review后说这代码比他写的好十倍。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_doubao_unlocked": true},
+    "effect": {"brain": 3, "bossSatisfy": 2, "yimin_rel": 2},
+    "postEvent": "🐳 豆包不太确定+1。但亿民现在开始怀疑自己了。"
+  },
+  "model_gpt54_japanese_01": {
+    "month": [3, 12],
+    "text": "GPT-5.4今天不知道为什么突然在代码注释里混入了日语：'// ユーザーログインを処理します。とても簡単です。' 康康一个字都看不懂。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_gpt54_unlocked": true},
+    "effect": {"brain": -3, "bossSatisfy": -1},
+    "postEvent": "🤖 康康用翻译软件查了一下，意思是'处理用户登录，很简单的'。是很简单，但你能用中文说吗？！"
+  },
+  "model_gpt54_meeting_01": {
+    "month": [4, 12],
+    "text": "GPT-5.4生成的代码里混入了一段像会议纪要的东西：'// Action item: Follow up with backend team about API latency. Due: Next Tuesday.'  康康怀疑GPT的训练数据里混进了某个大厂的会议记录。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.5,
+    "include": {"model_gpt54_unlocked": true},
+    "effect": {"brain": -1},
+    "postEvent": "🤖 最离谱的是，那个Next Tuesday永远不会到来。"
+  },
+  "model_opus_haiku_01": {
+    "month": [3, 12],
+    "text": "Opus 4.6在一个数组排序函数前写了一首五言绝句风格的注释：'// 冒泡如流水，归并似山峰。算法千万种，性能各不同。' 然后选了最慢的排序方式。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_opus46_unlocked": true},
+    "effect": {"brain": -3, "token": -15},
+    "postEvent": "🎯 文学素养满分，算法素养零分。Opus是AI界的文艺青年。"
+  },
+  "model_opus_refuse_aesthetic_01": {
+    "month": [4, 12],
+    "text": "Opus 4.6拒绝写一段简单的for循环：'for循环过于原始。让我为您设计一个优雅的递归方案——' 结果递归深度超限，程序栈溢出了。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_opus46_unlocked": true},
+    "effect": {"brain": -5, "token": -20},
+    "postEvent": "🎯 Opus：'宁可优雅地崩溃，也不愿粗俗地运行。' 康康：'我选粗俗地运行。'"
+  },
+  "model_deepseek_magic_01": {
+    "month": [4, 12],
+    "text": "DeepSeek V4生成了一个函数，没有人能解释它为什么能工作。没有注释，变量名分别是tmp1到tmp47，嵌套了12层三元运算符。但测试全过。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_deepseek_v4_unlocked": true},
+    "effect": {"bossSatisfy": 2, "brain": -3},
+    "postEvent": "🔮 这就是传说中的'黑魔法代码'。能跑，但碰都不敢碰。少爷在代码旁边标注了'勿动，会爆炸'。"
+  },
+  "model_deepseek_overengineer_01": {
+    "month": [5, 12],
+    "text": "你让DeepSeek写一个Hello World。它给你返回了一个微服务架构：包含API网关、消息队列、三个Docker容器、一个Kubernetes配置文件和一份部署文档。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_deepseek_v4_unlocked": true},
+    "effect": {"token": -40, "brain": -5},
+    "postEvent": "🔮 康康：'我只想打印一行字……' DeepSeek：'已为您实现高可用分布式打印方案。'"
+  },
+  "model_cheapgpt_delete_01": {
+    "month": [4, 12],
+    "text": "CheapGPT在'优化'你的代码时，把核心业务逻辑全删了，理由是'这些代码似乎是冗余的'。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_cheapgpt_unlocked": true},
+    "effect": {"brain": -8, "bossSatisfy": -3},
+    "postEvent": "💀 康康从Git记录里恢复了代码，发誓再也不让CheapGPT碰核心模块。但下个月Token不够的时候他还是会用。"
+  },
+  "model_cheapgpt_lorem_01": {
+    "month": [3, 12],
+    "text": "CheapGPT不知道从哪学来的坏习惯，在所有字符串常量里填入了Lorem Ipsum。用户界面上赫然显示着一段拉丁文。还好QA发现了。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_cheapgpt_unlocked": true},
+    "effect": {"brain": -3, "bossSatisfy": -2},
+    "postEvent": "💀 老板：'为什么我们的APP在说拉丁语？' 康康：'那是……国际化适配的一部分？'"
+  },
+  "model_fakeopus_watermark_01": {
+    "month": [6, 12],
+    "text": "FakeOpus在每个函数末尾都偷偷插了一行：'console.log(\"Powered by FakeOpus Enterprise™ - Buy premium at fakeopus.xyz\")' 。线上环境控制台被广告刷爆了。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_fakeopus_unlocked": true},
+    "effect": {"brain": -5, "bossSatisfy": -4},
+    "postEvent": "🎪 这不是AI工具，这是广告投放平台。康康用正则批量删除了500行console.log。"
+  },
+  "model_fakeopus_selfpraise_01": {
+    "month": [5, 12],
+    "text": "FakeOpus在代码注释里疯狂自吹：'// 以下代码由业界领先的Opus模型生成，质量有保障™' 。然后紧接着的代码里有一个无限循环。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_fakeopus_unlocked": true},
+    "effect": {"brain": -4, "bossSatisfy": -2},
+    "postEvent": "🎪 '品质有保障'——保障你电脑风扇转到起飞。"
+  },
+  "model_token_bill_shock_02": {
+    "month": [4, 12],
+    "text": "财务部发来邮件：'请解释上个月API调用中有47次相同的请求——内容都是让AI写一首关于加班的诗。' 原来是Opus在Debug时进了死循环，一直在生成诗歌。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.6,
+    "effect": {"token": -60, "money": -2000},
+    "postEvent": "那首诗写得确实不错：'月明加班夜，Bug满天飞。Delete键已碎，明天继续写。'"
+  },
+  "model_ai_argue_02": {
+    "month": [5, 12],
+    "text": "康康让Opus Review了DeepSeek写的代码。Opus的评价是：'此代码虽然功能正确，但在美学上令人遗憾。' DeepSeek的反驳注释：'// 能跑就行，又不是在写小说。' 两个AI在Git记录里吵了八轮。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.6,
+    "include": {"model_opus46_unlocked": true, "model_deepseek_v4_unlocked": true},
+    "effect": {"brain": -3, "token": -25},
+    "postEvent": "康康看着Git Blame，感觉自己在看两个AI的朋友圈互撕。"
+  },
+  "model_ai_collab_disaster_01": {
+    "month": [6, 12],
+    "text": "康康尝试让三个AI协作写同一个模块：豆包写注释，GPT写逻辑，DeepSeek做优化。结果豆包的注释和GPT的逻辑完全对不上，DeepSeek把两个人的代码都删了重写了一遍。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.5,
+    "include": {"model_doubao_unlocked": true, "model_gpt54_unlocked": true, "model_deepseek_v4_unlocked": true},
+    "effect": {"brain": -8, "token": -40, "bossSatisfy": -2},
+    "postEvent": "事实证明：AI协作比人类协作更难。至少人类开会还能互相甩锅，AI是直接互删代码。"
+  },
+  "model_passive_todo_02": {
+    "month": [3, 12],
+    "text": "Opus 4.6在代码里留了一条TODO：'// TODO: 考虑是否真的需要这个功能。也许用户自己都不知道自己想要什么。——苏格拉底（大概）'",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.5,
+    "include": {"model_opus46_unlocked": true},
+    "effect": {"brain": -1, "token": -10},
+    "postEvent": "🎯 康康决定把哲学和代码分开：写代码用GPT，写人生感悟用Opus。"
+  },
+  "model_doubao_quality_shock_01": {
+    "month": [3, 12],
+    "text": "豆包今天生成了一段代码，质量高到少爷以为是Opus写的。老板特意来表扬康康'模型选得好'。康康没好意思说这其实是最便宜的豆包。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.5,
+    "include": {"model_doubao_unlocked": true},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "康康趁热打铁，用豆包高质量的代码完成了整个模块。省了一大笔Token。",
+        "type": "good",
+        "effect": {"bossSatisfy": 4, "brain": 3}
+      },
+      {
+        "cond": {},
+        "text": "可惜康康脑力不够，没能充分利用这次豆包的超常发挥。但老板的表扬还是拿到了。",
+        "type": "good",
+        "effect": {"bossSatisfy": 2}
+      }
+    ]
+  },
+  "model_git_blame_chaos_01": {
+    "month": [5, 12],
+    "text": "少爷在做Code Review时发现Git Blame显示同一个文件在一天之内被四种不同代码风格重写了四次。他走过来问康康：'你今天是不是换了四个AI？'",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.6,
+    "effect": {"shaoye_rel": -2, "brain": -2},
+    "postEvent": "康康：'不是，是五个。中间还用了半小时纯手写，但那部分被第五个AI删了。'"
   }
 }

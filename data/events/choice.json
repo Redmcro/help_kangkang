@@ -1091,5 +1091,308 @@
         "effect": {"bossSatisfy": 1, "charm": 3, "hp": 3}
       }
     ]
+  },
+
+  "choice_delivery_fulltime_01": {
+    "month": [6, 12],
+    "text": "外卖平台推了个'精英骑手计划'：月跑满500单奖2万。前同事发来消息：'兄弟，你上次跑得不错，要不要正式加入？全职骑手收入比你想的高。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"considered_delivery": true},
+    "title": "🛵 骑手进阶邀约",
+    "desc": "正式转型当骑手？还是把这当成退路？人生的岔路口又来了。",
+    "choices": [
+      {
+        "text": "🏍️ 周末兼职试一个月：保留退路",
+        "hint": "两头跑很累，但至少两条腿走路",
+        "result": "你开始周末跑单。一个月下来赚了4000块，腿也粗了一圈。同事问你周末去哪了，你笑而不语。",
+        "effect": {"money": 4000, "hp": -10, "charm": 3}
+      },
+      {
+        "text": "🙅 拒绝：我是程序员，不是骑手",
+        "hint": "坚守本行，用代码证明自己",
+        "result": "你坚定地拒绝了。回到工位打开IDE，心里默念：'我要用AI证明程序员不会被淘汰。'",
+        "effect": {"brain": 5, "hp": 3}
+      },
+      {
+        "text": "💡 反向操作：给骑手平台做个AI调度工具",
+        "hint": "用程序员思维解决骑手问题，降维打击",
+        "require": {"brain": 60},
+        "success": "你花两周写了个路线优化工具。前同事用了之后每天多跑50单，直呼'程序员就是不一样'。你开始考虑把它商业化。",
+        "successEffect": {"brain": -8, "charm": 8, "money": 2000},
+        "fail": "想法很好，但实现起来比想象中复杂。调度算法涉及太多变量，暂时搁置了。",
+        "failEffect": {"brain": -5}
+      }
+    ]
+  },
+
+  "choice_ai_course_mentor_01": {
+    "month": [5, 11],
+    "text": "之前买的AI课程平台发来邮件：'你的课程评价和笔记获得了大量好评！我们想邀请你当兼职讲师，录制实战课程。课时费每小时500。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.2,
+    "include": {"learned_ai_course": true},
+    "title": "🎓 讲师邀约",
+    "desc": "从学生变老师。教别人也是巩固自己，但时间就那么多。",
+    "choices": [
+      {
+        "text": "📹 接了！录课赚外快",
+        "hint": "教学相长，还有钱拿",
+        "result": "你花了三周录了8节实战课。过程中发现自己对AI的理解又深了一层。课上线后收到了很多感谢留言。",
+        "effect": {"money": 4000, "brain": 5, "charm": 8, "hp": -8}
+      },
+      {
+        "text": "✍️ 写文字教程代替：不想露脸",
+        "hint": "文字也是力量，低调输出",
+        "result": "你写了一套图文教程发在掘金上。阅读量破万，评论区有人说'这是我看过最接地气的AI教程'。",
+        "effect": {"brain": 3, "charm": 5, "hp": -3}
+      },
+      {
+        "text": "🙅 婉拒：我还在学习阶段",
+        "hint": "谦虚是美德，但机会不等人",
+        "result": "你觉得自己还不够资格教别人。过了三个月，另一个学员接了这个活。你有点后悔。",
+        "effect": {"brain": 2}
+      }
+    ]
+  },
+
+  "choice_doubao_crisis_01": {
+    "month": [5, 11],
+    "text": "新闻推送：'豆包大模型被曝训练数据含大量未授权内容，多家公司紧急下架相关服务。' 你刚切过去的主力模型……",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"switched_to_doubao": true},
+    "title": "🚨 豆包数据风波",
+    "desc": "主力模型出事了！项目用的全是豆包生成的代码，要不要紧急切换？",
+    "choices": [
+      {
+        "text": "🔄 紧急切回其他模型：安全第一",
+        "hint": "迁移有成本，但不能冒险",
+        "result": "你花了一整天把项目中依赖豆包的部分全部迁移。虽然累，但老板很满意你的风险意识。",
+        "effect": {"brain": -8, "hp": -5, "bossSatisfy": 5, "token": -50}
+      },
+      {
+        "text": "🤔 观望一下：也许只是公关危机",
+        "hint": "不要慌，等官方声明",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "三天后豆包发了官方声明，澄清了大部分质疑。虚惊一场，你省了一次迁移的功夫。", "type": "good", "effect": {"brain": 3, "luck": 3}},
+          {"chance": 50, "result": "事态升级了。监管部门介入调查，豆包API限流降速。你的项目进度直接受影响，老板脸色很难看。", "type": "bad", "effect": {"bossSatisfy": -5, "brain": -5}}
+        ]
+      },
+      {
+        "text": "📊 写风险评估报告给老板：把决定权上交",
+        "hint": "专业分析，让领导做决定",
+        "result": "你连夜写了一份风险评估报告，分析了迁移成本和不迁移的风险。老板看完说：'你考虑得很周全。' 最终决定部分迁移。",
+        "effect": {"brain": -5, "bossSatisfy": 3, "charm": 3}
+      }
+    ]
+  },
+
+  "choice_gamejam_indie_01": {
+    "month": [7, 12],
+    "text": "GameJam获奖作品在itch.io上意外火了！一个独立游戏发行商发来邮件：'我们对你的作品很感兴趣，想聊聊发行合作。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "include": {"gamejam_won": true},
+    "title": "🎮 发行商敲门",
+    "desc": "GameJam的小品级作品被发行商看上了。独立开发的梦，要醒吗？",
+    "choices": [
+      {
+        "text": "🤝 谈合作：把作品做成完整版",
+        "hint": "圆梦独立游戏，但要兼顾主业",
+        "result": "你和发行商签了合作意向书。利用周末和晚上时间扩展作品。三个月后，Steam页面上线了你的第一款独立游戏。虽然还在Early Access，但评价出奇地好。",
+        "effect": {"money": 5000, "hp": -12, "brain": -5, "charm": 10}
+      },
+      {
+        "text": "📋 先了解条件再说",
+        "hint": "不冲动，先搞清楚分成和timeline",
+        "result": "你详细了解了合作条件：三七分成，你七。deadline有点紧但不是不可能。你把方案存进了备忘录，还没决定。",
+        "effect": {"brain": 3, "charm": 3}
+      },
+      {
+        "text": "🙅 婉拒：只是玩票心态",
+        "hint": "保持初心，GameJam就是图个开心",
+        "result": "你礼貌地回复了发行商。关掉邮件后，看着itch.io上的下载数，还是忍不住笑了。至少证明了自己的创意是被认可的。",
+        "effect": {"hp": 3, "brain": 2}
+      }
+    ]
+  },
+
+  "choice_ai_cert_promotion_01": {
+    "month": [8, 12],
+    "text": "公司年中晋升窗口开放了。HR发来通知：'请准备晋升答辩材料。' 你看了看自己的AI高级认证证书，觉得这次有戏。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"ai_advanced_cert": true},
+    "title": "📈 晋升答辩",
+    "desc": "手握AI高级认证，晋升之路似乎近了。但答辩不只看证书……",
+    "choices": [
+      {
+        "text": "🎯 全力准备：证书+项目成果双管齐下",
+        "hint": "拼一把，用实力说话",
+        "require": {"bossSatisfy": 50},
+        "success": "你的答辩PPT做了40页，从AI认证到项目落地全覆盖。评委点头频率明显高于其他候选人。一周后收到通知：晋升成功，薪资上调20%！",
+        "successEffect": {"money": 5000, "bossSatisfy": 5, "charm": 8, "brain": -5},
+        "fail": "答辩表现不错，但评委说：'技术能力很强，但团队管理经验还差一点。' 这次没过，但拿到了明确的改进方向。",
+        "failEffect": {"bossSatisfy": -2, "brain": 3}
+      },
+      {
+        "text": "📝 随便准备一下：该晋升自然会晋升",
+        "hint": "佛系应对，不内卷",
+        "result": "你花了一个晚上做了个简洁的PPT。答辩时不紧不慢地讲完。结果是：'再等等下一次。' 你说：'行吧。'",
+        "effect": {"hp": 3, "brain": 2}
+      },
+      {
+        "text": "🗣️ 先跟老板通个气：摸清胜算再说",
+        "hint": "先摸底再出手，稳中求进",
+        "result": "老板说：'你今年表现不错，我会帮你说话。但你答辩的时候要重点讲AI落地的成果。' 有了老板的提示，你心里有了底。",
+        "effect": {"bossSatisfy": 2, "charm": 3, "brain": -2}
+      }
+    ]
+  },
+
+  "choice_opensource_foundation_01": {
+    "month": [9, 12],
+    "text": "CNCF（云原生计算基金会）发来正式邀请：希望你加入某AI工具链项目的Technical Advisory Board。这意味着你的名字将出现在基金会官网上。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 0.8,
+    "include": {"opensource_collab": true},
+    "title": "🏛️ 基金会邀约",
+    "desc": "从开源贡献者到技术顾问委员会成员。这是圈内顶级的荣誉。",
+    "choices": [
+      {
+        "text": "🔥 加入！这是简历上的王炸",
+        "hint": "顶级背书，但责任也很重",
+        "result": "你正式成为了TAB成员。每月参加一次线上会议，review技术方案。LinkedIn上多了一行'CNCF TAB Member'，私信瞬间爆炸。",
+        "effect": {"charm": 12, "brain": -3, "hp": -5, "bossSatisfy": 3}
+      },
+      {
+        "text": "🤔 问问时间投入再决定",
+        "hint": "了解清楚再承诺，别过度承诺",
+        "result": "对方详细介绍了时间投入：每月约10小时。你评估了一下，觉得可以handle。但还没正式答复。",
+        "effect": {"charm": 5, "brain": 2}
+      },
+      {
+        "text": "🙏 暂时婉拒：精力有限",
+        "hint": "适可而止，不要每个机会都接",
+        "result": "你诚恳地回复了邮件。对方说：'完全理解，席位给你保留到下个季度。' 至少证明你的开源贡献被最高层看到了。",
+        "effect": {"charm": 3, "hp": 3}
+      }
+    ]
+  },
+
+  "choice_ai_tool_scale_01": {
+    "month": [7, 12],
+    "text": "老板找你开会：'你做的AI工具其他部门也想用。我打算让你成立一个内部工具小组，带两个人专门做这个。你愿意吗？'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"ai_tool_adopted": true},
+    "title": "👥 工具小组组长",
+    "desc": "从个人项目到部门级产品。你的工具要升级了，但管人比写代码难多了。",
+    "choices": [
+      {
+        "text": "💪 接受！带团队做大",
+        "hint": "从写代码到带团队，新的挑战",
+        "result": "你成了内部工具小组的负责人。虽然管人比写代码累十倍，但看着工具被全公司使用的感觉——很不一样。三个月后工具日活跃用户突破200人。",
+        "effect": {"bossSatisfy": 8, "charm": 8, "brain": -5, "hp": -5}
+      },
+      {
+        "text": "🔧 只做技术负责人：不想管人",
+        "hint": "专注技术，管理的事交给别人",
+        "result": "你跟老板说自己更适合做技术。老板找了另一个人当组长，你当技术顾问。写代码的快乐保住了，但升职路线窄了一点。",
+        "effect": {"brain": 3, "bossSatisfy": 2, "charm": -2}
+      },
+      {
+        "text": "📋 提条件：要加薪+调岗",
+        "hint": "需要charm 55+，谈判是门艺术",
+        "require": {"charm": 55},
+        "success": "你提出了加薪15%和正式调岗的条件。老板考虑了两天后同意了。你成了公司第一个'AI工具工程师'。",
+        "successEffect": {"money": 3000, "bossSatisfy": 3, "charm": 5},
+        "fail": "老板说：'加薪的事年底再说，先把事情做起来。' 你有点失望，但也理解。",
+        "failEffect": {"bossSatisfy": -2, "charm": -2}
+      }
+    ]
+  },
+
+  "choice_startup_pivot_01": {
+    "month": [9, 12],
+    "text": "创业产品有了几十个付费用户，但增长遇到了瓶颈。合伙人提议：'要不要pivot（转型）到企业市场？to B的客单价高十倍。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.2,
+    "include": {"ai_startup_offer": true},
+    "title": "🔀 创业十字路口",
+    "desc": "to C增长见顶，to B看起来更赚钱。但转型意味着几乎从零开始。",
+    "choices": [
+      {
+        "text": "🏢 转型to B：拿下几个企业客户",
+        "hint": "高风险高回报，客单价直接翻十倍",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 45, "result": "你们用了一个月重新包装产品。第一个企业客户签了年费5万的合同。虽然只有一个客户，但这个方向看起来很有前景。", "type": "good", "effect": {"money": 8000, "brain": -8, "hp": -8, "charm": 5}},
+          {"chance": 55, "result": "转型后发现企业客户的需求复杂度远超想象。定制化开发做了两个月，客户还是不满意。钱烧了不少，团队士气下降。", "type": "bad", "effect": {"money": -3000, "brain": -10, "hp": -10}}
+        ]
+      },
+      {
+        "text": "📊 先做市场调研再决定",
+        "hint": "用数据说话，不拍脑袋",
+        "result": "你花了两周做了详细的市场调研。结论是：to B确实有机会，但需要先找到一个垂直场景切入。合伙人说：'你比我理性，听你的。'",
+        "effect": {"brain": -3, "charm": 3}
+      },
+      {
+        "text": "🎯 坚持to C：先把现有用户服务好",
+        "hint": "深耕存量，口碑裂变",
+        "result": "你决定专注现有用户。优化了产品体验后，用户活跃度提升了40%，还有几个用户主动发了推荐。慢就是快。",
+        "effect": {"brain": -3, "charm": 5, "hp": -3}
+      }
+    ]
+  },
+
+  "choice_doubao_community_01": {
+    "month": [4, 9],
+    "text": "豆包开发者社区的运营给你发了私信：'你在社区的回答帮助了很多人，要不要做我们的官方版主？有月度补贴和内测资格。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "include": {"switched_to_doubao": true},
+    "title": "🏅 社区版主邀约",
+    "desc": "成为官方版主意味着内测优先权和补贴，但也意味着更多时间投入。",
+    "choices": [
+      {
+        "text": "🙋 接受：当版主拿内测资格",
+        "hint": "内测新模型，比别人快一步",
+        "result": "你成了豆包社区官方版主。每月补贴800块不多，但内测新模型的资格让你总是第一个用上最新功能。同事们都来找你问'豆包那个新功能怎么用'。",
+        "effect": {"money": 800, "brain": 5, "charm": 5, "hp": -3}
+      },
+      {
+        "text": "📝 只做内容贡献者：不想被绑定",
+        "hint": "自由输出，不受约束",
+        "result": "你委婉地说自己更适合自由创作。运营表示理解，给了你一个'优质创作者'的标签。没有补贴，但也没有KPI。",
+        "effect": {"charm": 3, "brain": 2}
+      },
+      {
+        "text": "🙅 拒绝：怕耽误正事",
+        "hint": "主业优先，社区的事放一放",
+        "result": "你拒绝了。过了一个月，看到新版主在群里晒内测截图，有一丢丢后悔。",
+        "effect": {"hp": 2}
+      }
+    ]
   }
 }

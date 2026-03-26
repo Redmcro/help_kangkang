@@ -622,5 +622,158 @@
     "include": {"tried_transfer": true},
     "effect": {"shaoye_rel": 3, "charm": 2},
     "postEvent": "康康回了一句：'有不懂的随时问我。' 转岗了但兄弟情还在。"
+  },
+
+  "random_good_delivery_encounter_01": {
+    "month": [7, 12],
+    "text": "下班路上又碰到了前同事骑手。他递给你一杯奶茶：'平台今天搞活动，多出来一杯。' 聊了几句，他说现在月入一万五，比写代码时还多。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"considered_delivery": true},
+    "effect": {"hp": 3, "charm": 3},
+    "postEvent": "康康喝着奶茶想：人生的路不止一条，每条路上都有幸福的人。"
+  },
+  "random_neutral_delivery_app_push_01": {
+    "month": [5, 12],
+    "text": "外卖平台的APP居然给康康推了精准广告：'高薪骑手招募中，月入过万不是梦！' 算法比谁都了解你的纠结。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.7,
+    "once": true,
+    "include": {"considered_delivery": true},
+    "effect": {"brain": 2, "luck": 2},
+    "postEvent": "康康关掉了推送提醒，但把那个APP留在了手机里——以防万一。"
+  },
+
+  "random_good_ai_course_alumni_01": {
+    "month": [6, 12],
+    "text": "AI课程的学员群里有人@了康康：'大神求教！你的那篇课后笔记帮了我大忙，我用了你的方法优化了Prompt，效果提升了3倍！'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"learned_ai_course": true},
+    "effect": {"charm": 5, "brain": 3},
+    "postEvent": "康康发现教别人的过程中，自己的理解也更深了。这大概就是教学相长。"
+  },
+
+  "random_neutral_doubao_update_01": {
+    "month": [4, 10],
+    "text": "豆包模型推送了一个大版本更新：推理速度提升40%，但API接口做了Breaking Change。康康既开心又头疼。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "once": false,
+    "include": {"switched_to_doubao": true},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "凭着对豆包API的熟悉，康康半小时就完成了适配。新版本速度确实快了不少，代码生成质量也提升了。",
+        "type": "good",
+        "effect": {"brain": 5, "bossSatisfy": 2}
+      },
+      {
+        "cond": {},
+        "text": "Breaking Change太多了，康康改了一下午的适配代码。等改完已经下班了，今天的需求一行没写。",
+        "type": "bad",
+        "effect": {"brain": -5, "hp": -3}
+      }
+    ]
+  },
+
+  "random_good_gamejam_media_01": {
+    "month": [7, 12],
+    "text": "一家游戏媒体写了一篇报道：'这个程序员用AI做了一款GameJam冠军游戏——他说秘诀就是把Bug当Feature。' 报道里引用了康康的获奖感言。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "include": {"gamejam_won": true},
+    "effect": {"charm": 8, "brain": 3, "bossSatisfy": 2},
+    "postEvent": "老板转发了这篇报道到部门群：'我们团队的人！' 康康的LinkedIn多了50个Connection请求。"
+  },
+  "random_good_gamejam_resume_01": {
+    "month": [5, 12],
+    "text": "康康更新简历的时候，在'业余项目'栏加上了GameJam参赛经历和用到的技术栈。猎头看了之后说：'这种实战经历比刷100道LeetCode更有说服力。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.7,
+    "once": true,
+    "include": {"gamejam_participated": true},
+    "effect": {"charm": 5, "brain": 3},
+    "postEvent": "康康决定明年再参加一次。这次要拿第一。"
+  },
+
+  "random_good_ai_cert_respect_01": {
+    "month": [8, 12],
+    "text": "新来的实习生看到康康桌上的AI高级认证证书，问了一堆技术问题。康康一一解答后，实习生说：'学长太厉害了！' 从此每天中午都来蹭饭。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"ai_advanced_cert": true},
+    "effect": {"charm": 5, "brain": 3, "hp": 2},
+    "postEvent": "康康觉得有个小跟班的感觉还不错。虽然午饭开销涨了。"
+  },
+
+  "random_good_opensource_collab_pr_01": {
+    "month": [8, 12],
+    "text": "康康提交的一个PR被项目维护者评价为'This is exactly what we needed'。merge之后，社区里有人发帖：'新的core contributor水平真不错。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.7,
+    "once": true,
+    "include": {"opensource_collab": true},
+    "effect": {"charm": 8, "brain": 5},
+    "postEvent": "康康把这条评论截图存在了'成就'文件夹里。这个文件夹已经有47张截图了。"
+  },
+
+  "random_good_ai_tool_feedback_01": {
+    "month": [7, 12],
+    "text": "公司內部用工具的同事发了一封长长的感谢邮件：'你的AI工具帮我省了每天2小时重复工作，我终于有时间学新技术了。' 抄送了老板。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"ai_tool_adopted": true},
+    "effect": {"bossSatisfy": 5, "charm": 5, "brain": 3},
+    "postEvent": "老板回复：'@康康 干得不错。' 简短但分量十足。"
+  },
+
+  "random_neutral_startup_investor_01": {
+    "month": [9, 12],
+    "text": "创业的事被一个天使投资人注意到了。他在微信上说：'产品方向不错，有BP吗？' 康康一边激动一边紧张——BP是什么来着？",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.7,
+    "once": true,
+    "include": {"ai_startup_offer": true},
+    "branch": [
+      {
+        "cond": {"charm": ">55"},
+        "text": "康康连夜做了份BP（商业计划书），发了过去。投资人约了个线下聊。虽然还没投，但这是一个很积极的信号。",
+        "type": "good",
+        "effect": {"charm": 5, "brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "康康现学现卖做了份BP，但逻辑有些混乱。投资人看完回了个'再打磨打磨'就没了下文。不过至少学会了写BP。",
+        "type": "neutral",
+        "effect": {"brain": 3}
+      }
+    ]
+  },
+  "random_bad_startup_burnout_01": {
+    "month": [10, 12],
+    "text": "白天上班、晚上创业的日子持续了两个月。今天早上康康照镜子发现自己的黑眼圈已经浓到像化了妆，同事问他是不是去蹦迪了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"ai_startup_offer": true},
+    "effect": {"hp": -8, "brain": -5},
+    "postEvent": "合伙人发来消息：'兄弟悠着点，人没了产品也没了。' 康康决定这个周末什么都不干。"
   }
 }

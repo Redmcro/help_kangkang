@@ -342,5 +342,183 @@
     "once": true,
     "effect": {"hp": 5, "charm": 2},
     "postEvent": "康康从此每天下午三点准时去'巡视'茶水间。亿民说：'你是第一个发现的新人，一般要等一个月。'"
+  },
+
+  "general_good_meeting_nap_01": {
+    "month": [3, 12],
+    "text": "周一全员大会，领导PPT念到第47页。康康靠着椅背闭目养神了20分钟，睁眼发现会已经结束了。",
+    "type": "good",
+    "system": "general",
+    "weight": 1.2,
+    "filler": true,
+    "effect": {"hp": 5, "brain": 3},
+    "postEvent": "亿民低声说：'你打呼了知道吗？' 康康：'不可能，我只是在思考。'"
+  },
+  "general_good_lunch_treat_01": {
+    "month": [2, 12],
+    "text": "少爷中午突然说请全组吃海底捞，理由是'上个月奖金发多了，花不完'。全组欢呼。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"hp": 8, "shaoye_rel": 3, "charm": 2},
+    "postEvent": "康康吃了三盘肥牛，下午写代码手都在抖。少爷：'这是你今天最后一行代码了是吧？'"
+  },
+  "general_good_standup_skip_01": {
+    "month": [3, 12],
+    "text": "今天站会主持人迟到了15分钟，大家默契地各自回工位了。多出来的时间康康用来喝了杯咖啡。",
+    "type": "good",
+    "system": "general",
+    "weight": 1,
+    "filler": true,
+    "effect": {"hp": 3, "brain": 2},
+    "postEvent": "后来才知道主持人在厕所看手机忘了时间。"
+  },
+  "general_neutral_elevator_01": {
+    "month": [2, 12],
+    "text": "电梯里遇到了大老板。两人沉默了8秒。康康鼓起勇气说了句：'今天天气不错。'老板回：'嗯。'然后继续沉默。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"charm": -1},
+    "postEvent": "走出电梯后康康在心里复盘了17种更好的开场白。全都没用。"
+  },
+  "general_neutral_naming_01": {
+    "month": [2, 12],
+    "text": "给一个布尔变量起名字。isReady？isFinished？isDone？hasBeenProcessedSuccessfully？康康盯着屏幕想了35分钟。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1,
+    "filler": true,
+    "effect": {"brain": -2},
+    "postEvent": "最后起名叫flag1。少爷Code Review时留了一条comment：'？'"
+  },
+  "general_good_friday_01": {
+    "month": [1, 12],
+    "text": "周五下午老板不在！全组默契地开始摸鱼。有人打游戏，有人看视频，康康在研究机械键盘。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"hp": 5, "brain": 3, "charm": 1},
+    "postEvent": "五点半所有人准时关电脑。亿民说：'这才是团队凝聚力。'"
+  },
+  "general_bad_meeting_bomb_01": {
+    "month": [3, 12],
+    "text": "技术评审会上，CTO突然点名：'康康，你来说说这个模块的架构设计？' 康康脑子一片空白。",
+    "type": "bad",
+    "system": "general",
+    "weight": 0.8,
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "康康临场发挥，居然讲得头头是道。CTO点了点头：'不错，有想法。'",
+        "type": "good",
+        "effect": {"bossSatisfy": 3, "brain": -3, "charm": 3}
+      },
+      {
+        "cond": {},
+        "text": "康康支支吾吾说了五分钟，全场沉默。CTO说'好的，下一个。'那个'好的'杀伤力极大。",
+        "type": "bad",
+        "effect": {"brain": -5, "bossSatisfy": -3, "charm": -2}
+      }
+    ]
+  },
+  "general_neutral_toilet_01": {
+    "month": [1, 12],
+    "text": "康康拿着手机去上厕所。进去5分钟，出来发现已经过了40分钟。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1.2,
+    "filler": true,
+    "effect": {"hp": 2, "brain": -1},
+    "postEvent": "亿民经过工位时看了眼空椅子：'又去开会了？'——全组心照不宣。"
+  },
+  "general_good_bug_blame_01": {
+    "month": [3, 12],
+    "text": "线上出Bug了！全组紧急排查。git blame一看，上次改这段代码的是三个月前离职的同事。不是你的锅！",
+    "type": "good",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"brain": 3, "bossSatisfy": 2},
+    "postEvent": "康康长舒一口气。少爷说：'别高兴太早，修Bug的活还是你的。'"
+  },
+  "general_bad_chair_01": {
+    "month": [2, 12],
+    "text": "工位椅子的气杆突然下沉了！康康从正常高度瞬间变成了显示器只露一双眼睛。",
+    "type": "bad",
+    "system": "general",
+    "weight": 0.7,
+    "effect": {"hp": -3, "charm": -1},
+    "postEvent": "行政说新椅子要两周才能到。康康只好坐在椅子上垫了三个靠枕，看起来像坐在王座上。"
+  },
+  "general_neutral_teambuilding_01": {
+    "month": [4, 12],
+    "text": "部门团建去了KTV。康康本想划水，结果被拉上去唱了一首《孤勇者》。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 0.6,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"charm": ">55"},
+        "text": "没想到康康唱得还不错！全场跟着合唱，气氛嗨到爆。少爷录了视频发到群里。",
+        "type": "good",
+        "effect": {"charm": 5, "shaoye_rel": 3, "yimin_rel": 2, "hp": 3}
+      },
+      {
+        "cond": {},
+        "text": "康康全程跑调，唱完全场安静了三秒。亿民礼貌地鼓了掌。",
+        "type": "neutral",
+        "effect": {"charm": -2, "hp": 2}
+      }
+    ]
+  },
+  "general_good_aircon_war_01": {
+    "month": [5, 9],
+    "text": "办公室空调大战！康康偷偷把温度从16度调到了24度。对面的前端组又调回了16度。反复拉锯了7次。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"hp": 3, "charm": 2},
+    "postEvent": "最后行政没收了遥控器，统一设定22度。康康：'这才是真正的DevOps——开发运维空调。'"
+  },
+  "general_bad_deploy_friday_01": {
+    "month": [3, 12],
+    "text": "周五下午4:58，产品经理走过来：'这个小需求很简单，改完上线吧，赶在周末前发布。'",
+    "type": "bad",
+    "system": "general",
+    "weight": 0.8,
+    "branch": [
+      {
+        "cond": {"brain": ">55"},
+        "text": "康康咬牙花了1小时改完上线了。周六凌晨收到报警——但是是别的模块出的问题。虚惊一场。",
+        "type": "neutral",
+        "effect": {"hp": -5, "brain": -3, "bossSatisfy": 2}
+      },
+      {
+        "cond": {},
+        "text": "匆忙上线后周六凌晨就炸了。康康在被窝里远程hotfix到凌晨3点。",
+        "type": "bad",
+        "effect": {"hp": -10, "brain": -8, "bossSatisfy": -3}
+      }
+    ]
+  },
+  "general_neutral_plant_01": {
+    "month": [1, 12],
+    "text": "康康工位上的小绿萝长大了！从一棵小苗变成了爬满显示器支架的绿色瀑布。路过的同事都会夸一句。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.6,
+    "filler": true,
+    "effect": {"hp": 3, "charm": 2},
+    "postEvent": "亿民问：'你写代码有这么用心就好了。' 康康：'绿萝不会给我提Bug。'"
+  },
+  "general_good_snack_hero_01": {
+    "month": [2, 12],
+    "text": "康康从楼下便利店扛了一大袋零食回来分给全组。瞬间成为今日MVP。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.8,
+    "effect": {"money": -150, "charm": 5, "shaoye_rel": 2, "yimin_rel": 2, "hp": 3},
+    "postEvent": "少爷嘴里塞着薯片说：'以后每周来一次。' 亿民默默拿走了最后一包坚果。"
   }
 }

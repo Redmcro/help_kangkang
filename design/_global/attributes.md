@@ -139,6 +139,7 @@ hp    += 5 （自然恢复，上限100）
 |:---|:---|:---|:---|:---|
 | `considered_delivery` | bool | choice | 考虑过送外卖 | 解锁骑手相关后续事件 |
 | `gamejam_won` | bool | monthly | GameJam获奖 | 解锁独立开发者结局 |
+| `gamejam_participated` | bool | monthly | GameJam参赛 | 简历加成、解锁后续GameJam事件 |
 | `sharedToy` | bool | choice | 分享玩具选择 | 后续社交事件 |
 | `signed_compete_clause` | bool | choice | 签竞业协议拿期权 | 限制跳槽选项 |
 | `opensource_fame` | bool | choice | 开源社区做分享 | 解锁猎头/人脉事件 |
