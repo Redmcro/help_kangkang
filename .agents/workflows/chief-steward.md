@@ -16,7 +16,7 @@ description: Chief Steward workflow — project coordination, task dispatch, rev
 
 | File | Purpose |
 |:---|:---|
-| `DECREES.md` | Decrees: `⛔规矩` at top + dept + ≤5 words per item (Chinese) |
+| `DECREES.md` | Decrees: `⛔规矩` at top + dept + ≤5 words per item (Chinese). **NO bullet details** — officials read task specs for specifics. |
 | `.agents/tasks/*.md` | Task specs: detailed, officials self-serve (English) |
 | `.agents/REPORTS.md` | **Pending Reports** + **Archive** |
 | `.agents/AGENTS.md` | Official rules + mandatory 6-step workflow |

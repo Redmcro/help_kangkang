@@ -1,7 +1,7 @@
 {
   "model_unlock_doubao": {
     "month": [1, 1],
-    "text": "IT部门配置好了开发环境。电脑上只有一个AI工具——豆包。🐳 '先用着吧，'IT小哥说，'其他的要审批。'",
+    "text": "IT部门配置好了开发环境。电脑上只有一个AI工具——豆包。🐳 '公司买了豆包的企业版，免费随便用，'IT小哥说，'其他模型要自己花钱。'",
     "type": "special",
     "system": "model",
     "weight": 100,
@@ -19,7 +19,7 @@
     "once": true,
     "effect": {"brain": 5},
     "setFlag": "model_gpt54_unlocked",
-    "postEvent": "康康用GPT-5.4重写了之前豆包写的代码，质量直接翻倍。但看了眼Token消耗……心在滴血。"
+    "postEvent": "康康看了眼GPT-5.4的Demo输出，质量确实强。但价格也强——¥15/M Token。用还是不用？"
   },
   "model_unlock_opus46": {
     "month": [3, 3],

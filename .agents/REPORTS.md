@@ -13,6 +13,9 @@
 
 ## 📦 Archive
 
+- ✅ ⚙️ Engineering · T5 Daily Report Overhaul — dayReport after events, doubao free, bug narrative, simplified data, choice→dayReport
+- ✅ 🎨 Military · T6 Daily Report Rendering — simplified format, model panel ¥/M, no deltas in choice result
+- ✅ 🖼️ Chancery · T7 Model Unlock Text — GPT unlock text fixed, Doubao mentions free
 - ✅ ⚙️ Engineering · T1 Engine Balance — model costs 2-3x, rng(5,7)+85%, bigger penalties, callbacks
 - ✅ 🖼️ Chancery · T4 Daily Summary — consolidated HTML, choice deltas, hint removed
 - ✅ 💾 Treasury · T2 Buff Redesign — 12 strategic buffs with trade-offs

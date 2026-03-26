@@ -6,7 +6,7 @@ import { EventManager } from './events.js';
 import { loadLegacy, saveLegacy, addToLegacySet } from './save.js';
 
 const AI_MODELS = {
-    doubao: { name: '🐳 豆包', unlockMonth: 1, cost: [10, 30, 80, 200], quality: 45, bugRate: 0.40, tokenPrice: 5 },
+    doubao: { name: '🐳 豆包', unlockMonth: 1, cost: [10, 30, 80, 200], quality: 45, bugRate: 0.40, tokenPrice: 0 },
     gpt54: { name: '🤖 GPT-5.4', unlockMonth: 2, cost: [40, 100, 300, 800], quality: 80, bugRate: 0.12, tokenPrice: 15 },
     opus46: { name: '🎯 Opus 4.6', unlockMonth: 3, cost: [60, 150, 400, 1000], quality: 92, bugRate: 0.05, tokenPrice: 25 },
     deepseek_v4: { name: '🔮 DeepSeek V4', unlockMonth: 4, cost: [15, 50, 120, 300], quality: 72, bugRate: 0.18, tokenPrice: 8 },
@@ -39,7 +39,7 @@ export class GameEngine {
         this.paused = false;
         this.timeline = [];
         // Daily report tracking
-        this.dayReport = { tokensUsed: 0, moneyCost: 0, bugs: 0, brainStart: 0, brainEnd: 0, hpStart: 0, hpEnd: 0, quality: 0, overtime: false, modelName: '', events: [] };
+        this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
         this.monthQualities = [];
         // Callbacks set by app.js
         this.onEvent = null;
@@ -160,9 +160,7 @@ export class GameEngine {
         }
 
         // Reset daily report at start of each day
-        if (day === 1 || this.dayReport.brainStart === 0) {
-            this.dayReport = { tokensUsed: 0, moneyCost: 0, bugs: 0, brainStart: this.property.get('brain'), brainEnd: 0, hpStart: this.property.get('hp'), hpEnd: 0, quality: 0, overtime: false, modelName: '', events: [] };
-        }
+        this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
 
         this.property.set('day', day);
         const pool = TASK_COMPLEXITY[month] || TASK_COMPLEXITY[12];
@@ -191,7 +189,6 @@ export class GameEngine {
         }
 
         const quality = this.calcQuality(model, stars, modelId);
-        this.dayReport.quality = quality;
 
         if (model) {
             let tc = model.cost[stars - 1] || model.cost[0];
@@ -210,7 +207,6 @@ export class GameEngine {
             if (currentMoney >= moneyCost) {
                 this.property.applyEffect({ money: -moneyCost });
                 this.dayReport.tokensUsed += tc;
-                this.dayReport.moneyCost += moneyCost;
             } else {
                 // Can't afford → auto-switch to brainpower
                 this.dayReport.events.push(`💸 余额不足！纯人肉写代码`);
@@ -229,9 +225,11 @@ export class GameEngine {
             const bc = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 5);
             this.property.applyEffect({ brain: -bc });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
-            this.dayReport.bugs++;
-        } else {
-            // quality tracked in dayReport.quality already
+            if (stars >= 3) {
+                this.dayReport.events.push('🐛 复杂Bug！康康debug了两小时才找到问题');
+            } else {
+                this.dayReport.events.push('🐛 代码出了Bug，康康花了30分钟手动排查修复');
+            }
         }
 
         this.monthQualities.push(quality);
@@ -250,21 +248,20 @@ export class GameEngine {
                 this.property.applyEffect({ hp: -rng(5, 10) });
                 this.dayReport.events.push('⚠️ 连续加班5天！强制休息');
             } else if (overtime >= 3) {
-                this.dayReport.events.push('⚠️ 连续加班3天！');
+                this.dayReport.events.push('⚠️ 连续加班3天，康康的黑眼圈已经遮不住了');
+            } else {
+                this.dayReport.events.push('⚠️ 质量不达标，康康不得不加班到凌晨');
             }
         } else {
             this.property.set('consecutive_overtime', 0);
         }
 
-        this.dayReport.brainEnd = this.property.get('brain');
-        this.dayReport.hpEnd = this.property.get('hp');
         this.emitUI();
 
         const go = this.property.isGameOver();
         if (go) { this.endGame(go); return; }
 
-        // Emit daily report then proceed to day event
-        this.emitDayReport(month, day);
+        // Proceed to day event — report emitted AFTER events
         this.scheduleNext(() => this.processDayEvent(month, day, totalDays));
     }
 
@@ -307,6 +304,8 @@ export class GameEngine {
             }
         }
 
+        // Emit daily report AFTER events, before next day
+        this.emitDayReport(month, day);
         this.scheduleNext(() => this.processWorkDay(month, day + 1, totalDays));
     }
 
@@ -362,7 +361,11 @@ export class GameEngine {
         }
         if (this.onChoiceResult) this.onChoiceResult({ text: result.text, deltas });
         if (this.onHideChoice) this.onHideChoice();
-        if (result.text) this.emitEvent('→ ' + result.text, 'choice-made');
+        if (result.text) {
+            // R7: push choice result into dayReport so it appears in day summary
+            // Note: onChoiceResult already handles immediate display, no emitEvent needed
+            this.dayReport.events.push(result.text);
+        }
         const month = this.property.get('month');
         this.timeline.push({ month, text: result.text, type: 'choice-made' });
         this.emitUI();
@@ -370,6 +373,8 @@ export class GameEngine {
         const go = this.property.isGameOver();
         if (go) { this.endGame(go); return; }
         const ctx = this._pcc || { month, day: 1, totalDays: 3 };
+        // Emit daily report after choice, before next day
+        this.emitDayReport(ctx.month, ctx.day);
         this.scheduleNext(() => this.processWorkDay(ctx.month, ctx.day + 1, ctx.totalDays));
     }
 
@@ -469,34 +474,25 @@ export class GameEngine {
 
     emitDayReport(month, day) {
         const r = this.dayReport;
-        if (r.brainStart === 0 && r.moneyCost === 0 && r.events.length === 0) return; // skip empty reports
-        const hpDelta = r.hpEnd - r.hpStart;
-        const brainDelta = r.brainEnd - r.brainStart;
-        const moneyDelta = -r.moneyCost;
-        // Call onDaySummary with structured data for rich rendering
+        if (r.tokensUsed === 0 && r.events.length === 0) return; // skip empty reports
+        // Call onDaySummary with simplified data structure (R5)
         if (this.onDaySummary) {
             this.onDaySummary({
                 month, day,
                 modelName: r.modelName,
-                moneyCost: r.moneyCost,
-                quality: r.quality,
-                bugs: r.bugs,
-                overtime: r.overtime,
-                hpDelta: hpDelta !== 0 ? hpDelta : 0,
-                brainDelta: brainDelta !== 0 ? brainDelta : 0,
-                moneyDelta: moneyDelta !== 0 ? moneyDelta : 0,
-                events: r.events
+                tokensUsed: r.tokensUsed,
+                events: r.events,
+                overtime: r.overtime
             });
         } else {
             // Fallback: plain text if no onDaySummary wired
-            const brainStr = `${r.brainStart}→${r.brainEnd}(${brainDelta >= 0 ? '+' : ''}${brainDelta})`;
-            const bugStr = r.bugs > 0 ? `Bug×${r.bugs}` : 'Bug×0';
+            const tokenStr = r.tokensUsed > 0 ? `消耗 ${r.tokensUsed}M` : '';
             const overtimeStr = r.overtime ? ' | ⚠️加班' : '';
-            const costStr = r.moneyCost > 0 ? `¥${r.moneyCost} (${r.tokensUsed}M)` : '¥0';
-            this.emitEvent(`📊 [${month}月${day}日] ${r.modelName} | ${costStr} | 质量${r.quality} | ${bugStr} | 脑力${brainStr}${overtimeStr}`, 'neutral');
+            const evStr = r.events.length > 0 ? ' | ' + r.events.join(' | ') : '';
+            this.emitEvent(`📊 [${month}月${day}日] ${r.modelName}${tokenStr ? ' | ' + tokenStr : ''}${evStr}${overtimeStr}`, 'neutral');
         }
         // Reset for next day
-        this.dayReport = { tokensUsed: 0, moneyCost: 0, bugs: 0, brainStart: this.property.get('brain'), brainEnd: 0, hpStart: this.property.get('hp'), hpEnd: 0, quality: 0, overtime: false, modelName: '', events: [] };
+        this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
     }
 
     emitEvent(text, type) {

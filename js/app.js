@@ -386,13 +386,14 @@ function renderModelSwitch() {
         const isCurrent = currentModel === id;
         const bugPct = Math.round(m.bugRate * 100);
 
+        const priceLabel = m.tokenPrice === 0 ? '免费' : `¥${m.tokenPrice}/M`;
         const item = document.createElement('div');
         item.className = 'model-item' + (isCurrent ? ' active' : '') + (!unlocked ? ' locked' : '');
         item.innerHTML = `
             <div class="mi-icon">${m.name.split(' ')[0]}</div>
             <div class="mi-info">
                 <div class="mi-name">${m.name}</div>
-                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}%</div>
+                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}% · ${priceLabel}</div>
             </div>
             ${isCurrent ? '<span class="mi-badge current">当前</span>' : ''}
             ${!unlocked ? '<span class="mi-badge" style="color:var(--text3);border:1px solid var(--border)">🔒 未解锁</span>' : ''}`;
@@ -428,28 +429,16 @@ game.onGameEnd = (data) => {
     checkAndShowAchievements();
 };
 game.onMonthSummary = () => {
-    // Module 4b: check achievements on month summary
     checkAndShowAchievements();
 };
 game.onDaySummary = (data) => {
     const parts = [`📅 ${data.month}月${data.day}日`];
     parts.push(data.modelName);
-    if (data.moneyCost > 0) parts.push(`¥-${data.moneyCost}`);
-    parts.push(`质量${data.quality}`);
-    if (data.bugs > 0) parts.push(`Bug×${data.bugs}`);
-    if (data.overtime) parts.push('⚠️加班');
+    if (data.tokensUsed > 0) parts.push(`消耗 ${data.tokensUsed}M`);
 
-    // Build HTML with colored deltas
     let html = parts.join(' | ');
 
-    const deltas = [];
-    if (data.hpDelta) deltas.push(colorDelta('❤️', data.hpDelta));
-    if (data.brainDelta) deltas.push(colorDelta('🧠', data.brainDelta));
-    if (data.moneyDelta) deltas.push(colorDelta('💰', data.moneyDelta, true));
-
-    if (deltas.length > 0) html += ' · ' + deltas.join(' ');
-
-    // Append any events that happened this day
+    // Append narrative events (bugs, overtime, special effects, choices)
     if (data.events && data.events.length > 0) {
         data.events.forEach(ev => {
             html += `<br>　　→ ${ev}`;
@@ -459,15 +448,8 @@ game.onDaySummary = (data) => {
     addEventLineHTML(data.month, data.day, html, data.overtime ? 'bad' : 'neutral');
 };
 game.onChoiceResult = ({ text, deltas }) => {
-    let html = `→ ${text}`;
-    const parts = [];
-    const names = { hp: '❤️HP', brain: '🧠脑力', money: '💰', bossSatisfy: '👔满意', shaoye_rel: '少爷', yimin_rel: '亿民', gf_rel: '💕女友' };
-    for (const [key, val] of Object.entries(deltas)) {
-        const name = names[key] || key;
-        parts.push(colorDelta(name, val, key === 'money'));
-    }
-    if (parts.length > 0) html += ' · ' + parts.join(' ');
-    addEventLineHTML(game.property.get('month'), game.property.get('day'), html, 'choice-made');
+    // R3: Show only narrative text, no numeric deltas
+    addEventLine(game.property.get('month'), game.property.get('day'), '→ ' + text, 'choice-made');
 };
 game.onError = (msg) => showToast('⚠️ ' + msg);
 
