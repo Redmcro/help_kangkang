@@ -87,13 +87,13 @@
     "choices": [
       {
         "text": "🎯 认真准备：花一整天做PPT",
-        "hint": "bossSatisfy+8, brain-5",
+        "hint": "认真准备总会被看到",
         "result": "分享很成功！老板频频点头，同事们也觉得有收获。",
         "effect": {"bossSatisfy": 8, "brain": -5, "charm": 5}
       },
       {
         "text": "🤖 让AI帮忙写：30分钟搞定",
-        "hint": "bossSatisfy+3, 有风险",
+        "hint": "省时间，但AI痕迹可能露馅",
         "chanceBased": true,
         "branches": [
           {"chance": 60, "result": "AI生成的PPT意外地很专业！老板还表扬了你的效率。", "type": "good", "effect": {"bossSatisfy": 5, "token": -20}},
@@ -102,7 +102,7 @@
       },
       {
         "text": "😷 请病假躲掉",
-        "hint": "hp-5, 延后但不可避免",
+        "hint": "躲得了初一躲不了十五",
         "result": "请了病假，但下个月还是得分享……而且老板记住了。",
         "effect": {"hp": -5, "bossSatisfy": -2}
       }
@@ -140,13 +140,13 @@
     "choices": [
       {
         "text": "💪 通宵干完：一个都不能少",
-        "hint": "hp-15, bossSatisfy+10",
+        "hint": "拼命赶工，老板会记住的",
         "result": "通宵把三个功能全赶出来了！代码质量不敢保证，但至少交付了。",
         "effect": {"hp": -15, "brain": -10, "bossSatisfy": 10}
       },
       {
         "text": "🎩 只做两个，第三个跟老板谈延期",
-        "hint": "bossSatisfy+3，保住健康",
+        "hint": "需要点口才才能说服老板",
         "require": {"charm": 40},
         "success": "凭借话术说服了老板延期一周。身体保住了，面子也保住了。",
         "successEffect": {"bossSatisfy": 3, "charm": 3},
@@ -155,7 +155,7 @@
       },
       {
         "text": "🐛 砍掉测试直接上线",
-        "hint": "bossSatisfy+5, 但后果自负",
+        "hint": "赌一把，线上见真章",
         "chanceBased": true,
         "branches": [
           {"chance": 40, "result": "居然没出Bug！运气爆棚。", "type": "good", "effect": {"bossSatisfy": 5, "luck": 3}},
@@ -233,7 +233,7 @@
     "choices": [
       {
         "text": "🏆 参加！用AI疯狂输出",
-        "hint": "hp-10, 有机会获奖",
+        "hint": "全力以赴，赢了改变命运",
         "chanceBased": true,
         "branches": [
           {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 10000, "hp": -10, "brain": 10, "bossSatisfy": 5, "charm": 5}},
@@ -243,13 +243,13 @@
       },
       {
         "text": "📦 当评委/观众",
-        "hint": "不累，学点东西",
+        "hint": "轻松围观，开开眼界",
         "result": "去看了看别人的作品，学到一些新思路。",
         "effect": {"brain": 3}
       },
       {
         "text": "🛏️ 在家躺着",
-        "hint": "恢复体力",
+        "hint": "躺平充电，养精蓄锐",
         "result": "周末在家打游戏补觉，周一精神满满。",
         "effect": {"hp": 8, "brain": 5}
       }
@@ -278,19 +278,19 @@
     "choices": [
       {
         "text": "🫡 主动值班：拍老板马屁",
-        "hint": "bossSatisfy+8, hp-8, money+2000",
+        "hint": "牺牲假期，换老板一个好印象",
         "result": "整个假期就你和老板在公司。老板很感动，多发了2000块加班费。",
         "effect": {"bossSatisfy": 8, "hp": -8, "money": 2000}
       },
       {
         "text": "🙋 只值一天意思意思",
-        "hint": "bossSatisfy+2, 平衡",
+        "hint": "做做样子，两边不得罪",
         "result": "去了一天装装样子，剩下时间回家躺着。",
         "effect": {"bossSatisfy": 2, "hp": 3}
       },
       {
         "text": "✈️ 直接出去旅游不看消息",
-        "hint": "hp+10, bossSatisfy-3",
+        "hint": "身心舒畅，但老板可能不高兴",
         "result": "去了趟三亚，晒得黝黑。回来发现老板多看了你两眼。",
         "effect": {"hp": 10, "brain": 5, "bossSatisfy": -3}
       }
@@ -335,5 +335,356 @@
     "once": true,
     "effect": {"hp": 3, "charm": 2},
     "postEvent": "火锅的热气模糊了所有人的脸。这一年终于要过去了。"
+  },
+
+  "monthly_m1_ai_pledge": {
+    "month": [1, 1],
+    "text": "老板要求每个人写一份'AI转型个人计划书'。洋洋洒洒写了三页，其实心里一个字都不信。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 70,
+    "title": "📝 AI转型计划书",
+    "desc": "老板让每人写一份AI转型计划。你打算怎么写？",
+    "choices": [
+      {
+        "text": "📚 认真研究后写一份有深度的计划",
+        "hint": "认真的态度会被看到",
+        "result": "老板在你的计划书上画了个大大的红色五角星。你悄悄截了个图发朋友圈。",
+        "effect": {"brain": 5, "bossSatisfy": 5}
+      },
+      {
+        "text": "🤖 用豆包帮你写",
+        "hint": "省事但可能翻车",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "豆包写了篇完美的计划书。唯一的问题是——它建议你转行做产品经理。", "type": "good", "effect": {"bossSatisfy": 3, "token": -10}},
+          {"chance": 50, "result": "计划书里出现了'根据我的知识截止日期'这种经典AI痕迹。老板皱了眉。", "type": "bad", "effect": {"bossSatisfy": -3, "token": -10}}
+        ]
+      },
+      {
+        "text": "✍️ 随便糊弄两行交差",
+        "hint": "敷衍了事，看运气吧",
+        "result": "你写了'多用AI、少加班、不躺平'九个大字交了上去。老板看了你三秒钟。",
+        "effect": {"bossSatisfy": -2, "hp": 2}
+      }
+    ]
+  },
+
+  "monthly_m2_return_shock": {
+    "month": [2, 2],
+    "text": "春节返工第一天，康康发现公司大厅多了一块大屏，24小时滚动显示各组AI使用率排名。你们组倒数第二。",
+    "type": "bad",
+    "system": "monthly",
+    "once": true,
+    "weight": 70,
+    "effect": {"brain": -3, "bossSatisfy": -2},
+    "postEvent": "康康望着排行榜发呆。隔壁组的AI使用率是你们的三倍……他们是怎么做到的？"
+  },
+
+  "monthly_m3_model_anxiety": {
+    "month": [3, 3],
+    "text": "Opus 4.6刚出，技术群里已经吵成一片。有人说它改变了一切，有人说它就是个噱头。康康打开钱包看了看余额，陷入沉思。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 75,
+    "title": "🤯 模型选择焦虑",
+    "desc": "新模型涌现，你感到前所未有的选择焦虑。该怎么办？",
+    "choices": [
+      {
+        "text": "🧪 每个模型都试一遍，做个对比测试",
+        "hint": "专业测评，费钱但能出名",
+        "result": "你花了整整两天，做了一份20页的模型对比报告。发到技术群里被疯传，老板也看到了。",
+        "effect": {"brain": 8, "token": -30, "bossSatisfy": 5, "charm": 3}
+      },
+      {
+        "text": "💰 挑最贵的用——贵的肯定好",
+        "hint": "简单粗暴，贵的就是好的",
+        "result": "Opus 4.6质量确实好，但Token烧得飞快。一个月的预算三天就花完了。",
+        "effect": {"token": -50, "brain": 3}
+      },
+      {
+        "text": "🐳 继续用豆包——免费的才是最好的",
+        "hint": "省钱是省钱，但别人都在卷",
+        "result": "当别人用Opus写出优雅代码时，你的豆包输出了一堆中文注释加面条代码。但至少……不花钱。",
+        "effect": {"brain": -3},
+        "setFlag": "switched_to_doubao"
+      }
+    ]
+  },
+
+  "monthly_m4_survival_choice": {
+    "month": [4, 4],
+    "text": "裁员风暴中，老板把你叫进办公室。桌上放着两份文件：一份是新项目的任命书，一份是N+1赔偿协议。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 95,
+    "title": "⚡ 生存还是离开",
+    "desc": "老板给了你两个选择。一份是高压新项目的任命，一份是体面的离职赔偿。",
+    "include": {"bossSatisfy": "<50"},
+    "choices": [
+      {
+        "text": "📋 接任命书——咬牙留下来",
+        "hint": "咬牙留下，前路漫漫",
+        "result": "你签下了任命书。老板点了点头：'我看好你。别让我失望。' 新项目的需求文档有整整87页。",
+        "effect": {"bossSatisfy": 10, "hp": -10, "brain": -5}
+      },
+      {
+        "text": "💼 拿赔偿——体面离开",
+        "hint": "拿钱走人，但以后的路更难",
+        "result": "你拿了N+1走人。HR递纸巾的手都在抖。走出大楼时阳光很刺眼。",
+        "effect": {"money": 15000, "bossSatisfy": -20, "hp": -15},
+        "setFlag": "considered_delivery"
+      }
+    ]
+  },
+
+  "monthly_m5_ai_impersonation": {
+    "month": [5, 5],
+    "text": "你在某技术论坛上发现一个帖子：有人用FakeOpus把整个项目重写了一遍，代码量是原来的5倍，但跑起来……完全一样。评论区笑疯了。",
+    "type": "neutral",
+    "system": "monthly",
+    "once": true,
+    "weight": 65,
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "你笑完之后突然意识到：这不就是自己用AI写代码的日常吗？只是程度不同而已。一阵后背发凉。",
+        "type": "neutral",
+        "effect": {"brain": 5, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "你笑了半天，然后低头看了看自己屏幕上FakeOpus刚输出的代码。突然笑不出来了。",
+        "type": "bad",
+        "effect": {"brain": -3, "hp": -2}
+      }
+    ]
+  },
+
+  "monthly_m6_618_token_sale": {
+    "month": [6, 6],
+    "text": "618大促！所有AI平台都在搞Token打折：充100送50！整个公司都在疯狂囤Token。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 85,
+    "title": "🛒 618 Token大促",
+    "desc": "各大AI平台618大促，Token价格史低。要趁机囤货吗？",
+    "choices": [
+      {
+        "text": "💎 充3000块——囤他个够",
+        "hint": "大手笔囤货，安全感拉满",
+        "result": "一口气充了3000块。看着账户里金灿灿的Token数字，你感受到了前所未有的安全感。",
+        "effect": {"money": -3000, "token": 200}
+      },
+      {
+        "text": "🪙 充500块意思意思",
+        "hint": "理性消费，小囤一点",
+        "result": "理性消费。同事们拿着'充值截图'炫耀时，你默默关上了手机。",
+        "effect": {"money": -500, "token": 50}
+      },
+      {
+        "text": "🚫 一分钱不充——打折也是消费主义陷阱",
+        "hint": "克制冲动，但错过就没了",
+        "result": "你选择了克制。到了7月Token价格翻倍时，你开始疯狂后悔。",
+        "effect": {"brain": -2}
+      }
+    ]
+  },
+
+  "monthly_m7_blackout": {
+    "month": [7, 7],
+    "text": "高温导致全城大面积停电！公司备用电源只够撑服务器，办公区一片漆黑。所有人只能用手机热点办公。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 80,
+    "title": "🔌 大停电危机",
+    "desc": "公司停电了，手机信号也不稳定。AI工具全部瘫痪。怎么办？",
+    "choices": [
+      {
+        "text": "💡 用手机热点硬撑——加载一行代码等五分钟",
+        "hint": "效率极低，但至少在干活",
+        "result": "你在烛光下对着14英寸屏幕写代码，AI回复一条消息要30秒。三小时写了不到20行。",
+        "effect": {"brain": -8, "hp": -8, "bossSatisfy": 2}
+      },
+      {
+        "text": "📝 不用AI，纯手写代码",
+        "hint": "证明自己离了AI也能行",
+        "require": {"brain": 50},
+        "success": "没有AI的你，居然手写了一个完整的功能模块。老板震惊了：'你还会手写代码？！'",
+        "successEffect": {"brain": -10, "bossSatisfy": 8, "charm": 5},
+        "fail": "尝试手写代码，但发现自己已经完全依赖AI了。连一个for循环都要查语法。",
+        "failEffect": {"brain": -15, "hp": -5, "bossSatisfy": -3}
+      },
+      {
+        "text": "☕ 去星巴克蹭电蹭网",
+        "hint": "换个环境，花点小钱图个舒服",
+        "result": "你在星巴克的角落里打开笔记本。空调、WiFi、咖啡一应俱全。效率竟然比公司还高。",
+        "effect": {"money": -50, "hp": 3, "brain": 3}
+      }
+    ]
+  },
+
+  "monthly_m8_awakening": {
+    "month": [8, 8],
+    "text": "半年考核后的某天深夜，你独自在公司加班。窗外万家灯火，你突然开始思考：学AI到底是为了生存，还是为了真正做出点什么？",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 60,
+    "title": "🌙 深夜的觉醒",
+    "desc": "半年已过，你开始认真思考自己和AI的关系。",
+    "choices": [
+      {
+        "text": "💡 '我要做AI做不到的事！'",
+        "hint": "找到自己不可替代的价值",
+        "result": "你决定不再只是做AI的'提示词工程师'，而是真正理解AI的局限，找到人类不可替代的价值。这个夜晚改变了你的方向。",
+        "effect": {"brain": 10, "charm": 5, "hp": -3}
+      },
+      {
+        "text": "😤 '我就是要比AI更快更好！'",
+        "hint": "卷到极致，身体可能吃不消",
+        "result": "你开始疯狂学习各种AI工具，立志成为全公司AI使用效率最高的人。目标明确，但身体在抗议。",
+        "effect": {"brain": 5, "hp": -5, "bossSatisfy": 3}
+      },
+      {
+        "text": "😔 '算了，能活一天是一天……'",
+        "hint": "得过且过，明天再说",
+        "result": "你叹了口气，关掉了知乎上《程序员转行指南》的标签页，继续写代码。明天再说吧。",
+        "effect": {"hp": 2, "brain": -3}
+      }
+    ]
+  },
+
+  "monthly_m9_gamejam_result": {
+    "month": [9, 9],
+    "text": "GameJam结束后的周一，你在朋友圈刷到了获奖名单。不管有没有参加，那些用AI做出的炫酷游戏都让你震撼了。",
+    "type": "neutral",
+    "system": "monthly",
+    "once": true,
+    "weight": 55,
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "看着那些作品，你心里涌起一股冲动：'我也可以做到。不，我能做得更好。' 你默默打开了Unity，开始写自己的项目。",
+        "type": "good",
+        "effect": {"brain": 5, "charm": 3},
+        "setFlag": "gamejam_won"
+      },
+      {
+        "cond": {"brain": ">40"},
+        "text": "那些AI生成的游戏画面和玩法让你感叹技术的进步。你截图保存了几个有意思的创意，或许以后用得上。",
+        "type": "neutral",
+        "effect": {"brain": 3}
+      },
+      {
+        "cond": {},
+        "text": "看着别人用AI做游戏做得那么溜，你怀疑自己这几年的Unity经验是不是都白费了。一阵莫名的失落。",
+        "type": "bad",
+        "effect": {"brain": -5, "hp": -3}
+      }
+    ]
+  },
+
+  "monthly_m10_ai_replacement_panic": {
+    "month": [10, 10],
+    "text": "一篇《2026年将被AI取代的十大职业》的文章刷爆朋友圈。'初级程序员'赫然排在第二位。整个办公室都在传。",
+    "type": "bad",
+    "system": "monthly",
+    "once": true,
+    "weight": 75,
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">60"},
+        "text": "虽然文章很吓人，但老板看你的眼神还是很满意的。'别看那些贩卖焦虑的东西，'他说，'你的AI使用率全组第一。'",
+        "type": "good",
+        "effect": {"brain": 3, "hp": 3}
+      },
+      {
+        "cond": {"bossSatisfy": ">35"},
+        "text": "老板在周会上轻描淡写地提了一句：'大家不要被这种文章影响情绪。但技能提升确实不能停。' 你品了品，不太是滋味。",
+        "type": "neutral",
+        "effect": {"brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "老板直接转发了这篇文章到工作群，还加了一句：'与其焦虑不如行动。Q4的AI转型考核马上就来了。'",
+        "type": "bad",
+        "effect": {"brain": -8, "hp": -5, "bossSatisfy": -3}
+      }
+    ]
+  },
+
+  "monthly_m11_last_chance": {
+    "month": [11, 11],
+    "text": "距离年终审判还剩两个月。HR群发了一封邮件：'年终考核将新增AI能力评估，占比30%。' 这是最后的机会了。",
+    "type": "choice",
+    "system": "monthly",
+    "once": true,
+    "weight": 90,
+    "title": "🎯 最后的冲刺",
+    "desc": "年终考核即将来临，AI能力占比30%。你打算怎么备战？",
+    "choices": [
+      {
+        "text": "🔥 疯狂肝——每天下班后学三小时AI",
+        "hint": "拼命冲刺，用健康换能力",
+        "result": "连续两周高强度学习。你的眼睛布满血丝，但AI使用技巧突飞猛进。同事开始来找你请教。",
+        "effect": {"brain": 12, "hp": -12, "bossSatisfy": 5, "charm": 3}
+      },
+      {
+        "text": "🧠 聪明学——找少爷/亿民一起组队备考",
+        "hint": "团队作战，但需要好人缘",
+        "require": {"shaoye_rel": 40},
+        "success": "少爷分享了一套压箱底的AI学习资料。三人轮流梳理，效率极高。",
+        "successEffect": {"brain": 8, "shaoye_rel": 5, "charm": 3},
+        "fail": "想拉人组队，但大家都自顾不暇。只好一个人埋头苦学。",
+        "failEffect": {"brain": 5, "hp": -5}
+      },
+      {
+        "text": "🤷 躺平——该来的总会来",
+        "hint": "佛系躺平，听天由命",
+        "result": "你选择了接受命运。每天准时下班，回家打游戏。内心既平静又恐慌。",
+        "effect": {"hp": 5, "brain": -5, "bossSatisfy": -5}
+      }
+    ]
+  },
+
+  "monthly_m12_final_verdict": {
+    "month": [12, 12],
+    "text": "年终审判的结果邮件终于来了。你的手指悬停在鼠标上方，迟迟没有点开……",
+    "type": "special",
+    "system": "monthly",
+    "once": true,
+    "weight": 95,
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">75"},
+        "text": "【S级】老板亲自打来电话：'恭喜！你是今年转型最成功的员工。明年你带个小组。' 年终奖：3个月工资。你在厕所里偷偷哭了。",
+        "type": "good",
+        "effect": {"money": 20000, "brain": 10, "hp": 10, "charm": 5}
+      },
+      {
+        "cond": {"bossSatisfy": ">55"},
+        "text": "【B级】评语：'转型进度优秀，尚有提升空间。建议继续深耕AI技术栈。' 年终奖：1.5个月工资。活下来了。",
+        "type": "good",
+        "effect": {"money": 10000, "brain": 5, "hp": 5}
+      },
+      {
+        "cond": {"bossSatisfy": ">35"},
+        "text": "【C级】评语：'AI转型进度落后于团队平均水平。Q1需提交改进计划。' 年终奖：0.5个月工资。勉强保住饭碗，但头顶的剑更近了。",
+        "type": "neutral",
+        "effect": {"money": 3000, "brain": -5}
+      },
+      {
+        "cond": {},
+        "text": "【D级】HR的邮件只有一行：'请于明天上午10点到HR办公室面谈。' 你看着这行字，突然觉得明天的路很长很长。",
+        "type": "bad",
+        "effect": {"brain": -15, "hp": -15, "bossSatisfy": -10}
+      }
+    ]
   }
 }

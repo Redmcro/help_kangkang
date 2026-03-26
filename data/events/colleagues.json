@@ -122,7 +122,7 @@
     "choices": [
       {
         "text": "💪 挽留：'留下来啊，咱们一起扛过这年！'",
-        "hint": "关系+15，但他可能留下也可能走",
+        "hint": "用真心挽留，但结果未必如愿",
         "chanceBased": true,
         "branches": [
           { "chance": 60, "result": "少爷想了想，笑着说：'行吧，看在奶茶的份上。'", "type": "good", "effect": { "shaoye_rel": 15, "brain": 3 } },
@@ -131,13 +131,13 @@
       },
       {
         "text": "🍺 请他喝一杯：'不管怎样，祝你好运。'",
-        "hint": "money -300, 关系+10",
+        "hint": "花钱请客，好聚好散",
         "result": "你们喝到很晚，聊了很多。少爷说：'你是个好人。'",
         "effect": { "money": -300, "hp": -2, "shaoye_rel": 10 }
       },
       {
         "text": "😤 '走吧走吧，反正AI也能测试了。'",
-        "hint": "关系-20",
+        "hint": "话说得太绝，可能伤人",
         "result": "少爷愣了一下，没说话。第二天他递了辞职信。",
         "effect": { "shaoye_rel": -20, "brain": -3 }
       }
@@ -157,19 +157,19 @@
     "choices": [
       {
         "text": "🤝 '需要帮忙的话随时问我'",
-        "hint": "关系+10，花时间",
+        "hint": "花时间帮忙，增进友谊",
         "result": "少爷不好意思地笑了：'那...能帮我看看这个报错吗？'",
         "effect": { "shaoye_rel": 10, "brain": -3 }
       },
       {
         "text": "😏 '怎么，QA也要卷了？'",
-        "hint": "关系-2",
+        "hint": "嘴上开玩笑，可能适得其反",
         "result": "少爷白了你一眼：'我不想只会写测试报告。'",
         "effect": { "shaoye_rel": -2 }
       },
       {
         "text": "📎 推荐他一些学习资源",
-        "hint": "关系+5",
+        "hint": "举手之劳，聊表心意",
         "result": "你发了一堆Python入门链接过去。少爷回了个'谢了'。",
         "effect": { "shaoye_rel": 5 }
       }
@@ -267,21 +267,21 @@
     "choices": [
       {
         "text": "📚 认真教他：花一下午带他入门",
-        "hint": "brain -8, 关系+20, 但当日工作受影响",
+        "hint": "倾囊相授，但今天的活可能干不完了",
         "result": "亿民学得很认真，晚上发消息说：'谢谢，这东西确实有点东西。'",
         "effect": { "brain": -8, "yimin_rel": 20, "bossSatisfy": -1 },
         "setFlag": "yimin_ai_convert"
       },
       {
         "text": "📎 发个教程链接：'自己看看就行'",
-        "hint": "关系+5",
+        "hint": "随手帮个忙，不费什么功夫",
         "result": "亿民点点头，没再说什么。过了几天你发现他在看视频教程。",
         "effect": { "yimin_rel": 5 },
         "setFlag": "yimin_ai_convert"
       },
       {
         "text": "😏 '怎么，大佬也用AI了？'",
-        "hint": "关系-10",
+        "hint": "嘲讽可能让他退缩",
         "result": "亿民脸一沉：'算了。' 转身走了。",
         "effect": { "yimin_rel": -10 }
       }
@@ -314,7 +314,7 @@
     "choices": [
       {
         "text": "🤝 找老板帮亿民说话",
-        "hint": "bossSatisfy -3, 亿民关系+15",
+        "hint": "为朋友出头，可能得罪老板",
         "require": { "bossSatisfy": 60 },
         "success": "老板说：'嗯，他技术确实不可替代。' 亿民保住了。",
         "successEffect": { "bossSatisfy": -3, "yimin_rel": 15 },
@@ -323,13 +323,13 @@
       },
       {
         "text": "💡 建议亿民学AI转型",
-        "hint": "关系+5",
+        "hint": "言语上的关心，总比沉默好",
         "result": "亿民沉默了很久：'也许你说得对。'",
         "effect": { "yimin_rel": 5, "brain": 2 }
       },
       {
         "text": "🙈 装不知道",
-        "hint": "无事发生",
+        "hint": "明哲保身，不掺和",
         "result": "你选择不掺和。亿民继续沉默地写着代码。",
         "effect": {}
       }
@@ -357,5 +357,291 @@
     "include": { "shaoye_rel": ">50", "yimin_rel": ">50" },
     "effect": { "hp": 2, "brain": 3, "shaoye_rel": 3, "yimin_rel": 3 },
     "postEvent": "这种日子挺好的。"
+  },
+
+  "colleague_shaoye_delta_01": {
+    "month": [1, 12],
+    "text": "少爷发来消息：'今晚三角洲行动，缺人，来不来？'",
+    "type": "choice",
+    "system": "colleague",
+    "weight": 2,
+    "tags": ["社交", "游戏"],
+    "include": { "shaoye_rel": ">45" },
+    "title": "🎮 三角洲行动之夜",
+    "desc": "少爷邀请你晚上一起打三角洲行动。明天还要上班呢……",
+    "choices": [
+      {
+        "text": "🔫 '来了！这把我突击手'",
+        "hint": "通宵开黑，伤身但快乐",
+        "result": "你们激战到凌晨两点，少爷的狙击救了你无数次。第二天上班你俩都顶着黑眼圈。",
+        "effect": { "hp": -5, "brain": -3, "shaoye_rel": 8 }
+      },
+      {
+        "text": "😴 '明天还要上班，下次吧'",
+        "hint": "拒绝邀请，少爷可能有点失望",
+        "result": "少爷回了个'切'的表情包。",
+        "effect": { "shaoye_rel": -2 }
+      },
+      {
+        "text": "🎯 '行，但最多打到11点'",
+        "hint": "适可而止，兼顾社交和休息",
+        "result": "你们打了三局就收手了。少爷说：'还是你自律。'",
+        "effect": { "hp": -2, "shaoye_rel": 5 }
+      }
+    ]
+  },
+  "colleague_shaoye_delta_02": {
+    "month": [2, 12],
+    "text": "少爷今天上班迟到了二十分钟，一脸疲惫：'昨晚三角洲排位掉了两段……'",
+    "type": "neutral",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["社交", "游戏"],
+    "include": { "shaoye_rel": ">35" },
+    "effect": { "shaoye_rel": 2 },
+    "postEvent": "你偷偷帮他倒了杯咖啡放桌上。"
+  },
+  "colleague_shaoye_meme_01": {
+    "month": [1, 12],
+    "text": "少爷在工作群里发了一张你写的Bug截图，还配了个表情包：'震惊！某程序员一行代码七个Bug！'",
+    "type": "bad",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["社交", "职场"],
+    "include": { "shaoye_rel": ">30", "avg_quality": "<55" },
+    "branch": [
+      {
+        "cond": { "shaoye_rel": ">60" },
+        "text": "你回了一张少爷上次打三角洲0杀的截图。大家哈哈大笑，算扯平了。",
+        "type": "neutral",
+        "effect": { "shaoye_rel": 2 }
+      },
+      {
+        "cond": {},
+        "text": "整个群都在笑。你尴尬得想钻进地缝。",
+        "type": "bad",
+        "effect": { "shaoye_rel": -3, "brain": -2, "bossSatisfy": -1 }
+      }
+    ]
+  },
+  "colleague_shaoye_bugbet_01": {
+    "month": [3, 12],
+    "text": "少爷提议打赌：'这版我测出的Bug超过10个，你请我喝奶茶；低于5个，我请你。'",
+    "type": "choice",
+    "system": "colleague",
+    "once": true,
+    "weight": 2,
+    "tags": ["社交", "职场"],
+    "include": { "shaoye_rel": ">40" },
+    "title": "🎲 Bug数赌局",
+    "desc": "少爷要拿你的Bug数打赌。你接不接？",
+    "choices": [
+      {
+        "text": "💪 '赌就赌！我对这版有信心'",
+        "hint": "对自己的代码有信心吗？",
+        "require": { "avg_quality": 70 },
+        "success": "少爷只找到3个Bug！他不情愿地掏出手机点了两杯奶茶。",
+        "successEffect": { "hp": 3, "shaoye_rel": 8, "brain": 2 },
+        "fail": "少爷找到了14个Bug，笑得合不拢嘴。你默默打开外卖App点了两杯奶茶。",
+        "failEffect": { "money": -30, "shaoye_rel": 3 }
+      },
+      {
+        "text": "🙅 '不赌，你太厉害了'",
+        "hint": "认怂也是一种智慧",
+        "result": "少爷得意地哼了一声：'算你有自知之明。'",
+        "effect": { "shaoye_rel": 2 }
+      }
+    ]
+  },
+  "colleague_shaoye_autotest_01": {
+    "month": [6, 12],
+    "text": "少爷突然给你看他写的自动化测试脚本：'你看，我用Python写的，能自动跑回归测试了！'",
+    "type": "good",
+    "system": "colleague",
+    "once": true,
+    "weight": 2,
+    "tags": ["技术", "社交"],
+    "include": { "shaoye_rel": ">55" },
+    "effect": { "brain": 3, "shaoye_rel": 5, "bossSatisfy": 2 },
+    "postEvent": "少爷从QA变成了SDET。你有点恍惚——他什么时候学会这些的？"
+  },
+  "colleague_shaoye_cold_01": {
+    "month": [1, 3],
+    "text": "你感冒了趴在工位上。少爷经过时放下一包感冒药：'别死在公司，我还不想写事故报告。'",
+    "type": "good",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["社交", "日常"],
+    "include": { "shaoye_rel": ">30", "hp": "<40" },
+    "effect": { "hp": 8, "shaoye_rel": 5 },
+    "postEvent": "嘴上毒舌，心里还是关心你的。"
+  },
+  "colleague_yimin_gym_01": {
+    "month": [1, 12],
+    "text": "亿民换上运动装准备去健身房：'你这体格不行啊，跟我去练练？'",
+    "type": "choice",
+    "system": "colleague",
+    "weight": 2,
+    "tags": ["社交", "健身"],
+    "include": { "yimin_rel": ">35" },
+    "title": "💪 亿民的健身邀请",
+    "desc": "亿民邀请你下班后一起去健身。你最近确实缺乏运动……",
+    "choices": [
+      {
+        "text": "🏋️ '走！练起来！'",
+        "hint": "锻炼身体，但消耗精力",
+        "result": "亿民带你做了一组全身训练。你浑身酸痛但精神焕发。亿民说：'坚持一个月你就知道好处了。'",
+        "effect": { "hp": 5, "brain": -2, "yimin_rel": 5 }
+      },
+      {
+        "text": "😫 '算了，我还有代码没写完'",
+        "hint": "宅在工位，可能让亿民失望",
+        "result": "亿民摇摇头：'就知道你们年轻人不爱动。'",
+        "effect": { "yimin_rel": -2 }
+      },
+      {
+        "text": "🏃 '我跑步就行，不用去健身房'",
+        "hint": "简单活动一下，聊胜于无",
+        "result": "亿民说：'有氧不够，力量训练才是正道。' 你跑了两圈就气喘吁吁回来了。",
+        "effect": { "hp": 2, "yimin_rel": 1 }
+      }
+    ]
+  },
+  "colleague_yimin_clockout_01": {
+    "month": [1, 12],
+    "text": "下午5点59分，亿民已经把包收好了，电脑关了，手放在键盘上假装还在工作。",
+    "type": "neutral",
+    "system": "colleague",
+    "weight": 2,
+    "tags": ["社交", "日常"],
+    "effect": { "yimin_rel": 1 },
+    "postEvent": "6点整，亿民第一个冲出了办公室。你看了看自己的Bug列表，叹了口气。"
+  },
+  "colleague_yimin_legacy_01": {
+    "month": [2, 12],
+    "text": "你打开一个三年前的老模块，满屏幕的屎山代码。亿民走过来扫了一眼：'这是我写的。'",
+    "type": "neutral",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["技术", "社交"],
+    "include": { "yimin_rel": ">30" },
+    "branch": [
+      {
+        "cond": { "brain": ">60" },
+        "text": "你当着亿民的面重构了核心逻辑。亿民点点头：'比我当年写得好。'",
+        "type": "good",
+        "effect": { "brain": -5, "yimin_rel": 8, "bossSatisfy": 2 }
+      },
+      {
+        "cond": {},
+        "text": "你看了半天看不懂。亿民叹了口气坐下来：'我给你讲讲。'",
+        "type": "neutral",
+        "effect": { "brain": 5, "yimin_rel": 3 }
+      }
+    ]
+  },
+  "colleague_yimin_hotfix_01": {
+    "month": [3, 12],
+    "text": "线上炸了！紧急Bug，老板脸都绿了。亿民面不改色，十分钟定位问题，二十分钟修复上线。",
+    "type": "good",
+    "system": "colleague",
+    "once": true,
+    "weight": 1,
+    "tags": ["技术", "职场"],
+    "include": { "yimin_rel": ">25" },
+    "effect": { "brain": 5, "bossSatisfy": 3, "yimin_rel": 5 },
+    "postEvent": "全场鼓掌。亿民淡定地说：'小场面。' 然后继续看他的健身视频。"
+  },
+  "colleague_yimin_protein_01": {
+    "month": [1, 12],
+    "text": "亿民从包里掏出一个蛋白粉摇杯，咕咚咕咚喝完。'增肌期，一天五顿蛋白质。'",
+    "type": "neutral",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["社交", "健身"],
+    "include": { "yimin_rel": ">20" },
+    "effect": { "yimin_rel": 1 },
+    "postEvent": "你低头看了看自己的肚子，默默放下了手里的薯片。"
+  },
+  "colleague_yimin_silentfix_01": {
+    "month": [2, 12],
+    "text": "你发现昨天那个怎么都调不通的Bug今天突然好了。Git日志显示亿民昨晚11点提交了一个修复。",
+    "type": "special",
+    "system": "colleague",
+    "once": true,
+    "weight": 1,
+    "tags": ["技术", "社交"],
+    "include": { "yimin_rel": ">65" },
+    "effect": { "bossSatisfy": 2, "brain": 3, "yimin_rel": 5 },
+    "postEvent": "你去感谢他，亿民头也不抬：'顺手的。' 但你知道那个Bug一点都不简单。"
+  },
+  "colleague_duo_gaming_01": {
+    "month": [2, 12],
+    "text": "周五下午摸鱼时间，少爷提议：'三角洲三人组？' 亿民居然也点了点头。",
+    "type": "choice",
+    "system": "colleague",
+    "once": true,
+    "weight": 1,
+    "tags": ["社交", "游戏"],
+    "include": { "shaoye_rel": ">50", "yimin_rel": ">50" },
+    "title": "🎮 三人游戏之夜",
+    "desc": "少爷和亿民都想打三角洲。一起打一局？",
+    "choices": [
+      {
+        "text": "🔥 '三缺一不如三缺零，开冲！'",
+        "hint": "一起并肩作战，拉近距离",
+        "result": "你们组队吃了两把鸡！少爷负责侦察，亿民负责狙击，你冲锋陷阵。完美配合。",
+        "effect": { "hp": -3, "shaoye_rel": 5, "yimin_rel": 5, "brain": 2 }
+      },
+      {
+        "text": "📋 '你们打，我当观众'",
+        "hint": "当个快乐观众也不错",
+        "result": "你在旁边看他俩互相嫌弃，笑得肚子疼。",
+        "effect": { "shaoye_rel": 2, "yimin_rel": 2, "hp": 1 }
+      }
+    ]
+  },
+  "colleague_duo_prank_01": {
+    "month": [4, 12],
+    "text": "少爷在亿民的键盘上贴了张纸条：'此键盘已被AI接管'。亿民看到后追着少爷跑了三层楼。",
+    "type": "good",
+    "system": "colleague",
+    "weight": 1,
+    "tags": ["社交", "日常"],
+    "include": { "shaoye_rel": ">40", "yimin_rel": ">40" },
+    "effect": { "hp": 2, "brain": 1, "shaoye_rel": 2, "yimin_rel": 2 },
+    "postEvent": "整个办公室都在笑。这是本月最轻松的一天。"
+  },
+  "colleague_duo_crisis_01": {
+    "month": [6, 12],
+    "text": "服务器半夜宕机，老板紧急召集你们三个人回公司抢修。凌晨三点的办公室，只有键盘声和泡面味。",
+    "type": "choice",
+    "system": "colleague",
+    "once": true,
+    "weight": 1,
+    "tags": ["职场", "社交"],
+    "include": { "shaoye_rel": ">35", "yimin_rel": ">35" },
+    "title": "🚨 深夜紧急抢修",
+    "desc": "凌晨三点，你们仨被叫回来加班。该怎么分工？",
+    "choices": [
+      {
+        "text": "🧩 '亿民查后端，少爷跑回归，我改前端'",
+        "hint": "拼一把，累但能赢得所有人认可",
+        "result": "天亮前你们修好了所有问题。老板感动得差点落泪（然后第二天还是催你交需求）。",
+        "effect": { "brain": -10, "hp": -8, "bossSatisfy": 8, "shaoye_rel": 8, "yimin_rel": 8 }
+      },
+      {
+        "text": "😤 '凭什么？我又不是运维'",
+        "hint": "甩锅可能让所有人不爽",
+        "result": "老板冷冷地看了你一眼。少爷和亿民默默替你干了你那份。",
+        "effect": { "bossSatisfy": -5, "shaoye_rel": -5, "yimin_rel": -5 }
+      },
+      {
+        "text": "☕ 先去买四杯咖啡回来再说",
+        "hint": "小小花费，暖暖人心",
+        "result": "你带着热咖啡回来，大家精神一振。虽然修到了天亮，但气氛出奇地好。",
+        "effect": { "money": -60, "hp": -5, "brain": -5, "bossSatisfy": 5, "shaoye_rel": 5, "yimin_rel": 5 }
+      }
+    ]
   }
 }

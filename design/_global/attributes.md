@@ -129,6 +129,9 @@ hp    += 5 （自然恢复，上限100）
 |:---|:---|:---|:---|:---|
 | `learned_ai_course` | bool | choice | 购买AI课程 | brain判定加成 |
 | `switched_to_doubao` | bool | choice | Token告急切豆包 | 豆包相关事件权重提升 |
+| `training_ai` | bool | choice | 选择AI培训方向 | 解锁AI进阶事件 |
+| `attended_ai_conf` | bool | choice | 参加AI技术大会 | 解锁行业人脉事件 |
+| `built_ai_tool` | bool | choice | 搭建AI接单工具 | 解锁工具变现事件 |
 
 ### 人生/抉择 Flag
 
@@ -137,6 +140,9 @@ hp    += 5 （自然恢复，上限100）
 | `considered_delivery` | bool | choice | 考虑过送外卖 | 解锁骑手相关后续事件 |
 | `gamejam_won` | bool | monthly | GameJam获奖 | 解锁独立开发者结局 |
 | `sharedToy` | bool | choice | 分享玩具选择 | 后续社交事件 |
+| `signed_compete_clause` | bool | choice | 签竞业协议拿期权 | 限制跳槽选项 |
+| `opensource_fame` | bool | choice | 开源社区做分享 | 解锁猎头/人脉事件 |
+| `tried_transfer` | bool | choice | 申请内部转岗 | 影响后续职业路径事件 |
 
 > [!TIP]
 > **添加新 Flag 时**：在事件中使用 `setFlag`，然后在此表中登记 Flag 名称、类型、来源和影响。

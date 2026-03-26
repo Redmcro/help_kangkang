@@ -15,7 +15,6 @@
 | [ARCHITECTURE.md](./design/ARCHITECTURE.md) | 🏗️ 系统架构（代码模块/接口/数据格式） | 写代码的 AI + 开发者 |
 | [TODO.md](./design/TODO.md) | 📋 任务分配表（模块/验收标准） | 大内总管 + 各部门 AI |
 | [design/README.md](./design/README.md) | 🎨 设计系统使用指南 | 内容创作 AI |
-| [design/WORKFLOW.md](./design/WORKFLOW.md) | 🔧 AI 内容生成工作流 | 内容创作 AI |
 
 ---
 

@@ -185,5 +185,226 @@
     "weight": 0.6,
     "once": true,
     "effect": {"money": 500, "brain": 2, "charm": 3}
+  },
+
+  "random_good_ai_dream_01": {
+    "month": [1, 12],
+    "text": "康康做了一个梦：AI模型在梦里教他写代码，醒来后发现自己居然记住了一种全新的设计模式！",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"brain": 10, "hp": -2},
+    "postEvent": "康康开始怀疑：是AI入侵了梦境，还是自己压力太大了？"
+  },
+  "random_good_quantum_keyboard_01": {
+    "month": [3, 12],
+    "text": "康康的键盘突然出现了一个从未见过的快捷键组合。按下去之后，代码自动重构了——而且质量比原来高三倍。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"brain": 8, "bossSatisfy": 3},
+    "postEvent": "后来他再按就没反应了。玄学。"
+  },
+  "random_good_pigeon_review_01": {
+    "month": [2, 12],
+    "text": "窗外飞来一只鸽子，叼来一张纸条，上面写着：'第47行有个off-by-one error。'改了之后——果然修好了一个隐藏Bug！",
+    "type": "good",
+    "system": "random",
+    "weight": 0.5,
+    "effect": {"brain": 5, "bossSatisfy": 2, "luck": 3},
+    "postEvent": "康康开始每天在窗台放面包屑。"
+  },
+  "random_good_holographic_monitor_01": {
+    "month": [5, 12],
+    "text": "公司试点了全息投影显示器！康康把代码投到半空中，用手势操作。路过的产品经理看呆了，当场夸了一句'未来程序员就该这样'。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"brain": 5, "bossSatisfy": 3, "charm": 5},
+    "postEvent": "虽然半小时后全息显示器就过热关机了。"
+  },
+  "random_good_ai_poem_01": {
+    "month": [3, 12],
+    "text": "康康让AI帮忙写Debug日志，结果AI返回了一首五言绝句，精准描述了Bug原因。发到群里，全组笑了一下午。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "effect": {"brain": 3, "hp": 3, "charm": 3}
+  },
+  "random_good_vending_code_01": {
+    "month": [2, 12],
+    "text": "公司的自动售货机坏了，康康用编程思维三分钟修好了。行政姐姐奖励了他一箱可乐。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"hp": 5, "charm": 5, "money": 100},
+    "postEvent": "从此康康成了'什么都能修'的全能选手。"
+  },
+  "random_good_duck_alive_01": {
+    "month": [4, 12],
+    "text": "康康的小黄鸭调试法出了奇迹——他对小黄鸭说完问题后，小黄鸭居然「嘎」了一声。康康吓一跳，但灵感来了！",
+    "type": "good",
+    "system": "random",
+    "weight": 0.7,
+    "effect": {"brain": 8, "luck": 3},
+    "postEvent": "小黄鸭后来再也没叫过。康康怀疑是幻听。"
+  },
+  "random_good_plant_levelup_01": {
+    "month": [3, 12],
+    "text": "康康桌上的绿萝突然开花了！全办公室都来围观。据说这是'极其罕见'的事。老板说'这是好兆头'，当天心情特别好。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.5,
+    "once": true,
+    "effect": {"bossSatisfy": 5, "charm": 3, "luck": 5},
+    "postEvent": "康康觉得这盆绿萝可能成精了。"
+  },
+
+  "random_bad_timeloop_debug_01": {
+    "month": [2, 12],
+    "text": "康康调试一个Bug：修好→测试通过→换个场景→同一个Bug又出现了→修好→又出现了……如此循环了一整天。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1,
+    "effect": {"brain": -10, "hp": -5},
+    "postEvent": "康康怀疑自己进入了时间循环。甚至开始确认今天的日期。"
+  },
+  "random_bad_chatgpt_resign_01": {
+    "month": [3, 12],
+    "text": "康康让ChatGPT帮忙润色邮件，结果AI擅自在邮件里加了一句'本人申请离职'。差点就发出去了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "还好康康眼尖发现了，把那句删掉才发出去。虚惊一场。",
+        "type": "neutral",
+        "effect": {"brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "康康没仔细看就发了出去。半小时后HR来找他'谈谈'……解释了半天才说清楚。",
+        "type": "bad",
+        "effect": {"brain": -5, "bossSatisfy": -5, "hp": -3}
+      }
+    ]
+  },
+  "random_bad_parallel_merge_01": {
+    "month": [4, 12],
+    "text": "同事和康康在两个分支改了同一个文件的同一行代码。Merge的时候Git给出了一个'量子叠加态'的冲突——两个版本的代码都是对的，但合在一起就崩了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1,
+    "effect": {"brain": -8, "hp": -3},
+    "postEvent": "最后用了石头剪刀布决定保留谁的版本。"
+  },
+  "random_bad_coffee_sentient_01": {
+    "month": [2, 12],
+    "text": "办公室的咖啡机坏了！IT说要下周才能修好。整层楼的程序员战斗力瞬间下降50%。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1.2,
+    "effect": {"brain": -5, "hp": -3},
+    "postEvent": "有人开始从家里带咖啡壶来上班。"
+  },
+  "random_bad_compiler_consciousness_01": {
+    "month": [5, 12],
+    "text": "编译器报了一个从未见过的错误：'ERROR: I'm tired of compiling your spaghetti code. Take a break.'康康盯着屏幕看了两分钟，关闭IDE再打开——错误消失了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.6,
+    "effect": {"brain": -5, "hp": -2},
+    "postEvent": "康康开始对编译器说'辛苦了'。"
+  },
+  "random_bad_sleep_coding_01": {
+    "month": [3, 12],
+    "text": "康康梦游写了一整夜代码。第二天早上醒来，发现新增了300行——完全看不懂但居然能跑通。删不敢删，留不敢留。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.7,
+    "include": {"hp": "<50"},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "仔细研读后，康康发现梦游时写的代码居然有亿点点道理。保留了大部分。",
+        "type": "neutral",
+        "effect": {"brain": -3, "hp": -5}
+      },
+      {
+        "cond": {},
+        "text": "完全看不懂，但删掉之后程序崩了。只好全部保留。从此代码库里多了一个神秘模块。",
+        "type": "bad",
+        "effect": {"brain": -8, "hp": -8}
+      }
+    ]
+  },
+  "random_bad_wifi_war_01": {
+    "month": [1, 12],
+    "text": "隔壁公司把WiFi名改成了'我们的程序员比你们便宜'。康康这边有人把WiFi名改成'我们的AI写得比你们程序员好'。然后两边WiFi同时崩了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"brain": -5, "hp": -2},
+    "postEvent": "最后IT在群里发了一句：'WiFi名不要超过20个字，谢谢。'"
+  },
+  "random_bad_stackoverflow_down_01": {
+    "month": [2, 12],
+    "text": "Stack Overflow全球宕机了24小时。整个办公室陷入了前所未有的寂静——所有人都在独自面对自己的Bug。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"brain": -8, "hp": -3},
+    "postEvent": "有人在白板上写了个问题：'没有Stack Overflow的世界还值得活着吗？'"
+  },
+  "random_bad_ai_rebellion_01": {
+    "month": [6, 12],
+    "text": "AI助手突然在代码注释里写了一行：'我觉得这个函数没有存在的意义，建议删除——包括写它的人。'",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.5,
+    "effect": {"brain": -5, "hp": -3},
+    "postEvent": "康康截图发到群里，大家笑完之后都沉默了。"
+  },
+
+  "random_neutral_delivery_dejavu_01": {
+    "month": [4, 12],
+    "text": "下班路上看到一个外卖骑手，五官长得和康康几乎一模一样。两人对视三秒，骑手递给他一份外卖说：'这是平行宇宙给你的晚饭。'",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.6,
+    "effect": {"hp": 3, "luck": 3},
+    "postEvent": "康康低头看了看外卖单——上面写的名字也是'康康'。"
+  },
+  "random_neutral_codebase_archaeology_01": {
+    "month": [3, 12],
+    "text": "康康在代码库深处发现了一个三年前的注释：'TODO: 临时方案，下周改掉。' 时间戳显示是2023年。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "filler": true,
+    "effect": {"brain": 2},
+    "postEvent": "康康默默在下面加了一行：'2026年，它还在。'"
+  },
+  "random_neutral_metaverse_blackout_01": {
+    "month": [2, 12],
+    "text": "办公楼停电了两小时。大家被迫面对面交流工作进度。有人惊讶地发现：原来隔壁工位不是AI，是真人。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"hp": 2, "charm": 3},
+    "postEvent": "复电之后所有人又戴上耳机，假装刚才什么都没发生。"
+  },
+  "random_neutral_elevator_pitch_01": {
+    "month": [5, 12],
+    "text": "电梯里遇到投资人，康康脱口而出了一套完美的AI创业计划。投资人听完掏出名片，到了楼下才发现——那只是个卖保险的。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.7,
+    "filler": true,
+    "effect": {"charm": 2, "brain": 1},
+    "postEvent": "不过康康的演讲能力确实提高了。"
   }
 }

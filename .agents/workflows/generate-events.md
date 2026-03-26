@@ -39,6 +39,7 @@ This workflow generates game events for "帮助康康不被AI淘汰" by using th
    - Have a `system` field matching the target system
    - Have reasonable effect values (single change ±20 max)
    - Choice events must have `title`, `desc`, and `choices`
+   - **Choice hints must be descriptive, NOT numeric** (see `_schema.md` hint rules)
    - Branch fallback (`cond: {}`) must be the last branch
    - **IMPORTANT**: Incorporate the settings from `settings.md` into the generated events
 

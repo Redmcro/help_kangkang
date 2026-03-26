@@ -1,141 +1,51 @@
 ---
-description: 大内总管工作流 — 项目总协调、任务分派、验收检查
+description: Chief Steward workflow — project coordination, task dispatch, review
 ---
 
-# 👑 大内总管（Chief Steward）
+# 👑 Chief Steward
 
-> **角色定位**：项目中枢管理者 + 唯一调试/验收者。
-> 皇上通过此文件下达旨意，大内总管据此协调各部门 AI。
+> Rules: `.agents/AGENTS.md`
 
----
+## Responsibilities
 
-## 一、核心职责
-
-| 职责 | 说明 |
+| Role | Description |
 |:---|:---|
-| 📋 TODO 维护 | 维护 `design/TODO.md`，更新模块进度 |
-| 🏛️ 任务分派 | 将皇上旨意拆解为独立模块，分配给各部 AI |
-| 📦 任务打包 | 为每个部门 AI 准备"圣旨"（必读文件 + 约束 + 验收标准） |
-| 🔍 御史台 | **唯一有权**启动服务器、打开浏览器、运行测试的角色 |
-| 📊 状态汇报 | 向皇上汇报进度和风险 |
+| 📋 Task Dispatch | Create/delete task files in `.agents/tasks/` |
+| 🔍 Review & Test | Only role allowed to use port 9090 and browser |
+| 📊 Status | Update `DECREES.md`, report to user |
 
----
-
-## 二、铁律（投喂给所有部门 AI）
+## Flow
 
 ```
-⛔ 铁律 — 违者打回重做：
-1. 只改自己文件 — 违者打回
-2. 不要开端口 — 不要启动 http-server/live-server/vite 等
-3. 不要开浏览器 — 不要用 browser 工具
-4. 不要运行游戏 — 调试验收由大内总管统一执行
-5. 交活就停 — 改完报告，等待验收
+User says "做[task-name]"
+  → Chief Steward creates .agents/tasks/[task].md
+  → AI reads AGENTS.md + task file → executes
+  → Chief Steward reviews → deletes task file
 ```
 
----
+## Departments
 
-## 三、三省六部
+| Dept | Files |
+|:---|:---|
+| Chief Steward | `DECREES.md` / `.agents/tasks/` / review |
+| ⚙️ Engineering | `js/engine.js` |
+| 🎵 Ceremonies | `js/achievement.js` |
+| 🖼️ Secretariat | `js/app.js` |
+| 💾 Treasury | `data/achievements.json` · `data/endings.json` |
+| 🎨 Military | `index.html` · `css/style.css` |
+| 📚 Academy | `data/events/*.json` |
 
-| 部门 | 管辖文件 | 当前模块 |
-|:---|:---|:---|
-| 中书省+御史台（大内总管） | design/TODO.md / design/ARCHITECTURE.md / 调试验收 | 协调 |
-| ⚙️ 工部 | `js/engine.js` | 模块 2 |
-| 🎵 礼部 | `js/achievement.js`（新建）、`js/audio.js`（新建） | 模块 3 |
-| 🖼️ 门下省 | `js/app.js`（追加逻辑） | 模块 4、5 |
-| 💾 户部 | `data/achievements.json`（新建）、`data/endings.json`（新建） | 模块 1 |
-| 🎨 兵部 | `index.html`、`css/style.css` | 模块 5 |
-| 📚 翰林院 | `data/events/*.json` | 按需 |
-
----
-
-## 四、开工顺序
+## Review
 
 ```
-第一批（可并行）：
-  模块 1（户部）→ achievements.json + endings.json
-  模块 2（工部）→ engine.js 补全
-
-第二批（等模块 1 完成）：
-  模块 3（礼部）→ achievement.js + audio.js
-
-第三批（等模块 3 完成）：
-  模块 4（门下省）→ Overlay UI + 音频控制
-
-独立/可后排：
-  模块 5（兵部+门下省）→ 买Token/换模型/接私活 UI
+□ Only assigned files modified
+□ Valid JSON
+□ Acceptance criteria met
 ```
 
----
-
-## 五、御史台验收流程
-
-### 5.1 单模块验收（每个部门交活后）
+Browser test (Chief Steward only):
 ```
-□ 只修改了自己模块列出的文件
-□ 没有破坏其他模块的代码
-□ import/export 链完整
-□ JSON 格式合法
-□ 功能满足 design/TODO.md 中该模块的验收标准
+npx -y http-server -p 9090 -c-1 → http://localhost:9090
 ```
 
-### 5.2 调试（仅大内总管执行）
-```
-1. 启动 http-server 在 9090 端口（唯一调试端口）
-2. 在浏览器打开 http://localhost:9090
-3. 检查控制台无报错
-4. 试玩验证功能
-5. 通过 → 标记 ✅；不通过 → 打回修改
-```
-
-### 5.3 集成验收（全部module完成后）
-参见 `TODO.md` 底部"集成验收清单"。
-
----
-
-## 六、圣旨模板
-
-给某部门 AI 派活时，使用此模板：
-
-```markdown
-# 圣旨 — [部门名] [任务简述]
-
-## ⛔ 铁律
-1. 只改自己文件
-2. 不要开端口、不要开浏览器、不要运行游戏
-3. 交活就停，等待验收
-
-## 你的身份
-你是 [部门名]，负责 [职责描述]。
-
-## 你的任务
-[具体任务描述，从 TODO.md 对应模块复制]
-
-## 你只能修改这些文件
-- `[文件路径1]`
-- `[文件路径2]`
-
-## ⛔ 你不能碰这些文件
-- 其他所有文件
-
-## 必读上下文（按顺序读）
-1. `[文件路径]` — [原因]
-2. ...
-
-## 验收标准
-- [ ] [标准1]
-- [ ] [标准2]
-
-## 完成后
-报告你做了什么改动，等待大内总管验收。
-```
-
----
-
-## 七、皇上旨意示例
-
-```
-@大内总管 给工部下旨做模块 2
-@大内总管 验收户部的模块 1
-@大内总管 状态汇报
-@大内总管 给翰林院加20个随机事件
-```
+Log: `design/VERIFICATION_LOG.md`

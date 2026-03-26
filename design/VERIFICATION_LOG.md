@@ -1,28 +1,37 @@
 # 🔍 验收记录
 
-## 2026-03-26 13:56 — 集成验收（御史台浏览器测试）
+## 2026-03-26 14:29 — 全面验收（模块4+5 + 事件C~G）
 
-> 大内总管在 9090 端口启动 http-server，浏览器实测
+### 模块4（门下省/app.js）✅ 通过
+- `AchievementManager` import + init + bind（L7, L611-614）
+- 图鉴面板 `renderGallery()` — 加载全事件，按system分Tab，对比events_seen
+- 结局面板 `renderEndings()` — 加载endings.json，按category分组，剪影/解锁态
+- 成就面板 `renderAchievements()` — getAll/getUnlockedIds，隐藏成就处理
+- 3按钮绑定 galleryBtn/endingsBtn/achieveBtn（L660-671）
+- `onGameEnd` + `onMonthSummary` 集成 `checkAndShowAchievements()`（L593-601）
+- achievements/endings/events 数据加载（L611-634）
 
-### 通过项目
-- ✅ 游戏正常启动，无 JS 报错
-- ✅ 核心循环正常：月份推进 / 工作日 / 事件触发 / 选择面板
-- ✅ 数据加载正常：stages / buffs / events (7系统) 全部 200
-- ✅ Token 商店：按钮可点，overlay 打开，余额显示，购买逻辑正常
+### 模块5（兵部+门下省）✅ 通过
+- Token商店：renderTokenShop + 购买逻辑（L454-487）
+- 模型切换：renderModelSwitch + 解锁/当前标识（L491-523）
+- 接私活：renderSideGig + charm修正收入 + 月冷却（L530-585）
+- 3按钮绑定 buyTokenBtn/switchModelBtn/sideGigBtn（L680-693）
 
-### 未通过项目
+### 事件生成验收
 
-**模块4（门下省/app.js）❌ 完全缺失**
-- app.js 中无 `AchievementManager` import
-- 无 `galleryBtn` / `endingsBtn` / `achieveBtn` 点击事件绑定
-- 无图鉴/结局/成就 overlay 渲染逻辑
-- 无 `achieveMgr.check()` 集成调用
-- **结论：模块4代码从未写入，之前的完成记录有误**
+| 系统 | 之前 | 现在 | 新增 | JSON合法 |
+|:---|:---|:---|:---|:---|
+| random | 18 | 39 | +21 | ✅ |
+| colleagues | 23 | 38 | +15 | ✅ |
+| choice | 10 | 25 | +15 | ✅ |
+| daily | 12 | 27 | +15 | ✅ |
+| monthly | 23 | 35 | +12 | ✅ |
+| **总计** | **118** | **196** | **+78** | ✅ |
 
-**模块5 部分失败（换模型 + 接私活）❌**
-- `switchModelBtn` 和 `sideGigBtn` 按钮存在但点击无响应
-- 可能原因：`gameActions` 初始 `display:none`，按钮在 DOM 加载时不可见导致事件绑定失败
-- Token 商店按钮正常工作（排除了代码逻辑问题）
+事件质量抽检：
+- random: 脑洞丰富（AI梦境/量子键盘/鸽子Review/梦游写代码/咖啡机罢工）
+- choice: 结构规范（有require/chanceBased/branches/setFlag），新增6个flag已注册
+- 所有effect键名均在attributes.md范围内
 
 ---
 

@@ -73,7 +73,7 @@
     "choices": [
       {
         "text": "🛒 买入门包 (¥500 → 200M)",
-        "hint": "花钱买Token",
+        "hint": "钱能解决的问题都不是问题",
         "require": {"money": 500},
         "success": "买了200M Token，够撑一阵了",
         "successEffect": {"money": -500, "token": 200},
@@ -82,14 +82,14 @@
       },
       {
         "text": "🐳 切换到豆包省Token",
-        "hint": "豆包消耗低",
+        "hint": "便宜够用，凑合着来",
         "result": "切回豆包，虽然质量差点但省钱",
         "effect": {"token": 30},
         "setFlag": "switched_to_doubao"
       },
       {
         "text": "💪 纯人肉写代码",
-        "hint": "脑力消耗翻倍",
+        "hint": "纯靠自己硬抗",
         "result": "不用AI了！但脑力消耗巨大...",
         "effect": {"brain": -15}
       }
@@ -124,7 +124,7 @@
     "choices": [
       {
         "text": "💰 购买课程 (¥2000)",
-        "hint": "脑力+15，长期收益",
+        "hint": "系统学习，磨刀不误砍柴工",
         "require": {"money": 2000},
         "success": "系统学习了Prompt Engineering，效率大幅提升！",
         "successEffect": {"money": -2000, "brain": 15},
@@ -134,7 +134,7 @@
       },
       {
         "text": "🔍 自己摸索",
-        "hint": "脑力+5，免费",
+        "hint": "野路子也是路",
         "result": "虽然慢，但也在进步",
         "effect": {"brain": 5}
       }
@@ -178,7 +178,7 @@
     "choices": [
       {
         "text": "💰 接！钱要紧",
-        "hint": "获得¥3000，但有风险",
+        "hint": "富贵险中求",
         "chanceBased": true,
         "branches": [
           {
@@ -197,7 +197,7 @@
       },
       {
         "text": "✋ 算了，太冒险了",
-        "hint": "安全",
+        "hint": "稳字当头，不冒险",
         "result": "拒绝了朋友，心里有点过意不去。但工作更重要。",
         "effect": {}
       }

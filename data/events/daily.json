@@ -138,5 +138,401 @@
     "filler": true,
     "effect": {"brain": -3, "bossSatisfy": 2},
     "postEvent": "康康发誓下次让AI写文档。等等，AI写的文档更长……"
+  },
+
+  "daily_ar_demo_01": {
+    "month": [3, 10],
+    "text": "老板突然冲过来：'客户下午要看AR Demo！在游戏里加个AR扫一扫，两小时够吧？'",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["职场", "压力"],
+    "effect": {"brain": -5, "token": -20},
+    "branch": [
+      {
+        "cond": {"brain": ">65"},
+        "text": "你用ARFoundation搭了个能扫二维码弹出3D模型的Demo，虽然模型是个旋转的茶壶，但客户居然觉得很酷！",
+        "type": "good",
+        "effect": {"bossSatisfy": 5, "brain": -8, "token": -30}
+      },
+      {
+        "cond": {},
+        "text": "你疯狂搜教程，最终只做出了一个能让屏幕变绿的'AR效果'。老板表情很微妙。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -3, "brain": -10, "hp": -5}
+      }
+    ]
+  },
+
+  "daily_ai_chatbot_01": {
+    "month": [2, 12],
+    "text": "策划发来需求：'在游戏里嵌入一个AI NPC，能跟玩家自由聊天。用最便宜的模型就行，预算50块。'",
+    "type": "choice",
+    "system": "daily",
+    "weight": 0.8,
+    "tags": ["AI", "职场"],
+    "title": "🤖 AI NPC 集成",
+    "desc": "策划要一个能聊天的AI角色。预算感人。",
+    "choices": [
+      {
+        "text": "🔧 硬着头皮做",
+        "hint": "正面刚，做出来就是功劳",
+        "result": "你用最便宜的API加了一大堆Prompt限制，NPC终于不会教玩家造火箭了。策划满意地点点头。",
+        "effect": {"token": -40, "brain": -5, "bossSatisfy": 3}
+      },
+      {
+        "text": "📝 写个假AI（随机回复）",
+        "hint": "以假乱真，看运气",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "随机回复居然歪打正着，玩家觉得AI很有个性。策划都信了。", "type": "good", "effect": {"bossSatisfy": 2}},
+          {"chance": 50, "result": "玩家问'你好'，AI回了句'你的背包已满'。穿帮了。", "type": "bad", "effect": {"bossSatisfy": -3}}
+        ]
+      },
+      {
+        "text": "🚫 跟策划解释做不了",
+        "hint": "实话实说，得罪人也没办法",
+        "result": "你花了30分钟解释为什么50块预算做不了自由聊天AI。策划转头去找老板告状了。",
+        "effect": {"bossSatisfy": -2, "brain": 2}
+      }
+    ]
+  },
+
+  "daily_shader_hell_01": {
+    "month": [4, 12],
+    "text": "美术说角色在某些手机上变成了一坨紫色，让你修Shader。⭐⭐⭐ 你打开Shader文件，满屏的hlsl让你眼前一黑。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["技术", "压力"],
+    "include": {"month": ">3"},
+    "effect": {"brain": -8},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "你发现是个half精度的问题。改了两行代码，所有手机上都正常了。美术看你的眼神充满了崇拜。",
+        "type": "good",
+        "effect": {"brain": -3, "bossSatisfy": 3, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "你改了一下午，角色从紫色变成了绿色。最终你偷偷把特效关了，角色变成了纯色——'极简风美术'。",
+        "type": "bad",
+        "effect": {"brain": -10, "hp": -3, "bossSatisfy": -2}
+      }
+    ]
+  },
+
+  "daily_intern_mentor_01": {
+    "month": [3, 9],
+    "text": "HR通知你：今天来了个实习生，你负责带。实习生推门进来：'学长好！我跟着14个B站教程学Unity，总共看了20分钟！'",
+    "type": "choice",
+    "system": "daily",
+    "weight": 0.6,
+    "once": true,
+    "tags": ["职场", "社交"],
+    "title": "🎓 带实习生",
+    "desc": "一个热情但一无所知的实习生。你要怎么带？",
+    "choices": [
+      {
+        "text": "📚 认真带教",
+        "hint": "手把手教，累但靠谱",
+        "result": "你花了一整天教实习生写Hello World。他的眼睛闪闪发光，但你的大脑已经宕机了。",
+        "effect": {"brain": -8, "charm": 5, "bossSatisfy": 2}
+      },
+      {
+        "text": "📺 让他先看文档",
+        "hint": "放养看造化",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 40, "result": "实习生很自觉地啃完了文档，还自己修了个小Bug。天选之人！", "type": "good", "effect": {"bossSatisfy": 2}},
+          {"chance": 60, "result": "实习生看完文档后按了一下自动格式化，把整个项目的代码风格全改了。Git记录一片血红。", "type": "bad", "effect": {"brain": -5, "hp": -3}}
+        ]
+      }
+    ]
+  },
+
+  "daily_perf_optimize_01": {
+    "month": [5, 12],
+    "text": "QA测试报告：游戏在低端机上只有12帧。老板：'下周送审，必须优化到30帧。'",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["技术", "压力"],
+    "include": {"month": ">4"},
+    "effect": {"brain": -6, "token": -20},
+    "branch": [
+      {
+        "cond": {"brain": ">65"},
+        "text": "你用Profiler找到了罪魁祸首——一个每帧实例化500个粒子的特效。关掉后帧率飙到60。美术投来杀人的眼神。",
+        "type": "good",
+        "effect": {"bossSatisfy": 4, "brain": -5}
+      },
+      {
+        "cond": {},
+        "text": "你把画质选项默认改成了'极低'，帧率达标了。但玩家进去一看：'这是PS1复刻版？'",
+        "type": "bad",
+        "effect": {"bossSatisfy": -2, "brain": -8, "hp": -3}
+      }
+    ]
+  },
+
+  "daily_ceo_demo_01": {
+    "month": [3, 12],
+    "text": "大老板要亲自给投资人演示游戏！你被安排在旁边'技术支持'。游戏刚打开就弹了个报错弹窗。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.5,
+    "once": true,
+    "tags": ["职场", "压力"],
+    "effect": {"hp": -5},
+    "branch": [
+      {
+        "cond": {"brain": ">60", "luck": ">50"},
+        "text": "你以迅雷不及掩耳之势按掉了弹窗，微笑着说'这是我们的Debug日志功能'。投资人居然信了，还夸你们技术透明。",
+        "type": "good",
+        "effect": {"bossSatisfy": 5, "charm": 3, "brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "报错弹窗后面跟着蓝屏。大老板的微笑凝固了。投资人礼貌地说'我们再考虑考虑'。你感觉自己的灵魂离开了身体。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -8, "hp": -10, "brain": -5}
+      }
+    ]
+  },
+
+  "daily_asset_leak_01": {
+    "month": [2, 12],
+    "text": "有人在论坛上传了你们游戏的全部美术资源！老板大怒，让你去查是谁泄露的。",
+    "type": "choice",
+    "system": "daily",
+    "weight": 0.4,
+    "once": true,
+    "tags": ["职场"],
+    "title": "🔍 资源泄露事件",
+    "desc": "公司美术资源被泄露到网上，你要查清真相。",
+    "choices": [
+      {
+        "text": "🕵️ 认真排查",
+        "hint": "翻个底朝天，查出真凶",
+        "result": "你查了Git日志和权限记录，发现是前员工离职前下载了整个资源库。老板对你的侦查能力刮目相看。",
+        "effect": {"brain": -8, "bossSatisfy": 5, "charm": 2}
+      },
+      {
+        "text": "🤷 象征性查查",
+        "hint": "走个过场，差不多得了",
+        "result": "你发了封邮件提醒大家注意保密，然后继续写代码。三天后又泄露了一批。",
+        "effect": {"brain": -2, "bossSatisfy": -3}
+      }
+    ]
+  },
+
+  "daily_localization_01": {
+    "month": [6, 12],
+    "text": "运营说要出海，让你加多语言支持。你打开翻译文档，发现'攻击'被翻译成了'Please hit me'。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.7,
+    "filler": true,
+    "tags": ["技术"],
+    "include": {"month": ">5"},
+    "effect": {"brain": -5, "token": -15},
+    "postEvent": "你花了半天把硬编码的中文改成了key-value。然后发现还有800条……AI翻译器，启动！"
+  },
+
+  "daily_physics_chaos_01": {
+    "month": [3, 12],
+    "text": "策划要求给角色加布娃娃物理效果。你开启Ragdoll后，角色开始以光速旋转飞上天空。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.8,
+    "filler": true,
+    "tags": ["技术", "搞笑"],
+    "effect": {"brain": -4},
+    "branch": [
+      {
+        "cond": {"brain": ">55"},
+        "text": "调了两小时参数，终于让角色正常倒地了。不过偶尔还是会抽搐一下，你觉得这是Feature。",
+        "type": "good",
+        "effect": {"brain": -3, "bossSatisfy": 2}
+      },
+      {
+        "cond": {},
+        "text": "你尝试了100种参数组合，角色现在不飞天了，改成原地钻进地里。你默默关掉了物理模拟。",
+        "type": "bad",
+        "effect": {"brain": -8, "hp": -2}
+      }
+    ]
+  },
+
+  "daily_procgen_01": {
+    "month": [5, 12],
+    "text": "老板看了个GDC演讲，激动地说要加程序化生成地图。'就是随机拼一拼嘛，应该不难吧？'",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.6,
+    "tags": ["技术", "压力"],
+    "include": {"month": ">4"},
+    "effect": {"brain": -7, "token": -35},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "你用WFC算法生成了一个看起来还不错的地牢。虽然偶尔会生成没有出口的房间，但老板已经在发朋友圈了。",
+        "type": "good",
+        "effect": {"bossSatisfy": 5, "brain": -5}
+      },
+      {
+        "cond": {},
+        "text": "你的'程序化生成'实际上就是Random.Range了一堆方块。老板看了看：'这不就是Minecraft？'",
+        "type": "bad",
+        "effect": {"bossSatisfy": -3, "brain": -10, "hp": -3}
+      }
+    ]
+  },
+
+  "daily_anticheat_01": {
+    "month": [6, 12],
+    "text": "玩家在论坛炸锅：'有人用挂秒杀全服Boss！'老板让你一天之内做个反外挂系统。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.5,
+    "tags": ["技术", "压力"],
+    "include": {"month": ">5"},
+    "effect": {"brain": -8, "token": -25},
+    "branch": [
+      {
+        "cond": {"brain": ">65"},
+        "text": "你把关键数值验算移到了服务端，还加了行为检测。外挂党发帖：'这游戏没法挂了，退坑了。' 老板破例给你点了杯奶茶。",
+        "type": "good",
+        "effect": {"bossSatisfy": 5, "brain": -5, "money": 500}
+      },
+      {
+        "cond": {},
+        "text": "你的反外挂检测把正常玩家也ban了一半。论坛从'有人开挂'变成了'官方是外挂'。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -5, "brain": -10, "hp": -5}
+      }
+    ]
+  },
+
+  "daily_liveops_rush_01": {
+    "month": [4, 12],
+    "text": "运营：'明天就是七夕/国庆/双十一（选一个），活动功能做好了吗？' 你：'什么活动？'",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["职场", "压力"],
+    "effect": {"brain": -6, "hp": -5},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "你通宵肝了一个'限时礼包+登录奖励'的活动页面，虽然UI有点糙但功能正常。运营竖起了大拇指。",
+        "type": "good",
+        "effect": {"bossSatisfy": 3, "brain": -8, "hp": -8}
+      },
+      {
+        "cond": {},
+        "text": "你做了个弹窗写着'节日快乐！送你100钻石'。运营问：'就这？' 你：'就这。'",
+        "type": "bad",
+        "effect": {"bossSatisfy": -4, "brain": -5}
+      }
+    ]
+  },
+
+  "daily_crossplatform_01": {
+    "month": [7, 12],
+    "text": "老板在会上宣布：'我们的游戏要同时上iOS、Android、PC、Switch！康康你来搞定平台适配。'",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.5,
+    "tags": ["技术", "压力"],
+    "include": {"month": ">6"},
+    "effect": {"brain": -10, "token": -50},
+    "branch": [
+      {
+        "cond": {"brain": ">75"},
+        "text": "你用了abstraction layer把平台差异封装好了，每个平台只需改config。你觉得自己是架构之神。",
+        "type": "good",
+        "effect": {"bossSatisfy": 5, "brain": -8}
+      },
+      {
+        "cond": {},
+        "text": "iOS端闪退，Android端发热，PC端分辨率拉伸，Switch端……连编译都没过。你开始考虑人生的意义。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -5, "brain": -12, "hp": -8}
+      }
+    ]
+  },
+
+  "daily_ai_art_review_01": {
+    "month": [2, 12],
+    "text": "美术用AI生成了200张角色立绘让你集成到游戏里。你打开文件夹一看：有6个手指的、有3只眼睛的、还有一张脸上长了两个鼻子的。",
+    "type": "choice",
+    "system": "daily",
+    "weight": 0.8,
+    "tags": ["AI", "搞笑"],
+    "title": "🎨 AI美术审查",
+    "desc": "200张AI生成的角色立绘，质量参差不齐。",
+    "choices": [
+      {
+        "text": "🔍 逐张审查并修改",
+        "hint": "苦功夫出细活",
+        "result": "你花了两天一张张审查、PS修图。最终效果不错，美术很感激，私下请你喝了杯咖啡。",
+        "effect": {"brain": -8, "hp": -5, "bossSatisfy": 3, "charm": 2}
+      },
+      {
+        "text": "🤖 写脚本批量筛选",
+        "hint": "用代码筛图，程序员的浪漫",
+        "require": {"brain": 65},
+        "success": "你用OpenCV写了个自动检测异常的脚本，成功筛掉了80%的问题图。剩下的手动改改就好。",
+        "successEffect": {"brain": -5, "bossSatisfy": 4, "token": -10},
+        "fail": "脚本跑了一晚上，把正常的图也删了一半。你默默按下了Ctrl+Z。",
+        "failEffect": {"brain": -8, "hp": -3}
+      },
+      {
+        "text": "📦 全部直接导入",
+        "hint": "全收了，爱咋咋地",
+        "result": "玩家论坛炸了：'这游戏的角色是克苏鲁联名吗？' 意外走红，下载量反而涨了。",
+        "effect": {"bossSatisfy": -2, "charm": 3}
+      }
+    ]
+  },
+
+  "daily_legacy_code_01": {
+    "month": [3, 12],
+    "text": "你在项目里发现了一个叫'temp_fix_DO_NOT_TOUCH_2019.cs'的文件。好奇心驱使你打开了它。里面只有一行注释：'// 我不知道为什么，但删了这个文件游戏就不能运行了'。",
+    "type": "choice",
+    "system": "daily",
+    "weight": 0.6,
+    "tags": ["技术", "搞笑"],
+    "title": "📜 神秘的祖传代码",
+    "desc": "一个2019年的'临时修复'文件。碰还是不碰？",
+    "choices": [
+      {
+        "text": "🗑️ 大胆删掉试试",
+        "hint": "不信邪，删了看看",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 30, "result": "删了之后一切正常！原来这个文件真的什么都没做。你感觉自己清理了一个都市传说。", "type": "good", "effect": {"brain": 3, "bossSatisfy": 1}},
+          {"chance": 70, "result": "游戏启动后所有NPC开始倒着走路。你花了四个小时才把文件恢复回去。注释你又加了一行：'真的不能删'。", "type": "bad", "effect": {"brain": -10, "hp": -5}}
+        ]
+      },
+      {
+        "text": "🔒 关掉文件，当无事发生",
+        "hint": "假装没看见，岁月静好",
+        "result": "你轻轻合上了这个文件，感觉碰到了什么不该碰的东西。你的代码洁癖受到了永久伤害。",
+        "effect": {"brain": -2}
+      },
+      {
+        "text": "📖 试着读懂它",
+        "hint": "考古式阅读，挑战智力极限",
+        "require": {"brain": 75},
+        "success": "你花了半天终于读懂了——这是个巧妙的初始化顺序hack。你重构了它，写了详细注释，还发了篇技术博客。",
+        "successEffect": {"brain": -5, "bossSatisfy": 3, "charm": 3},
+        "fail": "你盯着代码看了两小时，越看越迷糊。最后你在注释下面加了一句：'2026年我也不知道为什么'。",
+        "failEffect": {"brain": -8}
+      }
+    ]
   }
 }
