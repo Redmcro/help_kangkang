@@ -406,5 +406,221 @@
     "filler": true,
     "effect": {"charm": 2, "brain": 1},
     "postEvent": "不过康康的演讲能力确实提高了。"
+  },
+
+  "random_good_setup_pc_01": {
+    "month": [1, 2],
+    "text": "康康拆开崭新MacBook的包装，手指碰到键盘的瞬间，仿佛听到了圣光降临的声音。然后他花了两小时配环境。",
+    "type": "good",
+    "system": "random",
+    "weight": 1.2,
+    "once": true,
+    "effect": {"brain": 3, "hp": 2},
+    "postEvent": "装完Homebrew之后，他对着终端敲了一行'echo Hello World'——感觉自己已经是高级工程师了。"
+  },
+  "random_neutral_badge_photo_01": {
+    "month": [1, 1],
+    "text": "HR拍工牌照片的时候，康康紧张地笑了一下。照出来的表情像是被电击了一样。这张照片将陪伴他每一天。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "filler": true,
+    "effect": {"charm": -2},
+    "postEvent": "少爷看了他的工牌说：'这照片挺像通缉犯的。'"
+  },
+  "random_good_first_cafeteria_01": {
+    "month": [1, 2],
+    "text": "第一次去公司食堂！菜品比想象中好多了，红烧排骨、宫保鸡丁全都有。康康打了满满一盘。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "effect": {"hp": 5, "charm": 1},
+    "postEvent": "亿民路过看了一眼他的盘子说：'新人吧？等你待三个月就知道这菜都是轮着来的。'"
+  },
+  "random_bad_first_prompt_disaster_01": {
+    "month": [1, 3],
+    "text": "康康第一次认真用AI写业务代码，输入了600字的需求描述。AI返回了一段完美解决……另一个问题的代码。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1.2,
+    "effect": {"brain": -5, "token": -20},
+    "postEvent": "康康重新组织了语言又试了三次，Token哗哗地流走了。"
+  },
+  "random_good_first_slack_01": {
+    "month": [1, 2],
+    "text": "康康偷偷打开B站看了十分钟视频。虽然心虚，但精神确实恢复了不少。摸鱼的艺术，人生必修课。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "effect": {"hp": 3, "brain": 2},
+    "postEvent": "刚关掉视频，主管就走过来了。虚惊一场。"
+  },
+  "random_bad_req_change_01": {
+    "month": [1, 3],
+    "text": "产品经理发来消息：'刚才的需求不对，整个方向要改一下。'康康看了看自己已经写了500行的代码……",
+    "type": "bad",
+    "system": "random",
+    "weight": 1.3,
+    "effect": {"brain": -8, "hp": -3, "bossSatisfy": -2},
+    "postEvent": "康康默默按下Ctrl+A，深吸一口气，按下了Delete。"
+  },
+  "random_good_mentor_tips_01": {
+    "month": [1, 3],
+    "text": "带康康的前辈偷偷传授了几个IDE快捷键和AI Prompt技巧。康康的开发速度瞬间翻倍。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "effect": {"brain": 8, "charm": 2},
+    "postEvent": "前辈最后说：'这些技巧说出去就不值钱了，你知道就好。'"
+  },
+  "random_neutral_icebreaker_01": {
+    "month": [1, 2],
+    "text": "部门破冰活动！每个人要说三个关于自己的事实，其中一个是假的。康康说完之后全组都猜错了——因为三个听起来都太离谱了。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "effect": {"charm": 5, "hp": 2},
+    "postEvent": "从此大家都记住了'那个说自己会杂耍的新人'。"
+  },
+  "random_bad_first_standup_01": {
+    "month": [1, 2],
+    "text": "康康第一次参加站会，紧张到语无伦次。本来想说'昨天完成了登录页面的UI'，说成了'昨天完成了登录页面的AI'。全场沉默三秒。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "effect": {"charm": -3, "hp": -2},
+    "postEvent": "少爷在旁边小声说：'没事，我第一次站会直接把昨天干的活全忘了。'"
+  },
+  "random_good_ai_first_success_01": {
+    "month": [1, 3],
+    "text": "康康用AI辅助完成了第一个完整功能模块！代码一次通过Review，零Critical Issue。这就是AI时代程序员的力量！",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "effect": {"brain": 5, "bossSatisfy": 3, "hp": 2},
+    "postEvent": "康康截图发了朋友圈：'AI就是生产力！'——获得了3个赞。"
+  },
+
+  "random_good_training_ai_showcase_01": {
+    "month": [5, 11],
+    "text": "公司搞技术展示日，康康用AI培训学到的技能现场演示了一个自动代码审查工具。老板看得眼睛都直了：'这个能省我们半个QA团队！'",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "include": {"training_ai": true},
+    "effect": {"bossSatisfy": 5, "charm": 5, "brain": -3},
+    "postEvent": "少爷在旁边小声说：'你这不是要让QA同事失业吗？' 康康赶紧改口说只是辅助工具。"
+  },
+  "random_good_training_ai_headhunt_01": {
+    "month": [6, 12],
+    "text": "LinkedIn上突然多了十几个消息请求。原来是康康AI课程的结业证书被猎头们注意到了。其中一个写着：'AI工程师，年薪80万起，有兴趣聊聊吗？'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"training_ai": true},
+    "effect": {"charm": 5, "brain": 3},
+    "postEvent": "康康虽然没打算跳槽，但知道自己'值这个价'的感觉，真的很好。"
+  },
+
+  "random_neutral_compete_stock_news_01": {
+    "month": [6, 12],
+    "text": "财经新闻推送：康康公司的最新估值出来了。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "once": false,
+    "include": {"signed_compete_clause": true},
+    "branch": [
+      {
+        "cond": {"luck": ">55"},
+        "text": "公司估值暴涨300%！你手里的期权按现在的价格算，值小二十万了。签竞业的决定看起来英明无比。",
+        "type": "good",
+        "effect": {"hp": 5, "charm": 3}
+      },
+      {
+        "cond": {},
+        "text": "公司估值缩水了40%。你算了算手里期权的价值……还不如当初加薪来得实在。竞业协议像是把自己卖了个打折价。",
+        "type": "bad",
+        "effect": {"hp": -5, "brain": -3}
+      }
+    ]
+  },
+  "random_bad_compete_clause_trapped_01": {
+    "month": [7, 12],
+    "text": "又一个好机会擦肩而过。前同事跳槽到了一家AI独角兽，薪资翻倍。康康看着自己的竞业协议，第一次有了'被困住了'的感觉。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"signed_compete_clause": true},
+    "effect": {"hp": -5, "brain": -3, "charm": -2},
+    "postEvent": "前同事发来消息：'来不了？太可惜了。下次有机会再说。' 康康回了个微笑表情，放下了手机。"
+  },
+
+  "random_good_opensource_conf_invite_01": {
+    "month": [7, 12],
+    "text": "一封来自GDC（游戏开发者大会）的邮件：'我们注意到您的开源项目和技术分享。诚邀您作为演讲嘉宾出席今年的AI in Gaming专题。差旅全包。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "include": {"opensource_fame": true},
+    "effect": {"charm": 10, "brain": 5, "bossSatisfy": 3},
+    "postEvent": "康康把邀请函截图发到工作群，老板秒回了一个👍。简历上又多了一行闪闪发光的经历。"
+  },
+
+  "random_good_ai_conf_referral_01": {
+    "month": [7, 12],
+    "text": "上次AI大会认识的一位CTO发来微信：'我们公司刚拿了一轮融资，在组AI团队。你不一定要来，但帮推荐个人也行，成功推荐有2万伯乐奖。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"attended_ai_conf": true},
+    "effect": {"money": 2000, "charm": 5},
+    "postEvent": "康康推荐了一个前同事，对方成功入职。伯乐奖到手的那天，康康请少爷和亿民吃了顿火锅。"
+  },
+  "random_good_ai_conf_insider_01": {
+    "month": [8, 12],
+    "text": "大会上认识的一位算法工程师私下分享了一条行业消息：某头部AI公司即将开源一个超强模型。康康提前做好了技术准备。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.7,
+    "once": true,
+    "include": {"attended_ai_conf": true},
+    "effect": {"brain": 8, "bossSatisfy": 3, "token": 50},
+    "postEvent": "模型开源当天，康康是全组第一个跑通Demo的人。老板问：'你怎么这么快？' 康康微微一笑。"
+  },
+
+  "random_good_ai_tool_clients_01": {
+    "month": [6, 12],
+    "text": "有个小公司的老板在技术论坛上看到了康康的AI工具，主动联系想要定制化部署。'价钱好说，关键是你这工具太适合我们了。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "once": true,
+    "include": {"built_ai_tool": true},
+    "effect": {"money": 5000, "charm": 5, "brain": -3},
+    "postEvent": "康康第一次体会到了'被甲方追着付钱'的感觉。这感觉，比升职加薪还爽。"
+  },
+
+  "random_neutral_transfer_old_team_01": {
+    "month": [8, 12],
+    "text": "原来团队的少爷在微信上发来消息：'你走了之后，你那个模块没人接。老板让我改你的代码……说实话，你的注释写得真好。'",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "once": true,
+    "include": {"tried_transfer": true},
+    "effect": {"shaoye_rel": 3, "charm": 2},
+    "postEvent": "康康回了一句：'有不懂的随时问我。' 转岗了但兄弟情还在。"
   }
 }

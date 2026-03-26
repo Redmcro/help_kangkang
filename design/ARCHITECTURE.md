@@ -49,7 +49,7 @@ help_kangkang/
 ├── DECREES.md              ← 皇上旨意（进度总览）
 └── README.md               ← 项目导航
 
-注：本文件(ARCHITECTURE.md)、GAME_DESIGN.md、TODO.md 均在 design/ 目录下
+注：本文件(ARCHITECTURE.md)、GAME_DESIGN.md 均在 design/ 目录下
 ```
 
 ## 二、分层架构
@@ -278,7 +278,7 @@ help_kangkang/
 
 ## 七、TODO
 
-> 详细任务分配见 [TODO.md](./TODO.md)（同目录）
+> 详细任务分配见 `.agents/tasks/`
 > 管理工作流见 `.agents/workflows/chief-steward.md`
 
 ### 代码重构（v1→v2）

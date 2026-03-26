@@ -13,7 +13,7 @@
 |:---|:---|:---|
 | [GAME_DESIGN.md](./design/GAME_DESIGN.md) | 🎮 游戏基础设定（属性/数值/机制/结局） | 内容创作 AI + 设计师 |
 | [ARCHITECTURE.md](./design/ARCHITECTURE.md) | 🏗️ 系统架构（代码模块/接口/数据格式） | 写代码的 AI + 开发者 |
-| [TODO.md](./design/TODO.md) | 📋 任务分配表（模块/验收标准） | 大内总管 + 各部门 AI |
+| [.agents/tasks/](./.agents/tasks/) | 📋 活跃任务派发 | 大内总管 + 各部门 AI |
 | [design/README.md](./design/README.md) | 🎨 设计系统使用指南 | 内容创作 AI |
 
 ---
@@ -63,7 +63,7 @@ help_kangkang/
 ├── design/             ← 设计文档 + AI 工作流
 │   ├── GAME_DESIGN.md  ← 游戏设定
 │   ├── ARCHITECTURE.md ← 系统架构
-│   ├── TODO.md         ← 任务分配表
+│   ├── VERIFICATION_LOG.md  ← 验收记录
 │   ├── _global/        ← 全局规范
 │   └── {system}/       ← 各系统设计文件
 ├── DECREES.md          ← 皇上旨意（进度总览）

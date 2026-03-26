@@ -818,5 +818,278 @@
         "effect": {"hp": 5, "bossSatisfy": -8, "charm": -3}
       }
     ]
+  },
+
+  "choice_training_ai_advanced_01": {
+    "month": [4, 10],
+    "text": "之前学的AI课程平台发来通知：'恭喜你完成初级课程！高级班名额有限，现在报名享8折优惠。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"training_ai": true},
+    "title": "🎓 AI进阶班",
+    "desc": "初级课程的基础让你尝到了甜头。要不要继续深造？",
+    "choices": [
+      {
+        "text": "🚀 报名高级班：系统学Transformer架构",
+        "hint": "深入底层原理，成为真正的AI工程师",
+        "result": "你花了两个月啃完了高级课程。Transformer的注意力机制、LoRA微调、RAG架构……现在你不只是用AI，你开始理解AI了。",
+        "effect": {"money": -2000, "brain": 12, "bossSatisfy": 3},
+        "setFlag": "ai_advanced_cert"
+      },
+      {
+        "text": "📖 自学路线：GitHub上找开源教程",
+        "hint": "省钱但需要自律，野路子也有野路子的好",
+        "result": "你在GitHub上找到了一套star过万的教程，跟着做了几个小项目。虽然不系统，但动手能力提升了。",
+        "effect": {"brain": 8, "hp": -5}
+      },
+      {
+        "text": "🙅 算了，初级够用了",
+        "hint": "见好就收，把精力放在别处",
+        "result": "你觉得现在的AI水平已经够应付工作了。关掉了邮件，打开了Steam。",
+        "effect": {"hp": 3, "luck": 2}
+      }
+    ]
+  },
+
+  "choice_compete_clause_recruiter_01": {
+    "month": [5, 11],
+    "text": "LinkedIn上收到字节跳动的HR私信：'看了你的profile，我们有个很match的岗位，薪资double。'然后你想起来——自己签了竞业协议。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"signed_compete_clause": true},
+    "title": "🔒 竞业锁链",
+    "desc": "心仪的offer就在眼前，但竞业协议是把锁。",
+    "choices": [
+      {
+        "text": "😔 诚实告知：'我签了竞业，去不了'",
+        "hint": "遗憾但体面，留个好印象",
+        "result": "HR表示理解：'竞业到期了联系我。'你挂断电话，盯着那份竞业协议发了十分钟呆。",
+        "effect": {"hp": -5, "charm": 3}
+      },
+      {
+        "text": "🕵️ 偷偷面试：先聊聊又不犯法",
+        "hint": "踩线操作，万一被发现后果严重",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 60, "result": "面了两轮，对方给了口头offer。虽然不能去，但至少知道了自己的市场价值。", "type": "neutral", "effect": {"brain": 3, "charm": 3}},
+          {"chance": 40, "result": "面试的消息不知怎么传到了老板耳朵里。'签了竞业还到处面试？' 气氛瞬间冰冻。", "type": "bad", "effect": {"bossSatisfy": -10, "charm": -5}}
+        ]
+      },
+      {
+        "text": "📋 研究竞业条款：找法律漏洞",
+        "hint": "知识就是力量，先搞清楚规则",
+        "result": "你花了一晚上研究竞业协议条款。发现了一些灰色地带，至少心里有了底。顺便了解了劳动法。",
+        "effect": {"brain": 5, "charm": 2}
+      }
+    ]
+  },
+
+  "choice_opensource_bigco_hr_01": {
+    "month": [6, 11],
+    "text": "上次开源分享火了之后，腾讯AI Lab的技术总监直接发了私信：'我们团队在做大模型基础设施，你有兴趣聊聊吗？'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"opensource_fame": true},
+    "title": "🏢 大厂橄榄枝",
+    "desc": "开源声望带来了大厂的主动邀约。这可是技术总监亲自联系。",
+    "choices": [
+      {
+        "text": "🤝 约个咖啡聊聊：了解一下机会",
+        "hint": "不一定要跳槽，但了解市场永远没错",
+        "result": "你和对方聊了两小时。了解到大厂AI团队的技术方向和薪资体系。对方说：'随时欢迎你来面试。' 你感觉自己多了一条退路。",
+        "effect": {"charm": 8, "brain": 3}
+      },
+      {
+        "text": "🙏 委婉拒绝：'目前团队需要我'",
+        "hint": "忠诚度拉满，但可能错过窗口",
+        "result": "你礼貌地婉拒了。老板不知怎么听说了这件事，在周会上说：'康康很有忠诚度。' 然后什么也没发生。",
+        "effect": {"bossSatisfy": 3, "charm": -2}
+      },
+      {
+        "text": "💡 反向操作：邀请他来自己公司做技术分享",
+        "hint": "化竞对为资源，社交鬼才的操作",
+        "require": {"charm": 60},
+        "success": "对方居然答应了！来公司做了一场内部分享。老板觉得你很有人脉资源，你的存在感暴涨。",
+        "successEffect": {"bossSatisfy": 5, "charm": 8, "brain": 5},
+        "fail": "对方笑着说：'这个嘛……不太方便。' 你有点尴尬。",
+        "failEffect": {"charm": -3}
+      }
+    ]
+  },
+
+  "choice_opensource_collab_01": {
+    "month": [7, 12],
+    "text": "一个GitHub上star过5万的知名开源项目维护者给你发了邮件：'看了你的项目和分享，想邀请你成为我们的core contributor。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "include": {"opensource_fame": true},
+    "title": "⭐ 顶级开源邀约",
+    "desc": "成为顶级开源项目的核心贡献者——简历上最闪亮的一行。但时间就那么多。",
+    "choices": [
+      {
+        "text": "🔥 全力加入：每周投入10小时",
+        "hint": "顶级背书，但业余时间全没了",
+        "result": "你成为了核心贡献者。三个月后，你的GitHub主页多了一个闪闪发光的badge。圈内都知道你了。",
+        "effect": {"hp": -8, "brain": -5, "charm": 12},
+        "setFlag": "opensource_collab"
+      },
+      {
+        "text": "⚖️ 量力而行：做一些力所能及的贡献",
+        "hint": "参与但不透支，平衡是种智慧",
+        "result": "你提交了几个PR，修了几个issue。虽然不是核心贡献者，但也被加到了contributor列表。",
+        "effect": {"brain": -3, "charm": 5, "hp": -3}
+      },
+      {
+        "text": "📝 先收藏：等忙完这阵子再说",
+        "hint": "拖延症犯了，但也许真的太忙",
+        "result": "你给邮件标了星标。三个月后再看时，项目已经招满了人。机会就是这样溜走的。",
+        "effect": {"brain": 2}
+      }
+    ]
+  },
+
+  "choice_ai_conf_connection_01": {
+    "month": [6, 11],
+    "text": "上次AI大会上认识的一位技术VP突然打来电话：'我们在做一个AI+游戏的项目，要不要来当技术顾问？周末干就行，按天计费。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"attended_ai_conf": true},
+    "title": "📞 人脉变现",
+    "desc": "大会结识的人脉终于开花了。这是一个用AI技能赚外快的机会。",
+    "choices": [
+      {
+        "text": "💼 接了！周末当顾问",
+        "hint": "赚外快长经验，但周末没了",
+        "result": "你开始了顾问生涯。每周末去对方公司指导AI接入。日薪2000，还接触到了游戏行业前沿的AI应用。",
+        "effect": {"money": 4000, "brain": 5, "hp": -8, "charm": 5}
+      },
+      {
+        "text": "🤔 先问问报酬和时间安排",
+        "hint": "谨慎是好事，先问清楚再决定",
+        "result": "对方详细介绍了项目情况。你还没决定，但至少知道了AI顾问的市场行情。这层人脉关系更近了。",
+        "effect": {"charm": 5, "brain": 3}
+      },
+      {
+        "text": "🙅 婉拒：精力不够了",
+        "hint": "别把自己累坏了",
+        "result": "你礼貌地拒绝了。对方说：'没关系，有其他合适的机会再推荐给你。' 人脉还在。",
+        "effect": {"hp": 3}
+      }
+    ]
+  },
+
+  "choice_ai_tool_company_adopt_01": {
+    "month": [5, 10],
+    "text": "你之前搭的AI接单工具在公司内部传开了。老板找你谈话：'这个工具能不能部署到公司内部用？效率提升太明显了。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 2,
+    "include": {"built_ai_tool": true},
+    "title": "🏢 工具被公司看上了",
+    "desc": "个人项目意外吸引了公司注意。是卖给公司，还是自己留着？",
+    "choices": [
+      {
+        "text": "🤝 免费给公司用：当内部工具推广",
+        "hint": "不赚钱但刷存在感，老板会记住",
+        "result": "你把工具部署到了内部服务器。全组都在用你写的工具，效率提升了30%。老板在周报里专门提了这件事。",
+        "effect": {"bossSatisfy": 8, "charm": 8, "brain": -3},
+        "setFlag": "ai_tool_adopted"
+      },
+      {
+        "text": "💰 谈授权费：'这算我的知识产权'",
+        "hint": "需要charm 60+，谈钱伤感情但不谈钱伤自己",
+        "require": {"charm": 60},
+        "success": "老板犹豫了一下，最终同意按月付你5000块使用费。同事们的目光里多了一份敬意。",
+        "successEffect": {"money": 5000, "bossSatisfy": 2, "charm": 5},
+        "fail": "老板冷笑：'上班时间写的东西算公司的吧？' 气氛突然尴尬了。",
+        "failEffect": {"bossSatisfy": -5, "charm": -3},
+        "setFlag": "ai_tool_adopted"
+      },
+      {
+        "text": "🔒 拒绝：'这是个人项目，不适合公司用'",
+        "hint": "保护自己的知识产权，但可能得罪老板",
+        "result": "老板有点不高兴：'你用公司时间写的东西不给公司用？' 你辩解说是下班后写的。气氛不太好。",
+        "effect": {"bossSatisfy": -5, "brain": 2}
+      }
+    ]
+  },
+
+  "choice_ai_tool_startup_01": {
+    "month": [7, 12],
+    "text": "一个前同事看了你的AI工具后眼前一亮：'兄弟，这东西商业化潜力很大！要不要一起创业？我来投第一笔钱。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "include": {"built_ai_tool": true},
+    "title": "🚀 创业邀约",
+    "desc": "你的AI工具被看中了！创业还是继续打工？人生的分叉路口。",
+    "choices": [
+      {
+        "text": "🔥 干了！先兼职试试水",
+        "hint": "两头跑很累，但万一起飞了呢？",
+        "result": "你开始白天上班、晚上创业。两个月后工具有了第一批付费用户。虽然只有23个人，但那种感觉——真的不一样。",
+        "effect": {"money": 3000, "hp": -12, "brain": -5, "charm": 8},
+        "setFlag": "ai_startup_offer"
+      },
+      {
+        "text": "🤝 聊聊商业计划再说",
+        "hint": "理性分析，不冲动决定",
+        "result": "你们一起做了市场调研和财务预测。虽然最终没有马上行动，但你第一次认真思考了'如果不打工'的可能性。",
+        "effect": {"brain": 5, "charm": 3}
+      },
+      {
+        "text": "🙅 拒绝：打工虽苦但稳定",
+        "hint": "稳定即正义，创业九死一生",
+        "result": "你婉拒了。前同事有点失望，但表示理解。你回到工位打开IDE，觉得屏幕上的代码突然有点无聊。",
+        "effect": {"hp": 2, "brain": -2}
+      }
+    ]
+  },
+
+  "choice_transfer_result_01": {
+    "month": [7, 12],
+    "text": "转到AI部门已经一个月了。新技术栈完全不同，你每天都在恶补大模型相关知识。新老板今天约你one-on-one。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 2,
+    "include": {"tried_transfer": true},
+    "title": "🆕 新部门适应期",
+    "desc": "转岗后的第一次绩效谈话。新老板会说什么？",
+    "choices": [
+      {
+        "text": "📊 主动汇报：展示学习成果和项目进展",
+        "hint": "有准备就有底气，主动出击",
+        "require": {"brain": 50},
+        "success": "新老板看了你的学习笔记和Demo，频频点头：'进步很快，下个迭代你来lead一个模块。'",
+        "successEffect": {"bossSatisfy": 8, "brain": 5, "charm": 5},
+        "fail": "你展示的Demo在演示时出了几个低级错误。新老板委婉地说：'基础还要再打扎实。'",
+        "failEffect": {"bossSatisfy": -3, "brain": -3, "charm": -2}
+      },
+      {
+        "text": "🎧 认真倾听：先听老板怎么说",
+        "hint": "少说多听，新人低调为上",
+        "result": "新老板给了你一些中肯的反馈：技术基底不错，但对大模型的工程化理解还需加强。你记在了本子上。",
+        "effect": {"brain": 3, "bossSatisfy": 2, "charm": 2}
+      },
+      {
+        "text": "😰 表达困难：'说实话，我有点跟不上节奏'",
+        "hint": "诚实不一定是坏事，示弱也需要勇气",
+        "result": "新老板笑了：'每个转岗的人都这么说。'他给你安排了一位mentor，还多给了两周适应时间。",
+        "effect": {"bossSatisfy": 1, "charm": 3, "hp": 3}
+      }
+    ]
   }
 }

@@ -534,5 +534,205 @@
         "failEffect": {"brain": -8}
       }
     ]
+  },
+
+  "daily_first_try_01": {
+    "month": [1, 12],
+    "text": "今天写了一段复杂的碰撞检测代码，点了运行……居然一次就跑通了。没有报错，没有警告，一切完美。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.8,
+    "tags": ["技术", "搞笑"],
+    "effect": {"bossSatisfy": 3, "brain": 2},
+    "branch": [
+      {
+        "cond": {"luck": ">60"},
+        "text": "你不敢相信自己的眼睛，连续运行了十遍，每次都完美。你开始怀疑世界线发生了偏移。但老板很满意！",
+        "type": "good",
+        "effect": {"bossSatisfy": 4, "brain": 3}
+      },
+      {
+        "cond": {},
+        "text": "你高兴了三十秒，然后心里涌上一阵恐惧——一次通过的代码一定有隐藏的Bug。你决定先不动它。",
+        "type": "neutral",
+        "effect": {"bossSatisfy": 2, "brain": -1}
+      }
+    ]
+  },
+
+  "daily_stackoverflow_01": {
+    "month": [1, 12],
+    "text": "被一个诡异的Unity序列化Bug卡了两小时。你死马当活马医地搜了Stack Overflow，排名第一的回答只有一行代码。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.9,
+    "tags": ["技术", "搞笑"],
+    "effect": {"bossSatisfy": 2, "brain": 3},
+    "postEvent": "你默默给那个2017年的回答点了个赞，然后关掉了页面。无名英雄，谢谢你。"
+  },
+
+  "daily_rubber_duck_01": {
+    "month": [2, 12],
+    "text": "你对着桌上的橡皮鸭解释了十五分钟代码逻辑。说到第三层嵌套时，突然顿住了——你找到Bug了。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["技术", "搞笑"],
+    "effect": {"bossSatisfy": 2, "brain": 2, "charm": 1},
+    "postEvent": "你看了看橡皮鸭，感觉它在用一种'我早就知道了'的眼神看你。从此你开会都带着它。"
+  },
+
+  "daily_pr_nocomment_01": {
+    "month": [2, 12],
+    "text": "你提交了一个500行的PR，内心已经做好了被喷的准备。结果少爷十分钟后就Approve了，零条评论。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.8,
+    "tags": ["职场", "搞笑"],
+    "include": {"shaoye_rel": ">40"},
+    "effect": {"bossSatisfy": 2, "shaoye_rel": 3},
+    "branch": [
+      {
+        "cond": {"shaoye_rel": ">70"},
+        "text": "少爷私聊你：'代码写得很好，没什么可改的。' 你感动得差点哭出来。程序员被夸代码好，这是最高荣誉。",
+        "type": "good",
+        "effect": {"bossSatisfy": 3, "shaoye_rel": 5, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "你越想越不对劲——他真的看了吗？你偷偷看了审核记录，发现他打开了2秒就点了Approve。你的内心毫无波动。",
+        "type": "neutral",
+        "effect": {"bossSatisfy": 1}
+      }
+    ]
+  },
+
+  "daily_push_main_01": {
+    "month": [2, 12],
+    "text": "手滑了！你把feature分支直接push到了main！你瞬间冷汗如雨。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.6,
+    "tags": ["技术", "搞笑"],
+    "branch": [
+      {
+        "cond": {"luck": ">55"},
+        "text": "你颤抖着打开CI……全绿。测试全过。仔细一看，你这个分支的代码确实比main上的好。同事们表示感谢。",
+        "type": "good",
+        "effect": {"bossSatisfy": 2, "brain": 2, "charm": 1}
+      },
+      {
+        "cond": {},
+        "text": "CI流水线红了一片。你手忙脚乱地force push回去，但Git记录已经留下了你的犯罪证据。亿民发来一个微笑表情。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -2, "brain": -3, "yimin_rel": -2}
+      }
+    ]
+  },
+
+  "daily_ai_commit_01": {
+    "month": [2, 12],
+    "text": "你让AI帮你写commit message。AI写了一段极其专业详细的提交信息，比你手写的好十倍。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.9,
+    "filler": true,
+    "tags": ["AI", "搞笑"],
+    "effect": {"bossSatisfy": 2, "brain": 1},
+    "postEvent": "老板在周会上特意表扬了你'规范的提交记录'。你微笑着没说话，心里默念：谢谢你，AI。"
+  },
+
+  "daily_test_100_01": {
+    "month": [3, 12],
+    "text": "你打开测试报告——覆盖率100%。你揉了揉眼睛再看一遍，还是100%。你确定自己没写过这么多测试。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.5,
+    "tags": ["技术", "搞笑"],
+    "include": {"month": ">2"},
+    "effect": {"bossSatisfy": 3},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "你仔细检查，发现是AI在你午休时自动补全了所有测试用例。每个测试都很合理。你感觉自己可能要失业了。",
+        "type": "good",
+        "effect": {"bossSatisfy": 4, "brain": 2}
+      },
+      {
+        "cond": {},
+        "text": "仔细一看，有30个测试用例的断言写的是assert(true)。覆盖率是上去了，但啥也没测。你默默删掉了它们。",
+        "type": "neutral",
+        "effect": {"bossSatisfy": 1, "brain": -2}
+      }
+    ]
+  },
+
+  "daily_bug_cancel_01": {
+    "month": [2, 12],
+    "text": "你修了一个角色移动速度的Bug，结果引入了另一个Bug：角色在墙角会瞬移。但玩家以为这是穿墙技能，好评如潮。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.6,
+    "tags": ["技术", "搞笑"],
+    "effect": {"bossSatisfy": 2, "charm": 2},
+    "postEvent": "策划找你确认：'那个穿墙是Feature吧？文档里要不要写上？' 你沉默了三秒：'……是的，是Feature。'"
+  },
+
+  "daily_review_feature_01": {
+    "month": [3, 12],
+    "text": "Code Review时你发现了一段'Bug代码'，正要标注修改意见。结果策划过来说：'那个是我特意要求的效果。'",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["职场", "搞笑"],
+    "effect": {"bossSatisfy": 1, "brain": 2},
+    "postEvent": "你默默关掉了Review页面，在心里给自己加了条备忘：改代码前先问策划。这不是Bug，这是Feature。"
+  },
+
+  "daily_test_fail_itself_01": {
+    "month": [2, 12],
+    "text": "跑单元测试：99个通过，1个失败。你紧张地点开失败的那个——测试代码本身写错了，被测的功能完全正常。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["技术", "搞笑"],
+    "effect": {"bossSatisfy": 2, "brain": 2},
+    "postEvent": "你修好了测试用例，100/100全绿。你觉得这是今天最有成就感的一刻——修了一个测试的Bug。"
+  },
+
+  "daily_copilot_poem_01": {
+    "month": [1, 12],
+    "text": "你在代码里写了一行注释'// 这里需要优化'。AI Copilot自动补全了整段优化代码，还附赠了一首打油诗。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.8,
+    "filler": true,
+    "tags": ["AI", "搞笑"],
+    "effect": {"bossSatisfy": 1, "brain": 2},
+    "postEvent": "诗的内容是：'代码千行不如精，优化一招定乾坤。人生苦短用Python——等等这是C#项目。'"
+  },
+
+  "daily_coffee_debug_01": {
+    "month": [1, 12],
+    "text": "你泡了杯咖啡，回到工位时发现——编译通过了。你什么都没改。你看了看咖啡，又看了看屏幕。",
+    "type": "good",
+    "system": "daily",
+    "weight": 0.7,
+    "tags": ["搞笑"],
+    "effect": {"brain": 3, "hp": 2},
+    "branch": [
+      {
+        "cond": {"luck": ">60"},
+        "text": "你喝了一口咖啡，觉得这杯有魔力。从此你每次编译失败都先去泡咖啡。神奇的是，成功率确实提高了——可能是因为冷静了两分钟。",
+        "type": "good",
+        "effect": {"brain": 4, "hp": 3, "luck": 1}
+      },
+      {
+        "cond": {},
+        "text": "你不敢碰任何东西，怕再次触发编译错误。你端着咖啡坐着发了十分钟呆，然后决定今天到此为止。",
+        "type": "neutral",
+        "effect": {"brain": 2, "hp": 3}
+      }
+    ]
   }
 }

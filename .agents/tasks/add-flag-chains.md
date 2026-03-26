@@ -1,7 +1,5 @@
 # 📚 做Flag事件链 (Add Flag Event Chains)
 
-> ⏳ **Blocked**: Wait for 改选项提示·选择卷 to complete.
-
 ## Rules
 See `.agents/AGENTS.md`
 

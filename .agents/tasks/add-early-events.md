@@ -1,7 +1,5 @@
 # 📚 补新手事件 (Add Early-Game Events)
 
-> ⏳ **Blocked**: Wait for 改选项提示·日常卷 to complete.
-
 ## Rules
 See `.agents/AGENTS.md`
 

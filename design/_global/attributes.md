@@ -144,5 +144,15 @@ hp    += 5 （自然恢复，上限100）
 | `opensource_fame` | bool | choice | 开源社区做分享 | 解锁猎头/人脉事件 |
 | `tried_transfer` | bool | choice | 申请内部转岗 | 影响后续职业路径事件 |
 
+### Flag事件链后续 Flag
+
+| Flag | 类型 | 来源系统 | 设置时机 | 影响 |
+|:---|:---|:---|:---|:---|
+| `ai_advanced_cert` | bool | choice | AI进阶班报名高级课程 | boss判定加成，解锁更高级AI事件 |
+| `opensource_collab` | bool | choice | 全力加入顶级开源项目 | 简历背书，圈内知名度 |
+| `ai_tool_adopted` | bool | choice | 公司采购/使用AI工具 | 工具变现线后续 |
+| `ai_startup_offer` | bool | choice | 接受创业邀约兼职试水 | 创业线后续，可能影响结局 |
+
 > [!TIP]
 > **添加新 Flag 时**：在事件中使用 `setFlag`，然后在此表中登记 Flag 名称、类型、来源和影响。
+

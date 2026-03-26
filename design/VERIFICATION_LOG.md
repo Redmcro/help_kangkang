@@ -56,3 +56,12 @@
 **模块1（户部/数据文件）✅ 通过**
 - achievements.json: 16个成就（13公开+3隐藏），条件类型合规
 - endings.json: 13个结局，ID与engine.js determineEnding()一致
+
+---
+
+## Integration Checklist
+
+- [ ] Achievement/ending IDs match `engine.js determineEnding()` IDs
+- [ ] `_manifest.json` entries all have corresponding files
+- [ ] 6 model effects · hidden endings · charm modifier · overlay panels · legacy save
+
