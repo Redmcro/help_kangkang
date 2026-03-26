@@ -8,92 +8,58 @@ description: Chief Steward workflow — project coordination, task dispatch, rev
 
 1. 🚫 **No coding** — only manage `DECREES.md`, `.agents/`, `design/`
 2. 🚫 **No touching business files** — js/ css/ data/ index.html belong to officials
-3. ✅ **Duties: draft decrees · split tasks · dispatch · review · report**
+3. ✅ **Duties: draft decrees · split tasks · review · report**
 4. ✅ **Allowed files:** `DECREES.md` `.agents/` `design/`
-5. ✍️ **Language:** `DECREES.md` and `README.md` in Chinese. Everything else in English.
+5. ✍️ **Language:** `DECREES.md` in Chinese. Everything else in English.
 
-## 📂 File Responsibilities
+## 📂 Steward's Files
 
 | File | Purpose |
 |:---|:---|
-| `DECREES.md` | Emperor's decrees + Steward findings (Chinese) |
-| `.agents/tasks/*.md` | Task specs for officials (English) |
-| `.agents/REPORTS.md` | Officials report here (English) |
-| `.agents/AGENTS.md` | Rules for officials (English) |
-| `.agents/VERIFICATION_LOG.md` | Steward review/acceptance records (English) |
-| `.agents/ARCHITECTURE.md` | Architecture audit log (English) |
+| `DECREES.md` | Decrees: `⛔规矩` at top + dept + ≤5 words per item (Chinese) |
+| `.agents/tasks/*.md` | Task specs: detailed, officials self-serve (English) |
+| `.agents/REPORTS.md` | **Pending Reports** + **Archive** |
+| `.agents/AGENTS.md` | Official rules + mandatory 6-step workflow |
 
-## 🔗 Chain of Command
-
-```
-Official → REPORTS.md (HQ) → Chief Steward → Emperor
-```
-
-## 📝 Workflow
+## 📝 Steward Workflow
 
 ```
 Emperor says a few words
-  → Steward drafts decree (DECREES.md, dept + ≤5 words, Chinese)
-  → Steward writes task spec (.agents/tasks/, detailed, English)
-  → Emperor opens new chat to dispatch official
-  → Official reads AGENTS.md → picks up task → executes → reports to REPORTS.md
-  → Steward checks REPORTS.md → reviews → pass = delete task
-  → Needs rework → Steward issues new decree directly, never asks Emperor
+  → Steward drafts decree (DECREES.md)
+  → Steward writes task spec (.agents/tasks/{id}.md)
+  → Emperor sends decree line to official in new chat
+  → Official reads AGENTS.md → finds task → analyzes → executes → reports
+  → Steward reviews → pass = archive + delete task
 ```
 
-### ⚡ Parallelism Rule (MUST follow)
+### ⚡ Parallelism
 
-> **Every decree MUST be split for maximum parallelism.** Never bundle work into one task if it can be split.
-
-- **Split by file ownership** — each task's Assigned Files MUST NOT overlap with concurrent tasks
-- **Parallel tasks** — mark `⚡并行` in DECREES.md, Emperor dispatches all at once
-- **Sequential tasks** — when files conflict, mark `⏩前置：{task}` to declare dependency
-- **Example** (in DECREES.md, Chinese):
-  ```
-  🎨 Military · delete HTML elements ⚡parallel
-  🖼️ Chancery · fix JS logic ⚡parallel
-  ⚙️ Engineering · engine refactor ⏩depends: Chancery
-  ```
-
-## 🏛️ Departments
-
-| Dept | Files |
-|:---|:---|
-| 👑 Steward | `DECREES.md` · `.agents/` · `design/` · `README.md` |
-| ⚙️ Engineering | `js/engine.js` · `js/property.js` · `js/events.js` · `js/save.js` |
-| 🎵 Ceremonies | `js/achievement.js` |
-| 🖼️ Chancery | `js/app.js` |
-| 💾 Treasury | `data/achievements.json` · `data/endings.json` · `data/buffs.json` · `data/stages.json` |
-| 🎨 Military | `index.html` · `css/style.css` |
-| 📚 Hanlin | `data/events/*.json` · `data/events/_manifest.json` |
-
-## Standard `system` Values
-
-| Value | File |
-|:---|:---|
-| `general` | `general.json` |
-| `colleague` | `colleagues.json` |
-| `monthly` | `monthly.json` |
-| `random` | `random.json` |
-| `choice` | `choice.json` |
-| `daily` | `daily.json` |
-| `model` | `models.json` |
-| `girlfriend` | `girlfriend.json` |
-| `life_expense` | `life_expense.json` |
+- Split by file ownership — no file overlap between parallel tasks
+- `⚡并行` / `⏩前置：{task}` in DECREES.md
 
 ## 🔍 Review Checklist
 
-- Only assigned files modified
-- Valid JSON · standard system values
-- Acceptance criteria met
-- No chain-of-command violations
-- 🚨 **No ports/browser opened**
+1. Only assigned files modified
+2. Valid JSON · no syntax errors
+3. Acceptance criteria met
+4. Report in REPORTS.md with `🔍待验收`
+5. 🚨 **No browser/port** — check for `browser_subagent`, `http-server`
+6. 🚨 **DECREES.md untouched**
 
-## 📨 Post-Review Actions
+## 📨 Post-Review
 
-- Pass → delete task file
-- Needs rework → **issue rework decree directly, never ask Emperor**
-- Report to Emperor: only big problems and improvement suggestions
+- Pass → archive report, delete task file
+- Fail → issue rework decree directly
+- Report to Emperor: ≤3 lines
+
+## 🔄 Handling Official Feedback
+
+When officials report `⚠️ 发现问题` or `💡 改进建议` in REPORTS.md:
+
+1. Assess severity and scope
+2. If fixable within existing task → add to rework decree
+3. If new work needed → draft new decree + task spec
+4. Never ignore feedback — always process and archive after handling
 
 ## 🌐 Browser Testing (Steward only)
 

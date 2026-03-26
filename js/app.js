@@ -132,6 +132,23 @@ function addEventLine(month, day, text, type) {
     s.scrollTop = s.scrollHeight;
 }
 
+function addEventLineHTML(month, day, html, type) {
+    const s = $('eventStream');
+    const d = document.createElement('div');
+    d.className = 'ev-line ' + (type || 'neutral');
+    d.innerHTML = `<span class="ev-prefix">${lineNum++}</span><span>${html}</span>`;
+    s.appendChild(d);
+    while (s.children.length > 150) s.removeChild(s.firstChild);
+    s.scrollTop = s.scrollHeight;
+}
+
+function colorDelta(label, delta, isMoney = false) {
+    const color = delta > 0 ? 'var(--green)' : 'var(--red)';
+    const sign = delta > 0 ? '+' : '';
+    const val = isMoney ? `¥${sign}${delta}` : `${sign}${delta}`;
+    return `<span style="color:${color}">${label}${val}</span>`;
+}
+
 // ===== Choice Panel =====
 
 function showChoicePanel(ev, state) {
@@ -146,7 +163,7 @@ function showChoicePanel(ev, state) {
         const lr = game.eventMgr.getLockReason(ch);
         const b = document.createElement('button');
         b.className = 'cp-btn' + (locked ? ' locked' : '');
-        b.innerHTML = `<div>${ch.text}</div>${ch.hint ? `<div class="cpb-hint">${ch.hint}</div>` : ''}${locked ? `<div class="cpb-lock">${lr}</div>` : ''}`;
+        b.innerHTML = `<div>${ch.text}</div>${locked ? `<div class="cpb-lock">${lr}</div>` : ''}`;
         if (!locked) b.addEventListener('click', () => game.makeChoice(ch));
         btns.appendChild(b);
     });
@@ -175,7 +192,6 @@ function showEndScreen(data) {
         tl.style.display = 'block';
     } else tl.style.display = 'none';
     $('endLegacy').textContent = `获得传世金币: +${totalCoins} 🪙`;
-    $('gameActions').style.display = 'none';
     showScreen('endScreen');
 }
 
@@ -415,6 +431,44 @@ game.onMonthSummary = () => {
     // Module 4b: check achievements on month summary
     checkAndShowAchievements();
 };
+game.onDaySummary = (data) => {
+    const parts = [`📅 ${data.month}月${data.day}日`];
+    parts.push(data.modelName);
+    if (data.moneyCost > 0) parts.push(`¥-${data.moneyCost}`);
+    parts.push(`质量${data.quality}`);
+    if (data.bugs > 0) parts.push(`Bug×${data.bugs}`);
+    if (data.overtime) parts.push('⚠️加班');
+
+    // Build HTML with colored deltas
+    let html = parts.join(' | ');
+
+    const deltas = [];
+    if (data.hpDelta) deltas.push(colorDelta('❤️', data.hpDelta));
+    if (data.brainDelta) deltas.push(colorDelta('🧠', data.brainDelta));
+    if (data.moneyDelta) deltas.push(colorDelta('💰', data.moneyDelta, true));
+
+    if (deltas.length > 0) html += ' · ' + deltas.join(' ');
+
+    // Append any events that happened this day
+    if (data.events && data.events.length > 0) {
+        data.events.forEach(ev => {
+            html += `<br>　　→ ${ev}`;
+        });
+    }
+
+    addEventLineHTML(data.month, data.day, html, data.overtime ? 'bad' : 'neutral');
+};
+game.onChoiceResult = ({ text, deltas }) => {
+    let html = `→ ${text}`;
+    const parts = [];
+    const names = { hp: '❤️HP', brain: '🧠脑力', money: '💰', bossSatisfy: '👔满意', shaoye_rel: '少爷', yimin_rel: '亿民', gf_rel: '💕女友' };
+    for (const [key, val] of Object.entries(deltas)) {
+        const name = names[key] || key;
+        parts.push(colorDelta(name, val, key === 'money'));
+    }
+    if (parts.length > 0) html += ' · ' + parts.join(' ');
+    addEventLineHTML(game.property.get('month'), game.property.get('day'), html, 'choice-made');
+};
 game.onError = (msg) => showToast('⚠️ ' + msg);
 
 // ===== Init =====
@@ -443,7 +497,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (game.start()) {
             $('eventStream').innerHTML = '';
             lineNum = 1;
-            $('gameActions').style.display = 'flex';
             showScreen('gameScreen');
         }
     });
@@ -452,7 +505,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('restartBtn').addEventListener('click', () => {
         game.backToStart();
         achieveMgr.bind(game.legacy); // re-bind after legacy reload
-        $('gameActions').style.display = 'none';
         showScreen('startScreen');
         initStart();
     });

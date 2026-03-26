@@ -1,13 +1,14 @@
 [
-  {"id": "buff_python", "icon": "🎓", "name": "学过Python", "desc": "脑力+10", "cost": 30, "effect": {"brain": 10}, "unlock": "完成1局"},
-  {"id": "buff_savings", "icon": "💳", "name": "小有积蓄", "desc": "初始金钱+3000", "cost": 50, "effect": {"money": 3000}, "unlock": "累计赚≥50000"},
-  {"id": "buff_fitness", "icon": "🏋️", "name": "健身习惯", "desc": "HP+15", "cost": 40, "effect": {"hp": 15}, "unlock": "某局hp未<50"},
-  {"id": "buff_memory", "icon": "🧠", "name": "过目不忘", "desc": "脑力+15", "cost": 60, "effect": {"brain": 15}, "unlock": "某局brain未<60"},
-  {"id": "buff_token", "icon": "💰", "name": "启动资金", "desc": "初始金钱+1500", "cost": 50, "effect": {"money": 1500}, "unlock": "获得任一胜利结局"},
-  {"id": "buff_doubao", "icon": "🐳", "name": "豆包皮肤", "desc": "豆包质量+15", "cost": 80, "effect": {"doubao_quality_bonus": 15}, "unlock": "豆包之神结局"},
-  {"id": "buff_social", "icon": "🤝", "name": "人脉王", "desc": "初始关系70，魅力+10", "cost": 40, "effect": {"shaoye_rel": 20, "yimin_rel": 20, "charm": 10}, "unlock": "铁三角结局"},
-  {"id": "buff_recommend", "icon": "⚡", "name": "内部推荐", "desc": "老板满意度初始60", "cost": 70, "effect": {"bossSatisfy": 10}, "unlock": "AI大师结局"},
-  {"id": "buff_lucky", "icon": "🍀", "name": "欧皇体质", "desc": "幸运+20", "cost": 60, "effect": {"luck": 20}, "unlock": "完成5局"},
-  {"id": "buff_insurance", "icon": "🛡️", "name": "工伤保险", "desc": "HP+20", "cost": 50, "effect": {"hp": 20}, "unlock": "过劳猝死结局"},
-  {"id": "buff_charm", "icon": "✨", "name": "天生丽质", "desc": "魅力+15", "cost": 50, "effect": {"charm": 15}, "unlock": "人间清醒结局"}
+  {"id": "buff_energy_drink", "icon": "🥤", "name": "红牛储备", "desc": "每月HP恢复+5，初始HP+10", "cost": 0, "effect": {"hp": 10}, "unlock": "完成1局"},
+  {"id": "buff_coffee", "icon": "☕", "name": "咖啡成瘾", "desc": "初始脑力+15，但初始HP-10", "cost": 20, "effect": {"brain": 15, "hp": -10}, "unlock": "完成1局"},
+  {"id": "buff_silver_tongue", "icon": "🗣️", "name": "巧舌如簧", "desc": "魅力+20，老板初始满意度+10", "cost": 30, "effect": {"charm": 20, "bossSatisfy": 10}, "unlock": "安稳过关结局"},
+  {"id": "buff_trust_fund", "icon": "💎", "name": "家里有矿", "desc": "初始金钱+8000", "cost": 40, "effect": {"money": 8000}, "unlock": "获得任一胜利结局"},
+  {"id": "buff_gym_rat", "icon": "💪", "name": "铁人体质", "desc": "HP+25，加班伤害减免", "cost": 50, "effect": {"hp": 25}, "unlock": "过劳猝死结局"},
+  {"id": "buff_big_brain", "icon": "🧬", "name": "超级大脑", "desc": "脑力+25，代码质量基础+10", "cost": 60, "effect": {"brain": 25}, "unlock": "精神崩溃结局"},
+  {"id": "buff_social_butterfly", "icon": "🦋", "name": "社交蝴蝶", "desc": "全关系+25，魅力+15", "cost": 50, "effect": {"shaoye_rel": 25, "yimin_rel": 25, "gf_rel": 10, "charm": 15}, "unlock": "铁三角结局"},
+  {"id": "buff_doubao_master", "icon": "🐳", "name": "豆包大师", "desc": "豆包质量+20，豆包永不出错", "cost": 80, "effect": {"doubao_quality_bonus": 20}, "unlock": "豆包之神结局"},
+  {"id": "buff_lucky_star", "icon": "🌟", "name": "天选之人", "desc": "幸运+30，事件结果倾向正面", "cost": 60, "effect": {"luck": 30}, "unlock": "完成5局"},
+  {"id": "buff_boss_spy", "icon": "🕵️", "name": "老板心腹", "desc": "老板初始满意度+20，但同事关系-10", "cost": 40, "effect": {"bossSatisfy": 20, "shaoye_rel": -10, "yimin_rel": -10}, "unlock": "AI大师结局"},
+  {"id": "buff_hacker", "icon": "👾", "name": "代码鬼才", "desc": "脑力+20，初始解锁DeepSeek V4", "cost": 100, "effect": {"brain": 20}, "unlock": "人间清醒结局"},
+  {"id": "buff_minimalist", "icon": "🏕️", "name": "极简生活", "desc": "生活费减半(每月省¥3000)", "cost": 30, "effect": {"living_cost": -3000}, "unlock": "破产回家结局"}
 ]

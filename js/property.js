@@ -13,17 +13,17 @@ export class PropertyManager {
     reset(overrides = {}) {
         this.#data = {
             // Core attributes (UI visible)
-            hp: 100,
-            money: 5000,
-            brain: 80,
-            bossSatisfy: 50,
+            hp: 80,
+            money: 3000,
+            brain: 60,
+            bossSatisfy: 40,
 
             // Colleague relations (UI visible)
             shaoye_rel: 50,
             yimin_rel: 50,
 
             // Girlfriend relation
-            gf_rel: 60,
+            gf_rel: 50,
             has_girlfriend: true,
             married: false,
 
@@ -40,9 +40,9 @@ export class PropertyManager {
             consecutive_overtime: 0,
             avg_quality: 50,
             total_bugs: 0,
-            salary: 15000,
+            salary: 12000,
             months_bankrupt: 0,
-            living_cost: 5000,
+            living_cost: 6000,
 
             // Story flags
             gamejam_won: false,
@@ -119,8 +119,8 @@ export class PropertyManager {
      */
     monthlyRecovery() {
         const wasOvertime = this.#data.consecutive_overtime > 0;
-        const brainRecover = wasOvertime ? 5 : 10;
-        const hpRecover = wasOvertime ? 3 : 5;
+        const brainRecover = wasOvertime ? 3 : 5;
+        const hpRecover = wasOvertime ? 2 : 3;
         this.set('brain', clamp(this.#data.brain + brainRecover, 0, 100));
         this.set('hp', clamp(this.#data.hp + hpRecover, 0, 100));
     }
@@ -131,7 +131,8 @@ export class PropertyManager {
      */
     monthlyExpense() {
         const salary = this.#data.salary || 15000;
-        this.set('money', this.#data.money + salary - 5000);
+        const cost = this.#data.living_cost || 5000;
+        this.set('money', this.#data.money + salary - cost);
     }
 
     // ===== Game Over Checks =====
@@ -142,7 +143,7 @@ export class PropertyManager {
     isGameOver() {
         if (this.#data.hp <= 0) return 'death';
         if (this.#data.brain <= 0) return 'breakdown';
-        if (this.#data.bossSatisfy < 20) return 'fired';
+        if (this.#data.bossSatisfy < 15) return 'fired';
         if ((this.#data.months_bankrupt || 0) >= 3) return 'bankrupt';
         return null;
     }

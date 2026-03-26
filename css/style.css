@@ -27,7 +27,7 @@
   --radius:4px;
   --radius-lg:8px;
   --tab-height:36px;
-  --terminal-height:50px;
+  --terminal-height:30px;
   --explorer-width:210px;
 }
 
@@ -148,18 +148,44 @@ body{
   width:var(--explorer-width);background:var(--bg-sidebar);
   border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;
   padding-bottom:12px;
+  display:flex;flex-direction:column;
 }
 .explorer::-webkit-scrollbar{width:3px}
 .explorer::-webkit-scrollbar-thumb{background:var(--comment);border-radius:2px}
 .explorer-title{
   font-size:11px;font-weight:700;color:var(--text3);
   padding:8px 12px;text-transform:uppercase;letter-spacing:1px;
+  flex-shrink:0;
 }
-.explorer-section{padding:0 8px;margin-bottom:8px}
+.explorer-section{padding:0 8px;margin-bottom:8px;flex-shrink:0}
 .section-header{
   font-size:10px;color:var(--text3);padding:4px;
   font-weight:700;text-transform:uppercase;letter-spacing:.5px;
   margin-bottom:4px;
+}
+
+/* Explorer Controls — pinned to bottom */
+.explorer-controls{
+  margin-top:auto;
+  padding:8px;
+  border-top:1px solid var(--border);
+}
+.ctrl-btn{
+  display:block;width:100%;padding:6px 8px;margin-bottom:6px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  background:rgba(255,255,255,.03);color:var(--text2);
+  font-family:'Noto Sans SC','JetBrains Mono',monospace;
+  font-size:11px;cursor:pointer;transition:all .2s;text-align:left;
+}
+.ctrl-btn:hover{
+  border-color:var(--purple);color:var(--text);
+  background:rgba(189,147,249,.08);
+}
+.explorer-controls .speed-ctrl{
+  display:flex;flex-direction:column;gap:3px;
+}
+.explorer-controls .speed-ctrl button{
+  width:100%;text-align:left;
 }
 
 .stat-row{
@@ -300,7 +326,7 @@ body{
 .cp-btn .cpb-hint{font-size:10px;color:var(--text3);margin-top:2px}
 .cp-btn .cpb-lock{font-size:10px;color:var(--orange);margin-top:2px}
 
-/* Terminal Bar */
+/* Terminal Bar — minimal */
 .terminal-bar{
   height:var(--terminal-height);background:var(--bg-darker);
   border-top:1px solid var(--border);display:flex;align-items:center;
@@ -310,7 +336,6 @@ body{
   font-size:11px;font-weight:700;color:var(--text3);
   text-transform:uppercase;letter-spacing:1px;
 }
-.terminal-actions{display:flex;align-items:center;flex:1;justify-content:flex-end;gap:8px}
 .speed-ctrl{display:flex;gap:4px}
 .speed-ctrl button{
   padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius);
@@ -432,21 +457,6 @@ body{
   .event-stream{min-height:200px;max-height:60vh;font-size:12px}
   .ev-line .ev-prefix{font-size:10px}
 
-  /* Game action FABs */
-  .terminal-bar .game-actions{
-    position:fixed;bottom:70px;right:12px;
-    flex-direction:column;gap:8px;z-index:50;
-  }
-  .action-btn{
-    width:48px;height:48px;border-radius:50%;
-    font-size:18px;padding:0;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 16px rgba(0,0,0,.5);
-    background:rgba(33,34,44,.95);
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  }
-  .action-btn .action-text{display:none}
-
   /* Choice panel → bottom sheet */
   .choice-panel{
     position:fixed;bottom:0;left:0;right:0;
@@ -459,7 +469,6 @@ body{
 
   /* Terminal compact */
   .terminal-bar{gap:6px;padding:0 8px}
-  .speed-ctrl button{min-height:44px;min-width:44px;font-size:10px;padding:4px 8px}
 
   /* Start screen */
   .start-btn{position:sticky;bottom:10px;box-shadow:0 -4px 20px rgba(0,0,0,.6)}
@@ -578,16 +587,7 @@ body{
 
 
 
-/* ===== GAME ACTION BUTTONS ===== */
-.game-actions{display:flex;gap:4px}
-.action-btn{
-  padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius);
-  background:transparent;color:var(--text2);font-family:'Noto Sans SC','JetBrains Mono',monospace;
-  font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap;
-  display:flex;align-items:center;gap:4px;
-}
-.action-btn:hover{border-color:var(--purple);color:var(--text);background:rgba(189,147,249,.08)}
-.action-btn:active{transform:scale(.96)}
+
 
 /* ===== MODEL SWITCH ===== */
 .model-list{display:flex;flex-direction:column;gap:6px}
@@ -616,6 +616,4 @@ body{
   .overlay-tabs{padding:6px 10px}
   .overlay-tab{font-size:10px;padding:4px 8px}
   .start-actions{flex-wrap:wrap}
-  .game-actions{gap:2px}
-  .action-btn{font-size:12px;padding:3px 6px}
 }
