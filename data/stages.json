@@ -1,13 +1,14 @@
 [
-  {"max":3,"name":"👶 婴幼儿"},
-  {"max":6,"name":"🧒 幼儿园"},
-  {"max":12,"name":"📚 小学"},
-  {"max":15,"name":"📖 初中"},
-  {"max":18,"name":"🎓 高中"},
-  {"max":22,"name":"🎮 大学"},
-  {"max":30,"name":"💻 程序员"},
-  {"max":40,"name":"🏢 职场"},
-  {"max":55,"name":"🔄 转型期"},
-  {"max":70,"name":"🧓 中老年"},
-  {"max":100,"name":"👴 老年"}
+  {"month": 1, "name": "🌱 新手上路", "phase": "tutorial"},
+  {"month": 2, "name": "📖 摸索期", "phase": "explore"},
+  {"month": 3, "name": "📖 摸索期", "phase": "explore"},
+  {"month": 4, "name": "⚔️ 生存战", "phase": "survival"},
+  {"month": 5, "name": "⚔️ 生存战", "phase": "survival"},
+  {"month": 6, "name": "⚔️ 生存战", "phase": "survival"},
+  {"month": 7, "name": "🔥 冲刺期", "phase": "sprint"},
+  {"month": 8, "name": "🔥 冲刺期", "phase": "sprint"},
+  {"month": 9, "name": "🔥 冲刺期", "phase": "sprint"},
+  {"month": 10, "name": "🏆 审判日", "phase": "final"},
+  {"month": 11, "name": "🏆 审判日", "phase": "final"},
+  {"month": 12, "name": "🏆 审判日", "phase": "final"}
 ]

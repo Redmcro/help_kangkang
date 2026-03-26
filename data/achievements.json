@@ -1,0 +1,171 @@
+[
+  {
+    "id": "ach_first_run",
+    "name": "初来乍到",
+    "icon": "👶",
+    "desc": "完成第一次人生",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "runs", "value": 1 },
+    "reward": { "coins": 10 },
+    "hidden": false
+  },
+  {
+    "id": "ach_five_runs",
+    "name": "轮回老手",
+    "icon": "🔄",
+    "desc": "完成5次转世",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "runs", "value": 5 },
+    "reward": { "coins": 30 },
+    "hidden": false
+  },
+  {
+    "id": "ach_first_win",
+    "name": "逆天改命",
+    "icon": "🌟",
+    "desc": "第一次获得胜利结局",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "wins", "value": 1 },
+    "reward": { "coins": 20 },
+    "hidden": false
+  },
+  {
+    "id": "ach_first_blood",
+    "name": "第一滴血",
+    "icon": "🩸",
+    "desc": "第一次被裁员成为外卖骑手",
+    "category": "ending",
+    "condition": { "type": "ending_unlocked", "target": "ending_rider" },
+    "reward": { "coins": 15 },
+    "hidden": false
+  },
+  {
+    "id": "ach_ai_master",
+    "name": "大师之路",
+    "icon": "🏆",
+    "desc": "达成「AI 大师」结局",
+    "category": "ending",
+    "condition": { "type": "ending_unlocked", "target": "ending_ai_master" },
+    "reward": { "coins": 30 },
+    "hidden": false
+  },
+  {
+    "id": "ach_all_win",
+    "name": "全胜通关",
+    "icon": "👑",
+    "desc": "解锁所有胜利结局",
+    "category": "ending",
+    "condition": {
+      "type": "endings_all",
+      "targets": ["ending_ai_master", "ending_stable", "ending_indie_dev"]
+    },
+    "reward": { "coins": 50 },
+    "hidden": false
+  },
+  {
+    "id": "ach_all_hidden",
+    "name": "隐藏猎人",
+    "icon": "🕵️",
+    "desc": "解锁所有隐藏结局",
+    "category": "ending",
+    "condition": {
+      "type": "endings_all",
+      "targets": [
+        "ending_ai_shape", "ending_zen", "ending_doubao_god",
+        "ending_trio", "ending_awakened", "ending_lucky"
+      ]
+    },
+    "reward": { "coins": 100 },
+    "hidden": true
+  },
+  {
+    "id": "ach_bug_hunter",
+    "name": "Bug猎人",
+    "icon": "🐛",
+    "desc": "累计修复100个Bug",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "total_bugs_fixed", "value": 100 },
+    "reward": { "coins": 30 },
+    "hidden": false
+  },
+  {
+    "id": "ach_token_whale",
+    "name": "Token巨鲸",
+    "icon": "🐋",
+    "desc": "累计消耗 1B Token",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "total_tokens_spent", "value": 1000 },
+    "reward": { "coins": 25 },
+    "hidden": false
+  },
+  {
+    "id": "ach_rich",
+    "name": "打工皇帝",
+    "icon": "💎",
+    "desc": "累计赚取 500,000 元",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "total_money_earned", "value": 500000 },
+    "reward": { "coins": 40 },
+    "hidden": false
+  },
+  {
+    "id": "ach_survivor",
+    "name": "12月勇士",
+    "icon": "⚔️",
+    "desc": "存活到12月（不管结局如何）",
+    "category": "stat",
+    "condition": { "type": "stat_gte", "target": "best_month", "value": 12 },
+    "reward": { "coins": 20 },
+    "hidden": false
+  },
+  {
+    "id": "ach_collector_25",
+    "name": "图鉴收集者",
+    "icon": "📖",
+    "desc": "收集25个不同事件",
+    "category": "stat",
+    "condition": { "type": "events_count_gte", "value": 25 },
+    "reward": { "coins": 20 },
+    "hidden": false
+  },
+  {
+    "id": "ach_collector_50",
+    "name": "百科全书",
+    "icon": "📚",
+    "desc": "收集50个不同事件",
+    "category": "stat",
+    "condition": { "type": "events_count_gte", "value": 50 },
+    "reward": { "coins": 40 },
+    "hidden": false
+  },
+  {
+    "id": "ach_doubao_god",
+    "name": "豆包之神",
+    "icon": "🐳",
+    "desc": "达成「豆包之神」隐藏结局",
+    "category": "ending",
+    "condition": { "type": "ending_unlocked", "target": "ending_doubao_god" },
+    "reward": { "coins": 50 },
+    "hidden": true
+  },
+  {
+    "id": "ach_trio",
+    "name": "铁三角",
+    "icon": "🤝",
+    "desc": "达成「铁三角」隐藏结局",
+    "category": "ending",
+    "condition": { "type": "ending_unlocked", "target": "ending_trio" },
+    "reward": { "coins": 40 },
+    "hidden": true
+  },
+  {
+    "id": "ach_overwork",
+    "name": "燃烧殆尽",
+    "icon": "🔥",
+    "desc": "因过劳猝死",
+    "category": "ending",
+    "condition": { "type": "ending_unlocked", "target": "ending_overwork" },
+    "reward": { "coins": 15 },
+    "hidden": false
+  }
+]

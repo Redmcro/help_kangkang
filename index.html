@@ -3,59 +3,148 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>🐷 康康逆天改命</title>
-<meta name="description" content="帮助Unity游戏程序员康康改变被AI取代的命运！一款趣味人生模拟游戏。">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<title>🐷 康康逆天改命 — 职场生存模拟</title>
+<meta name="description" content="帮助Unity程序员康康在AI时代保住饭碗！12个月职场生存模拟 + Roguelike转世系统。">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="stars" id="stars"></div>
+<div class="code-rain" id="codeRain"></div>
 
 <!-- ===== START SCREEN ===== -->
 <div class="screen active" id="startScreen"><div class="container">
   <header class="logo">
+    <div class="logo-terminal">~/kangkang $</div>
     <h1>🐷 康康逆天改命</h1>
-    <div class="sub">康康是一名Unity游戏程序员<br>但命运的尽头是<em>被AI取代，沦为外卖骑手</em><br>帮助康康改变命运！</div>
+    <div class="sub">康康是一名Unity游戏程序员<br>在<em>AI取代一切</em>的时代<br>他能撑过这<em>12个月</em>吗？</div>
   </header>
   <section class="buff-section">
-    <h3>🪙 转世加持 <span class="coins" id="legacyCoins">0</span></h3>
+    <h3>🪙 转世加持 <span class="coins" id="legacyCoins">0</span> <span class="buff-limit">（最多3个）</span></h3>
     <div class="buff-grid" id="buffGrid"></div>
   </section>
-  <button class="start-btn" id="startBtn">🚀 开始康康的人生</button>
+  <button class="start-btn" id="startBtn">🚀 开始新的一年</button>
   <p class="best-record" id="bestRecord"></p>
 </div></div>
 
-<!-- ===== GAME SCREEN ===== -->
-<div class="screen" id="gameScreen"><div class="container">
-  <div class="game-top">
-    <div><div class="gt-stage" id="gStage">👶 婴幼儿</div></div>
-    <div style="text-align:center"><div class="gt-age" id="gAge">0</div><div class="gt-label">岁</div></div>
-    <div style="text-align:right"><div class="gt-money" id="gMoney">¥0</div><div class="gt-label">存款</div></div>
+<!-- ===== GAME SCREEN (IDE Layout) ===== -->
+<div class="screen" id="gameScreen"><div class="ide-layout">
+
+  <!-- Tab Bar (Month Indicator) -->
+  <div class="tab-bar" id="tabBar">
+    <div class="tab-item" data-month="1">1月</div>
+    <div class="tab-item" data-month="2">2月</div>
+    <div class="tab-item" data-month="3">3月</div>
+    <div class="tab-item" data-month="4">4月</div>
+    <div class="tab-item" data-month="5">5月</div>
+    <div class="tab-item" data-month="6">6月</div>
+    <div class="tab-item" data-month="7">7月</div>
+    <div class="tab-item" data-month="8">8月</div>
+    <div class="tab-item" data-month="9">9月</div>
+    <div class="tab-item" data-month="10">10月</div>
+    <div class="tab-item" data-month="11">11月</div>
+    <div class="tab-item" data-month="12">12月</div>
   </div>
-  <div class="stats-bar">
-    <div class="sb-item si-hp"><div class="si-icon">❤️</div><div class="si-val" id="vHp">50</div><div class="si-bar"><div class="si-fill" id="bHp" style="width:50%"></div></div></div>
-    <div class="sb-item si-int"><div class="si-icon">🧠</div><div class="si-val" id="vInt">50</div><div class="si-bar"><div class="si-fill" id="bInt" style="width:50%"></div></div></div>
-    <div class="sb-item si-hap"><div class="si-icon">😊</div><div class="si-val" id="vHap">50</div><div class="si-bar"><div class="si-fill" id="bHap" style="width:50%"></div></div></div>
-    <div class="sb-item si-chr"><div class="si-icon">✨</div><div class="si-val" id="vChr">50</div><div class="si-bar"><div class="si-fill" id="bChr" style="width:50%"></div></div></div>
+
+  <!-- Main Area: Explorer + Editor -->
+  <div class="ide-main">
+
+    <!-- Explorer (Left Sidebar) -->
+    <div class="explorer" id="explorer">
+      <div class="explorer-title">EXPLORER</div>
+
+      <div class="explorer-section">
+        <div class="section-header">📊 STATUS</div>
+        <div class="stat-row">
+          <span class="stat-icon">❤️</span>
+          <span class="stat-name">HP</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-hp" id="barHp"></div></div>
+          <span class="stat-val" id="valHp">100</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">🧠</span>
+          <span class="stat-name">Brain</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-brain" id="barBrain"></div></div>
+          <span class="stat-val" id="valBrain">80</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">💰</span>
+          <span class="stat-name">Money</span>
+          <span class="stat-val stat-val-money" id="valMoney">¥5,000</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">🪙</span>
+          <span class="stat-name">Token</span>
+          <span class="stat-val stat-val-token" id="valToken">50M</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">👔</span>
+          <span class="stat-name">Boss</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-boss" id="barBoss"></div></div>
+          <span class="stat-val" id="valBoss">50</span>
+        </div>
+      </div>
+
+      <div class="explorer-section">
+        <div class="section-header">🤝 COLLEAGUES</div>
+        <div class="stat-row">
+          <span class="stat-icon">🧪</span>
+          <span class="stat-name">少爷</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-rel" id="barShaoye"></div></div>
+          <span class="stat-val" id="valShaoye">50</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">💻</span>
+          <span class="stat-name">亿民</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-rel" id="barYimin"></div></div>
+          <span class="stat-val" id="valYimin">50</span>
+        </div>
+      </div>
+
+      <div class="explorer-section">
+        <div class="section-header">🤖 AI MODEL</div>
+        <div class="model-display" id="currentModelDisplay">🐳 豆包</div>
+      </div>
+
+      <div class="explorer-section">
+        <div class="section-header">📅 STAGE</div>
+        <div class="stage-display" id="stageDisplay">🌱 新手上路</div>
+      </div>
+    </div>
+
+    <!-- Editor (Main Content) -->
+    <div class="editor">
+      <div class="editor-tab">
+        <span class="editor-tab-icon">📄</span>
+        <span id="editorTabName">kangkang_life.log</span>
+      </div>
+      <div class="event-stream" id="eventStream"></div>
+      <div class="choice-panel" id="choicePanel">
+        <div class="cp-title" id="cpTitle"></div>
+        <div class="cp-desc" id="cpDesc"></div>
+        <div id="cpBtns"></div>
+      </div>
+    </div>
   </div>
-  <div class="speed-ctrl">
-    <button data-speed="1500" id="sp1">慢速</button>
-    <button data-speed="800" class="active" id="sp2">正常</button>
-    <button data-speed="300" id="sp3">快速</button>
+
+  <!-- Terminal Bar (Bottom) -->
+  <div class="terminal-bar">
+    <div class="terminal-title">TERMINAL</div>
+    <div class="terminal-actions">
+      <div class="speed-ctrl" id="speedCtrl">
+        <button data-speed="1500">▶ 慢速</button>
+        <button data-speed="800" class="active">▶▶ 正常</button>
+        <button data-speed="300">▶▶▶ 快速</button>
+      </div>
+    </div>
   </div>
-  <div class="event-stream" id="eventStream"></div>
-  <div class="choice-panel" id="choicePanel">
-    <div class="cp-title" id="cpTitle"></div>
-    <div class="cp-desc" id="cpDesc"></div>
-    <div id="cpBtns"></div>
-  </div>
+
 </div></div>
 
 <!-- ===== END SCREEN ===== -->
 <div class="screen" id="endScreen"><div class="end-screen">
   <div class="end-card">
     <div class="big-icon" id="endIcon">💀</div>
-    <h2 id="endTitle" class="lose">康康的人生结束了</h2>
+    <h2 id="endTitle" class="lose">康康的职场生涯结束了</h2>
     <div class="end-desc" id="endDesc"></div>
     <div class="end-grid" id="endGrid"></div>
     <div class="end-timeline" id="endTimeline" style="display:none"></div>
@@ -64,16 +153,15 @@
   </div>
 </div></div>
 
-<!-- ===== ACHIEVEMENT TOAST ===== -->
+<!-- ===== TOAST ===== -->
 <div class="achievement-toast" id="achieveToast">
   <div class="at-icon">🏆</div>
   <div class="at-info">
-    <div class="at-title">成就解锁！</div>
+    <div class="at-title">提示</div>
     <div class="at-name" id="achieveName"></div>
   </div>
 </div>
 
-<!-- Module script — no inline JS! -->
 <script type="module" src="js/app.js"></script>
 </body>
 </html>

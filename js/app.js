@@ -1,5 +1,5 @@
 // ===== App.js =====
-// UI Controller — handles DOM rendering, event listeners, visual effects
+// v2: IDE-themed UI Controller — handles DOM rendering, event listeners
 // This is the ONLY file that touches the DOM
 
 import { GameEngine } from './engine.js';
@@ -10,16 +10,24 @@ const game = new GameEngine();
 // ===== DOM References =====
 const $ = id => document.getElementById(id);
 
-// ===== Stars Background =====
-function createStars() {
-    const c = $('stars');
-    for (let i = 0; i < 60; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        s.style.left = Math.random() * 100 + '%';
-        s.style.top = Math.random() * 100 + '%';
-        s.style.setProperty('--d', (2 + Math.random() * 4) + 's');
-        c.appendChild(s);
+// ===== Code Rain Background =====
+function createCodeRain() {
+    const c = $('codeRain');
+    if (!c) return;
+    const chars = '01{}();=>const let var function return if else for while class import export async await yield'.split('');
+    for (let i = 0; i < 30; i++) {
+        const col = document.createElement('div');
+        col.className = 'rain-col';
+        col.style.left = (i / 30 * 100) + '%';
+        col.style.setProperty('--dur', (8 + Math.random() * 12) + 's');
+        col.style.setProperty('--op', (0.3 + Math.random() * 0.7).toString());
+        col.style.animationDelay = (-Math.random() * 15) + 's';
+        let text = '';
+        for (let j = 0; j < 30; j++) {
+            text += chars[Math.floor(Math.random() * chars.length)] + ' ';
+        }
+        col.textContent = text;
+        c.appendChild(col);
     }
 }
 
@@ -62,51 +70,75 @@ function initStart() {
     renderBuffs();
     const br = $('bestRecord');
     br.textContent = game.legacy.runs > 0
-        ? `已转世${game.legacy.runs}次 · 最长${game.legacy.best}岁 · 改命成功${game.legacy.wins}次`
-        : '第一次投胎？帮康康改变被AI取代的命运！';
+        ? `已转世${game.legacy.runs}次 · 最远${game.legacy.best_month}月 · 改命成功${game.legacy.wins}次`
+        : '第一次入职？帮康康撑过这12个月！';
+}
+
+// ===== Month Tab Bar =====
+function updateTabs(currentMonth) {
+    document.querySelectorAll('.tab-item').forEach(tab => {
+        const m = parseInt(tab.dataset.month);
+        tab.classList.remove('active', 'completed');
+        if (m === currentMonth) tab.classList.add('active');
+        else if (m < currentMonth) tab.classList.add('completed');
+    });
+    const activeTab = document.querySelector('.tab-item.active');
+    if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
 // ===== Game UI Update =====
 function updateUI(state, stageName) {
-    $('gAge').textContent = state.age;
-    $('gStage').textContent = stageName;
-    $('gMoney').textContent = '¥' + Math.floor(state.money);
+    updateStatBar('valHp', 'barHp', state.hp, 100);
+    updateStatBar('valBrain', 'barBrain', state.brain, 100);
+    updateStatBar('valBoss', 'barBoss', state.bossSatisfy, 100);
+    updateStatBar('valShaoye', 'barShaoye', state.shaoye_rel, 100);
+    updateStatBar('valYimin', 'barYimin', state.yimin_rel, 100);
 
-    // Animate stat changes
-    updateStat('vHp', 'bHp', state.hp);
-    updateStat('vInt', 'bInt', state.int);
-    updateStat('vHap', 'bHap', state.hap);
-    updateStat('vChr', 'bChr', state.chr);
+    $('valMoney').textContent = '¥' + formatNumber(state.money);
+    $('valToken').textContent = state.token + 'M';
+
+    const modelNames = {
+        doubao: '🐳 豆包', gpt54: '🤖 GPT-5.4', opus46: '🎯 Opus 4.6',
+        deepseek_v4: '🔮 DeepSeek V4', cheapgpt: '💀 CheapGPT', fakeopus: '🎪 FakeOpus'
+    };
+    $('currentModelDisplay').textContent = modelNames[state.current_model] || '🐳 豆包';
+    $('stageDisplay').textContent = stageName;
+
+    updateTabs(state.month);
 }
 
-function updateStat(valId, barId, newVal) {
+function updateStatBar(valId, barId, value, max) {
     const el = $(valId);
     const oldVal = parseInt(el.textContent) || 0;
-    const rounded = Math.round(newVal);
+    const rounded = Math.round(value);
     el.textContent = rounded;
-    $(barId).style.width = rounded + '%';
+    $(barId).style.width = Math.max(0, Math.min(100, (value / max) * 100)) + '%';
 
-    // Add change animation
     if (rounded > oldVal) {
         el.classList.remove('stat-change-down');
         el.classList.add('stat-change-up');
-        setTimeout(() => el.classList.remove('stat-change-up'), 600);
+        setTimeout(() => el.classList.remove('stat-change-up'), 500);
     } else if (rounded < oldVal) {
         el.classList.remove('stat-change-up');
         el.classList.add('stat-change-down');
-        setTimeout(() => el.classList.remove('stat-change-down'), 600);
+        setTimeout(() => el.classList.remove('stat-change-down'), 500);
     }
 }
 
+function formatNumber(n) {
+    return Math.floor(n).toLocaleString('zh-CN');
+}
+
 // ===== Event Stream =====
-function addEventLine(age, text, type = 'neutral') {
+let lineNumber = 1;
+
+function addEventLine(month, day, text, type = 'neutral') {
     const s = $('eventStream');
     const d = document.createElement('div');
     d.className = 'ev-line ' + type;
-    d.innerHTML = `<span class="ev-age">[${age}岁]</span>${text}`;
+    d.innerHTML = `<span class="ev-prefix">${lineNumber++}</span><span>${text}</span>`;
     s.appendChild(d);
-    // Limit DOM nodes to prevent unbounded growth
-    while (s.children.length > 100) s.removeChild(s.firstChild);
+    while (s.children.length > 150) s.removeChild(s.firstChild);
     s.scrollTop = s.scrollHeight;
 }
 
@@ -144,34 +176,28 @@ function hideChoicePanel() {
 
 // ===== End Screen =====
 function showEndScreen(data) {
-    const { isWin, isRider, cause, earned, age, job, totalEarned, aiSurvived, timeline } = data;
+    const { ending, month, avgQuality, bossSatisfy, money, totalCoins, timeline } = data;
 
-    $('endIcon').textContent = isWin ? '🎉' : isRider ? '🛵' : '💀';
+    $('endIcon').textContent = ending.icon;
     const t = $('endTitle');
-    if (isWin) { t.textContent = '康康的传奇人生！'; t.className = 'win'; }
-    else if (isRider) { t.textContent = '康康沦为了骑手...'; t.className = 'lose'; }
-    else { t.textContent = '康康的人生结束了'; t.className = 'lose'; }
+    t.textContent = ending.title;
+    t.className = ending.isWin ? 'win' : 'lose';
 
-    $('endDesc').innerHTML = isWin
-        ? `活到了${age}岁！${aiSurvived ? '成功抵抗了AI浪潮！' : ''}总收入¥${totalEarned}`
-        : isRider
-        ? `康康最终还是被AI取代，成为了外卖骑手...<br>再试一次，帮他逆天改命吧！`
-        : `享年${age}岁 — ${cause}<br>最终职业：${job}`;
+    $('endDesc').innerHTML = ending.desc;
 
     $('endGrid').innerHTML = `
-        <div class="eg-item"><div class="eg-l">享年</div><div class="eg-v">${age}岁</div></div>
-        <div class="eg-item"><div class="eg-l">职业</div><div class="eg-v">${job}</div></div>
-        <div class="eg-item"><div class="eg-l">总收入</div><div class="eg-v" style="color:var(--green)">¥${totalEarned}</div></div>
-        <div class="eg-item"><div class="eg-l">改命</div><div class="eg-v">${aiSurvived ? '✅成功' : '❌失败'}</div></div>
+        <div class="eg-item"><div class="eg-l">存活月份</div><div class="eg-v">${month}/12</div></div>
+        <div class="eg-item"><div class="eg-l">代码质量</div><div class="eg-v">${avgQuality}</div></div>
+        <div class="eg-item"><div class="eg-l">老板满意度</div><div class="eg-v">${bossSatisfy}</div></div>
+        <div class="eg-item"><div class="eg-l">最终存款</div><div class="eg-v" style="color:var(--green)">¥${formatNumber(money)}</div></div>
     `;
 
-    // Timeline
     const tl = $('endTimeline');
     if (timeline && timeline.length > 0) {
-        tl.innerHTML = '<div class="tl-title">📜 人生关键节点</div>' +
+        tl.innerHTML = '<div class="tl-title">📜 关键事件</div>' +
             timeline.map(e => `
                 <div class="tl-item">
-                    <span class="tl-age">[${e.age}岁]</span> ${e.text}
+                    <span class="tl-month">[${e.month}月]</span> ${e.text}
                 </div>
             `).join('');
         tl.style.display = 'block';
@@ -179,7 +205,7 @@ function showEndScreen(data) {
         tl.style.display = 'none';
     }
 
-    $('endLegacy').textContent = `获得传世金币: +${earned} 🪙`;
+    $('endLegacy').textContent = `获得传世金币: +${totalCoins} 🪙`;
     showScreen('endScreen');
 }
 
@@ -191,8 +217,8 @@ function setSpeed(s) {
     if (btn) btn.classList.add('active');
 }
 
-// ===== Achievement Toast =====
-function showAchievement(text) {
+// ===== Toast =====
+function showToast(text) {
     const toast = $('achieveToast');
     $('achieveName').textContent = text;
     toast.classList.add('show');
@@ -205,32 +231,30 @@ game.onUpdateUI = updateUI;
 game.onShowChoice = showChoicePanel;
 game.onHideChoice = hideChoicePanel;
 game.onGameEnd = showEndScreen;
-game.onAchievement = showAchievement;
-game.onError = (msg) => showAchievement('⚠️ ' + msg);
+game.onMonthSummary = () => {};
+game.onError = (msg) => showToast('⚠️ ' + msg);
 
-// ===== Event Listeners (no more onclick!) =====
+// ===== Event Listeners =====
 document.addEventListener('DOMContentLoaded', async () => {
-    createStars();
+    createCodeRain();
     await game.init();
     initStart();
 
-    // Start button
     $('startBtn').addEventListener('click', () => {
         if (game.start()) {
             $('eventStream').innerHTML = '';
+            lineNumber = 1;
             showScreen('gameScreen');
         }
     });
 
-    // Restart button
     $('restartBtn').addEventListener('click', () => {
         game.backToStart();
         showScreen('startScreen');
         initStart();
     });
 
-    // Speed control — event delegation
-    document.querySelector('.speed-ctrl').addEventListener('click', (e) => {
+    $('speedCtrl').addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (!btn || !btn.dataset.speed) return;
         setSpeed(Number(btn.dataset.speed));

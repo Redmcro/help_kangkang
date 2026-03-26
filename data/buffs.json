@@ -1,8 +1,12 @@
 [
-  {"id":"school","icon":"🎓","name":"重点小学","desc":"智力+10","cost":0,"effect":{"int":10}},
-  {"id":"health","icon":"💪","name":"强壮体质","desc":"健康+15","cost":20,"effect":{"hp":15}},
-  {"id":"charm","icon":"🌟","name":"颜值逆袭","desc":"魅力+15","cost":20,"effect":{"chr":15}},
-  {"id":"rich","icon":"💰","name":"小金库","desc":"初始¥500","cost":30,"effect":{"money":500}},
-  {"id":"genius","icon":"🧠","name":"天才大脑","desc":"智力+25","cost":50,"effect":{"int":25}},
-  {"id":"lucky","icon":"🍀","name":"欧皇附体","desc":"运气+30","cost":40,"effect":{"luck":30}}
+  {"id": "buff_python", "icon": "🎓", "name": "学过Python", "desc": "脑力+10", "cost": 30, "effect": {"brain": 10}, "unlock": "完成1局"},
+  {"id": "buff_savings", "icon": "💳", "name": "小有积蓄", "desc": "初始金钱+3000", "cost": 50, "effect": {"money": 3000}, "unlock": "累计赚≥50000"},
+  {"id": "buff_fitness", "icon": "🏋️", "name": "健身习惯", "desc": "HP+15", "cost": 40, "effect": {"hp": 15}, "unlock": "某局hp未<50"},
+  {"id": "buff_memory", "icon": "🧠", "name": "过目不忘", "desc": "脑力+15", "cost": 60, "effect": {"brain": 15}, "unlock": "某局brain未<60"},
+  {"id": "buff_token", "icon": "💰", "name": "Token礼包", "desc": "初始Token+500M", "cost": 50, "effect": {"token": 500}, "unlock": "获得任一胜利结局"},
+  {"id": "buff_doubao", "icon": "🐳", "name": "豆包皮肤", "desc": "豆包质量+15", "cost": 80, "effect": {"doubao_bonus": 15}, "unlock": "豆包之神结局"},
+  {"id": "buff_social", "icon": "🤝", "name": "人脉王", "desc": "初始关系70", "cost": 40, "effect": {"shaoye_rel": 20, "yimin_rel": 20}, "unlock": "铁三角结局"},
+  {"id": "buff_recommend", "icon": "⚡", "name": "内部推荐", "desc": "老板满意度初始60", "cost": 70, "effect": {"bossSatisfy": 10}, "unlock": "AI大师结局"},
+  {"id": "buff_lucky", "icon": "🍀", "name": "欧皇体质", "desc": "正面概率+15%", "cost": 60, "effect": {"luck_bonus": 15}, "unlock": "完成5局"},
+  {"id": "buff_insurance", "icon": "🛡️", "name": "工伤保险", "desc": "猝死阈值hp≤-20", "cost": 50, "effect": {"death_threshold": -20}, "unlock": "过劳猝死结局"}
 ]

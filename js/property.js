@@ -1,18 +1,50 @@
 // ===== PropertyManager =====
-// Manages game state with observer pattern for UI updates
+// v2: Manages game state with observer pattern for UI updates.
+// Core attributes: hp, money, brain, token, bossSatisfy
+// Relations: shaoye_rel, yimin_rel
+// Hidden: charm, luck
+// Flags: dynamic boolean state (model unlocks, story flags)
 
 export class PropertyManager {
     #data = {};
+    #flags = {};
     #listeners = [];
 
     reset(overrides = {}) {
         this.#data = {
-            age: 0, hp: 55, int: 50, hap: 60, chr: 45,
-            luck: 50, money: 0, earned: 0, alive: true,
-            job: 'none', salary: 0, college: '', highSchool: '',
-            married: false, indieSuccess: false, aiSurvived: false,
+            // Core attributes (UI visible)
+            hp: 100,
+            money: 5000,
+            brain: 80,
+            token: 50,           // unit: M (1B = 1000M)
+            bossSatisfy: 50,
+
+            // Colleague relations (UI visible)
+            shaoye_rel: 50,
+            yimin_rel: 50,
+
+            // Hidden attributes
+            charm: 50,
+            luck: 50,
+
+            // State tracking
+            month: 1,
+            day: 1,
+            alive: true,
+            current_model: 'doubao',
+            is_overtime: false,
+            consecutive_overtime: 0,
+            avg_quality: 50,
+            total_bugs: 0,
+            salary: 15000,
+            months_bankrupt: 0,
+
+            // Story flags
+            gamejam_won: false,
+
             ...overrides
         };
+        this.#flags = {};
         this.#notifyAll();
     }
 
@@ -24,24 +56,43 @@ export class PropertyManager {
         if (old !== value) this.#notify(key, old, value);
     }
 
-    // Apply an effect object like { hp: -5, int: 3, money: 200 }
+    // ===== Flag System =====
+    // Flags are separate boolean states (model unlocks, story events)
+
+    setFlag(key, value = true) {
+        this.#flags[key] = value;
+    }
+
+    getFlag(key) {
+        return !!this.#flags[key];
+    }
+
+    // ===== Effects =====
+
+    /**
+     * Apply an effect object like { hp: -5, brain: 3, money: 200 }
+     * Numeric values are added; non-numeric values are set directly.
+     * Bounded stats (hp, brain, bossSatisfy, charm, luck, relations) are clamped 0-100.
+     */
     applyEffect(effect) {
         if (!effect) return;
-        const statKeys = ['hp', 'int', 'hap', 'chr'];
+        const clampedKeys = ['hp', 'brain', 'bossSatisfy', 'charm', 'luck', 'shaoye_rel', 'yimin_rel'];
         for (const [key, delta] of Object.entries(effect)) {
             if (typeof delta === 'number') {
-                const newVal = (this.#data[key] || 0) + delta;
-                this.set(key, statKeys.includes(key) ? clamp(newVal) : newVal);
+                let newVal = (this.#data[key] || 0) + delta;
+                if (clampedKeys.includes(key)) newVal = clamp(newVal, 0, 100);
+                this.set(key, newVal);
             } else {
                 this.set(key, delta);
             }
         }
     }
 
-    // Apply buff effects from buffs.json format { hp: 15, int: 10 }
     applyBuff(effect) {
         this.applyEffect(effect);
     }
+
+    // ===== Observer =====
 
     onChange(fn) { this.#listeners.push(fn); }
 
@@ -55,41 +106,61 @@ export class PropertyManager {
         }
     }
 
-    // Passive income based on age and salary
-    earnPassiveIncome() {
-        if (this.#data.age >= 23 && this.#data.salary > 0 && this.#data.job !== '失业') {
-            const base = this.#data.salary * 0.2;
-            let mult = 1;
-            if (this.#data.age >= 16) mult = 1.5;
-            if (this.#data.age >= 23) mult = 3;
-            if (this.#data.age >= 30) mult = 5;
-            if (this.#data.age >= 40) mult = 6;
-            if (this.#data.age >= 50) mult = 4;
-            const amt = Math.floor(base * mult * (1 + this.#data.int / 200));
-            this.set('money', this.#data.money + amt);
-            this.set('earned', this.#data.earned + amt);
-        }
+    // ===== Monthly Cycle =====
+
+    /**
+     * Monthly recovery (called at start of each month).
+     * brain +10, hp +5 (halved if overtime last month).
+     */
+    monthlyRecovery() {
+        const wasOvertime = this.#data.consecutive_overtime > 0;
+        const brainRecover = wasOvertime ? 5 : 10;
+        const hpRecover = wasOvertime ? 3 : 5;
+        this.set('brain', clamp(this.#data.brain + brainRecover, 0, 100));
+        this.set('hp', clamp(this.#data.hp + hpRecover, 0, 100));
     }
 
-    // Age-related health decay
-    ageDecay() {
-        const age = this.#data.age;
-        if (age >= 45) this.set('hp', clamp(this.#data.hp - rng(1, 3)));
-        if (age >= 60) this.set('hp', clamp(this.#data.hp - rng(2, 4)));
-        if (age >= 80) this.set('hp', clamp(this.#data.hp - rng(3, 6)));
+    /**
+     * Monthly expense & income.
+     * salary (default 15000), living cost -5000.
+     */
+    monthlyExpense() {
+        const salary = this.#data.salary || 15000;
+        this.set('money', this.#data.money + salary - 5000);
     }
 
-    isDead() { return this.#data.hp <= 0; }
-    isMaxAge() { return this.#data.age > 100; }
+    // ===== Game Over Checks =====
 
-    toJSON() { return { ...this.#data }; }
+    /**
+     * Check all game-over conditions. Returns a cause string or null.
+     */
+    isGameOver() {
+        if (this.#data.hp <= 0) return 'death';
+        if (this.#data.brain <= 0) return 'breakdown';
+        if (this.#data.bossSatisfy < 20) return 'fired';
+        if ((this.#data.months_bankrupt || 0) >= 3) return 'bankrupt';
+        return null;
+    }
+
+    isDead() {
+        return this.#data.hp <= 0 || this.#data.brain <= 0;
+    }
+
+    isBankrupt() {
+        return (this.#data.months_bankrupt || 0) >= 3;
+    }
+
+    // ===== Serialization =====
+
+    toJSON() {
+        return {
+            ...this.#data,
+            ...this.#flags  // Include flags in snapshot for event condition checks
+        };
+    }
 }
 
-// Utility functions
+// Utility
 function clamp(v, min = 0, max = 100) {
     return Math.max(min, Math.min(max, v));
-}
-
-function rng(a, b) {
-    return Math.floor(Math.random() * (b - a + 1)) + a;
 }

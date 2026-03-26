@@ -1,5 +1,5 @@
 // ===== EventManager =====
-// Data-driven event system: loads events from JSON, handles filtering, branching, weighted random
+// v2: Data-driven event system with month-based filtering
 
 export class EventManager {
     #events = {};
@@ -7,9 +7,20 @@ export class EventManager {
 
     async load() {
         try {
-            const resp = await fetch('./data/events.json');
-            if (!resp.ok) throw new Error('Failed to load events.json');
-            this.#events = await resp.json();
+            const manifestResp = await fetch('./data/events/_manifest.json');
+            if (!manifestResp.ok) throw new Error('Failed to load _manifest.json');
+            const manifest = await manifestResp.json();
+
+            const results = await Promise.all(
+                manifest.map(sys =>
+                    fetch(`./data/events/${sys}.json`)
+                        .then(r => r.ok ? r.json() : {})
+                        .catch(() => ({}))
+                )
+            );
+
+            this.#events = Object.assign({}, ...results);
+            console.log(`Loaded ${Object.keys(this.#events).length} events from ${manifest.length} systems`);
         } catch (e) {
             console.error('Event loading failed:', e);
             this.#events = {};
@@ -20,18 +31,16 @@ export class EventManager {
         this.#usedEvents.clear();
     }
 
-    // Get all events that can fire at the given age with current state
-    getPool(age, state) {
+    // Get all events that can fire at the given month with current state
+    getPool(month, state) {
         return Object.entries(this.#events).filter(([id, ev]) => {
-            // Once-only events
             if (ev.once && this.#usedEvents.has(id)) return false;
-            // Age range check
-            const [min, max] = ev.age;
-            if (age < min || age > max) return false;
-            // Include conditions
-            if (ev.include && !this.#checkCondition(ev.include, state)) return false;
-            // Exclude conditions
-            if (ev.exclude && this.#checkCondition(ev.exclude, state)) return false;
+            const [min, max] = ev.month;
+            if (month < min || month > max) return false;
+            if (ev.include && Object.keys(ev.include).length > 0
+                && !this.#checkCondition(ev.include, state)) return false;
+            if (ev.exclude && Object.keys(ev.exclude).length > 0
+                && this.#checkCondition(ev.exclude, state)) return false;
             return true;
         });
     }
@@ -51,16 +60,12 @@ export class EventManager {
 
     // Prioritized pick: prefer choice > special > named > filler
     pickPrioritized(pool) {
-        // Find a choice event first
         const choice = pool.find(([, ev]) => ev.type === 'choice');
         if (choice) return { id: choice[0], ev: choice[1] };
-        // Then special events
         const special = pool.find(([, ev]) => ev.type === 'special');
         if (special) return { id: special[0], ev: special[1] };
-        // Then non-filler events
         const nonFiller = pool.filter(([, ev]) => !ev.filler);
         if (nonFiller.length) return this.pick(nonFiller);
-        // Finally filler events
         return this.pick(pool);
     }
 
@@ -68,15 +73,16 @@ export class EventManager {
     execute(id, ev, state) {
         this.#usedEvents.add(id);
 
-        // Check branches
         if (ev.branch && ev.type !== 'choice') {
             for (const b of ev.branch) {
-                if (b.cond && Object.keys(b.cond).length > 0 && this.#checkCondition(b.cond, state)) {
+                if (b.cond && Object.keys(b.cond).length > 0
+                    && this.#checkCondition(b.cond, state)) {
                     return {
                         text: b.text,
                         effect: b.effect || ev.effect,
                         type: b.type || ev.type || 'neutral',
-                        postEvent: b.postEvent || ev.postEvent
+                        postEvent: b.postEvent || ev.postEvent,
+                        setFlag: b.setFlag || ev.setFlag
                     };
                 }
             }
@@ -86,21 +92,17 @@ export class EventManager {
             text: ev.text,
             effect: ev.effect,
             type: ev.type || 'neutral',
-            postEvent: ev.postEvent
+            postEvent: ev.postEvent,
+            setFlag: ev.setFlag
         };
     }
 
     // Execute a choice option
     executeChoice(choice, state) {
-        // Chance-based choices (random outcome, affected by luck)
+        // Chance-based choices
         if (choice.chanceBased && choice.branches) {
-            // Luck modifier: luck 50 = neutral, >50 favors first branch, <50 favors last
-            const luckMod = ((state.luck || 50) - 50) / 100; // -0.5 to +0.5
-            const branches = choice.branches.map((b, i) => {
-                const baseChance = b.chance || 1;
-                // Positive luck boosts earlier (better) branches
-                const modifier = 1 + luckMod * (i === 0 ? 1 : -0.5);
-                return { ...b, adjustedChance: Math.max(0.1, baseChance * modifier) };
+            const branches = choice.branches.map(b => {
+                return { ...b, adjustedChance: Math.max(0.1, b.chance || 1) };
             });
             const total = branches.reduce((s, b) => s + b.adjustedChance, 0);
             let r = Math.random() * total;
@@ -146,7 +148,7 @@ export class EventManager {
         };
     }
 
-    // Check if a choice is locked (requirements not met)
+    // Check if a choice is locked
     isChoiceLocked(choice, state) {
         if (!choice.require) return false;
         for (const [key, val] of Object.entries(choice.require)) {
@@ -159,8 +161,12 @@ export class EventManager {
     getLockReason(choice) {
         if (!choice.require) return '';
         const parts = [];
+        const names = {
+            money: '¥', brain: '脑力', hp: '生命',
+            token: 'Token', bossSatisfy: '满意度',
+            shaoye_rel: '少爷好感', yimin_rel: '亿民好感'
+        };
         for (const [key, val] of Object.entries(choice.require)) {
-            const names = { money: '¥', int: '智力', hp: '健康', hap: '快乐', chr: '魅力' };
             if (typeof val === 'number') {
                 parts.push(`${names[key] || key}${val}`);
             }
@@ -168,7 +174,7 @@ export class EventManager {
         return `🔒 需要${parts.join(' ')}`;
     }
 
-    // Simple condition checker (JSON object format)
+    // Condition checker
     #checkCondition(cond, state) {
         for (const [key, val] of Object.entries(cond)) {
             const stateVal = state[key];

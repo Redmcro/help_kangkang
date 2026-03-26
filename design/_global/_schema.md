@@ -33,7 +33,8 @@
     "weight": 1,                // 权重（默认1，越大越容易被选中）
     "once": true,               // 是否只触发一次（默认 false）
     "filler": true,             // 填充事件标记（优先级最低）
-    "system": "colleague",      // 所属系统标记（colleague/model/economy/daily/random）
+    "system": "colleague",      // 所属系统标记（colleague/model/economy/daily/random/choice/monthly）
+    "tags": ["职场", "社交"],    // 主题标签，方便按主题筛选和平衡
 
     // ========== 可选：效果 ==========
     "effect": {                 // 对属性的直接修改
@@ -147,6 +148,7 @@
 ## 五、可用的属性键名
 
 > **生成事件时，effect 和条件中只能使用以下键名：**
+> **完整属性定义见 `_global/attributes.md`**
 
 ### 核心属性
 | 键名 | 说明 | 范围 |
@@ -163,6 +165,12 @@
 | `shaoye_rel` | 少爷关系 | 0–100 |
 | `yimin_rel` | 亿民关系 | 0–100 |
 
+### 隐藏属性（UI 不显示，影响事件结果）
+| 键名 | 说明 | 范围 |
+|:---|:---|:---|
+| `charm` | 魅力，影响社交/关系增益/谈判 | 0–100 |
+| `luck` | 运气，影响概率选择/Bug率/随机事件 | 0–100 |
+
 ### 状态 Flag（布尔/字符串）
 | 键名 | 类型 | 说明 |
 |:---|:---|:---|
@@ -174,7 +182,8 @@
 | `total_bugs` | number | 累计Bug数 |
 
 > [!TIP]
-> 需要新增 Flag 时，在事件中使用 `setFlag` 设置，然后在其他事件的条件中引用即可。建议在对应系统的 MD 文件中记录新 Flag。
+> 需要新增 Flag 时，在事件中使用 `setFlag` 设置，然后在其他事件的条件中引用即可。
+> **务必在 `_global/attributes.md` 的 Flag 注册表中登记新 Flag。**
 
 ---
 
@@ -187,6 +196,7 @@
     "text": "少爷面无表情地走过来：'你这版有 20 个 Bug。'",
     "type": "bad",
     "system": "colleague",
+    "tags": ["职场", "社交"],
     "once": false,
     "include": { "shaoye_rel": ">30" },
     "branch": [

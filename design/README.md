@@ -1,59 +1,81 @@
 # 🎮 帮助康康不被AI淘汰 — 模块化设计系统
 
-> **本目录是游戏内容的设计中枢。** 每个 `.md` 文件描述一个独立系统，可以单独交给 AI 生成事件内容。
+> **本目录是游戏内容的设计中枢。** 每个子文件夹描述一个独立系统。
 
 ---
 
-## 目录索引
+## 目录结构
 
-| 文件 | 系统 | 描述 | 可独立生成内容 |
-|:---|:---|:---|:---:|
-| [`_schema.md`](./_schema.md) | 📐 数据格式规范 | 所有事件的 JSON 格式定义，**任何生成的事件都必须符合此格式** | — |
-| [`attributes.md`](./attributes.md) | 📊 属性系统 | hp/money/brain/token/bossSatisfy 的定义、范围、联动 | — |
-| [`ai_models.md`](./ai_models.md) | 🤖 AI 模型系统 | 各模型数据、Bug率、Token消耗、解锁时间 | ✅ 可添加新模型 |
-| [`colleagues.md`](./colleagues.md) | 🤝 同事系统 | 少爷、亿民的人设 + 互动事件模板 | ✅ 可添加同事/事件 |
-| [`monthly_events.md`](./monthly_events.md) | 📅 月份事件 | 12个月的大事件 + 阶段机制 | ✅ 可补充月份事件 |
-| [`daily_tasks.md`](./daily_tasks.md) | 💻 每日任务 | 工作任务类型、代码质量公式、熬夜机制 | ✅ 可添加任务类型 |
-| [`random_events.md`](./random_events.md) | 🎲 随机事件 | 正面/负面随机事件 | ✅ 可大量添加 |
-| [`choice_events.md`](./choice_events.md) | 🎭 选择事件 | 需要玩家做决策的事件 | ✅ 可大量添加 |
-| [`endings.md`](./endings.md) | 🏆 结局系统 | 胜利/失败/隐藏结局 | ✅ 可添加新结局 |
-| [`economy.md`](./economy.md) | 💰 经济系统 | 工资、Token定价、开销 | — |
-| [`reincarnation.md`](./reincarnation.md) | 🔄 转世系统 | 传世金币、Buff商店 | ✅ 可添加Buff |
-| [`ui_style.md`](./ui_style.md) | 🎨 UI风格 | 夜间IDE风格指南 | — |
+```
+design/
+├── _global/                  ← 🔒 全局基础（AI 必读）
+│   ├── _schema.md            ← 📐 JSON 格式规范
+│   ├── attributes.md         ← 📊 属性定义 + Flag 注册表
+│   └── ui_style.md           ← 🎨 UI 风格指南
+│
+├── colleagues/               ← 🤝 同事系统
+├── ai_models/                ← 🤖 AI 模型系统
+├── monthly/                  ← 📅 月份事件
+├── daily_tasks/              ← 💻 每日任务
+├── random_events/            ← 🎲 随机事件
+├── choice_events/            ← 🎭 选择事件
+├── endings/                  ← 🏆 结局系统
+├── economy/                  ← 💰 经济系统
+└── reincarnation/            ← 🔄 转世系统
+```
+
+每个系统文件夹包含 3 个文件：
+
+| 文件 | 谁写 | 内容 |
+|:---|:---|:---|
+| `_ai_spec.md` | AI / 初始化写好 | 🤖 系统规则、机制、事件约束 |
+| `settings.md` | **你** | 📝 一句话设定、角色特点、灵感 |
+| `events_example.md` | 示例 | 📋 已有事件 JSON 示例 |
 
 ---
 
-## 如何使用本系统
+## 如何使用
 
-### 🤖 给 AI 生成内容时
+### 📝 添加新设定（最简单）
 
-将以下文件组合发给 AI：
+打开任意系统的 `settings.md`，写你的想法，例如：
 
+```markdown
+## 少爷
+- 爱玩游戏，经常偷偷在工位上玩手游
+- 周五下午会约人打羽毛球
 ```
-必读：_schema.md + attributes.md（格式 + 属性约束）
-按需：对应的系统 MD（如要生成同事事件就加 colleagues.md）
-```
 
-**示例 Prompt**：
+### 🤖 让 AI 生成事件
 
-> 请阅读 `_schema.md` 了解事件格式，阅读 `colleagues.md` 了解同事系统。
-> 然后为"少爷"生成 5 个有趣的互动事件，输出符合 schema 的 JSON。
+使用 `/generate-events` 工作流，AI 会自动读取：
+1. `_global/_schema.md` + `_global/attributes.md`（必读）
+2. 目标系统的 `_ai_spec.md` + `settings.md` + `events_example.md`
 
-### 📝 人工维护时
+### ➕ 添加新系统
 
-1. 修改系统规则 → 编辑对应的 MD
-2. 添加新事件 → 在对应 MD 的"事件列表"部分追加
-3. 添加新系统 → 新建 MD + 更新本 README 索引
+1. 新建文件夹 `design/{system_name}/`
+2. 创建 `_ai_spec.md`、`settings.md`、`events_example.md`
+3. 在 `_global/attributes.md` 登记新属性和 Flag
+4. 更新本 README 索引
 
-### ⚠️ 跨系统依赖
+---
 
-```
-_schema.md ←── 所有事件文件都依赖此格式
-attributes.md ←── 所有涉及 effect 的文件都依赖此属性表
-ai_models.md ←── daily_tasks.md 中的任务消耗依赖模型数据
-colleagues.md ←── 部分 random_events / choice_events 涉及同事
-monthly_events.md ←── 定义了模型解锁时间，ai_models.md 需同步
-```
+## 系统索引
+
+| 系统 | 文件夹 | 可生成内容 | 说明 |
+|:---|:---|:---:|:---|
+| 📐 格式规范 | `_global/` | — | 所有事件必须遵循的 JSON 格式 |
+| 📊 属性系统 | `_global/` | — | 属性定义 + Flag 注册表 |
+| 🤝 同事系统 | `colleagues/` | ✅ | 少爷、亿民的人设和互动事件 |
+| 🤖 AI模型 | `ai_models/` | ✅ | 模型数据、解锁事件 |
+| 📅 月份事件 | `monthly/` | ✅ | 12月主线事件 |
+| 💻 每日任务 | `daily_tasks/` | ✅ | 工作任务、私活 |
+| 🎲 随机事件 | `random_events/` | ✅ | 正面/负面随机事件 |
+| 🎭 选择事件 | `choice_events/` | ✅ | 需要玩家决策的事件 |
+| 🏆 结局系统 | `endings/` | ✅ | 胜利/失败/隐藏结局 |
+| 💰 经济系统 | `economy/` | — | 收支规则 |
+| 🔄 转世系统 | `reincarnation/` | ✅ | 传世金币、Buff 商店 |
 
 ---
 

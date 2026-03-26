@@ -1,0 +1,226 @@
+{
+  "month1_start": {
+    "month": [1, 1],
+    "text": "康康正式入职第一天！HR带他参观了工位，一台崭新的MacBook Pro，但只装了豆包AI。",
+    "type": "special",
+    "system": "monthly",
+    "weight": 100,
+    "once": true,
+    "effect": {}
+  },
+  "month1_doubao_intro": {
+    "month": [1, 1],
+    "text": "康康打开豆包，试着让它写了个Hello World。虽然简单，但豆包的中文注释真的很棒！",
+    "type": "good",
+    "system": "monthly",
+    "weight": 50,
+    "once": true,
+    "effect": {"brain": 3}
+  },
+  "month1_simple_task": {
+    "month": [1, 1],
+    "text": "第一个任务：修改UI按钮颜色。简单得不能再简单了。",
+    "type": "neutral",
+    "system": "daily_tasks",
+    "weight": 1,
+    "filler": true,
+    "effect": {"bossSatisfy": 1}
+  },
+  "month2_gpt_unlock": {
+    "month": [2, 2],
+    "text": "公司开通了GPT-5.4的API！康康终于用上了真正的大模型。代码质量直线上升！",
+    "type": "special",
+    "system": "ai_models",
+    "weight": 100,
+    "once": true,
+    "effect": {"brain": 5},
+    "include": {}
+  },
+  "overtime_event": {
+    "month": [2, 12],
+    "text": "产品经理又改需求了！代码质量不达标，只能加班。",
+    "type": "bad",
+    "system": "random_events",
+    "weight": 1,
+    "effect": {"hp": -8, "brain": -5}
+  },
+  "coffee_break": {
+    "month": [1, 12],
+    "text": "去茶水间倒杯咖啡，顺便摸了五分钟鱼。精神好了不少。",
+    "type": "good",
+    "system": "random_events",
+    "weight": 1,
+    "filler": true,
+    "effect": {"hp": 3, "brain": 2}
+  },
+  "bug_crisis": {
+    "month": [3, 12],
+    "text": "线上出了严重Bug！用户疯狂投诉，老板脸色铁青。必须立刻修复！",
+    "type": "bad",
+    "system": "random_events",
+    "weight": 0.8,
+    "effect": {"bossSatisfy": -5, "brain": -8},
+    "include": {"month": ">2"}
+  },
+  "token_shortage": {
+    "month": [3, 12],
+    "text": "Token快用完了！这个月的AI使用量太大了。",
+    "type": "choice",
+    "system": "economy",
+    "title": "🪙 Token告急",
+    "desc": "Token余额不足，下个功能可能写不完了",
+    "include": {"token": "<100"},
+    "choices": [
+      {
+        "text": "🛒 买入门包 (¥500 → 200M)",
+        "hint": "花钱买Token",
+        "require": {"money": 500},
+        "success": "买了200M Token，够撑一阵了",
+        "successEffect": {"money": -500, "token": 200},
+        "fail": "钱不够买Token...",
+        "failEffect": {}
+      },
+      {
+        "text": "🐳 切换到豆包省Token",
+        "hint": "豆包消耗低",
+        "result": "切回豆包，虽然质量差点但省钱",
+        "effect": {"token": 30},
+        "setFlag": "switched_to_doubao"
+      },
+      {
+        "text": "💪 纯人肉写代码",
+        "hint": "脑力消耗翻倍",
+        "result": "不用AI了！但脑力消耗巨大...",
+        "effect": {"brain": -15}
+      }
+    ]
+  },
+  "month3_opus_unlock": {
+    "month": [3, 3],
+    "text": "Opus 4.6发布了！号称最强代码模型。公司决定试用。但Token消耗惊人...",
+    "type": "special",
+    "system": "ai_models",
+    "weight": 100,
+    "once": true,
+    "effect": {"brain": 3}
+  },
+  "month4_layoff_rumor": {
+    "month": [4, 6],
+    "text": "办公室传来裁员消息...HR部门最近频繁开会。康康心里有点慌。",
+    "type": "bad",
+    "system": "monthly",
+    "weight": 2,
+    "once": true,
+    "effect": {"bossSatisfy": -3}
+  },
+  "learn_ai_course": {
+    "month": [2, 8],
+    "text": "B站推荐了一个AI编程课程，据说学完能大幅提升效率。",
+    "type": "choice",
+    "system": "choice_events",
+    "title": "📚 AI编程课",
+    "desc": "花钱和时间学习，还是继续摸索？",
+    "once": true,
+    "choices": [
+      {
+        "text": "💰 购买课程 (¥2000)",
+        "hint": "脑力+15，长期收益",
+        "require": {"money": 2000},
+        "success": "系统学习了Prompt Engineering，效率大幅提升！",
+        "successEffect": {"money": -2000, "brain": 15},
+        "fail": "钱不够...",
+        "failEffect": {},
+        "setFlag": "learned_ai_course"
+      },
+      {
+        "text": "🔍 自己摸索",
+        "hint": "脑力+5，免费",
+        "result": "虽然慢，但也在进步",
+        "effect": {"brain": 5}
+      }
+    ]
+  },
+  "noodle_event": {
+    "month": [1, 12],
+    "text": "又到月底了，钱包空空。今晚又得吃泡面了...",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1,
+    "include": {"money": "<1000"},
+    "effect": {"hp": -3}
+  },
+  "good_code_day": {
+    "month": [1, 12],
+    "text": "今天写的代码一次跑通，零Bug！难得的好日子。",
+    "type": "good",
+    "system": "random_events",
+    "weight": 1,
+    "filler": true,
+    "effect": {"bossSatisfy": 2, "brain": 2}
+  },
+  "month7_heatwave": {
+    "month": [7, 9],
+    "text": "高温预警！办公室空调坏了，热得写不动代码。",
+    "type": "bad",
+    "system": "monthly",
+    "weight": 1.5,
+    "once": true,
+    "effect": {"hp": -8, "brain": -5}
+  },
+  "freelance_opportunity": {
+    "month": [3, 10],
+    "text": "朋友介绍了一个私活，做个小程序，报酬不错。但被公司发现就麻烦了...",
+    "type": "choice",
+    "system": "choice_events",
+    "title": "💼 接私活？",
+    "desc": "朋友急需帮忙，报酬3000元。但公司禁止兼职...",
+    "once": true,
+    "choices": [
+      {
+        "text": "💰 接！钱要紧",
+        "hint": "获得¥3000，但有风险",
+        "chanceBased": true,
+        "branches": [
+          {
+            "chance": 70,
+            "result": "顺利完成！赚了3000块，没被发现。",
+            "effect": {"money": 3000},
+            "type": "money"
+          },
+          {
+            "chance": 30,
+            "result": "被老板发现了！挨了一顿批评...",
+            "effect": {"money": 3000, "bossSatisfy": -8},
+            "type": "bad"
+          }
+        ]
+      },
+      {
+        "text": "✋ 算了，太冒险了",
+        "hint": "安全",
+        "result": "拒绝了朋友，心里有点过意不去。但工作更重要。",
+        "effect": {}
+      }
+    ]
+  },
+  "month10_annual_review": {
+    "month": [10, 12],
+    "text": "年终考核要来了...HR开始发绩效评估表。康康紧张地检查自己的代码提交记录。",
+    "type": "special",
+    "system": "monthly",
+    "weight": 3,
+    "once": true,
+    "effect": {}
+  },
+  "delivery_thought": {
+    "month": [6, 12],
+    "text": "路过楼下，看到外卖骑手在等餐。康康突然想：要是被裁了，是不是也得去送外卖？",
+    "type": "neutral",
+    "system": "random_events",
+    "weight": 0.5,
+    "once": true,
+    "include": {"bossSatisfy": "<40"},
+    "effect": {},
+    "setFlag": "considered_delivery"
+  }
+}
