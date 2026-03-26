@@ -1,10 +1,34 @@
 // ===== App.js =====
 // v2: IDE-themed UI Controller. Only file that touches the DOM.
+// Module 5: Token Shop, Model Switch, Side Gig interaction panels.
 
 import { GameEngine } from './engine.js';
 
 const game = new GameEngine();
 const $ = id => document.getElementById(id);
+
+// ===== Module 5: Constants =====
+const TOKEN_PACKAGES = [
+    { icon: '🟢', name: '入门包', price: 500, amount: 200 },
+    { icon: '🔵', name: '标准包', price: 2000, amount: 1000 },
+    { icon: '🟣', name: '豪华包', price: 5000, amount: 3000 },
+    { icon: '🔴', name: '至尊包', price: 10000, amount: 8000 },
+];
+
+// Mirror of AI_MODELS from engine.js (read-only, for UI display only)
+const AI_MODELS_UI = {
+    doubao:      { name: '🐳 豆包',       cost: '5~80M',   quality: 45, bugRate: '40%' },
+    gpt54:       { name: '🤖 GPT-5.4',    cost: '20~400M', quality: 80, bugRate: '12%' },
+    opus46:      { name: '🎯 Opus 4.6',   cost: '35~600M', quality: 92, bugRate: '5%'  },
+    deepseek_v4: { name: '🔮 DeepSeek V4',cost: '8~150M',  quality: 72, bugRate: '18%' },
+    cheapgpt:    { name: '💀 CheapGPT',   cost: '3~50M',   quality: 30, bugRate: '60%' },
+    fakeopus:    { name: '🎪 FakeOpus',   cost: '5~90M',   quality: 35, bugRate: '55%' },
+};
+
+let gigUsedThisMonth = false;
+let currentGigMonth = 0;
+
+// ===== Code Rain =====
 
 function createCodeRain() {
     const c = $('codeRain');
@@ -24,10 +48,14 @@ function createCodeRain() {
     }
 }
 
+// ===== Screen Management =====
+
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     $(id).classList.add('active');
 }
+
+// ===== Start Screen =====
 
 function renderBuffs() {
     const g = $('buffGrid');
@@ -50,6 +78,8 @@ function initStart() {
         ? `已转世${game.legacy.runs}次 · 最远${game.legacy.best_month}月 · 改命成功${game.legacy.wins}次`
         : '第一次入职？帮康康撑过这12个月！';
 }
+
+// ===== Game UI =====
 
 function updateTabs(currentMonth) {
     document.querySelectorAll('.tab-item').forEach(tab => {
@@ -74,6 +104,12 @@ function updateUI(state, stageName) {
     $('currentModelDisplay').textContent = mn[state.current_model] || '🐳 豆包';
     $('stageDisplay').textContent = stageName;
     updateTabs(state.month);
+
+    // Module 5: Reset gig cooldown when month changes
+    if (state.month !== currentGigMonth) {
+        currentGigMonth = state.month;
+        gigUsedThisMonth = false;
+    }
 }
 
 function updateBar(valId, barId, value, max) {
@@ -86,6 +122,8 @@ function updateBar(valId, barId, value, max) {
     else if (v < old) { el.classList.remove('stat-change-up'); el.classList.add('stat-change-down'); setTimeout(() => el.classList.remove('stat-change-down'), 500); }
 }
 
+// ===== Event Stream =====
+
 let lineNum = 1;
 function addEventLine(month, day, text, type) {
     const s = $('eventStream');
@@ -96,6 +134,8 @@ function addEventLine(month, day, text, type) {
     while (s.children.length > 150) s.removeChild(s.firstChild);
     s.scrollTop = s.scrollHeight;
 }
+
+// ===== Choice Panel =====
 
 function showChoicePanel(ev, state) {
     const p = $('choicePanel');
@@ -118,6 +158,8 @@ function showChoicePanel(ev, state) {
 
 function hideChoicePanel() { $('choicePanel').classList.remove('show'); }
 
+// ===== End Screen =====
+
 function showEndScreen(data) {
     const { ending, month, avgQuality, bossSatisfy, money, totalCoins, timeline } = data;
     $('endIcon').textContent = ending.icon;
@@ -136,8 +178,11 @@ function showEndScreen(data) {
         tl.style.display = 'block';
     } else tl.style.display = 'none';
     $('endLegacy').textContent = `获得传世金币: +${totalCoins} 🪙`;
+    $('gameActions').style.display = 'none';
     showScreen('endScreen');
 }
+
+// ===== Speed & Toast =====
 
 function setSpeed(s) {
     game.setSpeed(s);
@@ -153,6 +198,162 @@ function showToast(text) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
+// ===== Module 5: Overlay Helpers =====
+
+let wasGamePaused = false;
+
+function openOverlay(overlayId) {
+    wasGamePaused = game.paused;
+    game.paused = true;
+    clearTimeout(game.autoTimer);
+    $(overlayId).classList.add('show');
+}
+
+function closeOverlay(overlayId) {
+    $(overlayId).classList.remove('show');
+    if (!wasGamePaused) {
+        game.paused = false;
+        game.emitUI();
+    }
+}
+
+// ===== Module 5: Token Shop =====
+
+function renderTokenShop() {
+    const state = game.property.toJSON();
+    const money = state.money;
+    const token = state.token;
+
+    $('shopBalance').innerHTML = `
+        💰 余额: <span class="sb-money">¥${Math.floor(money).toLocaleString('zh-CN')}</span>
+        · 🪙 Token: <span class="sb-token">${token}M</span>`;
+
+    const grid = $('tokenGrid');
+    grid.innerHTML = '';
+    TOKEN_PACKAGES.forEach(pkg => {
+        const canBuy = money >= pkg.price;
+        const card = document.createElement('div');
+        card.className = 'token-card';
+        card.innerHTML = `
+            <div class="tc-icon">${pkg.icon}</div>
+            <div class="tc-name">${pkg.name}</div>
+            <div class="tc-amount">${pkg.amount >= 1000 ? (pkg.amount / 1000) + 'B' : pkg.amount + 'M'}</div>
+            <div class="tc-price">¥${pkg.price.toLocaleString('zh-CN')}</div>
+            <button class="tc-buy" ${canBuy ? '' : 'disabled'}>${canBuy ? '购买' : '余额不足'}</button>`;
+        if (canBuy) {
+            card.querySelector('.tc-buy').addEventListener('click', () => {
+                game.property.applyEffect({ money: -pkg.price });
+                game.property.set('token', game.property.get('token') + pkg.amount);
+                game.emitUI();
+                addEventLine(state.month, state.day || 1, `🪙 购买了${pkg.name}！Token +${pkg.amount}M，花费 ¥${pkg.price.toLocaleString('zh-CN')}`, 'money');
+                showToast(`🪙 ${pkg.name} 到账！+${pkg.amount}M`);
+                renderTokenShop(); // Refresh balance & button states
+            });
+        }
+        grid.appendChild(card);
+    });
+}
+
+// ===== Module 5: Model Switch =====
+
+function renderModelSwitch() {
+    const state = game.property.toJSON();
+    const currentModel = state.current_model;
+    const list = $('modelList');
+    list.innerHTML = '';
+
+    for (const [id, m] of Object.entries(AI_MODELS_UI)) {
+        const flagKey = `model_${id}_unlocked`;
+        const unlocked = !!state[flagKey];
+        const isCurrent = currentModel === id;
+
+        const item = document.createElement('div');
+        item.className = 'model-item' + (isCurrent ? ' active' : '') + (!unlocked ? ' locked' : '');
+        item.innerHTML = `
+            <div class="mi-icon">${m.name.split(' ')[0]}</div>
+            <div class="mi-info">
+                <div class="mi-name">${m.name}</div>
+                <div class="mi-stats">质量:${m.quality} · Bug:${m.bugRate} · Token:${m.cost}</div>
+            </div>
+            ${isCurrent ? '<span class="mi-badge current">当前</span>' : ''}
+            ${!unlocked ? '<span class="mi-badge" style="color:var(--text3);border:1px solid var(--border)">🔒 未解锁</span>' : ''}`;
+
+        if (unlocked && !isCurrent) {
+            item.addEventListener('click', () => {
+                game.property.set('current_model', id);
+                game.emitUI();
+                addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
+                showToast(`已切换到 ${m.name}`);
+                renderModelSwitch(); // Refresh active state
+            });
+        }
+        list.appendChild(item);
+    }
+}
+
+// ===== Module 5: Side Gig =====
+
+function rng(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+function renderSideGig() {
+    const state = game.property.toJSON();
+    const charm = state.charm || 50;
+    const baseIncome = rng(1000, 5000);
+    const charmMod = 1 + (charm - 50) / 100;
+    const income = Math.round(baseIncome * charmMod);
+    const discoverChance = 30;
+
+    const panel = $('gigPanel');
+
+    if (gigUsedThisMonth) {
+        panel.innerHTML = `
+            <div class="gig-desc">🚫 本月已经接过私活了，下个月再来吧。</div>
+            <div class="gig-cooldown">每月只能接一次私活</div>
+            <div class="gig-actions" style="margin-top:12px">
+                <button class="gig-btn cancel" id="gigCancelBtn">关闭</button>
+            </div>`;
+        $('gigCancelBtn').addEventListener('click', () => closeOverlay('sideGigOverlay'));
+        return;
+    }
+
+    panel.innerHTML = `
+        <div class="gig-desc">
+            有个朋友介绍了一个外包项目，加班偷偷做可以赚点外快。<br>
+            但如果被老板发现就麻烦了……
+        </div>
+        <div class="gig-stats">
+            <span class="gs-good">💰 预计收入: ¥${income.toLocaleString('zh-CN')}</span>
+            <span class="gs-bad">⚠️ 发现概率: ${discoverChance}%</span>
+        </div>
+        <div class="gig-actions">
+            <button class="gig-btn confirm" id="gigConfirmBtn">接活！</button>
+            <button class="gig-btn cancel" id="gigCancelBtn">算了</button>
+        </div>`;
+
+    $('gigConfirmBtn').addEventListener('click', () => {
+        gigUsedThisMonth = true;
+        const discovered = Math.random() < (discoverChance / 100);
+
+        game.property.applyEffect({ money: income });
+
+        if (discovered) {
+            game.property.applyEffect({ bossSatisfy: -5 });
+            addEventLine(state.month, state.day || 1, `💼 接私活赚了 ¥${income.toLocaleString('zh-CN')}，但被老板发现了！满意度 -5`, 'bad');
+            showToast('⚠️ 接私活被老板发现了！');
+        } else {
+            addEventLine(state.month, state.day || 1, `💼 偷偷接了个私活，赚了 ¥${income.toLocaleString('zh-CN')}！`, 'good');
+            showToast(`💰 私活到账！+¥${income.toLocaleString('zh-CN')}`);
+        }
+
+        game.emitUI();
+        closeOverlay('sideGigOverlay');
+    });
+
+    $('gigCancelBtn').addEventListener('click', () => closeOverlay('sideGigOverlay'));
+}
+
+// ===== Callbacks =====
+
 game.onEvent = addEventLine;
 game.onUpdateUI = updateUI;
 game.onShowChoice = showChoicePanel;
@@ -161,16 +362,64 @@ game.onGameEnd = showEndScreen;
 game.onMonthSummary = () => {};
 game.onError = (msg) => showToast('⚠️ ' + msg);
 
+// ===== Init =====
+
 document.addEventListener('DOMContentLoaded', async () => {
     createCodeRain();
     await game.init();
     initStart();
+
+    // Game start
     $('startBtn').addEventListener('click', () => {
-        if (game.start()) { $('eventStream').innerHTML = ''; lineNum = 1; showScreen('gameScreen'); }
+        if (game.start()) {
+            $('eventStream').innerHTML = '';
+            lineNum = 1;
+            gigUsedThisMonth = false;
+            currentGigMonth = 0;
+            $('gameActions').style.display = 'flex';
+            showScreen('gameScreen');
+        }
     });
-    $('restartBtn').addEventListener('click', () => { game.backToStart(); showScreen('startScreen'); initStart(); });
+
+    // Restart → back to start screen
+    $('restartBtn').addEventListener('click', () => {
+        game.backToStart();
+        $('gameActions').style.display = 'none';
+        showScreen('startScreen');
+        initStart();
+    });
+
+    // Speed controls
     $('speedCtrl').addEventListener('click', (e) => {
         const btn = e.target.closest('button');
         if (btn && btn.dataset.speed) setSpeed(Number(btn.dataset.speed));
+    });
+
+    // ===== Module 5: Button bindings =====
+    $('buyTokenBtn').addEventListener('click', () => {
+        renderTokenShop();
+        openOverlay('tokenShopOverlay');
+    });
+
+    $('switchModelBtn').addEventListener('click', () => {
+        renderModelSwitch();
+        openOverlay('modelSwitchOverlay');
+    });
+
+    $('sideGigBtn').addEventListener('click', () => {
+        renderSideGig();
+        openOverlay('sideGigOverlay');
+    });
+
+    // ===== Overlay close handlers (all overlays including Module 5) =====
+    document.querySelectorAll('.overlay-close[data-close]').forEach(btn => {
+        btn.addEventListener('click', () => closeOverlay(btn.dataset.close));
+    });
+
+    // Close overlay on background click
+    document.querySelectorAll('.overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeOverlay(overlay.id);
+        });
     });
 });

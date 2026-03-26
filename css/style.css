@@ -489,10 +489,97 @@ body{
   background:rgba(139,233,253,.06);
 }
 
+/* ===== GAME ACTION BUTTONS (Module 5) ===== */
+.game-actions{display:flex;gap:4px}
+.action-btn{
+  padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius);
+  background:transparent;color:var(--text2);font-family:'Noto Sans SC','JetBrains Mono',monospace;
+  font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.action-btn:hover{border-color:var(--purple);color:var(--text);background:rgba(189,147,249,.08)}
+.action-btn:active{transform:scale(.96)}
+
+/* ===== TOKEN SHOP (Module 5) ===== */
+.shop-balance{
+  padding:10px 14px;margin-bottom:12px;border-radius:var(--radius-lg);
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  font-size:13px;color:var(--text2);display:flex;align-items:center;gap:12px;
+}
+.shop-balance .sb-money{color:var(--green);font-weight:700;font-family:'JetBrains Mono',monospace}
+.shop-balance .sb-token{color:var(--yellow);font-weight:700;font-family:'JetBrains Mono',monospace}
+
+.token-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.token-card{
+  padding:14px;border:1px solid var(--border);border-radius:var(--radius-lg);
+  background:rgba(255,255,255,.02);text-align:center;transition:all .25s;
+  display:flex;flex-direction:column;gap:4px;
+}
+.token-card:hover{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04)}
+.token-card .tc-icon{font-size:28px}
+.token-card .tc-name{font-size:13px;font-weight:700;color:var(--text)}
+.token-card .tc-amount{font-size:11px;color:var(--yellow);font-family:'JetBrains Mono',monospace}
+.token-card .tc-price{font-size:12px;color:var(--green);font-weight:700;margin-top:2px}
+.token-card .tc-buy{
+  margin-top:6px;padding:6px 0;border:1px solid var(--purple);border-radius:var(--radius);
+  background:rgba(189,147,249,.1);color:var(--purple);font-family:inherit;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;
+}
+.token-card .tc-buy:hover{background:rgba(189,147,249,.2);color:var(--text)}
+.token-card .tc-buy:disabled{opacity:.35;cursor:not-allowed;border-color:var(--border);color:var(--text3)}
+
+/* ===== MODEL SWITCH (Module 5) ===== */
+.model-list{display:flex;flex-direction:column;gap:6px}
+.model-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border:1px solid var(--border);border-radius:var(--radius-lg);
+  background:rgba(255,255,255,.02);cursor:pointer;transition:all .25s;
+}
+.model-item:hover{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.04)}
+.model-item.active{border-color:var(--cyan);box-shadow:0 0 12px rgba(139,233,253,.15)}
+.model-item .mi-icon{font-size:24px;flex-shrink:0}
+.model-item .mi-info{flex:1;min-width:0}
+.model-item .mi-name{font-size:13px;font-weight:700}
+.model-item .mi-stats{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.model-item .mi-badge{
+  font-size:10px;padding:3px 8px;border-radius:10px;flex-shrink:0;
+  font-family:'JetBrains Mono',monospace;
+}
+.model-item .mi-badge.current{color:var(--cyan);border:1px solid rgba(139,233,253,.3);background:rgba(139,233,253,.08)}
+.model-item.locked{opacity:.35;cursor:not-allowed}
+
+/* ===== SIDE GIG (Module 5) ===== */
+.overlay-content-sm{max-width:380px}
+.gig-panel{text-align:center;padding:8px 0}
+.gig-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.gig-stats{
+  display:flex;gap:12px;justify-content:center;margin-bottom:16px;
+  font-size:12px;font-family:'JetBrains Mono',monospace;
+}
+.gig-stats .gs-good{color:var(--green)}
+.gig-stats .gs-bad{color:var(--red)}
+.gig-actions{display:flex;gap:8px;justify-content:center}
+.gig-btn{
+  padding:10px 24px;border:none;border-radius:var(--radius-lg);
+  font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;
+}
+.gig-btn.confirm{
+  background:linear-gradient(135deg,var(--green),var(--cyan));color:var(--bg-darker);
+}
+.gig-btn.confirm:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(80,250,123,.3)}
+.gig-btn.cancel{
+  background:transparent;border:1px solid var(--border);color:var(--text3);
+}
+.gig-btn.cancel:hover{border-color:var(--red);color:var(--red)}
+.gig-btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.gig-cooldown{font-size:11px;color:var(--orange);margin-top:8px}
+
 /* ===== RESPONSIVE OVERLAY ===== */
 @media(max-width:600px){
   .overlay-content{width:100vw;max-height:100vh;border-radius:0}
   .overlay-tabs{padding:6px 10px}
   .overlay-tab{font-size:10px;padding:4px 8px}
   .start-actions{flex-wrap:wrap}
+  .token-grid{grid-template-columns:1fr}
+  .game-actions{gap:2px}
+  .action-btn{font-size:10px;padding:3px 6px}
 }

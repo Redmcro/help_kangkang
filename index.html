@@ -134,6 +134,11 @@
   <!-- Terminal Bar (Bottom) -->
   <div class="terminal-bar">
     <div class="terminal-title">TERMINAL</div>
+    <div class="game-actions" id="gameActions">
+      <button class="action-btn" id="buyTokenBtn" title="购买Token">🪙 买Token</button>
+      <button class="action-btn" id="switchModelBtn" title="切换模型">🤖 换模型</button>
+      <button class="action-btn" id="sideGigBtn" title="接私活">💼 接私活</button>
+    </div>
     <div class="terminal-actions">
       <div class="speed-ctrl" id="speedCtrl">
         <button data-speed="1500">▶ 慢速</button>
@@ -198,6 +203,46 @@
     </div>
     <div class="overlay-progress" id="achieveProgress"></div>
     <div class="overlay-body" id="achieveBody"></div>
+  </div>
+</div>
+
+<!-- Token Shop -->
+<div class="overlay" id="tokenShopOverlay">
+  <div class="overlay-content">
+    <div class="overlay-header">
+      <h2>🪙 Token 商店</h2>
+      <button class="overlay-close" data-close="tokenShopOverlay">✕</button>
+    </div>
+    <div class="overlay-body">
+      <div class="shop-balance" id="shopBalance"></div>
+      <div class="token-grid" id="tokenGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Model Switch -->
+<div class="overlay" id="modelSwitchOverlay">
+  <div class="overlay-content">
+    <div class="overlay-header">
+      <h2>🤖 切换 AI 模型</h2>
+      <button class="overlay-close" data-close="modelSwitchOverlay">✕</button>
+    </div>
+    <div class="overlay-body">
+      <div class="model-list" id="modelList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Side Gig -->
+<div class="overlay" id="sideGigOverlay">
+  <div class="overlay-content overlay-content-sm">
+    <div class="overlay-header">
+      <h2>💼 接私活</h2>
+      <button class="overlay-close" data-close="sideGigOverlay">✕</button>
+    </div>
+    <div class="overlay-body">
+      <div class="gig-panel" id="gigPanel"></div>
+    </div>
   </div>
 </div>
 

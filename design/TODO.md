@@ -1,6 +1,6 @@
 # 🔧 TODO — 并发任务分配表
 
-> **最后审计：2026-03-26 13:32**
+> **最后审计：2026-03-26 13:56**
 > 全局规则见 `.agents/AGENTS.md`（铁律自动生效）
 > 大内总管工作流：`.agents/workflows/chief-steward.md`
 
@@ -17,10 +17,10 @@
 | 文件 | 状态 | 说明 |
 |:---|:---|:---|
 | `property.js` | ✅ 正常 | v2 属性完整（含 charm/luck），Flag 系统正常 |
-| `engine.js` | ⚠️ 功能不全 | 月份循环正常，缺模型特效/3个隐藏结局/charm机制/熬夜/doubao_bonus |
+| `engine.js` | ✅ 正常 | 模型特效+隐藏结局+charm机制+熬夜+doubao_bonus 已完成 |
 | `events.js` | ✅ 正常 | month 筛选 + luck 修正已完成 |
 | `save.js` | ✅ 正常 | events_seen/achievements_unlocked 已恢复 |
-| `app.js` | ⚠️ 功能不全 | IDE UI 正常，缺 overlay 面板 JS 逻辑 |
+| `app.js` | ⚠️ 功能不全 | 模块5部分完成，模块4(overlay逻辑)完全缺失 |
 | `index.html` | ⚠️ 不完整 | overlay 面板已有，缺 Token购买/换模型/接私活 UI |
 | `css/style.css` | ✅ 正常 | Dracula 配色 + IDE 风格（19KB） |
 | `stages.json` | ✅ 正常 | 12 个月 5 个阶段 |
@@ -35,7 +35,7 @@
 | `daily.json` | ✅ | 每日任务 |
 | `models.json` | ✅ | 模型事件 |
 | `_manifest.json` | ✅ | 7 系统已注册 |
-| `achievement.js` | ❌ 不存在 | 之前存在被误删 |
+| `achievement.js` | ✅ 正常 | AchievementManager 6方法+5条件类型，礼部已完成 |
 
 
 ---
@@ -105,7 +105,7 @@
 
 ---
 
-## 🔴 模块 2：引擎补全（工部）
+## ✅ 模块 2：引擎补全（工部）— 已验收
 
 **负责文件**：`js/engine.js`
 **只读参考**：`GAME_DESIGN.md`、`js/property.js`（接口）
@@ -175,7 +175,7 @@
 
 ---
 
-## 🔴 模块 3：成就系统（礼部）
+## ✅ 模块 3：成就系统（礼部）— 已验收
 
 > **前置依赖**：模块 1（achievements.json）完成后开工
 
@@ -209,7 +209,7 @@
 
 ---
 
-## 🟡 模块 4：Overlay UI + 交互功能（门下省）
+## ❌ 模块 4：Overlay UI + 交互功能（门下省）— 验收未通过，需重做
 
 > **前置依赖**：模块 1（数据文件）+ 模块 3（achievement.js）完成后开工
 
