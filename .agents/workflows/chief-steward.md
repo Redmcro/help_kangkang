@@ -20,6 +20,8 @@ description: Chief Steward workflow — project coordination, task dispatch, rev
 | `.agents/tasks/*.md` | Task specs for officials (English) |
 | `.agents/REPORTS.md` | Officials report here (English) |
 | `.agents/AGENTS.md` | Rules for officials (English) |
+| `.agents/VERIFICATION_LOG.md` | Steward review/acceptance records (English) |
+| `.agents/ARCHITECTURE.md` | Architecture audit log (English) |
 
 ## 🔗 Chain of Command
 

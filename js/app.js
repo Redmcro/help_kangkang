@@ -3,7 +3,7 @@
 // Module 4: Overlay panels (Gallery, Endings, Achievements) + achievement integration
 // Module 5: Token Shop, Model Switch, Side Gig interaction panels.
 
-import { GameEngine } from './engine.js';
+import { GameEngine, AI_MODELS } from './engine.js';
 import { AchievementManager } from './achievement.js';
 import { saveLegacy } from './save.js';
 
@@ -13,18 +13,9 @@ const $ = id => document.getElementById(id);
 
 // Module 4: Data loaded at init
 let endingsData = {};   // from data/endings.json
-let allEventsData = {}; // all events merged from manifest systems
 
 
-// Mirror of AI_MODELS from engine.js (read-only, for UI display only)
-const AI_MODELS_UI = {
-    doubao:      { name: '🐳 豆包',       cost: '5~80M',   quality: 45, bugRate: '40%' },
-    gpt54:       { name: '🤖 GPT-5.4',    cost: '20~400M', quality: 80, bugRate: '12%' },
-    opus46:      { name: '🎯 Opus 4.6',   cost: '35~600M', quality: 92, bugRate: '5%'  },
-    deepseek_v4: { name: '🔮 DeepSeek V4',cost: '8~150M',  quality: 72, bugRate: '18%' },
-    cheapgpt:    { name: '💀 CheapGPT',   cost: '3~50M',   quality: 30, bugRate: '60%' },
-    fakeopus:    { name: '🎪 FakeOpus',   cost: '5~90M',   quality: 35, bugRate: '55%' },
-};
+
 
 let gigUsedThisMonth = false;
 let currentGigMonth = 0;
@@ -207,91 +198,7 @@ function showToast(text) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// ===== Module 4: Gallery Panel =====
 
-const SYSTEM_NAMES = {
-    general: '📋 通用', monthly: '📅 月份主线', random: '🎲 随机事件',
-    colleagues: '🤝 同事互动', choice: '🎯 选择事件', daily: '📋 每日任务',
-    models: '🤖 模型事件', random_events: '🎲 随机事件', economy: '💰 经济',
-    ai_models: '🤖 AI模型', choice_events: '🎯 选择事件', daily_tasks: '📋 每日任务'
-};
-
-function renderGallery(filterSystem) {
-    const seen = new Set(game.legacy.events_seen || []);
-    const entries = Object.entries(allEventsData);
-
-    // Group by system
-    const groups = {};
-    for (const [id, ev] of entries) {
-        const sys = ev.system || 'general';
-        if (!groups[sys]) groups[sys] = [];
-        groups[sys].push({ id, ev });
-    }
-
-    const systemKeys = Object.keys(groups).sort();
-    const activeSystem = filterSystem || systemKeys[0] || 'general';
-
-    // Tabs
-    const tabs = $('galleryTabs');
-    tabs.innerHTML = '';
-    const tabAll = document.createElement('div');
-    tabAll.className = 'overlay-tab' + (!filterSystem ? ' active' : '');
-    tabAll.textContent = `全部 (${entries.length})`;
-    tabAll.addEventListener('click', () => renderGallery());
-    tabs.appendChild(tabAll);
-
-    for (const sys of systemKeys) {
-        const tab = document.createElement('div');
-        tab.className = 'overlay-tab' + (activeSystem === sys && filterSystem ? ' active' : '');
-        tab.textContent = `${SYSTEM_NAMES[sys] || sys} (${groups[sys].length})`;
-        tab.addEventListener('click', () => renderGallery(sys));
-        tabs.appendChild(tab);
-    }
-
-    // Progress
-    const totalCount = entries.length;
-    const seenCount = entries.filter(([id]) => seen.has(id)).length;
-    const pct = totalCount > 0 ? Math.round(seenCount / totalCount * 100) : 0;
-    $('galleryProgress').innerHTML = `
-        <span>📖 已收集 ${seenCount}/${totalCount} (${pct}%)</span>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>`;
-
-    // Body
-    const body = $('galleryBody');
-    body.innerHTML = '';
-    const displayEntries = filterSystem ? (groups[filterSystem] || []) : entries.map(([id, ev]) => ({ id, ev }));
-
-    for (const item of displayEntries) {
-        const { id, ev } = item;
-        const unlocked = seen.has(id);
-        const card = document.createElement('div');
-        card.className = 'collection-card' + (unlocked ? '' : ' locked');
-
-        if (unlocked) {
-            const sysLabel = SYSTEM_NAMES[ev.system] || ev.system || '通用';
-            const monthLabel = ev.month ? `${ev.month[0]}~${ev.month[1]}月` : '';
-            card.innerHTML = `
-                <div class="cc-header">
-                    <span class="cc-name">${ev.title || ev.text?.slice(0, 30) || id}</span>
-                    <span class="cc-badge unlocked">✓ 已收集</span>
-                </div>
-                <div class="cc-desc">${ev.text || ''}</div>
-                <div class="cc-meta">
-                    <span class="cc-system">${sysLabel}</span>
-                    ${monthLabel ? `<span class="cc-month">${monthLabel}</span>` : ''}
-                </div>`;
-        } else {
-            card.innerHTML = `
-                <div class="cc-header">
-                    <span class="cc-icon">❓</span>
-                    <span class="cc-name" style="color:var(--text3)">??? 未知事件</span>
-                    <span class="cc-badge locked">未收集</span>
-                </div>
-                <div class="cc-desc" style="color:var(--text3);font-style:italic">完成更多游戏来解锁这个事件</div>`;
-        }
-        body.appendChild(card);
-    }
-}
 
 // ===== Module 4: Endings Panel =====
 
@@ -460,10 +367,13 @@ function renderModelSwitch() {
     const list = $('modelList');
     list.innerHTML = '';
 
-    for (const [id, m] of Object.entries(AI_MODELS_UI)) {
+    for (const [id, m] of Object.entries(AI_MODELS)) {
         const flagKey = `model_${id}_unlocked`;
         const unlocked = !!state[flagKey];
         const isCurrent = currentModel === id;
+        const minCost = m.cost[0] * m.tokenPrice;
+        const maxCost = m.cost[3] * m.tokenPrice;
+        const bugPct = Math.round(m.bugRate * 100);
 
         const item = document.createElement('div');
         item.className = 'model-item' + (isCurrent ? ' active' : '') + (!unlocked ? ' locked' : '');
@@ -471,7 +381,7 @@ function renderModelSwitch() {
             <div class="mi-icon">${m.name.split(' ')[0]}</div>
             <div class="mi-info">
                 <div class="mi-name">${m.name}</div>
-                <div class="mi-stats">质量:${m.quality} · Bug:${m.bugRate} · Token:${m.cost}</div>
+                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}% · ¥${m.tokenPrice}/M · ⭐¥${minCost}~⭐⭐⭐⭐¥${maxCost}</div>
             </div>
             ${isCurrent ? '<span class="mi-badge current">当前</span>' : ''}
             ${!unlocked ? '<span class="mi-badge" style="color:var(--text3);border:1px solid var(--border)">🔒 未解锁</span>' : ''}`;
@@ -482,7 +392,7 @@ function renderModelSwitch() {
                 game.emitUI();
                 addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
                 showToast(`已切换到 ${m.name}`);
-                renderModelSwitch(); // Refresh active state
+                renderModelSwitch();
             });
         }
         list.appendChild(item);
@@ -584,20 +494,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (endResp.ok) endingsData = await endResp.json();
     } catch (e) { console.warn('Endings data load failed:', e); }
 
-    try {
-        const mfResp = await fetch('data/events/_manifest.json');
-        if (mfResp.ok) {
-            const manifest = await mfResp.json();
-            const results = await Promise.all(
-                manifest.map(sys =>
-                    fetch(`data/events/${sys}.json`)
-                        .then(r => r.ok ? r.json() : {})
-                        .catch(() => ({}))
-                )
-            );
-            allEventsData = Object.assign({}, ...results);
-        }
-    } catch (e) { console.warn('Events data load failed:', e); }
+
 
     initStart();
 
@@ -623,10 +520,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // ===== Module 4: Overlay button bindings =====
-    $('galleryBtn').addEventListener('click', () => {
-        renderGallery();
-        openOverlay('galleryOverlay');
-    });
     $('endingsBtn').addEventListener('click', () => {
         renderEndings();
         openOverlay('endingsOverlay');
@@ -663,5 +556,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) closeOverlay(overlay.id);
         });
+    });
+
+    // ===== Mobile: Explorer toggle =====
+    $('toggleExplorer').addEventListener('click', () => {
+        $('explorer').classList.toggle('open');
+        $('explorerBackdrop').classList.toggle('show');
+    });
+    $('explorerBackdrop').addEventListener('click', () => {
+        $('explorer').classList.remove('open');
+        $('explorerBackdrop').classList.remove('show');
     });
 });

@@ -24,7 +24,7 @@
   </section>
   <button class="start-btn" id="startBtn">🚀 开始新的一年</button>
   <div class="start-actions">
-    <button class="start-sub-btn" id="galleryBtn">📖 事件图鉴</button>
+
     <button class="start-sub-btn" id="endingsBtn">🏆 结局收集</button>
     <button class="start-sub-btn" id="achieveBtn">⭐ 成就</button>
   </div>
@@ -49,6 +49,10 @@
     <div class="tab-item" data-month="11">11月</div>
     <div class="tab-item" data-month="12">12月</div>
   </div>
+
+  <!-- Mobile Explorer Toggle -->
+  <button class="explorer-toggle" id="toggleExplorer">📊</button>
+  <div class="explorer-backdrop" id="explorerBackdrop"></div>
 
   <!-- Main Area: Explorer + Editor -->
   <div class="ide-main">
@@ -170,18 +174,7 @@
 
 <!-- ===== OVERLAYS ===== -->
 
-<!-- Event Gallery -->
-<div class="overlay" id="galleryOverlay">
-  <div class="overlay-content">
-    <div class="overlay-header">
-      <h2>📖 程序员生存图鉴</h2>
-      <button class="overlay-close" data-close="galleryOverlay">✕</button>
-    </div>
-    <div class="overlay-tabs" id="galleryTabs"></div>
-    <div class="overlay-progress" id="galleryProgress"></div>
-    <div class="overlay-body" id="galleryBody"></div>
-  </div>
-</div>
+
 
 <!-- Endings Collection -->
 <div class="overlay" id="endingsOverlay">

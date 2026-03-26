@@ -13,7 +13,7 @@
   colleague_shaoye_lunch_01     → 同事系统 - 少爷请吃午饭 - 第1个
   monthly_m3_opus_release       → 月份事件 - 3月Opus发布
   random_good_exercise_01       → 随机事件 - 正面 - 锻炼
-  choice_token_sale_01          → 选择事件 - Token打折
+  choice_ai_budget_01           → 选择事件 - AI预算管理
   daily_bug_emergency_01        → 每日任务 - 紧急修Bug
 ```
 

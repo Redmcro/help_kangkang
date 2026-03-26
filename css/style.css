@@ -382,37 +382,42 @@ body{
 }
 
 /* ===== RESPONSIVE — Mobile ===== */
+/* Explorer toggle (hidden on desktop) */
+.explorer-toggle{display:none}
+.explorer-backdrop{display:none}
+
 @media(max-width:600px){
   .container{padding:10px}
   .logo h1{font-size:24px}
 
-  /* Explorer → compact horizontal strip */
-  .ide-main{flex-direction:column}
-  .explorer{
-    width:100%;border-right:none;border-bottom:1px solid var(--border);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    padding:8px;gap:6px;overflow:visible;
-    max-height:none;
+  /* Explorer → slide-out drawer */
+  .explorer-toggle{
+    display:flex;align-items:center;justify-content:center;
+    position:fixed;top:calc(var(--tab-height) + 8px);left:8px;
+    z-index:50;width:40px;height:40px;
+    border:1px solid var(--border);border-radius:var(--radius-lg);
+    background:rgba(33,34,44,.9);color:var(--text);
+    font-size:16px;cursor:pointer;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 2px 12px rgba(0,0,0,.4);
+    transition:all .2s;
   }
-  .explorer-title{display:none}
-  .explorer-section{
-    margin:0;padding:4px 6px;
-    background:rgba(255,255,255,.02);
-    border-radius:var(--radius);
-    border:1px solid var(--border);
+  .explorer-toggle:hover{border-color:var(--purple);background:rgba(189,147,249,.15)}
+  .explorer-backdrop{
+    display:none;position:fixed;inset:0;z-index:90;
+    background:rgba(0,0,0,.5);backdrop-filter:blur(2px);
+    transition:opacity .3s;
   }
-  .section-header{font-size:9px;padding:2px 4px;margin-bottom:2px}
-  .stat-row{padding:1px 2px;gap:3px}
-  .stat-icon{font-size:10px;width:14px}
-  .stat-name{font-size:9px;width:26px}
-  .stat-bar-wrap{height:4px;min-width:20px}
-  .stat-val{font-size:9px;width:20px}
+  .explorer-backdrop.show{display:block}
 
-  /* Editor fills remaining space */
-  .editor{min-height:280px}
-  .event-stream{min-height:180px;max-height:50vh;font-size:11px}
-  .ev-line .ev-prefix{font-size:10px}
+  .explorer{
+    position:fixed;top:0;left:-85vw;width:85vw;height:100vh;
+    z-index:100;overflow-y:auto;
+    transition:left .3s cubic-bezier(.4,0,.2,1);
+    border-right:1px solid var(--border);
+    box-shadow:4px 0 24px rgba(0,0,0,.6);
+  }
+  .explorer.open{left:0}
 
   /* Tab bar scroll fade */
   .tab-bar{
@@ -422,14 +427,39 @@ body{
   }
   .tab-item{padding:0 8px;font-size:10px}
 
+  /* Editor fills remaining space */
+  .editor{min-height:280px}
+  .event-stream{min-height:200px;max-height:60vh;font-size:12px}
+  .ev-line .ev-prefix{font-size:10px}
+
+  /* Game action FABs */
+  .terminal-bar .game-actions{
+    position:fixed;bottom:70px;right:12px;
+    flex-direction:column;gap:8px;z-index:50;
+  }
+  .action-btn{
+    width:48px;height:48px;border-radius:50%;
+    font-size:18px;padding:0;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 16px rgba(0,0,0,.5);
+    background:rgba(33,34,44,.95);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .action-btn .action-text{display:none}
+
+  /* Choice panel → bottom sheet */
+  .choice-panel{
+    position:fixed;bottom:0;left:0;right:0;
+    z-index:90;max-height:70vh;
+    border-radius:16px 16px 0 0;
+    box-shadow:0 -8px 30px rgba(0,0,0,.5);
+    overflow-y:auto;
+  }
+  .cp-btn{min-height:48px;font-size:13px;padding:12px 14px}
+
   /* Terminal compact */
   .terminal-bar{gap:6px;padding:0 8px}
-  .action-btn{font-size:12px;padding:4px 8px}
-  .action-btn .action-text{display:none}
-  .speed-ctrl button{font-size:9px;padding:3px 6px}
-
-  /* Choice panel */
-  .cp-btn{font-size:12px;padding:8px 10px}
+  .speed-ctrl button{min-height:44px;min-width:44px;font-size:10px;padding:4px 8px}
 
   /* Start screen */
   .start-btn{position:sticky;bottom:10px;box-shadow:0 -4px 20px rgba(0,0,0,.6)}
@@ -555,21 +585,7 @@ body{
 .cc-meta{font-size:10px;color:var(--text3);margin-top:4px;font-family:'JetBrains Mono',monospace}
 .cc-reward{font-size:10px;color:var(--yellow);margin-top:2px}
 
-/* Event gallery specific */
-.cc-effect{
-  font-size:10px;color:var(--cyan);margin-top:3px;
-  font-family:'JetBrains Mono',monospace;
-}
-.cc-system{
-  display:inline-block;font-size:9px;padding:1px 6px;
-  border-radius:8px;color:var(--purple);border:1px solid rgba(189,147,249,.3);
-  background:rgba(189,147,249,.06);margin-right:4px;
-}
-.cc-month{
-  display:inline-block;font-size:9px;padding:1px 6px;
-  border-radius:8px;color:var(--cyan);border:1px solid rgba(139,233,253,.3);
-  background:rgba(139,233,253,.06);
-}
+
 
 /* ===== GAME ACTION BUTTONS ===== */
 .game-actions{display:flex;gap:4px}

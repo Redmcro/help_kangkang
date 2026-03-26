@@ -35,30 +35,30 @@
       }
     ]
   },
-  "choice_token_sale_01": {
+  "choice_ai_budget_01": {
     "month": [3, 10],
-    "text": "某平台搞活动：Token充值翻倍！限时24小时！",
+    "text": "某AI平台搞活动：年费会员五折优惠！限时24小时！",
     "type": "choice",
     "system": "choice",
     "once": true,
-    "title": "🎉 Token 翻倍活动！",
+    "title": "🎉 AI 会员促销！",
     "desc": "手头有点紧，但这个优惠确实诱人...",
     "choices": [
       {
-        "text": "💰 冲它！充 3000 块",
-        "hint": "获得 2B Token",
-        "result": "Token 库存一下子充裕了！",
-        "effect": { "money": -3000, "token": 2000 }
+        "text": "💰 冲它！买年费会员",
+        "hint": "长期省钱，短期肉疼",
+        "result": "以后每月AI费用省不少！",
+        "effect": { "money": -3000, "brain": 5 }
       },
       {
-        "text": "🤏 小充一笔 500 块",
-        "hint": "获得 400M Token",
-        "result": "聊胜于无，省着点用。",
-        "effect": { "money": -500, "token": 400 }
+        "text": "🤏 买个季度会员试试",
+        "hint": "小投入，试试水",
+        "result": "聊胜于无，先用着。",
+        "effect": { "money": -800, "brain": 2 }
       },
       {
-        "text": "😤 不充，告诫自己省着用",
-        "hint": "brain +3",
+        "text": "😤 不买，告诫自己省着用",
+        "hint": "省钱，但得精打细算",
         "result": "你关掉了广告页面。钱还是留着交房租吧。",
         "effect": { "brain": 3 }
       }

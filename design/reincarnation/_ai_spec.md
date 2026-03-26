@@ -25,7 +25,7 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
   "runs": 0,
   "wins": 0,
   "endings_unlocked": [],
-  "total_tokens_spent": 0,
+  "total_money_on_ai": 0,
   "total_bugs_fixed": 0
 }
 ```
@@ -40,7 +40,7 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
 | 💳 小有积蓄 | `buff_savings` | money +3000 | 50 | 累计赚 ≥ 50000 |
 | 🏋️ 健身习惯 | `buff_fitness` | hp +15, 熬夜hp -30% | 40 | 某局 hp 未 < 50 |
 | 🧠 过目不忘 | `buff_memory` | brain 衰减减半 | 60 | 某局 brain 未 < 60 |
-| 💰 Token 礼包 | `buff_token` | token +500M | 50 | 获得任一胜利结局 |
+| 💰 启动资金 | `buff_token` | money +1500 | 50 | 获得任一胜利结局 |
 | 🐳 豆包皮肤 | `buff_doubao` | 豆包质量 +15 | 80 | "豆包之神"结局 |
 | 🤝 人脉王 | `buff_social` | 初始关系 70 | 40 | "铁三角"结局 |
 | ⚡ 内部推荐 | `buff_recommend` | bossSatisfy 初始 60 | 70 | "AI大师"结局 |

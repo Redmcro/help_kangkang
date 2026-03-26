@@ -21,13 +21,15 @@ description: Generate game events using design MDs as context for AI content cre
    | Model | `design/ai_models/` |
    | Endings | `design/endings/` |
    | Buffs | `design/reincarnation/` |
+   | Girlfriend | `design/girlfriend/` |
+   | Life Expense | `design/life_expense/` |
 
    Each folder contains: `_ai_spec.md` (rules) · `settings.md` (ideas) · `events_example.md` (reference)
 
 3. **Generate events**
    - ID format: `{system}_{desc}_{seq}`
    - Required fields: `month` [min, max], `text`, `type`, `system`
-   - `system` must be: `general` / `colleague` / `monthly` / `random` / `choice` / `daily` / `model`
+   - `system` must be: `general` / `colleague` / `monthly` / `random` / `choice` / `daily` / `model` / `girlfriend` / `life_expense`
    - Effect keys only from `attributes.md`
    - Single effect ±20 max
    - **Hints must be descriptive, NOT numeric**

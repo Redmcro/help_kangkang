@@ -132,14 +132,14 @@ hp    += 5 （自然恢复，上限100）
 | Flag | 类型 | 来源系统 | 设置时机 | 影响 |
 |:---|:---|:---|:---|:---|
 | `yimin_ai_convert` | bool | colleagues | 亿民开始学AI事件 | 解锁亿民后续AI事件 |
-| `yimin_token_discount` | bool | colleagues | 亿民分享渠道 | Token购买打8折 |
+| `yimin_cost_discount` | bool | colleagues | 亿民分享渠道 | AI使用费打8折 |
 
 ### 学习/技能 Flag
 
 | Flag | 类型 | 来源系统 | 设置时机 | 影响 |
 |:---|:---|:---|:---|:---|
 | `learned_ai_course` | bool | choice | 购买AI课程 | brain判定加成 |
-| `switched_to_doubao` | bool | choice | Token告急切豆包 | 豆包相关事件权重提升 |
+| `switched_to_doubao` | bool | choice | 余额不足切豆包 | 豆包相关事件权重提升 |
 | `training_ai` | bool | choice | 选择AI培训方向 | 解锁AI进阶事件 |
 | `attended_ai_conf` | bool | choice | 参加AI技术大会 | 解锁行业人脉事件 |
 | `built_ai_tool` | bool | choice | 搭建AI接单工具 | 解锁工具变现事件 |

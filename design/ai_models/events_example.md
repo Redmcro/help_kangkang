@@ -10,7 +10,7 @@
     "type": "good",
     "system": "model",
     "once": true,
-    "effect": { "token": 50 },
+    "effect": { "money": 500 },
     "setFlag": "model_doubao_unlocked"
   },
   "model_unlock_gpt54": {
