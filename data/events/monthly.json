@@ -24,7 +24,7 @@
     "system": "monthly",
     "weight": 90,
     "once": true,
-    "effect": {"hp": 3, "brain": -3}
+    "effect": {"hp": 3, "brain": -2}
   },
   "monthly_m2_new_year_bonus": {
     "month": [2, 2],
@@ -52,7 +52,7 @@
     "system": "monthly",
     "weight": 40,
     "once": true,
-    "effect": {"brain": -8, "hp": -3},
+    "effect": {"brain": -5, "hp": -3},
     "postEvent": "IT部门花了两小时才修好。这两小时里，康康发现自己不用AI根本写不动代码。"
   },
   "monthly_m4_layoff_wave": {
@@ -62,7 +62,7 @@
     "system": "monthly",
     "weight": 100,
     "once": true,
-    "effect": {"bossSatisfy": -2, "brain": -5, "hp": -5},
+    "effect": {"bossSatisfy": -2, "brain": -3, "hp": -3},
     "postEvent": "康康在工位上坐了很久，打开了招聘网站，又默默关掉了。"
   },
   "monthly_m4_deepseek_release": {
@@ -104,7 +104,7 @@
         "text": "😷 请病假躲掉",
         "hint": "躲得了初一躲不了十五",
         "result": "请了病假，但下个月还是得分享……而且老板记住了。",
-        "effect": {"hp": -5, "bossSatisfy": -2}
+        "effect": {"hp": -3, "bossSatisfy": -2}
       }
     ]
   },
@@ -125,7 +125,7 @@
     "system": "monthly",
     "weight": 100,
     "once": true,
-    "effect": {"hp": -10, "brain": -8, "bossSatisfy": -3},
+    "effect": {"hp": -4, "brain": -3, "bossSatisfy": -3},
     "postEvent": "康康连续三天加班到凌晨，泡面桶堆满了垃圾桶。"
   },
   "monthly_m6_deadline_push": {
@@ -142,7 +142,7 @@
         "text": "💪 通宵干完：一个都不能少",
         "hint": "拼命赶工，老板会记住的",
         "result": "通宵把三个功能全赶出来了！代码质量不敢保证，但至少交付了。",
-        "effect": {"hp": -15, "brain": -10, "bossSatisfy": 10}
+        "effect": {"hp": -8, "brain": -3, "bossSatisfy": 10}
       },
       {
         "text": "🎩 只做两个，第三个跟老板谈延期",
@@ -171,7 +171,7 @@
     "system": "monthly",
     "weight": 90,
     "once": true,
-    "effect": {"hp": -5, "brain": -3},
+    "effect": {"hp": -3, "brain": -3},
     "postEvent": "康康买了个USB小风扇，对着脸吹热风。"
   },
   "monthly_m7_summer_intern": {
@@ -208,7 +208,7 @@
         "cond": {},
         "text": "考核评价：D。HR暗示你'主动优化'比较体面。",
         "type": "bad",
-        "effect": {"hp": -10, "brain": -10, "bossSatisfy": -5}
+        "effect": {"hp": -5, "brain": -5, "bossSatisfy": -5}
       }
     ]
   },
@@ -236,9 +236,9 @@
         "hint": "全力以赴，赢了改变命运",
         "chanceBased": true,
         "branches": [
-          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 10000, "hp": -10, "brain": 10, "bossSatisfy": 5, "charm": 5}},
-          {"chance": 45, "result": "作品不错但没获奖。收获了经验和几个新朋友。", "type": "neutral", "effect": {"hp": -10, "brain": 5, "charm": 3}},
-          {"chance": 20, "result": "48小时只做了个半成品，Demo都跑不起来……", "type": "bad", "effect": {"hp": -10, "brain": -5}}
+          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 10000, "hp": -8, "brain": 10, "bossSatisfy": 5, "charm": 5}},
+          {"chance": 45, "result": "作品不错但没获奖。收获了经验和几个新朋友。", "type": "neutral", "effect": {"hp": -6, "brain": 5, "charm": 3}},
+          {"chance": 20, "result": "48小时只做了个半成品，Demo都跑不起来……", "type": "bad", "effect": {"hp": -6, "brain": -5}}
         ]
       },
       {
@@ -280,7 +280,7 @@
         "text": "🫡 主动值班：拍老板马屁",
         "hint": "牺牲假期，换老板一个好印象",
         "result": "整个假期就你和老板在公司。老板很感动，多发了2000块加班费。",
-        "effect": {"bossSatisfy": 8, "hp": -8, "money": 2000}
+        "effect": {"bossSatisfy": 8, "hp": -3, "money": 2000}
       },
       {
         "text": "🙋 只值一天意思意思",
@@ -303,7 +303,7 @@
     "system": "monthly",
     "weight": 100,
     "once": true,
-    "effect": {"hp": -5, "brain": -5},
+    "effect": {"hp": -2, "brain": -2},
     "postEvent": "康康看了看自己的KPI完成率……37%。还有两个月。"
   },
   "monthly_m11_bonus_rumor": {
@@ -429,13 +429,13 @@
         "text": "📋 接任命书——咬牙留下来",
         "hint": "咬牙留下，前路漫漫",
         "result": "你签下了任命书。老板点了点头：'我看好你。别让我失望。' 新项目的需求文档有整整87页。",
-        "effect": {"bossSatisfy": 10, "hp": -10, "brain": -5}
+        "effect": {"bossSatisfy": 10, "hp": -5, "brain": -2}
       },
       {
         "text": "💼 拿赔偿——体面离开",
         "hint": "拿钱走人，但以后的路更难",
         "result": "你拿了N+1走人。HR递纸巾的手都在抖。走出大楼时阳光很刺眼。",
-        "effect": {"money": 15000, "bossSatisfy": -20, "hp": -15},
+        "effect": {"money": 15000, "bossSatisfy": -20, "hp": -8},
         "setFlag": "considered_delivery"
       }
     ]
@@ -509,16 +509,16 @@
         "text": "💡 用手机热点硬撑——加载一行代码等五分钟",
         "hint": "效率极低，但至少在干活",
         "result": "你在烛光下对着14英寸屏幕写代码，AI回复一条消息要30秒。三小时写了不到20行。",
-        "effect": {"brain": -8, "hp": -8, "bossSatisfy": 2}
+        "effect": {"brain": -3, "hp": -3, "bossSatisfy": 2}
       },
       {
         "text": "📝 不用AI，纯手写代码",
         "hint": "证明自己离了AI也能行",
         "require": {"brain": 50},
         "success": "没有AI的你，居然手写了一个完整的功能模块。老板震惊了：'你还会手写代码？！'",
-        "successEffect": {"brain": -10, "bossSatisfy": 8, "charm": 5},
+        "successEffect": {"brain": -6, "bossSatisfy": 8, "charm": 5},
         "fail": "尝试手写代码，但发现自己已经完全依赖AI了。连一个for循环都要查语法。",
-        "failEffect": {"brain": -15, "hp": -5, "bossSatisfy": -3}
+        "failEffect": {"brain": -10, "hp": -3, "bossSatisfy": -3}
       },
       {
         "text": "☕ 去星巴克蹭电蹭网",
@@ -543,13 +543,13 @@
         "text": "💡 '我要做AI做不到的事！'",
         "hint": "找到自己不可替代的价值",
         "result": "你决定不再只是做AI的'提示词工程师'，而是真正理解AI的局限，找到人类不可替代的价值。这个夜晚改变了你的方向。",
-        "effect": {"brain": 10, "charm": 5, "hp": -3}
+        "effect": {"brain": 10, "charm": 5, "hp": -2}
       },
       {
         "text": "😤 '我就是要比AI更快更好！'",
         "hint": "卷到极致，身体可能吃不消",
         "result": "你开始疯狂学习各种AI工具，立志成为全公司AI使用效率最高的人。目标明确，但身体在抗议。",
-        "effect": {"brain": 5, "hp": -5, "bossSatisfy": 3}
+        "effect": {"brain": 5, "hp": -3, "bossSatisfy": 3}
       },
       {
         "text": "😔 '算了，能活一天是一天……'",
@@ -633,7 +633,7 @@
         "text": "🔥 疯狂肝——每天下班后学三小时AI",
         "hint": "拼命冲刺，用健康换能力",
         "result": "连续两周高强度学习。你的眼睛布满血丝，但AI使用技巧突飞猛进。同事开始来找你请教。",
-        "effect": {"brain": 12, "hp": -12, "bossSatisfy": 5, "charm": 3}
+        "effect": {"brain": 12, "hp": -5, "bossSatisfy": 5, "charm": 3}
       },
       {
         "text": "🧠 聪明学——找少爷/亿民一起组队备考",
@@ -642,7 +642,7 @@
         "success": "少爷分享了一套压箱底的AI学习资料。三人轮流梳理，效率极高。",
         "successEffect": {"brain": 8, "shaoye_rel": 5, "charm": 3},
         "fail": "想拉人组队，但大家都自顾不暇。只好一个人埋头苦学。",
-        "failEffect": {"brain": 5, "hp": -5}
+        "failEffect": {"brain": 5, "hp": -3}
       },
       {
         "text": "🤷 躺平——该来的总会来",
@@ -683,7 +683,7 @@
         "cond": {},
         "text": "【D级】HR的邮件只有一行：'请于明天上午10点到HR办公室面谈。' 你看着这行字，突然觉得明天的路很长很长。",
         "type": "bad",
-        "effect": {"brain": -15, "hp": -15, "bossSatisfy": -10}
+        "effect": {"brain": -8, "hp": -8, "bossSatisfy": -10}
       }
     ]
   }

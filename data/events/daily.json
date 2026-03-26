@@ -6,7 +6,7 @@
     "system": "daily",
     "weight": 1.5,
     "filler": true,
-    "effect": {"bossSatisfy": 1}
+    "effect": {"bossSatisfy": 1, "hp": 2, "brain": 1}
   },
   "daily_ui_layout_01": {
     "month": [1, 8],
@@ -15,7 +15,7 @@
     "system": "daily",
     "weight": 1.2,
     "filler": true,
-    "effect": {"bossSatisfy": 1}
+    "effect": {"bossSatisfy": 1, "hp": 2, "brain": 1}
   },
   "daily_feature_sort_01": {
     "month": [2, 10],
@@ -24,7 +24,7 @@
     "system": "daily",
     "weight": 1,
     "filler": true,
-    "effect": {"bossSatisfy": 2, "brain": -2}
+    "effect": {"bossSatisfy": 2, "brain": -1}
   },
   "daily_feature_settings_01": {
     "month": [2, 10],
@@ -33,7 +33,7 @@
     "system": "daily",
     "weight": 1,
     "filler": true,
-    "effect": {"bossSatisfy": 2, "brain": -3}
+    "effect": {"bossSatisfy": 2, "brain": -2}
   },
   "daily_system_dialog_01": {
     "month": [3, 12],
@@ -43,7 +43,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
-    "effect": {"bossSatisfy": 3, "brain": -5, "token": -30}
+    "effect": {"bossSatisfy": 3, "brain": -3, "token": -30}
   },
   "daily_system_quest_01": {
     "month": [4, 12],
@@ -53,7 +53,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">3"},
-    "effect": {"bossSatisfy": 3, "brain": -5, "token": -25}
+    "effect": {"bossSatisfy": 3, "brain": -3, "token": -25}
   },
   "daily_arch_ecs_01": {
     "month": [7, 12],
@@ -63,7 +63,7 @@
     "weight": 0.6,
     "filler": true,
     "include": {"month": ">6"},
-    "effect": {"bossSatisfy": 4, "brain": -10, "token": -80},
+    "effect": {"bossSatisfy": 4, "brain": -4, "token": -80},
     "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
   },
   "daily_arch_network_01": {
@@ -74,7 +74,7 @@
     "weight": 0.5,
     "filler": true,
     "include": {"month": ">7"},
-    "effect": {"bossSatisfy": 5, "brain": -12, "token": -100}
+    "effect": {"bossSatisfy": 5, "brain": -5, "token": -100}
   },
   "daily_bug_crash_01": {
     "month": [2, 12],
@@ -82,19 +82,19 @@
     "type": "bad",
     "system": "daily",
     "weight": 0.8,
-    "effect": {"bossSatisfy": -2, "brain": -5},
+    "effect": {"bossSatisfy": -2, "brain": -3},
     "branch": [
       {
         "cond": {"brain": ">60"},
         "text": "快速定位到是空指针异常，十分钟修好了。老板松了口气。",
         "type": "good",
-        "effect": {"bossSatisfy": 3, "brain": -3}
+        "effect": {"bossSatisfy": 3, "brain": -2}
       },
       {
         "cond": {},
         "text": "排查了一整天才找到Bug。修了一个又冒出来两个……头要炸了。",
         "type": "bad",
-        "effect": {"bossSatisfy": -3, "brain": -8, "hp": -5}
+        "effect": {"bossSatisfy": -3, "brain": -5, "hp": -5}
       }
     ]
   },
@@ -104,19 +104,19 @@
     "type": "bad",
     "system": "daily",
     "weight": 0.6,
-    "effect": {"brain": -5},
+    "effect": {"brain": -3},
     "branch": [
       {
         "cond": {"brain": ">70"},
         "text": "用Profiler精准定位，是个Texture没释放。修完还顺便优化了加载流程。",
         "type": "good",
-        "effect": {"brain": -3, "bossSatisfy": 4}
+        "effect": {"brain": -2, "bossSatisfy": 4}
       },
       {
         "cond": {},
         "text": "折腾了两天，改了十几处代码，还是会偶尔泄漏。最终贴了个定时清理的创可贴方案。",
         "type": "bad",
-        "effect": {"brain": -8, "hp": -3, "bossSatisfy": -1}
+        "effect": {"brain": -3, "hp": -3, "bossSatisfy": -1}
       }
     ]
   },
@@ -127,7 +127,7 @@
     "system": "daily",
     "weight": 1,
     "filler": true,
-    "effect": {"brain": -2, "bossSatisfy": 1}
+    "effect": {"bossSatisfy": 1}
   },
   "daily_doc_writing_01": {
     "month": [1, 12],
@@ -136,7 +136,7 @@
     "system": "daily",
     "weight": 0.8,
     "filler": true,
-    "effect": {"brain": -3, "bossSatisfy": 2},
+    "effect": {"brain": -1, "bossSatisfy": 2},
     "postEvent": "康康发誓下次让AI写文档。等等，AI写的文档更长……"
   },
 
@@ -147,19 +147,19 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["职场", "压力"],
-    "effect": {"brain": -5, "token": -20},
+    "effect": {"brain": -2, "token": -20},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你用ARFoundation搭了个能扫二维码弹出3D模型的Demo，虽然模型是个旋转的茶壶，但客户居然觉得很酷！",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -8, "token": -30}
+        "effect": {"bossSatisfy": 5, "brain": -3, "token": -30}
       },
       {
         "cond": {},
         "text": "你疯狂搜教程，最终只做出了一个能让屏幕变绿的'AR效果'。老板表情很微妙。",
         "type": "bad",
-        "effect": {"bossSatisfy": -3, "brain": -10, "hp": -5}
+        "effect": {"bossSatisfy": -3, "brain": -4, "hp": -3}
       }
     ]
   },
@@ -178,7 +178,7 @@
         "text": "🔧 硬着头皮做",
         "hint": "正面刚，做出来就是功劳",
         "result": "你用最便宜的API加了一大堆Prompt限制，NPC终于不会教玩家造火箭了。策划满意地点点头。",
-        "effect": {"token": -40, "brain": -5, "bossSatisfy": 3}
+        "effect": {"token": -40, "brain": -3, "bossSatisfy": 3}
       },
       {
         "text": "📝 写个假AI（随机回复）",
@@ -206,19 +206,19 @@
     "weight": 0.7,
     "tags": ["技术", "压力"],
     "include": {"month": ">3"},
-    "effect": {"brain": -8},
+    "effect": {"brain": -3},
     "branch": [
       {
         "cond": {"brain": ">70"},
         "text": "你发现是个half精度的问题。改了两行代码，所有手机上都正常了。美术看你的眼神充满了崇拜。",
         "type": "good",
-        "effect": {"brain": -3, "bossSatisfy": 3, "charm": 2}
+        "effect": {"brain": -2, "bossSatisfy": 3, "charm": 2}
       },
       {
         "cond": {},
         "text": "你改了一下午，角色从紫色变成了绿色。最终你偷偷把特效关了，角色变成了纯色——'极简风美术'。",
         "type": "bad",
-        "effect": {"brain": -10, "hp": -3, "bossSatisfy": -2}
+        "effect": {"brain": -4, "hp": -3, "bossSatisfy": -2}
       }
     ]
   },
@@ -238,7 +238,7 @@
         "text": "📚 认真带教",
         "hint": "手把手教，累但靠谱",
         "result": "你花了一整天教实习生写Hello World。他的眼睛闪闪发光，但你的大脑已经宕机了。",
-        "effect": {"brain": -8, "charm": 5, "bossSatisfy": 2}
+        "effect": {"brain": -3, "charm": 5, "bossSatisfy": 2}
       },
       {
         "text": "📺 让他先看文档",
@@ -260,19 +260,19 @@
     "weight": 0.7,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -6, "token": -20},
+    "effect": {"brain": -3, "token": -20},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你用Profiler找到了罪魁祸首——一个每帧实例化500个粒子的特效。关掉后帧率飙到60。美术投来杀人的眼神。",
         "type": "good",
-        "effect": {"bossSatisfy": 4, "brain": -5}
+        "effect": {"bossSatisfy": 4, "brain": -3}
       },
       {
         "cond": {},
         "text": "你把画质选项默认改成了'极低'，帧率达标了。但玩家进去一看：'这是PS1复刻版？'",
         "type": "bad",
-        "effect": {"bossSatisfy": -2, "brain": -8, "hp": -3}
+        "effect": {"bossSatisfy": -2, "brain": -3, "hp": -3}
       }
     ]
   },
@@ -297,7 +297,7 @@
         "cond": {},
         "text": "报错弹窗后面跟着蓝屏。大老板的微笑凝固了。投资人礼貌地说'我们再考虑考虑'。你感觉自己的灵魂离开了身体。",
         "type": "bad",
-        "effect": {"bossSatisfy": -8, "hp": -10, "brain": -5}
+        "effect": {"bossSatisfy": -8, "hp": -8, "brain": -3}
       }
     ]
   },
@@ -317,7 +317,7 @@
         "text": "🕵️ 认真排查",
         "hint": "翻个底朝天，查出真凶",
         "result": "你查了Git日志和权限记录，发现是前员工离职前下载了整个资源库。老板对你的侦查能力刮目相看。",
-        "effect": {"brain": -8, "bossSatisfy": 5, "charm": 2}
+        "effect": {"brain": -5, "bossSatisfy": 5, "charm": 2}
       },
       {
         "text": "🤷 象征性查查",
@@ -337,7 +337,7 @@
     "filler": true,
     "tags": ["技术"],
     "include": {"month": ">5"},
-    "effect": {"brain": -5, "token": -15},
+    "effect": {"brain": -2, "token": -15},
     "postEvent": "你花了半天把硬编码的中文改成了key-value。然后发现还有800条……AI翻译器，启动！"
   },
 
@@ -349,19 +349,19 @@
     "weight": 0.8,
     "filler": true,
     "tags": ["技术", "搞笑"],
-    "effect": {"brain": -4},
+    "effect": {"brain": -2},
     "branch": [
       {
         "cond": {"brain": ">55"},
         "text": "调了两小时参数，终于让角色正常倒地了。不过偶尔还是会抽搐一下，你觉得这是Feature。",
         "type": "good",
-        "effect": {"brain": -3, "bossSatisfy": 2}
+        "effect": {"brain": -2, "bossSatisfy": 2}
       },
       {
         "cond": {},
         "text": "你尝试了100种参数组合，角色现在不飞天了，改成原地钻进地里。你默默关掉了物理模拟。",
         "type": "bad",
-        "effect": {"brain": -8, "hp": -2}
+        "effect": {"brain": -3, "hp": -2}
       }
     ]
   },
@@ -374,19 +374,19 @@
     "weight": 0.6,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -7, "token": -35},
+    "effect": {"brain": -3, "token": -35},
     "branch": [
       {
         "cond": {"brain": ">70"},
         "text": "你用WFC算法生成了一个看起来还不错的地牢。虽然偶尔会生成没有出口的房间，但老板已经在发朋友圈了。",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -5}
+        "effect": {"bossSatisfy": 5, "brain": -2}
       },
       {
         "cond": {},
         "text": "你的'程序化生成'实际上就是Random.Range了一堆方块。老板看了看：'这不就是Minecraft？'",
         "type": "bad",
-        "effect": {"bossSatisfy": -3, "brain": -10, "hp": -3}
+        "effect": {"bossSatisfy": -3, "brain": -4, "hp": -3}
       }
     ]
   },
@@ -399,19 +399,19 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">5"},
-    "effect": {"brain": -8, "token": -25},
+    "effect": {"brain": -3, "token": -25},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你把关键数值验算移到了服务端，还加了行为检测。外挂党发帖：'这游戏没法挂了，退坑了。' 老板破例给你点了杯奶茶。",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -5, "money": 500}
+        "effect": {"bossSatisfy": 5, "brain": -3, "money": 500}
       },
       {
         "cond": {},
         "text": "你的反外挂检测把正常玩家也ban了一半。论坛从'有人开挂'变成了'官方是外挂'。",
         "type": "bad",
-        "effect": {"bossSatisfy": -5, "brain": -10, "hp": -5}
+        "effect": {"bossSatisfy": -5, "brain": -4, "hp": -3}
       }
     ]
   },
@@ -423,19 +423,19 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["职场", "压力"],
-    "effect": {"brain": -6, "hp": -5},
+    "effect": {"brain": -3, "hp": -3},
     "branch": [
       {
         "cond": {"brain": ">60"},
         "text": "你通宵肝了一个'限时礼包+登录奖励'的活动页面，虽然UI有点糙但功能正常。运营竖起了大拇指。",
         "type": "good",
-        "effect": {"bossSatisfy": 3, "brain": -8, "hp": -8}
+        "effect": {"bossSatisfy": 3, "brain": -3, "hp": -3}
       },
       {
         "cond": {},
         "text": "你做了个弹窗写着'节日快乐！送你100钻石'。运营问：'就这？' 你：'就这。'",
         "type": "bad",
-        "effect": {"bossSatisfy": -4, "brain": -5}
+        "effect": {"bossSatisfy": -4, "brain": -3}
       }
     ]
   },
@@ -448,19 +448,19 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">6"},
-    "effect": {"brain": -10, "token": -50},
+    "effect": {"brain": -4, "token": -50},
     "branch": [
       {
         "cond": {"brain": ">75"},
         "text": "你用了abstraction layer把平台差异封装好了，每个平台只需改config。你觉得自己是架构之神。",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -8}
+        "effect": {"bossSatisfy": 5, "brain": -3}
       },
       {
         "cond": {},
         "text": "iOS端闪退，Android端发热，PC端分辨率拉伸，Switch端……连编译都没过。你开始考虑人生的意义。",
         "type": "bad",
-        "effect": {"bossSatisfy": -5, "brain": -12, "hp": -8}
+        "effect": {"bossSatisfy": -5, "brain": -5, "hp": -3}
       }
     ]
   },
@@ -479,16 +479,16 @@
         "text": "🔍 逐张审查并修改",
         "hint": "苦功夫出细活",
         "result": "你花了两天一张张审查、PS修图。最终效果不错，美术很感激，私下请你喝了杯咖啡。",
-        "effect": {"brain": -8, "hp": -5, "bossSatisfy": 3, "charm": 2}
+        "effect": {"brain": -3, "hp": -3, "bossSatisfy": 3, "charm": 2}
       },
       {
         "text": "🤖 写脚本批量筛选",
         "hint": "用代码筛图，程序员的浪漫",
         "require": {"brain": 65},
         "success": "你用OpenCV写了个自动检测异常的脚本，成功筛掉了80%的问题图。剩下的手动改改就好。",
-        "successEffect": {"brain": -5, "bossSatisfy": 4, "token": -10},
+        "successEffect": {"brain": -3, "bossSatisfy": 4, "token": -10},
         "fail": "脚本跑了一晚上，把正常的图也删了一半。你默默按下了Ctrl+Z。",
-        "failEffect": {"brain": -8, "hp": -3}
+        "failEffect": {"brain": -5, "hp": -3}
       },
       {
         "text": "📦 全部直接导入",
@@ -515,7 +515,7 @@
         "chanceBased": true,
         "branches": [
           {"chance": 30, "result": "删了之后一切正常！原来这个文件真的什么都没做。你感觉自己清理了一个都市传说。", "type": "good", "effect": {"brain": 3, "bossSatisfy": 1}},
-          {"chance": 70, "result": "游戏启动后所有NPC开始倒着走路。你花了四个小时才把文件恢复回去。注释你又加了一行：'真的不能删'。", "type": "bad", "effect": {"brain": -10, "hp": -5}}
+          {"chance": 70, "result": "游戏启动后所有NPC开始倒着走路。你花了四个小时才把文件恢复回去。注释你又加了一行：'真的不能删'。", "type": "bad", "effect": {"brain": -5, "hp": -3}}
         ]
       },
       {
@@ -529,9 +529,9 @@
         "hint": "考古式阅读，挑战智力极限",
         "require": {"brain": 75},
         "success": "你花了半天终于读懂了——这是个巧妙的初始化顺序hack。你重构了它，写了详细注释，还发了篇技术博客。",
-        "successEffect": {"brain": -5, "bossSatisfy": 3, "charm": 3},
+        "successEffect": {"brain": -3, "bossSatisfy": 3, "charm": 3},
         "fail": "你盯着代码看了两小时，越看越迷糊。最后你在注释下面加了一句：'2026年我也不知道为什么'。",
-        "failEffect": {"brain": -8}
+        "failEffect": {"brain": -5}
       }
     ]
   },
@@ -625,7 +625,7 @@
         "cond": {},
         "text": "CI流水线红了一片。你手忙脚乱地force push回去，但Git记录已经留下了你的犯罪证据。亿民发来一个微笑表情。",
         "type": "bad",
-        "effect": {"bossSatisfy": -2, "brain": -3, "yimin_rel": -2}
+        "effect": {"bossSatisfy": -2, "brain": -2, "yimin_rel": -2}
       }
     ]
   },
@@ -662,7 +662,7 @@
         "cond": {},
         "text": "仔细一看，有30个测试用例的断言写的是assert(true)。覆盖率是上去了，但啥也没测。你默默删掉了它们。",
         "type": "neutral",
-        "effect": {"bossSatisfy": 1, "brain": -2}
+        "effect": {"bossSatisfy": 1, "brain": -1}
       }
     ]
   },

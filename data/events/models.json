@@ -92,7 +92,7 @@
     "system": "model",
     "weight": 0.8,
     "include": {"model_opus46_unlocked": true},
-    "effect": {"brain": -3},
+    "effect": {"brain": -1},
     "branch": [
       {
         "cond": {"brain": ">70"},
@@ -104,7 +104,7 @@
         "cond": {},
         "text": "Opus拒绝干活了。你只好换成GPT凑合。多花了50M Token。",
         "type": "bad",
-        "effect": {"token": -50, "brain": -2}
+        "effect": {"token": -50, "brain": -1}
       }
     ]
   },
@@ -115,7 +115,7 @@
     "system": "model",
     "weight": 0.8,
     "include": {"model_cheapgpt_unlocked": true},
-    "effect": {"brain": -5, "bossSatisfy": -2},
+    "effect": {"brain": -2, "bossSatisfy": -2},
     "postEvent": "💀 一分钱一分货，这话没错。"
   },
   "model_deepseek_verbose_01": {
@@ -135,7 +135,7 @@
     "system": "model",
     "weight": 0.8,
     "include": {"model_fakeopus_unlocked": true},
-    "effect": {"brain": -8, "bossSatisfy": -3},
+    "effect": {"brain": -3, "bossSatisfy": -3},
     "postEvent": "🎪 表面功夫一流，实际质量为零。这就是'Opus平替'的真相。"
   },
   "model_war_comparison_01": {
@@ -197,7 +197,7 @@
     "system": "model",
     "weight": 0.8,
     "include": {"model_gpt54_unlocked": true},
-    "effect": {"brain": -2},
+    "effect": {"brain": -1},
     "postEvent": "🤖 康康：'老板看不懂英文注释会扣我工资的……'"
   },
   "model_gpt54_english_02": {
@@ -242,13 +242,13 @@
         "cond": {"brain": ">70"},
         "text": "你花了两小时重构后终于理解了。这算法确实精妙，只是……写法太野了。",
         "type": "good",
-        "effect": {"brain": -5, "bossSatisfy": 2}
+        "effect": {"brain": -2, "bossSatisfy": 2}
       },
       {
         "cond": {},
         "text": "你盯着屏幕看了一个小时，决定直接删掉重写。",
         "type": "bad",
-        "effect": {"brain": -8, "token": -20}
+        "effect": {"brain": -3, "token": -20}
       }
     ]
   },
@@ -259,7 +259,7 @@
     "system": "model",
     "weight": 0.7,
     "include": {"model_cheapgpt_unlocked": true},
-    "effect": {"brain": -5, "bossSatisfy": -2},
+    "effect": {"brain": -2, "bossSatisfy": -2},
     "postEvent": "💀 少爷看到代码时沉默了三十秒，然后说：'这是混淆过的吗？'"
   },
   "model_cheapgpt_save_token_01": {
@@ -269,7 +269,7 @@
     "system": "model",
     "weight": 0.7,
     "include": {"model_cheapgpt_unlocked": true},
-    "effect": {"brain": -6, "bossSatisfy": -3},
+    "effect": {"brain": -3, "bossSatisfy": -3},
     "postEvent": "💀 康康：'我让你写代码，不是让你做压缩包……'"
   },
   "model_fakeopus_caught_01": {
@@ -338,7 +338,7 @@
     "system": "model",
     "weight": 0.6,
     "include": {"model_opus46_unlocked": true},
-    "effect": {"brain": -5, "token": -15},
+    "effect": {"brain": -2, "token": -15},
     "postEvent": "🎯 康康：'我只是想删个测试数据啊！！！'"
   },
   "model_doubao_chinese_01": {
@@ -357,7 +357,7 @@
     "type": "bad",
     "system": "model",
     "weight": 0.5,
-    "effect": {"brain": -10, "hp": -5, "bossSatisfy": -3},
+    "effect": {"brain": -4, "hp": -5, "bossSatisfy": -3},
     "postEvent": "康康深刻体会到了一个事实：离开AI，他已经不会写代码了。"
   },
 
@@ -418,7 +418,7 @@
     "system": "model",
     "weight": 0.7,
     "include": {"model_opus46_unlocked": true},
-    "effect": {"brain": -5, "token": -20},
+    "effect": {"brain": -2, "token": -20},
     "postEvent": "🎯 Opus：'宁可优雅地崩溃，也不愿粗俗地运行。' 康康：'我选粗俗地运行。'"
   },
   "model_deepseek_magic_01": {
@@ -438,7 +438,7 @@
     "system": "model",
     "weight": 0.6,
     "include": {"model_deepseek_v4_unlocked": true},
-    "effect": {"token": -40, "brain": -5},
+    "effect": {"token": -40, "brain": -2},
     "postEvent": "🔮 康康：'我只想打印一行字……' DeepSeek：'已为您实现高可用分布式打印方案。'"
   },
   "model_cheapgpt_delete_01": {
@@ -448,7 +448,7 @@
     "system": "model",
     "weight": 0.7,
     "include": {"model_cheapgpt_unlocked": true},
-    "effect": {"brain": -8, "bossSatisfy": -3},
+    "effect": {"brain": -3, "bossSatisfy": -3},
     "postEvent": "💀 康康从Git记录里恢复了代码，发誓再也不让CheapGPT碰核心模块。但下个月Token不够的时候他还是会用。"
   },
   "model_cheapgpt_lorem_01": {
@@ -468,7 +468,7 @@
     "system": "model",
     "weight": 0.7,
     "include": {"model_fakeopus_unlocked": true},
-    "effect": {"brain": -5, "bossSatisfy": -4},
+    "effect": {"brain": -2, "bossSatisfy": -4},
     "postEvent": "🎪 这不是AI工具，这是广告投放平台。康康用正则批量删除了500行console.log。"
   },
   "model_fakeopus_selfpraise_01": {
@@ -478,7 +478,7 @@
     "system": "model",
     "weight": 0.6,
     "include": {"model_fakeopus_unlocked": true},
-    "effect": {"brain": -4, "bossSatisfy": -2},
+    "effect": {"brain": -2, "bossSatisfy": -2},
     "postEvent": "🎪 '品质有保障'——保障你电脑风扇转到起飞。"
   },
   "model_token_bill_shock_02": {
@@ -507,7 +507,7 @@
     "system": "model",
     "weight": 0.5,
     "include": {"model_doubao_unlocked": true, "model_gpt54_unlocked": true, "model_deepseek_v4_unlocked": true},
-    "effect": {"brain": -8, "token": -40, "bossSatisfy": -2},
+    "effect": {"brain": -3, "token": -40, "bossSatisfy": -2},
     "postEvent": "事实证明：AI协作比人类协作更难。至少人类开会还能互相甩锅，AI是直接互删代码。"
   },
   "model_passive_todo_02": {

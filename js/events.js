@@ -29,7 +29,7 @@ export class EventManager {
 
     getPool(month, state) {
         return Object.entries(this.#events).filter(([id, ev]) => {
-            if (ev.once && this.#usedEvents.has(id)) return false;
+            if (this.#usedEvents.has(id)) return false;
             const [min, max] = ev.month;
             if (month < min || month > max) return false;
             if (ev.include && Object.keys(ev.include).length > 0 && !this.#checkCondition(ev.include, state)) return false;
@@ -48,10 +48,10 @@ export class EventManager {
     }
 
     pickPrioritized(pool) {
-        const choice = pool.find(([, ev]) => ev.type === 'choice');
-        if (choice) return { id: choice[0], ev: choice[1] };
-        const special = pool.find(([, ev]) => ev.type === 'special');
-        if (special) return { id: special[0], ev: special[1] };
+        const choices = pool.filter(([, ev]) => ev.type === 'choice');
+        if (choices.length && Math.random() < 0.35) return this.pick(choices);
+        const specials = pool.filter(([, ev]) => ev.type === 'special');
+        if (specials.length && Math.random() < 0.5) return this.pick(specials);
         const nonFiller = pool.filter(([, ev]) => !ev.filler);
         if (nonFiller.length) return this.pick(nonFiller);
         return this.pick(pool);

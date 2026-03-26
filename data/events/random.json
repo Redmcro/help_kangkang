@@ -5,7 +5,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": 5, "brain": 2}
+    "effect": {"hp": 5, "brain": 3}
   },
   "random_good_cat_01": {
     "month": [1, 12],
@@ -235,7 +235,7 @@
   },
   "random_good_vending_code_01": {
     "month": [2, 12],
-    "text": "公司的自动售货机坏了，康康用编程思维三分钟修好了。行政姐姐奖励了他一箱可乐。",
+    "text": "公司的自动售货机坏了！康康用编程思维三分钟修好了。行政姐姐奖励了他一箱可乐。",
     "type": "good",
     "system": "random",
     "weight": 0.8,
@@ -337,7 +337,7 @@
         "cond": {},
         "text": "完全看不懂，但删掉之后程序崩了。只好全部保留。从此代码库里多了一个神秘模块。",
         "type": "bad",
-        "effect": {"brain": -8, "hp": -8}
+        "effect": {"brain": -5, "hp": -3}
       }
     ]
   },
@@ -385,7 +385,7 @@
     "system": "random",
     "weight": 1,
     "filler": true,
-    "effect": {"brain": 2},
+    "effect": {"brain": 3},
     "postEvent": "康康默默在下面加了一行：'2026年，它还在。'"
   },
   "random_neutral_metaverse_blackout_01": {
@@ -454,7 +454,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": 3, "brain": 2},
+    "effect": {"hp": 3, "brain": 3},
     "postEvent": "刚关掉视频，主管就走过来了。虚惊一场。"
   },
   "random_bad_req_change_01": {
@@ -549,7 +549,7 @@
         "cond": {},
         "text": "公司估值缩水了40%。你算了算手里期权的价值……还不如当初加薪来得实在。竞业协议像是把自己卖了个打折价。",
         "type": "bad",
-        "effect": {"hp": -5, "brain": -3}
+        "effect": {"hp": -5, "brain": -5}
       }
     ]
   },

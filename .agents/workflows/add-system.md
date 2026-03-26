@@ -2,54 +2,41 @@
 description: Add a new game system (events, attributes, design docs) to the project
 ---
 
-# Add New System Workflow
-
-This workflow adds a completely new game system to "帮助康康不被AI淘汰". No JS code changes needed.
+# Add New System
 
 ## Steps
 
-1. **Determine system name and key**
-   Choose a system name (e.g., "romance") and key (used for folder and file names).
+1. **Choose system key** (e.g. `romance`)
 
-2. **Create design folder**
-   Create `design/{system_key}/` with 3 files:
-
+2. **Create design folder** `design/{key}/`
    // turbo
-   - `_ai_spec.md` — System rules, mechanics, event constraints
-   - `settings.md` — Human-writable settings (pre-filled with user's input)
-   - `events_example.md` — Empty or with initial event examples
+   - `_ai_spec.md` — rules & constraints
+   - `settings.md` — ideas & config
+   - `events_example.md` — JSON examples
 
-   Follow the format of existing systems (e.g., `design/colleagues/`).
-
-3. **Register new attributes and Flags**
-   If the new system introduces new attributes or Flags:
+3. **Register attributes/Flags** (if new ones needed)
    // turbo
-   - Add attribute entries to `design/_global/attributes.md` (section 一/二)
-   - Add Flag entries to `design/_global/attributes.md` (section 六 Flag registry)
-   - Add attribute keys to `design/_global/_schema.md` (section 五)
+   - `design/_global/attributes.md` — add entries + Flag registry
+   - `design/_global/_schema.md` — add to section 五
 
-4. **Create event data file**
+4. **Create event file**
    // turbo
-   Create `data/events/{system_key}.json` with initial events (or empty `{}`).
+   `data/events/{key}.json` (start with `{}`)
 
 5. **Update manifest**
    // turbo
-   Add `"{system_key}"` to `data/events/_manifest.json` array.
+   Add `"{key}"` to `data/events/_manifest.json`
 
-6. **Update README index**
+6. **Update README**
    // turbo
-   Add the new system to the table in `design/README.md`.
+   Add to `design/README.md` table
 
-7. **Generate initial events**
-   Use the `/generate-events` workflow to create events for the new system,
-   reading from the design folder that was just created.
+7. **Generate events** via `/generate-events`
 
 ## Checklist
 
-After completion, verify:
-- [ ] `design/{system_key}/` exists with 3 files
-- [ ] New attributes/Flags are registered in `_global/attributes.md`
-- [ ] `data/events/{system_key}.json` exists
-- [ ] `_manifest.json` includes the new system
-- [ ] `README.md` index is updated
+- [ ] `design/{key}/` has 3 files
+- [ ] Attributes/Flags registered
+- [ ] `data/events/{key}.json` exists
+- [ ] `_manifest.json` updated
 - [ ] Game loads without errors

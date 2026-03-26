@@ -21,7 +21,7 @@
     "month": [1, 1],
     "text": "第一个任务：修改UI按钮颜色。简单得不能再简单了。",
     "type": "neutral",
-    "system": "daily_tasks",
+    "system": "general",
     "weight": 1,
     "filler": true,
     "effect": {"bossSatisfy": 1}
@@ -30,7 +30,7 @@
     "month": [2, 2],
     "text": "公司开通了GPT-5.4的API！康康终于用上了真正的大模型。代码质量直线上升！",
     "type": "special",
-    "system": "ai_models",
+    "system": "general",
     "weight": 100,
     "once": true,
     "effect": {"brain": 5},
@@ -40,15 +40,15 @@
     "month": [2, 12],
     "text": "产品经理又改需求了！代码质量不达标，只能加班。",
     "type": "bad",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
-    "effect": {"hp": -8, "brain": -5}
+    "effect": {"hp": -5, "brain": -3}
   },
   "coffee_break": {
     "month": [1, 12],
     "text": "去茶水间倒杯咖啡，顺便摸了五分钟鱼。精神好了不少。",
     "type": "good",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
     "filler": true,
     "effect": {"hp": 3, "brain": 2}
@@ -57,16 +57,16 @@
     "month": [3, 12],
     "text": "线上出了严重Bug！用户疯狂投诉，老板脸色铁青。必须立刻修复！",
     "type": "bad",
-    "system": "random_events",
+    "system": "general",
     "weight": 0.8,
-    "effect": {"bossSatisfy": -5, "brain": -8},
+    "effect": {"bossSatisfy": -5, "brain": -5},
     "include": {"month": ">2"}
   },
   "token_shortage": {
     "month": [3, 12],
     "text": "Token快用完了！这个月的AI使用量太大了。",
     "type": "choice",
-    "system": "economy",
+    "system": "general",
     "title": "🪙 Token告急",
     "desc": "Token余额不足，下个功能可能写不完了",
     "include": {"token": "<100"},
@@ -91,7 +91,7 @@
         "text": "💪 纯人肉写代码",
         "hint": "纯靠自己硬抗",
         "result": "不用AI了！但脑力消耗巨大...",
-        "effect": {"brain": -15}
+        "effect": {"brain": -10}
       }
     ]
   },
@@ -99,7 +99,7 @@
     "month": [3, 3],
     "text": "Opus 4.6发布了！号称最强代码模型。公司决定试用。但Token消耗惊人...",
     "type": "special",
-    "system": "ai_models",
+    "system": "general",
     "weight": 100,
     "once": true,
     "effect": {"brain": 3}
@@ -117,7 +117,7 @@
     "month": [2, 8],
     "text": "B站推荐了一个AI编程课程，据说学完能大幅提升效率。",
     "type": "choice",
-    "system": "choice_events",
+    "system": "general",
     "title": "📚 AI编程课",
     "desc": "花钱和时间学习，还是继续摸索？",
     "once": true,
@@ -144,7 +144,7 @@
     "month": [1, 12],
     "text": "又到月底了，钱包空空。今晚又得吃泡面了...",
     "type": "bad",
-    "system": "economy",
+    "system": "general",
     "weight": 1,
     "include": {"money": "<1000"},
     "effect": {"hp": -3}
@@ -153,7 +153,7 @@
     "month": [1, 12],
     "text": "今天写的代码一次跑通，零Bug！难得的好日子。",
     "type": "good",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
     "filler": true,
     "effect": {"bossSatisfy": 2, "brain": 2}
@@ -165,13 +165,13 @@
     "system": "monthly",
     "weight": 1.5,
     "once": true,
-    "effect": {"hp": -8, "brain": -5}
+    "effect": {"hp": -5, "brain": -3}
   },
   "freelance_opportunity": {
     "month": [3, 10],
     "text": "朋友介绍了一个私活，做个小程序，报酬不错。但被公司发现就麻烦了...",
     "type": "choice",
-    "system": "choice_events",
+    "system": "general",
     "title": "💼 接私活？",
     "desc": "朋友急需帮忙，报酬3000元。但公司禁止兼职...",
     "once": true,
@@ -216,7 +216,7 @@
     "month": [6, 12],
     "text": "路过楼下，看到外卖骑手在等餐。康康突然想：要是被裁了，是不是也得去送外卖？",
     "type": "neutral",
-    "system": "random_events",
+    "system": "general",
     "weight": 0.5,
     "once": true,
     "include": {"bossSatisfy": "<40"},
@@ -228,7 +228,7 @@
     "month": [1, 1],
     "text": "康康被拉进了部门群。群里消息已经999+了。他翻了翻聊天记录，发现80%是表情包大战。",
     "type": "neutral",
-    "system": "random_events",
+    "system": "general",
     "weight": 1.5,
     "once": true,
     "filler": true,
@@ -239,7 +239,7 @@
     "month": [1, 2],
     "text": "康康第一次git push到主分支——然后CI全红了。原来是忘了跑测试。Slack群里瞬间弹出12条消息。",
     "type": "bad",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
     "once": true,
     "branch": [
@@ -253,7 +253,7 @@
         "cond": {},
         "text": "康康手忙脚乱折腾了半小时才修好。全组的部署被block了30分钟。",
         "type": "bad",
-        "effect": {"brain": -8, "bossSatisfy": -3, "charm": -2}
+        "effect": {"brain": -5, "bossSatisfy": -3, "charm": -2}
       }
     ]
   },
@@ -261,7 +261,7 @@
     "month": [1, 3],
     "text": "康康第一次用公司打印机，结果同一份文件打了15份。打印机旁边堆了一摞纸，路过的同事都以为他在做传单。",
     "type": "neutral",
-    "system": "random_events",
+    "system": "general",
     "weight": 0.8,
     "once": true,
     "filler": true,
@@ -272,7 +272,7 @@
     "month": [1, 3],
     "text": "康康收到了人生第一次Code Review反馈——42条comment，每一条都以'建议'开头，但每一条都不像建议。",
     "type": "bad",
-    "system": "random_events",
+    "system": "general",
     "weight": 1.2,
     "once": true,
     "branch": [
@@ -286,7 +286,7 @@
         "cond": {},
         "text": "康康看到第20条的时候已经开始怀疑人生了。逐一修完花了两天。",
         "type": "bad",
-        "effect": {"brain": -5, "hp": -3}
+        "effect": {"brain": -3, "hp": -3}
       }
     ]
   },
@@ -294,7 +294,7 @@
     "month": [1, 2],
     "text": "康康给客户发了第一封正式邮件。发完才发现邮件签名还是默认的'Sent from my iPhone'——他用的是公司Mac。",
     "type": "neutral",
-    "system": "random_events",
+    "system": "general",
     "weight": 0.8,
     "once": true,
     "filler": true,
@@ -305,7 +305,7 @@
     "month": [1, 3],
     "text": "康康入职后第一次网购：花了800块买了一把机械键盘。接上的那一刻，打字声响彻整个办公室。",
     "type": "good",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
     "once": true,
     "effect": {"brain": 3, "money": -800, "hp": 2},
@@ -315,7 +315,7 @@
     "month": [1, 3],
     "text": "第一个Sprint的Deadline到了！产品经理问进度，康康说完成了80%。实际上他昨天才开始看需求文档。",
     "type": "bad",
-    "system": "random_events",
+    "system": "general",
     "weight": 1.5,
     "once": true,
     "branch": [
@@ -323,7 +323,7 @@
         "cond": {"brain": ">65"},
         "text": "康康疯狂输出，用AI加持通宵干完了。第二天Demo居然通过了！但身体扛不住了。",
         "type": "neutral",
-        "effect": {"bossSatisfy": 2, "hp": -10, "brain": -8}
+        "effect": {"bossSatisfy": 2, "hp": -8, "brain": -5}
       },
       {
         "cond": {},
@@ -337,7 +337,7 @@
     "month": [1, 2],
     "text": "康康发现了茶水间柜子里藏着的零食宝库——薯片、坚果、巧克力应有尽有！原来这是行政每周补货的。",
     "type": "good",
-    "system": "random_events",
+    "system": "general",
     "weight": 1,
     "once": true,
     "effect": {"hp": 5, "charm": 2},
