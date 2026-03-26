@@ -1,0 +1,715 @@
+{
+  "gf_date_casual_01": {
+    "month": [1, 12],
+    "text": "女朋友发消息：'周末出来逛逛？好久没一起出门了。'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 3,
+    "tags": ["恋爱", "约会"],
+    "include": { "gf_rel": ">30" },
+    "title": "💕 周末约会",
+    "desc": "女朋友想出去逛街。你的钱包和时间都有点紧……",
+    "choices": [
+      {
+        "text": "🛍️ '走！想去哪都行'",
+        "hint": "痛快答应，花钱哄她开心",
+        "result": "你们逛了一下午商场，她拉着你试了无数件衣服。你的脚酸了但她很开心。",
+        "effect": { "money": -800, "hp": -3, "gf_rel": 8 }
+      },
+      {
+        "text": "🌳 '去公园走走吧，不用花钱也挺好'",
+        "hint": "省钱方案，她可能喜欢也可能嫌弃",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 55, "result": "你们在公园散步聊天看日落，她靠在你肩上说：'其实这样挺好的。'", "type": "good", "effect": { "hp": 3, "gf_rel": 5 } },
+          { "chance": 45, "result": "她嘴上说好，但逛了半小时就没精神了。回家路上一直刷闺蜜的朋友圈。", "type": "bad", "effect": { "gf_rel": -3 } }
+        ]
+      },
+      {
+        "text": "😓 '这周末要加班，下次吧'",
+        "hint": "拒绝约会，她可能不高兴",
+        "result": "她沉默了一会儿，回了个'好吧'。你隐约感觉到一丝冷淡。",
+        "effect": { "gf_rel": -5 }
+      }
+    ]
+  },
+  "gf_date_dinner_01": {
+    "month": [1, 12],
+    "text": "女朋友在微信上发了一家新开的餐厅：'看起来好好吃🤤 你请我吃嘛~'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "约会"],
+    "include": { "gf_rel": ">25" },
+    "title": "🍜 餐厅约会",
+    "desc": "女朋友想去一家新开的网红餐厅。人均消费不低……",
+    "choices": [
+      {
+        "text": "🥂 '好，我订位！'",
+        "hint": "大方请客，她会很开心",
+        "result": "你们吃了一顿精致的晚餐，她拍了好多照片发朋友圈，配文'最好的男朋友❤️'。",
+        "effect": { "money": -600, "gf_rel": 8, "charm": 2 }
+      },
+      {
+        "text": "🍳 '我给你做饭吧，比外面好吃'",
+        "hint": "省钱又有心意，但要看手艺",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 50, "result": "你做了一桌子菜，虽然卖相一般但味道还行。她吃得很开心：'有进步！'", "type": "good", "effect": { "gf_rel": 6, "hp": -2 } },
+          { "chance": 50, "result": "你把厨房炸了，最后还是叫了外卖。她笑了半天：'下次别逞强了。'", "type": "neutral", "effect": { "money": -200, "gf_rel": 2 } }
+        ]
+      },
+      {
+        "text": "💸 '最近手头紧，换个便宜的？'",
+        "hint": "实话实说，但她可能不太高兴",
+        "result": "她说'行吧'，但你能感觉到气氛微妙地变了。最后去了楼下沙县。",
+        "effect": { "money": -50, "gf_rel": -3 }
+      }
+    ]
+  },
+  "gf_complain_overtime_01": {
+    "month": [2, 12],
+    "text": "女朋友打来电话：'你又加班？这个月你已经加了好几天了！你到底有没有在乎过我的感受？'",
+    "type": "bad",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "冲突"],
+    "include": { "is_overtime": true, "gf_rel": ">20" },
+    "branch": [
+      {
+        "cond": { "charm": ">60" },
+        "text": "你温柔地解释了工作情况，承诺这周末好好陪她。她叹了口气：'好吧，注意身体。'",
+        "type": "neutral",
+        "effect": { "gf_rel": -2 }
+      },
+      {
+        "cond": {},
+        "text": "你说'没办法，工作就是这样'。她直接挂了电话。",
+        "type": "bad",
+        "effect": { "gf_rel": -8, "brain": -3 }
+      }
+    ]
+  },
+  "gf_complain_notime_01": {
+    "month": [3, 12],
+    "text": "女朋友发来一段长消息：'我觉得你根本没把我放在心上，我们多久没一起吃过饭了？'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "冲突"],
+    "include": { "gf_rel": "<50" },
+    "title": "💔 女朋友的不满",
+    "desc": "她觉得你陪她的时间太少了。你怎么回应？",
+    "choices": [
+      {
+        "text": "💐 立刻买束花送过去道歉",
+        "hint": "花钱表达诚意，看能不能哄好她",
+        "result": "你捧着花出现在她楼下。她虽然还在生气，但嘴角忍不住翘起来了。",
+        "effect": { "money": -200, "gf_rel": 10 }
+      },
+      {
+        "text": "📱 打电话认真道歉，承诺改变",
+        "hint": "嘴上功夫，真诚最重要",
+        "require": { "charm": 55 },
+        "success": "你说了好多好多话，她慢慢气消了：'最后一次相信你。'",
+        "successEffect": { "gf_rel": 8 },
+        "fail": "你说了一堆，她冷冷地说：'你每次都这样说。'",
+        "failEffect": { "gf_rel": -3 }
+      },
+      {
+        "text": "🤷 '我也很累好吧，能不能互相理解一下'",
+        "hint": "可能火上浇油……",
+        "result": "她回了一句'呵呵'然后三天没理你。",
+        "effect": { "gf_rel": -10, "brain": -5 }
+      }
+    ]
+  },
+  "gf_birthday_01": {
+    "month": [6, 6],
+    "text": "今天是女朋友的生日！她一大早就发了条朋友圈：'新的一岁🎂'，然后@了你。",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 5,
+    "tags": ["恋爱", "生日"],
+    "title": "🎂 女朋友的生日",
+    "desc": "她的生日到了！你得好好表现。",
+    "choices": [
+      {
+        "text": "🎁 精心准备礼物 + 烛光晚餐",
+        "hint": "大手笔浪漫，花钱但效果拉满",
+        "result": "你订了她最喜欢的餐厅，还准备了她念叨很久的包。她感动得眼眶都红了：'你真的有在听我说话！'",
+        "effect": { "money": -3000, "gf_rel": 15, "charm": 3 }
+      },
+      {
+        "text": "🎈 自己动手做礼物 + 做饭庆祝",
+        "hint": "省钱但用心，效果取决于你的诚意",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 60, "result": "你做了一本手工相册，记录了你们在一起的每个瞬间。她翻着翻着就哭了：'你怎么这么好……'", "type": "good", "effect": { "money": -200, "gf_rel": 12, "charm": 2 } },
+          { "chance": 40, "result": "你做了一晚上的手工，最后成品有点…抽象。她笑着说'心意收到了'，但你觉得她有点失望。", "type": "neutral", "effect": { "money": -100, "gf_rel": 5 } }
+        ]
+      },
+      {
+        "text": "💳 转账 520 发个红包",
+        "hint": "简单直接，但有点敷衍",
+        "result": "她收了红包，回了句'谢谢'。你感觉到了一种客气的距离感。",
+        "effect": { "money": -520, "gf_rel": -3 }
+      },
+      {
+        "text": "🤯 完了……忘记了",
+        "hint": "天大的错误，后果难测",
+        "result": "到了晚上她问你'今天什么日子'，你才想起来。她沉默了很久，然后说：'算了。'",
+        "effect": { "gf_rel": -15, "brain": -5 }
+      }
+    ]
+  },
+  "gf_valentine_01": {
+    "month": [2, 2],
+    "text": "情人节到了！朋友圈全是秀恩爱的，女朋友频繁看手机，显然在等你的表示。",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 5,
+    "tags": ["恋爱", "节日"],
+    "title": "🌹 情人节",
+    "desc": "情人节，你得有所表示。",
+    "choices": [
+      {
+        "text": "🌹 999朵玫瑰 + 惊喜约会",
+        "hint": "顶级浪漫，但钱包会哭",
+        "result": "你抱着一大捧玫瑰出现在她公司楼下。她同事们都在起哄，她幸福得脸都红了。朋友圈获赞200+。",
+        "effect": { "money": -2000, "gf_rel": 15, "charm": 3 }
+      },
+      {
+        "text": "💝 买份小礼物，一起吃顿饭",
+        "hint": "中规中矩，不会出错",
+        "result": "你送了一条项链，吃了一顿不错的晚餐。她挽着你的手说：'其实这样就很好了。'",
+        "effect": { "money": -800, "gf_rel": 8 }
+      },
+      {
+        "text": "📱 发一条朋友圈表白",
+        "hint": "成本最低的表示，但诚意够不够？",
+        "result": "你发了条朋友圈秀恩爱。她点了赞但没评论。晚上问你'就这？'",
+        "effect": { "gf_rel": -2 }
+      }
+    ]
+  },
+  "gf_anniversary_01": {
+    "month": [8, 8],
+    "text": "今天是你们在一起的纪念日。女朋友换了一个特别的头像，微信签名改成了你们在一起的天数。",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 5,
+    "tags": ["恋爱", "纪念日"],
+    "title": "💍 恋爱纪念日",
+    "desc": "恋爱纪念日到了，她显然很重视这个日子。",
+    "choices": [
+      {
+        "text": "✨ 带她去当初表白的地方",
+        "hint": "重温旧梦，她一定会感动",
+        "result": "你们回到了第一次表白的地方。她牵着你的手说：'谢谢你还记得这里。' 你们聊了好久好久。",
+        "effect": { "money": -500, "gf_rel": 12, "hp": 3, "charm": 2 }
+      },
+      {
+        "text": "🎁 送一份用心的礼物",
+        "hint": "精挑细选，看你了不了解她",
+        "require": { "gf_rel": 50 },
+        "success": "你送了一条她收藏很久的手链。她惊喜地抱住你：'你怎么知道我想要这个！'",
+        "successEffect": { "money": -1500, "gf_rel": 10 },
+        "fail": "你送了一条围巾。她笑了笑：'嗯，挺暖和的。' 你感觉选错了。",
+        "failEffect": { "money": -300, "gf_rel": 2 }
+      },
+      {
+        "text": "🤦 '啊……今天什么日子？'",
+        "hint": "你完了",
+        "result": "她看着你的表情就知道你忘了。'我不想跟你说话。' 然后她真的三天没理你。",
+        "effect": { "gf_rel": -12, "brain": -3 }
+      }
+    ]
+  },
+  "gf_gift_demand_01": {
+    "month": [3, 12],
+    "text": "女朋友给你发了一个截图：'宝宝你看这个好好看！' 你一看价格，两千多……",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "消费"],
+    "include": { "gf_rel": ">30" },
+    "title": "👜 她想要一个礼物",
+    "desc": "女朋友暗示想要一个不便宜的东西。你怎么办？",
+    "choices": [
+      {
+        "text": "💳 '喜欢就买！'",
+        "hint": "大方买单，钱包减负",
+        "result": "她开心得跳起来，连发了三条消息感谢你。晚上还做了你爱吃的菜。",
+        "effect": { "money": -2000, "gf_rel": 10 }
+      },
+      {
+        "text": "🤔 '等我发工资就给你买'",
+        "hint": "缓兵之计，她可能接受也可能不满",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 50, "result": "她说'好吧，那你记住哦'。等到发工资那天她准时来催了。", "type": "neutral", "effect": { "gf_rel": -1 } },
+          { "chance": 50, "result": "她说'算了，不想要了'。你松了口气，但总觉得哪里不对。", "type": "neutral", "effect": { "gf_rel": -5 } }
+        ]
+      },
+      {
+        "text": "😅 '太贵了……换个差不多的？'",
+        "hint": "诚实但可能伤感情",
+        "result": "她说'行吧'，然后默默关掉了聊天窗口。你知道她不开心了。",
+        "effect": { "gf_rel": -6 }
+      }
+    ]
+  },
+  "gf_fight_01": {
+    "month": [1, 12],
+    "text": "不知道怎么回事，一件小事突然升级成了大吵。女朋友哭着说：'你根本不在乎我！'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "冲突"],
+    "include": { "gf_rel": "<45" },
+    "title": "😤 大吵一架",
+    "desc": "你们因为小事大吵了一架。该怎么收场？",
+    "choices": [
+      {
+        "text": "🙇 立刻道歉：'对不起，是我不好'",
+        "hint": "主动认错，可能化解矛盾",
+        "result": "她抽泣着说：'你每次都说对不起，但从来不改。' 不过她还是原谅你了。",
+        "effect": { "gf_rel": 5, "brain": -3 }
+      },
+      {
+        "text": "🍦 买她最爱的冰淇淋送过去",
+        "hint": "物质哄人，简单有效",
+        "result": "她一边吃冰淇淋一边擦眼泪：'你以为吃的能解决一切吗？' 但气氛确实缓和了。",
+        "effect": { "money": -50, "gf_rel": 6 }
+      },
+      {
+        "text": "😤 '你无理取闹！'",
+        "hint": "火上浇油，胆子很大",
+        "result": "她摔门走了。你们冷战了整整一周。",
+        "effect": { "gf_rel": -15, "hp": -3, "brain": -5 }
+      }
+    ]
+  },
+  "gf_coldwar_01": {
+    "month": [1, 12],
+    "text": "女朋友已经两天没理你了。你的消息全部已读不回。",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "冲突"],
+    "include": { "gf_rel": "<35" },
+    "title": "🧊 冷战进行中",
+    "desc": "她不理你了。你得想办法打破僵局。",
+    "choices": [
+      {
+        "text": "🚗 直接去找她当面聊",
+        "hint": "主动出击，看你的诚意",
+        "require": { "charm": 50 },
+        "success": "你出现在她楼下，她愣了一下，然后叹了口气让你上去了。你们聊了很久，把事情说开了。",
+        "successEffect": { "gf_rel": 10, "hp": -2 },
+        "fail": "你去找她，她说'我现在不想见你'。你在楼下站了半小时，只好回去了。",
+        "failEffect": { "gf_rel": -3, "hp": -3, "brain": -3 }
+      },
+      {
+        "text": "📝 写一封长长的道歉信",
+        "hint": "写出你的真心话",
+        "result": "你花了一晚上写了一封信发过去。过了很久她回了一句：'看到了。' 虽然只有两个字，但至少不再已读不回了。",
+        "effect": { "gf_rel": 5, "brain": -3 }
+      },
+      {
+        "text": "⏳ 继续等，给彼此空间",
+        "hint": "顺其自然，但可能越等越冷",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 40, "result": "过了几天她主动找你了：'你就不会主动吗！' 虽然又吵了一小会儿，但至少破冰了。", "type": "neutral", "effect": { "gf_rel": 2 } },
+          { "chance": 60, "result": "冷战持续了一周多。你们之间的距离感越来越明显。", "type": "bad", "effect": { "gf_rel": -8 } }
+        ]
+      }
+    ]
+  },
+  "gf_sweet_msg_01": {
+    "month": [1, 12],
+    "text": "深夜加班时，女朋友发来消息：'早点回来，我煮了你最爱的排骨汤。❤️'",
+    "type": "good",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "日常"],
+    "include": { "gf_rel": ">55" },
+    "effect": { "hp": 5, "brain": 3, "gf_rel": 3 },
+    "postEvent": "你回到家，热汤还在锅里温着。这一刻觉得所有辛苦都值得了。"
+  },
+  "gf_support_01": {
+    "month": [3, 12],
+    "text": "你最近压力很大，回到家一句话都不想说。女朋友没追问，默默给你倒了杯热水，然后坐在旁边安静地陪着你。",
+    "type": "good",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "治愈"],
+    "include": { "gf_rel": ">60", "brain": "<40" },
+    "effect": { "hp": 5, "brain": 8, "gf_rel": 5 },
+    "postEvent": "她轻声说：'不管怎样，我都在。' 你鼻子一酸。"
+  },
+  "gf_meeting_parents_01": {
+    "month": [5, 10],
+    "text": "女朋友说：'我爸妈想见见你。' 你的心跳突然加速了。",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 3,
+    "tags": ["恋爱", "剧情"],
+    "include": { "gf_rel": ">70" },
+    "title": "👨‍👩‍👦 见家长",
+    "desc": "女朋友要带你见她父母了。这可是大事！",
+    "choices": [
+      {
+        "text": "🎁 买礼物，穿正装，精心准备",
+        "hint": "第一印象很重要，花心思准备",
+        "require": { "charm": 50 },
+        "success": "你表现得体又大方，她爸爸拍了拍你的肩膀：'小伙子不错。' 她妈妈一直给你夹菜。",
+        "successEffect": { "money": -1500, "gf_rel": 12, "charm": 3 },
+        "fail": "你紧张得话都说不利索。她爸爸全程没怎么说话。她妈妈勉强笑了笑。结束后女朋友安慰你：'没事，下次会好的。'",
+        "failEffect": { "money": -1500, "gf_rel": 3, "charm": -2 },
+        "setFlag": "met_gf_parents"
+      },
+      {
+        "text": "😰 '我还没准备好……能不能晚点？'",
+        "hint": "拖延可能让她不满",
+        "result": "她有点失望：'你到底认不认真的？' 你赶紧解释了半天。",
+        "effect": { "gf_rel": -8 }
+      }
+    ]
+  },
+  "gf_jealousy_01": {
+    "month": [2, 12],
+    "text": "你跟女同事在茶水间聊了几句工作的事。女朋友不知道从哪看到了，晚上质问你：'她是谁？'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "冲突"],
+    "include": { "gf_rel": "<60" },
+    "title": "😡 醋意大发",
+    "desc": "女朋友吃醋了。你怎么解释？",
+    "choices": [
+      {
+        "text": "🤝 耐心解释：'就是同事，聊工作的'",
+        "hint": "耐心沟通，坦诚相待",
+        "result": "你把聊天记录给她看了。她嘟着嘴说：'我就是问问。' 气氛缓和了。",
+        "effect": { "gf_rel": 3, "charm": 1 }
+      },
+      {
+        "text": "😂 '你吃醋了？好可爱'",
+        "hint": "化解危机的高招……也许吧",
+        "chanceBased": true,
+        "branches": [
+          { "chance": 50, "result": "她脸红了：'谁吃醋了！哼！' 但你看得出她心情好了。", "type": "good", "effect": { "gf_rel": 5, "charm": 2 } },
+          { "chance": 50, "result": "她更生气了：'你还嬉皮笑脸！说！到底什么关系！'", "type": "bad", "effect": { "gf_rel": -5 } }
+        ]
+      },
+      {
+        "text": "😤 '你管得太多了吧'",
+        "hint": "这句话说出去就回不来了",
+        "result": "她愣住了，然后红着眼说：'好，我不管了。' 挂断电话。",
+        "effect": { "gf_rel": -10 }
+      }
+    ]
+  },
+  "gf_sick_01": {
+    "month": [1, 12],
+    "text": "女朋友发消息说她感冒了，发着低烧。'我好难受……'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "照顾"],
+    "include": { "gf_rel": ">15" },
+    "title": "🤒 她生病了",
+    "desc": "女朋友生病了，你怎么做？",
+    "choices": [
+      {
+        "text": "🏥 请假去照顾她",
+        "hint": "翘班照顾她，老板可能不太高兴",
+        "result": "你请了半天假，买了药和粥去她住的地方。她烧得迷迷糊糊的，紧紧握着你的手：'有你在真好。'",
+        "effect": { "bossSatisfy": -2, "gf_rel": 12, "hp": -3 }
+      },
+      {
+        "text": "📦 外卖送药 + 粥过去",
+        "hint": "不耽误上班又能关心到她",
+        "result": "你点了药和白粥送过去，还附了张纸条：'多喝水，早点好。' 她拍了照发给你：'收到了💕'",
+        "effect": { "money": -100, "gf_rel": 6 }
+      },
+      {
+        "text": "📱 '多喝热水'",
+        "hint": "经典直男操作，后果自负",
+        "result": "她回了一个微笑表情。你知道那不是真的微笑。",
+        "effect": { "gf_rel": -8 }
+      }
+    ]
+  },
+  "gf_breakup_warning_01": {
+    "month": [4, 12],
+    "text": "女朋友约你出来，表情很严肃：'我们好好谈谈吧。'",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 5,
+    "tags": ["恋爱", "危机"],
+    "include": { "gf_rel": "<20" },
+    "title": "💔 分手危机",
+    "desc": "她的语气从来没有这么认真过。你们之间出了问题。",
+    "choices": [
+      {
+        "text": "🙏 '给我一次机会，我会改的'",
+        "hint": "最后的挽留，看你还有没有诚意",
+        "require": { "charm": 45 },
+        "success": "你握着她的手，认真地承诺了很多。她哭着说：'我再给你最后一次机会。'",
+        "successEffect": { "gf_rel": 15, "brain": -5 },
+        "fail": "你说了很多，但她摇了摇头：'你说过太多次了。我们……还是算了吧。'",
+        "failEffect": { "gf_rel": -20, "hp": -10, "brain": -10 },
+        "setFlag": "gf_breakup_warning"
+      },
+      {
+        "text": "💍 掏出准备好的戒指",
+        "hint": "孤注一掷！但你有钱买戒指吗？",
+        "require": { "money": 5000 },
+        "success": "她完全没想到。愣了好久，然后哭了：'你这个笨蛋！' 她把戒指戴上了。",
+        "successEffect": { "money": -5000, "gf_rel": 20, "charm": 5 },
+        "fail": "你翻遍口袋才发现钱根本不够买戒指。尴尬的沉默弥漫在空气中。",
+        "failEffect": { "gf_rel": -5 }
+      },
+      {
+        "text": "😞 '也许……你说得对'",
+        "hint": "放手，也许是另一种温柔",
+        "result": "你们在沉默中坐了很久。她说：'那就这样吧。' 起身走了。你一个人坐了很久很久。",
+        "effect": { "gf_rel": -30, "hp": -8, "brain": -10 },
+        "setFlag": "gf_broke_up"
+      }
+    ]
+  },
+  "gf_propose_01": {
+    "month": [9, 12],
+    "text": "你看着存款和她的笑脸，心里萌生了一个念头：也许……是时候了？",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 4,
+    "tags": ["恋爱", "求婚"],
+    "include": { "gf_rel": ">90", "money": ">30000" },
+    "exclude": { "gf_broke_up": true },
+    "title": "💍 求婚",
+    "desc": "你攒够了钱，她也一直在你身边。要不要……求婚？",
+    "choices": [
+      {
+        "text": "💎 正式求婚！",
+        "hint": "人生大事，准备好了就上吧",
+        "result": "你选了一个她最爱的餐厅，单膝跪地掏出戒指。她捂着嘴，泪流满面：'我愿意！'全场鼓掌。",
+        "effect": { "money": -10000, "gf_rel": 15, "hp": 10, "brain": 10, "charm": 5 },
+        "setFlag": "gf_engaged"
+      },
+      {
+        "text": "🤔 '再等等，还不是时候'",
+        "hint": "谨慎一点也没错",
+        "result": "你按下了这个念头。也许等年终稳定了再说吧。",
+        "effect": {}
+      }
+    ]
+  },
+  "gf_wedding_01": {
+    "month": [10, 12],
+    "text": "订婚后，你们开始筹备婚礼。她兴奋得每天都在看婚纱照和婚礼场地。",
+    "type": "choice",
+    "system": "girlfriend",
+    "once": true,
+    "weight": 5,
+    "tags": ["恋爱", "婚礼"],
+    "include": { "gf_engaged": true },
+    "title": "💒 筹备婚礼",
+    "desc": "婚礼筹备中！预算是个大问题……",
+    "choices": [
+      {
+        "text": "🏰 '办最好的婚礼！'",
+        "hint": "梦想中的婚礼，预算拉满",
+        "result": "你们办了一场浪漫至极的婚礼。她穿着婚纱的那一刻，你觉得这辈子值了。从此每月生活费+3000。",
+        "effect": { "money": -20000, "gf_rel": 10, "hp": 5, "brain": 5, "charm": 3 },
+        "setFlag": "gf_married"
+      },
+      {
+        "text": "📸 '简单办个仪式就好'",
+        "hint": "省钱但温馨",
+        "result": "你们在小教堂办了一个简单的仪式，只请了最亲近的人。她说：'有你就够了。' 从此每月生活费+3000。",
+        "effect": { "money": -5000, "gf_rel": 5, "hp": 3 },
+        "setFlag": "gf_married"
+      },
+      {
+        "text": "⏰ '婚礼太贵了，要不明年再办？'",
+        "hint": "拖延婚礼可能让她不安",
+        "result": "她的笑容僵了一下：'好吧……那我先把婚纱收起来。' 你感觉到了她的失落。",
+        "effect": { "gf_rel": -8 }
+      }
+    ]
+  },
+  "gf_married_life_01": {
+    "month": [10, 12],
+    "text": "婚后的早晨，她在厨房哼着歌做早餐。你坐在餐桌前，觉得生活从来没有这样温馨过。",
+    "type": "good",
+    "system": "girlfriend",
+    "weight": 3,
+    "tags": ["恋爱", "婚后"],
+    "include": { "gf_married": true },
+    "effect": { "hp": 5, "brain": 5, "gf_rel": 3 },
+    "postEvent": "她端上早餐：'吃完再去上班，今天也要加油哦。' 你觉得自己有了为之奋斗的理由。"
+  },
+  "gf_movie_01": {
+    "month": [1, 12],
+    "text": "女朋友发来一张电影海报：'这个周五上映！一起看！'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "约会"],
+    "include": { "gf_rel": ">35" },
+    "title": "🎬 一起看电影",
+    "desc": "女朋友想看新上映的电影。",
+    "choices": [
+      {
+        "text": "🎬 '好！我买票'",
+        "hint": "轻松约会，花费不大",
+        "result": "你们看了场电影，她靠在你肩上看完了全程。出来后她说：'结局好感人。'",
+        "effect": { "money": -200, "gf_rel": 5, "hp": 2 }
+      },
+      {
+        "text": "📱 '在家一起看吧，我下载'",
+        "hint": "省钱宅家方案",
+        "result": "你们窝在沙发上看了一部老电影，她嫌你选的片子不好看但还是看完了。",
+        "effect": { "gf_rel": 2 }
+      },
+      {
+        "text": "🙅 '没空，你找闺蜜去吧'",
+        "hint": "拒绝她的邀请……",
+        "result": "她说'好吧'。后来你在朋友圈看到她和闺蜜的合照，笑得很开心。只是没有你。",
+        "effect": { "gf_rel": -4 }
+      }
+    ]
+  },
+  "gf_encourage_work_01": {
+    "month": [4, 12],
+    "text": "你被老板批评了，心情低落地回到家。女朋友看出你不对劲，搂着你的胳膊说：'没事的，你已经很厉害了。'",
+    "type": "good",
+    "system": "girlfriend",
+    "weight": 2,
+    "tags": ["恋爱", "治愈"],
+    "include": { "gf_rel": ">50", "bossSatisfy": "<45" },
+    "effect": { "brain": 5, "hp": 3, "gf_rel": 3 },
+    "postEvent": "她给你泡了杯热茶：'打不死你的会让你更强。' 你笑了——这鸡汤比真鸡汤管用。"
+  },
+  "gf_cooking_01": {
+    "month": [1, 12],
+    "text": "女朋友心血来潮要给你做一顿大餐。厨房传来乒乒乓乓的声音和一声惨叫。",
+    "type": "neutral",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "日常"],
+    "include": { "gf_rel": ">45" },
+    "branch": [
+      {
+        "cond": { "luck": ">55" },
+        "text": "出乎意料地好吃！她得意地说：'怎么样！' 你竖起了大拇指。",
+        "type": "good",
+        "effect": { "hp": 5, "gf_rel": 5 }
+      },
+      {
+        "cond": {},
+        "text": "味道……很有创意。你强忍着把饭吃完了，她满意地笑了。你的胃在抗议。",
+        "type": "neutral",
+        "effect": { "hp": -2, "gf_rel": 3 }
+      }
+    ]
+  },
+  "gf_savings_talk_01": {
+    "month": [6, 11],
+    "text": "女朋友拿出一个账本：'宝宝我算了一下，我们如果每月存一万，年底就能付首付了……'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "理财"],
+    "include": { "gf_rel": ">60", "money": ">10000" },
+    "title": "💰 一起存钱计划",
+    "desc": "她想和你一起为未来存钱。",
+    "choices": [
+      {
+        "text": "💪 '好！我们一起努力'",
+        "hint": "承诺存钱，但压力会更大",
+        "result": "你们约定每月各存五千。她开心地在账本上写下了第一笔。生活更拮据了，但目标更明确了。",
+        "effect": { "gf_rel": 8, "brain": 3 }
+      },
+      {
+        "text": "😅 '首付太远了，先过好眼前吧'",
+        "hint": "泼冷水可能让她失望",
+        "result": "她沉默了一会儿，把账本合上了：'也是。' 你感觉她有点失落。",
+        "effect": { "gf_rel": -5 }
+      }
+    ]
+  },
+  "gf_friend_compare_01": {
+    "month": [3, 12],
+    "text": "女朋友跟你说：'我闺蜜男朋友又给她买了个包……' 她看着你，表情意味深长。",
+    "type": "neutral",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "日常"],
+    "include": { "gf_rel": ">25" },
+    "branch": [
+      {
+        "cond": { "charm": ">65" },
+        "text": "你笑着说：'那你闺蜜有我帅吗？' 她扑哧笑了：'没你脸皮厚。'",
+        "type": "good",
+        "effect": { "gf_rel": 3 }
+      },
+      {
+        "cond": {},
+        "text": "你不知道该说什么。气氛有点尴尬。",
+        "type": "neutral",
+        "effect": { "gf_rel": -3 }
+      }
+    ]
+  },
+  "gf_late_night_call_01": {
+    "month": [1, 12],
+    "text": "凌晨一点，你还在改Bug。女朋友打来视频电话，揉着眼睛说：'你还没睡？我陪你。'",
+    "type": "good",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "治愈"],
+    "include": { "gf_rel": ">55", "is_overtime": true },
+    "effect": { "brain": 5, "hp": 2, "gf_rel": 3 },
+    "postEvent": "她在视频那头慢慢睡着了，你不忍心挂断，就让手机亮着继续改代码。"
+  },
+  "gf_walk_dog_01": {
+    "month": [1, 12],
+    "text": "路过宠物店，女朋友蹲在橱窗前看了好久那只柯基：'宝宝你看它好可爱……我们养一只好不好？'",
+    "type": "choice",
+    "system": "girlfriend",
+    "weight": 1,
+    "tags": ["恋爱", "日常"],
+    "include": { "gf_rel": ">50" },
+    "once": true,
+    "title": "🐕 她想养狗",
+    "desc": "女朋友想养一只柯基。养宠物意味着长期开销……",
+    "choices": [
+      {
+        "text": "🐶 '养！名字我都想好了'",
+        "hint": "长期开销增加，但她会很开心",
+        "result": "你们把小柯基带回了家，取名'团子'。她每天都在拍小狗的视频给你看。生活费每月+500。",
+        "effect": { "money": -3000, "gf_rel": 10, "hp": 3, "charm": 2 },
+        "setFlag": "has_dog"
+      },
+      {
+        "text": "🤔 '先想想吧，养宠物责任很大的'",
+        "hint": "理性拒绝，她可能理解",
+        "result": "她有点失望但还是点了点头：'也是……那下次路过我们再来看它。'",
+        "effect": { "gf_rel": -2 }
+      }
+    ]
+  }
+}

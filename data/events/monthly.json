@@ -72,7 +72,7 @@
     "system": "monthly",
     "weight": 80,
     "once": true,
-    "effect": {"brain": 3, "token": 50},
+    "effect": {"brain": 3, "money": 150},
     "postEvent": "康康心想：这年头，开源才是王道啊。"
   },
   "monthly_m5_tech_share": {
@@ -96,8 +96,8 @@
         "hint": "省时间，但AI痕迹可能露馅",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "AI生成的PPT意外地很专业！老板还表扬了你的效率。", "type": "good", "effect": {"bossSatisfy": 5, "token": -20}},
-          {"chance": 40, "result": "PPT里出现了'根据上下文分析'这种AI痕迹……老板皱了皱眉。", "type": "bad", "effect": {"bossSatisfy": -3, "token": -20}}
+          {"chance": 60, "result": "AI生成的PPT意外地很专业！老板还表扬了你的效率。", "type": "good", "effect": {"bossSatisfy": 5, "money": -60}},
+          {"chance": 40, "result": "PPT里出现了'根据上下文分析'这种AI痕迹……老板皱了皱眉。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -60}}
         ]
       },
       {
@@ -263,7 +263,7 @@
     "system": "monthly",
     "weight": 90,
     "once": true,
-    "effect": {"token": 100},
+    "effect": {"money": 300},
     "postEvent": "康康感叹：卷到最后连AI都开始卷价格了。"
   },
   "monthly_m10_national_day": {
@@ -358,8 +358,8 @@
         "hint": "省事但可能翻车",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "豆包写了篇完美的计划书。唯一的问题是——它建议你转行做产品经理。", "type": "good", "effect": {"bossSatisfy": 3, "token": -10}},
-          {"chance": 50, "result": "计划书里出现了'根据我的知识截止日期'这种经典AI痕迹。老板皱了眉。", "type": "bad", "effect": {"bossSatisfy": -3, "token": -10}}
+          {"chance": 50, "result": "豆包写了篇完美的计划书。唯一的问题是——它建议你转行做产品经理。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
+          {"chance": 50, "result": "计划书里出现了'根据我的知识截止日期'这种经典AI痕迹。老板皱了眉。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
         ]
       },
       {
@@ -396,13 +396,13 @@
         "text": "🧪 每个模型都试一遍，做个对比测试",
         "hint": "专业测评，费钱但能出名",
         "result": "你花了整整两天，做了一份20页的模型对比报告。发到技术群里被疯传，老板也看到了。",
-        "effect": {"brain": 8, "token": -30, "bossSatisfy": 5, "charm": 3}
+        "effect": {"brain": 8, "money": -90, "bossSatisfy": 5, "charm": 3}
       },
       {
         "text": "💰 挑最贵的用——贵的肯定好",
         "hint": "简单粗暴，贵的就是好的",
         "result": "Opus 4.6质量确实好，但Token烧得飞快。一个月的预算三天就花完了。",
-        "effect": {"token": -50, "brain": 3}
+        "effect": {"money": -150, "brain": 3}
       },
       {
         "text": "🐳 继续用豆包——免费的才是最好的",
@@ -478,13 +478,13 @@
         "text": "💎 充3000块——囤他个够",
         "hint": "大手笔囤货，安全感拉满",
         "result": "一口气充了3000块。看着账户里金灿灿的Token数字，你感受到了前所未有的安全感。",
-        "effect": {"money": -3000, "token": 200}
+        "effect": {"money": -2400}
       },
       {
         "text": "🪙 充500块意思意思",
         "hint": "理性消费，小囤一点",
         "result": "理性消费。同事们拿着'充值截图'炫耀时，你默默关上了手机。",
-        "effect": {"money": -500, "token": 50}
+        "effect": {"money": -350}
       },
       {
         "text": "🚫 一分钱不充——打折也是消费主义陷阱",

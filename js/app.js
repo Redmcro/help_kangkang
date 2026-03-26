@@ -15,13 +15,6 @@ const $ = id => document.getElementById(id);
 let endingsData = {};   // from data/endings.json
 let allEventsData = {}; // all events merged from manifest systems
 
-// ===== Module 5: Constants =====
-const TOKEN_PACKAGES = [
-    { icon: '🟢', name: '入门包', price: 500, amount: 200 },
-    { icon: '🔵', name: '标准包', price: 2000, amount: 1000 },
-    { icon: '🟣', name: '豪华包', price: 5000, amount: 3000 },
-    { icon: '🔴', name: '至尊包', price: 10000, amount: 8000 },
-];
 
 // Mirror of AI_MODELS from engine.js (read-only, for UI display only)
 const AI_MODELS_UI = {
@@ -106,8 +99,8 @@ function updateUI(state, stageName) {
     updateBar('valBoss', 'barBoss', state.bossSatisfy, 100);
     updateBar('valShaoye', 'barShaoye', state.shaoye_rel, 100);
     updateBar('valYimin', 'barYimin', state.yimin_rel, 100);
+    updateBar('valGfRel', 'barGfRel', state.gf_rel || 0, 100);
     $('valMoney').textContent = '¥' + Math.floor(state.money).toLocaleString('zh-CN');
-    $('valToken').textContent = state.token + 'M';
     const mn = { doubao: '🐳 豆包', gpt54: '🤖 GPT-5.4', opus46: '🎯 Opus 4.6', deepseek_v4: '🔮 DeepSeek V4', cheapgpt: '💀 CheapGPT', fakeopus: '🎪 FakeOpus' };
     $('currentModelDisplay').textContent = mn[state.current_model] || '🐳 豆包';
     $('stageDisplay').textContent = stageName;
@@ -122,10 +115,15 @@ function updateUI(state, stageName) {
 
 function updateBar(valId, barId, value, max) {
     const el = $(valId);
+    const bar = $(barId);
     const old = parseInt(el.textContent) || 0;
     const v = Math.round(value);
     el.textContent = v;
-    $(barId).style.width = Math.max(0, Math.min(100, (value / max) * 100)) + '%';
+    bar.style.width = Math.max(0, Math.min(100, (value / max) * 100)) + '%';
+    // Danger state: pulse when ≤ 25%
+    const isDanger = value <= max * 0.25;
+    bar.classList.toggle('stat-danger', isDanger);
+    el.classList.toggle('stat-danger', isDanger);
     if (v > old) { el.classList.remove('stat-change-down'); el.classList.add('stat-change-up'); setTimeout(() => el.classList.remove('stat-change-up'), 500); }
     else if (v < old) { el.classList.remove('stat-change-up'); el.classList.add('stat-change-down'); setTimeout(() => el.classList.remove('stat-change-down'), 500); }
 }
@@ -136,7 +134,10 @@ let lineNum = 1;
 function addEventLine(month, day, text, type) {
     const s = $('eventStream');
     const d = document.createElement('div');
-    d.className = 'ev-line ' + (type || 'neutral');
+    let cls = 'ev-line ' + (type || 'neutral');
+    // Add divider for month start lines
+    if (text.includes('月开始')) cls += ' ev-divider';
+    d.className = cls;
     d.innerHTML = `<span class="ev-prefix">${lineNum++}</span><span>${text}</span>`;
     s.appendChild(d);
     while (s.children.length > 150) s.removeChild(s.firstChild);
@@ -449,42 +450,7 @@ function closeOverlay(overlayId) {
     }
 }
 
-// ===== Module 5: Token Shop =====
 
-function renderTokenShop() {
-    const state = game.property.toJSON();
-    const money = state.money;
-    const token = state.token;
-
-    $('shopBalance').innerHTML = `
-        💰 余额: <span class="sb-money">¥${Math.floor(money).toLocaleString('zh-CN')}</span>
-        · 🪙 Token: <span class="sb-token">${token}M</span>`;
-
-    const grid = $('tokenGrid');
-    grid.innerHTML = '';
-    TOKEN_PACKAGES.forEach(pkg => {
-        const canBuy = money >= pkg.price;
-        const card = document.createElement('div');
-        card.className = 'token-card';
-        card.innerHTML = `
-            <div class="tc-icon">${pkg.icon}</div>
-            <div class="tc-name">${pkg.name}</div>
-            <div class="tc-amount">${pkg.amount >= 1000 ? (pkg.amount / 1000) + 'B' : pkg.amount + 'M'}</div>
-            <div class="tc-price">¥${pkg.price.toLocaleString('zh-CN')}</div>
-            <button class="tc-buy" ${canBuy ? '' : 'disabled'}>${canBuy ? '购买' : '余额不足'}</button>`;
-        if (canBuy) {
-            card.querySelector('.tc-buy').addEventListener('click', () => {
-                game.property.applyEffect({ money: -pkg.price });
-                game.property.set('token', game.property.get('token') + pkg.amount);
-                game.emitUI();
-                addEventLine(state.month, state.day || 1, `🪙 购买了${pkg.name}！Token +${pkg.amount}M，花费 ¥${pkg.price.toLocaleString('zh-CN')}`, 'money');
-                showToast(`🪙 ${pkg.name} 到账！+${pkg.amount}M`);
-                renderTokenShop(); // Refresh balance & button states
-            });
-        }
-        grid.appendChild(card);
-    });
-}
 
 // ===== Module 5: Model Switch =====
 
@@ -676,11 +642,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (btn && btn.dataset.speed) setSpeed(Number(btn.dataset.speed));
     });
 
-    // ===== Module 5: Button bindings =====
-    $('buyTokenBtn').addEventListener('click', () => {
-        renderTokenShop();
-        openOverlay('tokenShopOverlay');
-    });
 
     $('switchModelBtn').addEventListener('click', () => {
         renderModelSwitch();

@@ -29,7 +29,9 @@ help_kangkang/
 │   │   ├── random.json     ← 随机事件
 │   │   ├── choice.json     ← 选择事件
 │   │   ├── daily.json      ← 每日任务事件
-│   │   └── models.json     ← AI模型相关事件
+│   │   ├── models.json     ← AI模型相关事件
+│   │   ├── girlfriend.json  ← 女朋友系统事件
+│   │   └── life_expense.json ← 生活开销事件
 │   ├── achievements.json   ← ✅ 成就定义（16条）
 │   ├── endings.json        ← ✅ 结局定义（13条）
 │   ├── stages.json         ← 月份阶段配置
@@ -44,7 +46,9 @@ help_kangkang/
 │   ├── choice_events/      ← 选择事件设计
 │   ├── endings/            ← 结局系统设计
 │   ├── economy/            ← 经济系统设计
-│   └── reincarnation/      ← 转世系统设计
+│   ├── reincarnation/      ← 转世系统设计
+│   ├── girlfriend/         ← 女朋友系统设计（待创建）
+│   └── life_expense/       ← 生活开销系统设计（待创建）
 ├── .agents/workflows/      ← 工作流定义
 ├── DECREES.md              ← 皇上旨意（进度总览）
 └── README.md               ← 项目导航
@@ -157,8 +161,11 @@ help_kangkang/
 | `applyEffect(effect)` | 应用效果 `{ hp: -5, brain: 3 }` |
 | `onChange(fn)` | 注册观察者 |
 | `monthlyRecovery()` | 月初自然恢复 |
-| `monthlyExpense()` | 月初固定扣除 |
-| `toJSON()` | 导出状态快照 |
+| `monthlyExpense()` | 月初固定扣除（salary - living_cost） |
+| `isGameOver()` | 检查游戏结束条件 |
+| `isDead()` | hp/brain归零检查 |
+| `isBankrupt()` | 连续破产3月检查 |
+| `toJSON()` | 导出状态快照（含data+flags） |
 
 ---
 
@@ -167,7 +174,7 @@ help_kangkang/
 ```json
 // localStorage key: "kk2"
 { "coins": 0, "best_month": 0, "runs": 0, "wins": 0,
-  "endings_unlocked": [], "total_tokens_spent": 0, "total_bugs_fixed": 0 }
+  "endings_unlocked": [], "events_seen": [], "achievements_unlocked": [] }
 ```
 
 ---
@@ -186,7 +193,7 @@ help_kangkang/
     "type": "good",          // special/good/bad/choice/money/neutral
     "system": "colleague",   // 所属系统
     "weight": 1, "once": true, "filler": true,
-    "effect": { "hp": -5, "brain": 3, "bossSatisfy": 2 },
+    "effect": { "hp": -5, "brain": 3, "bossSatisfy": 2, "money": -500 },
     "include": {}, "exclude": {},
     "branch": [], "choices": []
   }
@@ -221,16 +228,16 @@ help_kangkang/
 │ ❤️ HP   ████░░ 78  │  // 3月15日              │
 │ 🧠 Brain ███░░ 62  │  > 少爷递来奶茶           │
 │ 💰 Money ¥12,500   │  > hp +3, brain +2       │
-│ 🪙 Token 850M      │                          │
 │ 👔 Boss  █████ 68  │                          │
 │ ── COLLEAGUES ──   │                          │
 │ 🤝 少爷  ████░ 55  │                          │
 │ 🤝 亿民  ███░░ 48  │                          │
+│ 💕 女友  ████░ 65  │                          │
 │ ── AI MODEL ──     │                          │
 │ 🐳 当前：豆包      │                          │
 ├──────────────────────────────────────────────┤
 │ TERMINAL（操作栏）                             │
-│ [⏩速度] [🛒买Token] [🔄换模型] [💼接私活]     │
+│ [⏩速度] [🔄换模型] [💼接私活]                   │
 └──────────────────────────────────────────────┘
 ```
 
@@ -278,29 +285,25 @@ help_kangkang/
 
 ## 七、TODO
 
-> 详细任务分配见 `.agents/tasks/`
+> 详细任务分配见 `DECREES.md`
 > 管理工作流见 `.agents/workflows/chief-steward.md`
 
-### 代码重构（v1→v2）
+### 代码重构（v1→v2→v3）
 - [x] `property.js` 属性系统对齐 v2（含 charm/luck 隐藏属性）
+- [x] `property.js` v3: 移除 token 属性，加入 gf_rel/has_girlfriend/married/salary/living_cost
 - [x] `engine.js` 月份循环 + luck 微调 + charm/luck 结局 + events_seen 追踪
+- [x] `engine.js` Token→Money 重构：AI模型费用直接从 money 扣除（tokenPrice机制）
+- [x] `engine.js` 每日工作简报系统
+- [x] `engine.js` 模型特殊效果 + 隐藏结局 + charm影响 + 熬夜机制 + doubao_quality_bonus
 - [x] `app.js` + `index.html` 重构为 IDE 风格 UI（基础完成，缺 Overlay 逻辑）
 - [x] `events.js` 事件筛选 month + luck 概率修正
 - [x] `save.js` 存档格式更新（含 events_seen/achievements_unlocked/音频偏好）
+- [x] `buffs.json` 对齐 v3（token→money，效果值修正）
 
-### 引擎功能缺失（待补）
-- [ ] 模型特殊效果（GAME_DESIGN §4.2，6个模型各有独特机制）
-- [ ] 隐藏结局补全（禅意程序员/豆包之神/铁三角，3/6 未实现）
-- [ ] charm 影响机制（关系修正/老板印象/私活谈判/社交事件）
-- [ ] 熬夜机制（代码质量<50 触发，连续加班计数器）
-- [ ] `doubao_quality_bonus` buff 引擎支持
-
-### 数据文件（已完成）
-- [x] `data/achievements.json` — 成就定义（16条，户部已完成）
-- [x] `data/endings.json` — 结局定义（13条，户部已完成）
-
-### 内容扩充
-- [x] 事件内容（7系统/118事件：general+colleagues+monthly+random+choice+daily+models）
+### 事件内容
+- [x] 7系统/118事件：general+colleagues+monthly+random+choice+daily+models
+- [ ] girlfriend 女朋友事件（JSON 待创建）
+- [ ] life_expense 生活开销事件（JSON 待创建）
 - [ ] 事件权重平衡调整
 
 ### UI 增强
@@ -308,9 +311,14 @@ help_kangkang/
 - [x] 月份 Tab Bar + 月度结算面板 + 代码字符雨
 - [x] Overlay HTML 结构（图鉴/结局/成就三个面板）
 - [ ] Overlay JS 逻辑（打开/关闭/渲染数据）
-- [ ] Token 购买 / 模型切换 / 接私活 UI
+- [ ] 模型切换 / 接私活 UI
+- [ ] 移动端 UI 适配
+
+### 数据文件
+- [x] `data/achievements.json` — 成就定义（16条）
+- [x] `data/endings.json` — 结局定义（13条）
 
 ### 系统扩展
-- [ ] 成就系统（achievements.json 待创建 + achievement.js 待重建）
+- [ ] 成就系统集成（achievement.js 已有，待与 UI 联动）
 - [ ] 事件收集图鉴（Overlay JS + save.js events_seen）
-- [ ] 结局收集系统（endings.json 待创建 + Overlay JS）
+- [ ] 结局收集系统（Overlay JS）

@@ -35,8 +35,8 @@
     "reward": 30, "hidden": false
   },
   "ach_token_whale": {
-    "icon": "🐋", "name": "Token巨鲸", "desc": "累计消耗1B Token",
-    "condition": { "type": "stat_gte", "stat": "total_tokens_spent", "value": 1000 },
+    "icon": "🐋", "name": "AI大户", "desc": "累计花费¥10万在AI模型上",
+    "condition": { "type": "stat_gte", "stat": "total_model_cost", "value": 100000 },
     "reward": 25, "hidden": false
   },
   "ach_money_king": {

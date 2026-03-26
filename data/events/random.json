@@ -76,7 +76,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.8,
-    "effect": {"brain": -3, "token": -10},
+    "effect": {"brain": -3, "money": -30},
     "branch": [
       {
         "cond": {"brain": ">70"},
@@ -445,7 +445,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.2,
-    "effect": {"brain": -5, "token": -20},
+    "effect": {"brain": -5, "money": -60},
     "postEvent": "康康重新组织了语言又试了三次，Token哗哗地流走了。"
   },
   "random_good_first_slack_01": {
@@ -596,7 +596,7 @@
     "weight": 0.7,
     "once": true,
     "include": {"attended_ai_conf": true},
-    "effect": {"brain": 8, "bossSatisfy": 3, "token": 50},
+    "effect": {"brain": 8, "bossSatisfy": 3, "money": 150},
     "postEvent": "模型开源当天，康康是全组第一个跑通Demo的人。老板问：'你怎么这么快？' 康康微微一笑。"
   },
 

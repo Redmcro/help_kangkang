@@ -3,7 +3,7 @@
   {"id": "buff_savings", "icon": "💳", "name": "小有积蓄", "desc": "初始金钱+3000", "cost": 50, "effect": {"money": 3000}, "unlock": "累计赚≥50000"},
   {"id": "buff_fitness", "icon": "🏋️", "name": "健身习惯", "desc": "HP+15", "cost": 40, "effect": {"hp": 15}, "unlock": "某局hp未<50"},
   {"id": "buff_memory", "icon": "🧠", "name": "过目不忘", "desc": "脑力+15", "cost": 60, "effect": {"brain": 15}, "unlock": "某局brain未<60"},
-  {"id": "buff_token", "icon": "💰", "name": "Token礼包", "desc": "初始Token+500M", "cost": 50, "effect": {"token": 500}, "unlock": "获得任一胜利结局"},
+  {"id": "buff_token", "icon": "💰", "name": "启动资金", "desc": "初始金钱+1500", "cost": 50, "effect": {"money": 1500}, "unlock": "获得任一胜利结局"},
   {"id": "buff_doubao", "icon": "🐳", "name": "豆包皮肤", "desc": "豆包质量+15", "cost": 80, "effect": {"doubao_quality_bonus": 15}, "unlock": "豆包之神结局"},
   {"id": "buff_social", "icon": "🤝", "name": "人脉王", "desc": "初始关系70，魅力+10", "cost": 40, "effect": {"shaoye_rel": 20, "yimin_rel": 20, "charm": 10}, "unlock": "铁三角结局"},
   {"id": "buff_recommend", "icon": "⚡", "name": "内部推荐", "desc": "老板满意度初始60", "cost": 70, "effect": {"bossSatisfy": 10}, "unlock": "AI大师结局"},

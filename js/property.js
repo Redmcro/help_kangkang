@@ -1,7 +1,7 @@
 // ===== PropertyManager =====
-// v2: Manages game state with observer pattern for UI updates.
-// Core attributes: hp, money, brain, token, bossSatisfy
-// Relations: shaoye_rel, yimin_rel
+// v3: Manages game state with observer pattern for UI updates.
+// Core attributes: hp, money, brain, bossSatisfy
+// Relations: shaoye_rel, yimin_rel, gf_rel
 // Hidden: charm, luck
 // Flags: dynamic boolean state (model unlocks, story flags)
 
@@ -16,12 +16,16 @@ export class PropertyManager {
             hp: 100,
             money: 5000,
             brain: 80,
-            token: 50,           // unit: M (1B = 1000M)
             bossSatisfy: 50,
 
             // Colleague relations (UI visible)
             shaoye_rel: 50,
             yimin_rel: 50,
+
+            // Girlfriend relation
+            gf_rel: 60,
+            has_girlfriend: true,
+            married: false,
 
             // Hidden attributes
             charm: 50,
@@ -38,6 +42,7 @@ export class PropertyManager {
             total_bugs: 0,
             salary: 15000,
             months_bankrupt: 0,
+            living_cost: 5000,
 
             // Story flags
             gamejam_won: false,
@@ -76,7 +81,7 @@ export class PropertyManager {
      */
     applyEffect(effect) {
         if (!effect) return;
-        const clampedKeys = ['hp', 'brain', 'bossSatisfy', 'charm', 'luck', 'shaoye_rel', 'yimin_rel'];
+        const clampedKeys = ['hp', 'brain', 'bossSatisfy', 'charm', 'luck', 'shaoye_rel', 'yimin_rel', 'gf_rel'];
         for (const [key, delta] of Object.entries(effect)) {
             if (typeof delta === 'number') {
                 let newVal = (this.#data[key] || 0) + delta;

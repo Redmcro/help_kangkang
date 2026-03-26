@@ -537,7 +537,7 @@
         "hint": "大机会也是大挑战，扛住就是英雄",
         "require": {"brain": 50},
         "success": "你花了两周搞定了迁移。模型推理成本降了60%！老板在全员会上点名表扬。",
-        "successEffect": {"brain": -10, "bossSatisfy": 8, "charm": 8, "token": 200},
+        "successEffect": {"brain": -10, "bossSatisfy": 8, "charm": 8, "money": 600},
         "fail": "你硬着头皮接下来，但部署总是出问题。最终找了外部顾问才搞定……",
         "failEffect": {"brain": -10, "bossSatisfy": -3, "charm": -3}
       },
@@ -733,7 +733,7 @@
         "text": "🎯 注册接单：先从小单做起",
         "hint": "薅AI羊毛来赚外快",
         "result": "你接了几个生成Logo和文案的小单。用AI几分钟搞定，赚了2000块。但Token也消耗了不少。",
-        "effect": {"money": 2000, "token": -100, "brain": -3}
+        "effect": {"money": 1700, "brain": -3}
       },
       {
         "text": "🏗️ 搭建自己的AI工具再接单",
@@ -1175,7 +1175,7 @@
         "text": "🔄 紧急切回其他模型：安全第一",
         "hint": "迁移有成本，但不能冒险",
         "result": "你花了一整天把项目中依赖豆包的部分全部迁移。虽然累，但老板很满意你的风险意识。",
-        "effect": {"brain": -5, "hp": -3, "bossSatisfy": 5, "token": -50}
+        "effect": {"brain": -5, "hp": -3, "bossSatisfy": 5, "money": -150}
       },
       {
         "text": "🤔 观望一下：也许只是公关危机",

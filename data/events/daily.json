@@ -43,7 +43,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
-    "effect": {"bossSatisfy": 3, "brain": -3, "token": -30}
+    "effect": {"bossSatisfy": 3, "brain": -3, "money": -90}
   },
   "daily_system_quest_01": {
     "month": [4, 12],
@@ -53,7 +53,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">3"},
-    "effect": {"bossSatisfy": 3, "brain": -3, "token": -25}
+    "effect": {"bossSatisfy": 3, "brain": -3, "money": -75}
   },
   "daily_arch_ecs_01": {
     "month": [7, 12],
@@ -63,7 +63,7 @@
     "weight": 0.6,
     "filler": true,
     "include": {"month": ">6"},
-    "effect": {"bossSatisfy": 4, "brain": -4, "token": -80},
+    "effect": {"bossSatisfy": 4, "brain": -4, "money": -240},
     "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
   },
   "daily_arch_network_01": {
@@ -74,7 +74,7 @@
     "weight": 0.5,
     "filler": true,
     "include": {"month": ">7"},
-    "effect": {"bossSatisfy": 5, "brain": -5, "token": -100}
+    "effect": {"bossSatisfy": 5, "brain": -5, "money": -300}
   },
   "daily_bug_crash_01": {
     "month": [2, 12],
@@ -147,13 +147,13 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["职场", "压力"],
-    "effect": {"brain": -2, "token": -20},
+    "effect": {"brain": -2, "money": -60},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你用ARFoundation搭了个能扫二维码弹出3D模型的Demo，虽然模型是个旋转的茶壶，但客户居然觉得很酷！",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -3, "token": -30}
+        "effect": {"bossSatisfy": 5, "brain": -3, "money": -90}
       },
       {
         "cond": {},
@@ -178,7 +178,7 @@
         "text": "🔧 硬着头皮做",
         "hint": "正面刚，做出来就是功劳",
         "result": "你用最便宜的API加了一大堆Prompt限制，NPC终于不会教玩家造火箭了。策划满意地点点头。",
-        "effect": {"token": -40, "brain": -3, "bossSatisfy": 3}
+        "effect": {"money": -120, "brain": -3, "bossSatisfy": 3}
       },
       {
         "text": "📝 写个假AI（随机回复）",
@@ -260,7 +260,7 @@
     "weight": 0.7,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -3, "token": -20},
+    "effect": {"brain": -3, "money": -60},
     "branch": [
       {
         "cond": {"brain": ">65"},
@@ -337,7 +337,7 @@
     "filler": true,
     "tags": ["技术"],
     "include": {"month": ">5"},
-    "effect": {"brain": -2, "token": -15},
+    "effect": {"brain": -2, "money": -45},
     "postEvent": "你花了半天把硬编码的中文改成了key-value。然后发现还有800条……AI翻译器，启动！"
   },
 
@@ -374,7 +374,7 @@
     "weight": 0.6,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -3, "token": -35},
+    "effect": {"brain": -3, "money": -105},
     "branch": [
       {
         "cond": {"brain": ">70"},
@@ -399,7 +399,7 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">5"},
-    "effect": {"brain": -3, "token": -25},
+    "effect": {"brain": -3, "money": -75},
     "branch": [
       {
         "cond": {"brain": ">65"},
@@ -448,7 +448,7 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">6"},
-    "effect": {"brain": -4, "token": -50},
+    "effect": {"brain": -4, "money": -150},
     "branch": [
       {
         "cond": {"brain": ">75"},
@@ -486,7 +486,7 @@
         "hint": "用代码筛图，程序员的浪漫",
         "require": {"brain": 65},
         "success": "你用OpenCV写了个自动检测异常的脚本，成功筛掉了80%的问题图。剩下的手动改改就好。",
-        "successEffect": {"brain": -3, "bossSatisfy": 4, "token": -10},
+        "successEffect": {"brain": -3, "bossSatisfy": 4, "money": -30},
         "fail": "脚本跑了一晚上，把正常的图也删了一半。你默默按下了Ctrl+Z。",
         "failEffect": {"brain": -5, "hp": -3}
       },

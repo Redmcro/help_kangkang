@@ -1,0 +1,325 @@
+{
+  "life_expense_rent_01": {
+    "month": [1, 12],
+    "text": "房东发来消息：'下个月开始房租涨500。' 康康看了看合同——确实到调价期了。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.5,
+    "once": true,
+    "include": {"month": ">4"},
+    "effect": {"money": -500},
+    "postEvent": "从此每月多了一笔固定支出。康康开始认真考虑要不要搬到远一点的地方。"
+  },
+  "life_expense_emergency_hospital_01": {
+    "month": [1, 12],
+    "text": "半夜突然牙疼！疼得在床上打滚。第二天一早直奔口腔医院，挂号费+检查+治疗，出来的时候钱包瘦了一大圈。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.8,
+    "effect": {"money": -2000, "hp": -5},
+    "postEvent": "医生说：'你这是智齿发炎，早该拔了。' 康康瑟瑟发抖地预约了下次拔牙。"
+  },
+  "life_expense_phone_broken_01": {
+    "month": [1, 12],
+    "text": "手机从桌上摔下来，屏幕裂成了蜘蛛网。没有手机的程序员就像没有翅膀的鸟——连二维码都扫不了。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.7,
+    "effect": {"money": -1500, "hp": -2},
+    "postEvent": "康康选择了第三方维修店，便宜是便宜了，但屏幕颜色总感觉有点发绿。"
+  },
+  "life_expense_double_eleven_01": {
+    "month": [11, 11],
+    "text": "双十一了！康康的购物车里躺着一个人体工学椅、三箱泡面、一个机械键盘和一台显示器。他对自己说：'这都是工作需要。'",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1.2,
+    "effect": {"money": -3000, "hp": 3, "brain": 3},
+    "postEvent": "付完款看到余额的那一刻，康康后悔了三秒钟——然后开始期待快递。"
+  },
+  "life_expense_air_conditioner_01": {
+    "month": [7, 8],
+    "text": "热到快融化了！康康终于忍不住开了空调——然后月底看到电费账单的时候也快融化了。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1,
+    "effect": {"money": -800, "hp": 3},
+    "postEvent": "室友建议轮流开空调省电。但康康加班到凌晨，轮到他的时候室友已经睡了。"
+  },
+  "life_expense_taxi_overtime_01": {
+    "month": [1, 12],
+    "text": "又加班到凌晨两点，末班地铁早没了。康康打了个车回家，看着计价器跳字跳得飞快。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1,
+    "include": {"is_overtime": true},
+    "effect": {"money": -200, "hp": -3},
+    "postEvent": "司机聊天说：'你们程序员经常这么晚啊？我开夜班都没你们辛苦。'"
+  },
+  "life_expense_water_heater_01": {
+    "month": [1, 12],
+    "text": "洗澡洗到一半，热水器罢工了！冰冷的水浇下来，康康差点在浴室跳起了踢踏舞。修理费加更换零件，又是一笔开销。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"money": -800, "hp": -5},
+    "postEvent": "维修师傅说：'这热水器该换了，都用了八年了。' 房东说：'能修就修。'"
+  },
+  "life_expense_instant_noodles_01": {
+    "month": [1, 12],
+    "text": "月底了，钱包余额告急。康康打开橱柜，翻出了三包老坛酸菜面——这就是今天的晚餐、明天的午餐和后天的早餐。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1.2,
+    "include": {"money": "<3000"},
+    "effect": {"hp": -5, "brain": -3},
+    "postEvent": "泡面虽然便宜，但连吃三顿之后，康康感觉自己也被腌入味了。"
+  },
+  "life_expense_social_wedding_01": {
+    "month": [3, 12],
+    "text": "微信收到老同学的红色炸弹——结婚请帖。这已经是今年第三个了。份子钱不能少，康康默默打开了余额。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.8,
+    "effect": {"money": -1000, "charm": 2},
+    "postEvent": "婚礼上康康被七大姑八大姨轮流问：'你什么时候结婚啊？' 康康假装接电话逃走了。"
+  },
+  "life_expense_social_wedding_02": {
+    "month": [5, 10],
+    "text": "又收到一张结婚请帖！这次是大学室友，必须到场。份子钱、车票、住宿……康康掰着手指头算了半天。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "effect": {"money": -2000, "hp": -2, "charm": 3},
+    "postEvent": "婚礼上室友说：'兄弟，下次轮到你我随双份！' 康康心想：我得先找个对象。"
+  },
+  "life_expense_glasses_01": {
+    "month": [3, 12],
+    "text": "连续盯屏幕一个月，康康发现看远处开始模糊了。去配了副新眼镜——防蓝光的。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "include": {"month": ">2"},
+    "effect": {"money": -1200, "hp": 2, "brain": 2},
+    "postEvent": "戴上新眼镜的瞬间，康康觉得世界都清晰了——然后看到了代码里一堆之前没注意到的Bug。"
+  },
+  "life_expense_annual_physical_01": {
+    "month": [6, 12],
+    "text": "公司组织年度体检。报告出来了——除了轻度脂肪肝和颈椎曲度变直，其他都正常。医生建议多运动少久坐。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.8,
+    "once": true,
+    "effect": {"hp": -2},
+    "branch": [
+      {
+        "cond": {"hp": ">60"},
+        "text": "康康的体检报告整体还算健康。医生说：'继续保持。' 松了一口气。",
+        "type": "good",
+        "effect": {"hp": 3}
+      },
+      {
+        "cond": {},
+        "text": "体检报告好几项指标飘红。医生严肃地说：'年轻人，再这样下去不行的。' 康康默默买了一盒维生素。",
+        "type": "bad",
+        "effect": {"hp": -3, "money": -300}
+      }
+    ]
+  },
+  "life_expense_food_delivery_01": {
+    "month": [1, 12],
+    "text": "连续一周叫外卖，康康看了看账单——七天花了600多块。比自己做饭贵三倍。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1,
+    "filler": true,
+    "effect": {"money": -300, "hp": -2},
+    "postEvent": "康康发誓下周一定自己做饭。——下周又叫了外卖。"
+  },
+  "life_expense_cook_save_01": {
+    "month": [1, 12],
+    "text": "康康下定决心自己做饭！买了一堆菜，花了一个小时做了两菜一汤。虽然卖相不好，但吃着特别香——关键是便宜。",
+    "type": "good",
+    "system": "economy",
+    "weight": 0.8,
+    "effect": {"money": 200, "hp": 5, "charm": 1},
+    "postEvent": "室友尝了一口说：'你这水平可以去食堂应聘了。' 康康选择理解为夸奖。"
+  },
+  "life_expense_subway_card_01": {
+    "month": [1, 12],
+    "text": "地铁卡又没钱了。康康想充50块，手一滑充了500。月底就指望这张卡活着了。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"money": -150},
+    "postEvent": "至少接下来半年不用担心坐不了地铁了。"
+  },
+  "life_expense_milk_tea_addiction_01": {
+    "month": [1, 12],
+    "text": "康康算了算这个月的奶茶消费：一杯15块，一周五杯，一个月下来……他决定假装没看到这个数字。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 1.2,
+    "filler": true,
+    "effect": {"money": -300, "hp": -1},
+    "postEvent": "第二天路过奶茶店，康康告诉自己'这是最后一杯'——跟昨天说的一样。"
+  },
+  "life_expense_winter_clothes_01": {
+    "month": [10, 12],
+    "text": "突然降温了！康康翻遍衣柜发现去年的羽绒服已经破了个洞。只好紧急网购了一件，还加了运费。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.8,
+    "effect": {"money": -800, "hp": 3},
+    "postEvent": "新羽绒服穿上的第一天就被地铁门夹了一下。康康心疼得捂住了胸口。"
+  },
+  "life_expense_pet_cat_01": {
+    "month": [3, 12],
+    "text": "路边捡到一只小奶猫，眼巴巴地看着康康。他没忍住带回了家——然后猫粮、猫砂、疫苗、驱虫的账单接踵而来。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.5,
+    "once": true,
+    "effect": {"money": -1500, "hp": 8, "charm": 3},
+    "postEvent": "虽然钱包出血了，但每天回家被一团毛球蹭腿的感觉，无价。",
+    "setFlag": "has_pet_cat"
+  },
+  "life_expense_pet_cat_monthly_01": {
+    "month": [1, 12],
+    "text": "猫主子的口粮告急了。康康比较了十几个品牌，最后选了个性价比最高的——猫才不管你买的什么牌子，它只在乎你铲屎及不及时。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 1,
+    "include": {"has_pet_cat": true},
+    "filler": true,
+    "effect": {"money": -500, "hp": 3},
+    "postEvent": "猫吃饱了在键盘上走了一圈，帮康康写了一行乱码。"
+  },
+  "life_expense_gym_membership_01": {
+    "month": [1, 6],
+    "text": "康康一时冲动办了张年卡，心想：'新的一年一定要健身！'",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"money": -2000, "hp": 5},
+    "branch": [
+      {
+        "cond": {"hp": ">60"},
+        "text": "康康真的坚持去了！每周三次，一个月下来感觉精力充沛了不少。年卡值了。",
+        "type": "good",
+        "effect": {"hp": 8, "charm": 3}
+      },
+      {
+        "cond": {},
+        "text": "办完卡去了两次就再也没去过。年卡变成了'年度最贵洗澡卡'。",
+        "type": "bad",
+        "effect": {"hp": -2}
+      }
+    ]
+  },
+  "life_expense_laptop_repair_01": {
+    "month": [4, 12],
+    "text": "个人笔记本突然黑屏了！送去检修发现是主板坏了。公司电脑不能带回家，这意味着晚上没法自己学习了。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.5,
+    "once": true,
+    "effect": {"money": -2500, "brain": -3},
+    "postEvent": "修好之后康康做的第一件事是备份所有数据。亡羊补牢。"
+  },
+  "life_expense_lucky_refund_01": {
+    "month": [3, 12],
+    "text": "之前网购的一件商品发错货了，商家不仅补发了正确的，还退了全款表示歉意。白嫖了一件！",
+    "type": "good",
+    "system": "economy",
+    "weight": 0.5,
+    "effect": {"money": 300, "luck": 3},
+    "postEvent": "康康觉得今天运气不错，顺手买了张彩票——没中。"
+  },
+  "life_expense_cashback_01": {
+    "month": [6, 12],
+    "text": "信用卡积分到期提醒！康康赶紧登录兑换，换了一堆超市购物券。虽然都是小钱，但蚊子腿也是肉。",
+    "type": "good",
+    "system": "economy",
+    "weight": 0.7,
+    "filler": true,
+    "effect": {"money": 200},
+    "postEvent": "康康开始认真研究各种返现和积分薅羊毛策略。"
+  },
+  "life_expense_parents_birthday_01": {
+    "month": [1, 12],
+    "text": "妈妈生日快到了。康康想了很久，最后给她买了一部新手机——旧手机卡到打开微信要等半分钟。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"money": -2000, "hp": 5, "charm": 3},
+    "postEvent": "妈妈收到后打了二十分钟电话夸手机好用，然后说：'别乱花钱，攒着娶媳妇。'"
+  },
+  "life_expense_fridge_empty_01": {
+    "month": [1, 12],
+    "text": "打开冰箱——只剩一瓶酱油和半块过期奶酪。康康叹了口气，穿上拖鞋去超市大采购。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 1,
+    "filler": true,
+    "effect": {"money": -400, "hp": 3},
+    "postEvent": "超市收银员看着他满满的购物车说：'一个人住吧？' 康康：'你怎么知道的？' '因为你买了四种口味的速冻水饺。'"
+  },
+  "life_expense_utility_bill_shock_01": {
+    "month": [1, 12],
+    "text": "水电账单不知不觉涨了不少——可能跟康康晚上开着电脑和灯练代码到凌晨有关。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"money": -300},
+    "postEvent": "康康开始养成随手关灯的习惯——除了自己房间的灯。"
+  },
+  "life_expense_friend_borrow_01": {
+    "month": [3, 12],
+    "text": "大学室友发来消息：'兄弟，手头紧，能借1000块吗？下个月一定还。' 康康犹豫了10秒钟。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"money": -1000, "charm": 3},
+    "branch": [
+      {
+        "cond": {"luck": ">50"},
+        "text": "室友下个月真的还了，还多转了100块说请你喝奶茶。世界上还是好人多。",
+        "type": "good",
+        "effect": {"money": 1100, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "到了下个月，室友说：'再宽限几天行吗？' 然后就没有然后了。康康把这笔钱记在了人生经验的账本上。",
+        "type": "bad",
+        "effect": {"charm": -2}
+      }
+    ]
+  },
+  "life_expense_haircut_01": {
+    "month": [1, 12],
+    "text": "头发长到扎眼了，康康去了楼下理发店。Tony老师热情推荐：'做个造型吧，帅哥！' 康康说只剪短一点——出来还是花了200。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"money": -200, "charm": 2},
+    "postEvent": "少爷第二天看到康康说：'换发型了？看着精神多了。' 200块花得值了。"
+  },
+  "life_expense_emergency_lockout_01": {
+    "month": [1, 12],
+    "text": "下班到门口——钥匙忘在公司了！康打电话叫了开锁师傅，蹲在楼道等了四十分钟。",
+    "type": "bad",
+    "system": "economy",
+    "weight": 0.6,
+    "effect": {"money": -300, "hp": -3},
+    "postEvent": "第二天康康买了个智能门锁，刷手机就能开门。——又是一笔大开销。"
+  }
+}

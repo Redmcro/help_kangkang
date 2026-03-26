@@ -64,27 +64,37 @@
   },
   "token_shortage": {
     "month": [3, 12],
-    "text": "Token快用完了！这个月的AI使用量太大了。",
+    "text": "模型费用快撑不住了！这个月的AI使用量太大，账户余额告急。",
     "type": "choice",
     "system": "general",
-    "title": "🪙 Token告急",
-    "desc": "Token余额不足，下个功能可能写不完了",
-    "include": {"token": "<100"},
+    "title": "💸 余额告急",
+    "desc": "模型费用快撑不住了",
+    "include": {"money": "<300"},
     "choices": [
       {
-        "text": "🛒 买入门包 (¥500 → 200M)",
-        "hint": "钱能解决的问题都不是问题",
-        "require": {"money": 500},
-        "success": "买了200M Token，够撑一阵了",
-        "successEffect": {"money": -500, "token": 200},
-        "fail": "钱不够买Token...",
-        "failEffect": {}
+        "text": "💼 接个私活赚点外快",
+        "hint": "用AI帮忙接单，赚点钱补贴模型费",
+        "chanceBased": true,
+        "branches": [
+          {
+            "chance": 75,
+            "result": "用AI接了个小单，赚了500块，够续命一阵了。",
+            "effect": {"money": 500, "brain": -3},
+            "type": "money"
+          },
+          {
+            "chance": 25,
+            "result": "接了个单子但需求太复杂，折腾半天没赚到钱。",
+            "effect": {"brain": -5, "hp": -3},
+            "type": "bad"
+          }
+        ]
       },
       {
-        "text": "🐳 切换到豆包省Token",
+        "text": "🐳 切换到豆包省钱",
         "hint": "便宜够用，凑合着来",
         "result": "切回豆包，虽然质量差点但省钱",
-        "effect": {"token": 30},
+        "effect": {"money": 90},
         "setFlag": "switched_to_doubao"
       },
       {

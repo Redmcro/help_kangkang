@@ -76,11 +76,7 @@
           <span class="stat-name">Money</span>
           <span class="stat-val stat-val-money" id="valMoney">¥5,000</span>
         </div>
-        <div class="stat-row">
-          <span class="stat-icon">🪙</span>
-          <span class="stat-name">Token</span>
-          <span class="stat-val stat-val-token" id="valToken">50M</span>
-        </div>
+
         <div class="stat-row">
           <span class="stat-icon">👔</span>
           <span class="stat-name">Boss</span>
@@ -90,7 +86,7 @@
       </div>
 
       <div class="explorer-section">
-        <div class="section-header">🤝 COLLEAGUES</div>
+        <div class="section-header">🤝 RELATIONS</div>
         <div class="stat-row">
           <span class="stat-icon">🧪</span>
           <span class="stat-name">少爷</span>
@@ -102,6 +98,12 @@
           <span class="stat-name">亿民</span>
           <div class="stat-bar-wrap"><div class="stat-bar stat-bar-rel" id="barYimin"></div></div>
           <span class="stat-val" id="valYimin">50</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">💕</span>
+          <span class="stat-name">女友</span>
+          <div class="stat-bar-wrap"><div class="stat-bar stat-bar-gf" id="barGfRel"></div></div>
+          <span class="stat-val" id="valGfRel">60</span>
         </div>
       </div>
 
@@ -135,9 +137,8 @@
   <div class="terminal-bar">
     <div class="terminal-title">TERMINAL</div>
     <div class="game-actions" id="gameActions">
-      <button class="action-btn" id="buyTokenBtn" title="购买Token">🪙 买Token</button>
-      <button class="action-btn" id="switchModelBtn" title="切换模型">🤖 换模型</button>
-      <button class="action-btn" id="sideGigBtn" title="接私活">💼 接私活</button>
+      <button class="action-btn" id="switchModelBtn" title="切换模型">🤖 <span class="action-text">换模型</span></button>
+      <button class="action-btn" id="sideGigBtn" title="接私活">💼 <span class="action-text">接私活</span></button>
     </div>
     <div class="terminal-actions">
       <div class="speed-ctrl" id="speedCtrl">
@@ -206,19 +207,7 @@
   </div>
 </div>
 
-<!-- Token Shop -->
-<div class="overlay" id="tokenShopOverlay">
-  <div class="overlay-content">
-    <div class="overlay-header">
-      <h2>🪙 Token 商店</h2>
-      <button class="overlay-close" data-close="tokenShopOverlay">✕</button>
-    </div>
-    <div class="overlay-body">
-      <div class="shop-balance" id="shopBalance"></div>
-      <div class="token-grid" id="tokenGrid"></div>
-    </div>
-  </div>
-</div>
+
 
 <!-- Model Switch -->
 <div class="overlay" id="modelSwitchOverlay">

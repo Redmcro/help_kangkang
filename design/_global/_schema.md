@@ -33,18 +33,18 @@
     "weight": 1,                // 权重（默认1，越大越容易被选中）
     "once": true,               // 是否只触发一次（默认 false）
     "filler": true,             // 填充事件标记（优先级最低）
-    "system": "colleague",      // 所属系统标记（colleague/model/economy/daily/random/choice/monthly）
+    "system": "colleague",      // 所属系统标记（colleague/model/economy/daily/random/choice/monthly/girlfriend/life_expense）
     "tags": ["职场", "社交"],    // 主题标签，方便按主题筛选和平衡
 
     // ========== 可选：效果 ==========
     "effect": {                 // 对属性的直接修改
       "hp": -5,
-      "money": 1000,
+      "money": -1000,
       "brain": 3,
-      "token": 100,             // 单位 M
       "bossSatisfy": 2,
       "shaoye_rel": 5,          // 同事关系值
-      "yimin_rel": -3
+      "yimin_rel": -3,
+      "gf_rel": 5               // 女朋友关系值
     },
     "postEvent": "补充文本",     // 事件后追加显示
 
@@ -163,14 +163,16 @@
 | `hp` | 生命值 | 0–100 |
 | `money` | 金钱（元） | 0–∞ |
 | `brain` | 脑力 | 0–100 |
-| `token` | Token（M为单位） | 0–∞ |
 | `bossSatisfy` | 老板满意度 | 0–100 |
 
-### 同事关系
+### 关系属性
 | 键名 | 说明 | 范围 |
 |:---|:---|:---|
 | `shaoye_rel` | 少爷关系 | 0–100 |
 | `yimin_rel` | 亿民关系 | 0–100 |
+| `gf_rel` | 女朋友好感 | 0–100 |
+| `has_girlfriend` | 是否有女朋友 | bool |
+| `married` | 是否已婚 | bool |
 
 ### 隐藏属性（UI 不显示，影响事件结果）
 | 键名 | 说明 | 范围 |

@@ -289,16 +289,16 @@
   },
   "colleague_yimin_token_share_01": {
     "month": [8, 12],
-    "text": "亿民说他发现了一个API代理渠道，Token价格便宜很多：'你要不要也用？'",
+    "text": "亿民说他发现了一个API代理渠道，模型费用便宜很多：'你要不要也用？'",
     "type": "good",
     "system": "colleague",
     "once": true,
     "weight": 2,
     "tags": ["经济", "社交"],
     "include": { "yimin_rel": ">70", "yimin_ai_convert": true },
-    "effect": { "yimin_rel": 5, "token": 100 },
-    "setFlag": "yimin_token_discount",
-    "postEvent": "从此Token购买打8折。亿民对AI的态度变化真大。"
+    "effect": { "yimin_rel": 5, "money": 300 },
+    "setFlag": "yimin_model_discount",
+    "postEvent": "从此模型使用费打8折。亿民对AI的态度变化真大。"
   },
   "colleague_yimin_fired_risk_01": {
     "month": [8, 12],
