@@ -36,7 +36,8 @@ This workflow generates game events for "帮助康康不被AI淘汰" by using th
    - Have unique IDs following the naming convention: `{system}_{desc}_{seq}`
    - Include all required fields: `month`, `text`
    - Use only valid attribute keys from `_global/attributes.md`
-   - Have a `system` field matching the target system
+   - Have a `system` field matching the target system. Standard values:
+     - `general` / `colleague` / `monthly` / `random` / `choice` / `daily` / `model`
    - Have reasonable effect values (single change ±20 max)
    - Choice events must have `title`, `desc`, and `choices`
    - **Choice hints must be descriptive, NOT numeric** (see `_schema.md` hint rules)
