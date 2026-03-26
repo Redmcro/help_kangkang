@@ -23,6 +23,11 @@
     <div class="buff-grid" id="buffGrid"></div>
   </section>
   <button class="start-btn" id="startBtn">🚀 开始新的一年</button>
+  <div class="start-actions">
+    <button class="start-sub-btn" id="galleryBtn">📖 事件图鉴</button>
+    <button class="start-sub-btn" id="endingsBtn">🏆 结局收集</button>
+    <button class="start-sub-btn" id="achieveBtn">⭐ 成就</button>
+  </div>
   <p class="best-record" id="bestRecord"></p>
 </div></div>
 
@@ -135,6 +140,10 @@
         <button data-speed="800" class="active">▶▶ 正常</button>
         <button data-speed="300">▶▶▶ 快速</button>
       </div>
+      <div class="audio-ctrl">
+        <button class="audio-btn" id="audioToggle" title="音效开关">🔊</button>
+        <button class="audio-btn" id="bgmToggle" title="BGM开关">🎵</button>
+      </div>
     </div>
   </div>
 
@@ -153,12 +162,52 @@
   </div>
 </div></div>
 
-<!-- ===== TOAST ===== -->
+<!-- ===== OVERLAYS ===== -->
+
+<!-- Event Gallery -->
+<div class="overlay" id="galleryOverlay">
+  <div class="overlay-content">
+    <div class="overlay-header">
+      <h2>📖 程序员生存图鉴</h2>
+      <button class="overlay-close" data-close="galleryOverlay">✕</button>
+    </div>
+    <div class="overlay-tabs" id="galleryTabs"></div>
+    <div class="overlay-progress" id="galleryProgress"></div>
+    <div class="overlay-body" id="galleryBody"></div>
+  </div>
+</div>
+
+<!-- Endings Collection -->
+<div class="overlay" id="endingsOverlay">
+  <div class="overlay-content">
+    <div class="overlay-header">
+      <h2>🏆 结局收集</h2>
+      <button class="overlay-close" data-close="endingsOverlay">✕</button>
+    </div>
+    <div class="overlay-progress" id="endingsProgress"></div>
+    <div class="overlay-body" id="endingsBody"></div>
+  </div>
+</div>
+
+<!-- Achievements -->
+<div class="overlay" id="achieveOverlay">
+  <div class="overlay-content">
+    <div class="overlay-header">
+      <h2>⭐ 成就</h2>
+      <button class="overlay-close" data-close="achieveOverlay">✕</button>
+    </div>
+    <div class="overlay-progress" id="achieveProgress"></div>
+    <div class="overlay-body" id="achieveBody"></div>
+  </div>
+</div>
+
+<!-- Achievement Toast -->
 <div class="achievement-toast" id="achieveToast">
   <div class="at-icon">🏆</div>
   <div class="at-info">
-    <div class="at-title">提示</div>
+    <div class="at-title">成就解锁！</div>
     <div class="at-name" id="achieveName"></div>
+    <div class="at-reward" id="achieveReward"></div>
   </div>
 </div>
 

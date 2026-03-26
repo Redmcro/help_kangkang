@@ -1,0 +1,172 @@
+{
+  "model_unlock_doubao": {
+    "month": [1, 1],
+    "text": "IT部门配置好了开发环境。电脑上只有一个AI工具——豆包。🐳 '先用着吧，'IT小哥说，'其他的要审批。'",
+    "type": "special",
+    "system": "model",
+    "weight": 100,
+    "once": true,
+    "effect": {"token": 100},
+    "setFlag": "model_doubao_unlocked",
+    "postEvent": "康康打开豆包，试了下。嗯，至少中文注释写得不错。"
+  },
+  "model_unlock_gpt54": {
+    "month": [2, 2],
+    "text": "公司终于批下来了GPT-5.4的API权限！🤖 据说全世界最强的代码模型——但也是最贵的。",
+    "type": "special",
+    "system": "model",
+    "weight": 100,
+    "once": true,
+    "effect": {"brain": 5},
+    "setFlag": "model_gpt54_unlocked",
+    "postEvent": "康康用GPT-5.4重写了之前豆包写的代码，质量直接翻倍。但看了眼Token消耗……心在滴血。"
+  },
+  "model_unlock_opus46": {
+    "month": [3, 3],
+    "text": "Anthropic发布了Opus 4.6！🎯 号称'最强代码推理模型'。公司第一时间接入了API。",
+    "type": "special",
+    "system": "model",
+    "weight": 100,
+    "once": true,
+    "effect": {"brain": 5},
+    "setFlag": "model_opus46_unlocked",
+    "postEvent": "康康试了一下，Opus写的代码确实惊艳。但它偶尔会拒绝生成，说'这段代码可能不太合适…' 有点矫情。"
+  },
+  "model_unlock_cheapgpt": {
+    "month": [3, 3],
+    "text": "同事偷偷分享了一个'便宜GPT' API地址。💀 价格只有官方的1/10，来源不明。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 80,
+    "once": true,
+    "effect": {},
+    "setFlag": "model_cheapgpt_unlocked",
+    "postEvent": "康康试了试，速度很快但输出质量……emmm。60%的概率猜不到它在写什么。"
+  },
+  "model_unlock_deepseek_v4": {
+    "month": [4, 4],
+    "text": "DeepSeek V4正式发布！🔮 国产开源大模型，Token价格只有GPT的1/5。技术群炸了。",
+    "type": "special",
+    "system": "model",
+    "weight": 100,
+    "once": true,
+    "effect": {"token": 80},
+    "setFlag": "model_deepseek_v4_unlocked",
+    "postEvent": "康康心想：性价比这么高，就是偶尔输出一堆废话有点烦。"
+  },
+  "model_unlock_fakeopus": {
+    "month": [5, 5],
+    "text": "淘宝卖家私信你：'Opus平替，同等质量1/7价格，免翻墙！' 🎪 看起来很可疑但价格真的很诱人。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 80,
+    "once": true,
+    "effect": {},
+    "setFlag": "model_fakeopus_unlocked",
+    "postEvent": "买了试试？反正不贵。至于质量……代码跑起来才知道。"
+  },
+  "model_doubao_surprise_01": {
+    "month": [1, 6],
+    "text": "豆包今天超常发挥！生成的代码逻辑清晰，结构优雅，连亿民都说写得好。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.8,
+    "include": {"model_doubao_unlocked": true},
+    "effect": {"brain": 5, "bossSatisfy": 3},
+    "postEvent": "🐳 豆包偶尔也有开窍的时候。"
+  },
+  "model_gpt54_stable_01": {
+    "month": [2, 12],
+    "text": "用GPT-5.4连续写了一天代码，零Bug零偏差。稳如老狗。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"model_gpt54_unlocked": true},
+    "effect": {"bossSatisfy": 3, "brain": 2},
+    "postEvent": "🤖 贵有贵的道理。但钱包在哭。"
+  },
+  "model_opus_refuse_01": {
+    "month": [3, 12],
+    "text": "Opus 4.6拒绝生成代码了：'我认为这段代码可能存在设计问题，建议重新思考架构。'",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.8,
+    "include": {"model_opus46_unlocked": true},
+    "effect": {"brain": -3},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "仔细想了想……Opus说得有道理。重构后代码确实更好了。",
+        "type": "good",
+        "effect": {"brain": 5, "bossSatisfy": 2}
+      },
+      {
+        "cond": {},
+        "text": "Opus拒绝干活了。你只好换成GPT凑合。多花了50M Token。",
+        "type": "bad",
+        "effect": {"token": -50, "brain": -2}
+      }
+    ]
+  },
+  "model_cheapgpt_garbage_01": {
+    "month": [3, 12],
+    "text": "CheapGPT输出了一段完全无关的代码。你让它写排序算法，它给你写了个天气预报API调用。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.8,
+    "include": {"model_cheapgpt_unlocked": true},
+    "effect": {"brain": -5, "bossSatisfy": -2},
+    "postEvent": "💀 一分钱一分货，这话没错。"
+  },
+  "model_deepseek_verbose_01": {
+    "month": [4, 12],
+    "text": "DeepSeek V4洋洋洒洒写了500行代码……有用的只有50行。剩下全是冗余封装和无用注释。",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.8,
+    "include": {"model_deepseek_v4_unlocked": true},
+    "effect": {"token": -30, "brain": -2},
+    "postEvent": "🔮 删代码比写代码更累。"
+  },
+  "model_fakeopus_trap_01": {
+    "month": [5, 12],
+    "text": "FakeOpus生成的代码看起来很专业，变量名规范、注释齐全……但逻辑完全是错的。测试全部失败。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.8,
+    "include": {"model_fakeopus_unlocked": true},
+    "effect": {"brain": -8, "bossSatisfy": -3},
+    "postEvent": "🎪 表面功夫一流，实际质量为零。这就是'Opus平替'的真相。"
+  },
+  "model_war_comparison_01": {
+    "month": [6, 12],
+    "text": "技术群里又在吵AI模型哪个好。有人说GPT稳，有人说Opus强，有人说DeepSeek性价比高……",
+    "type": "neutral",
+    "system": "model",
+    "weight": 0.5,
+    "filler": true,
+    "effect": {"brain": 1},
+    "postEvent": "康康默默关掉群消息，该用哪个用哪个。"
+  },
+  "model_doubao_update_01": {
+    "month": [6, 12],
+    "text": "豆包大更新！新版本在代码能力上有明显提升，不再是'只会写Hello World'了。",
+    "type": "good",
+    "system": "model",
+    "weight": 0.6,
+    "once": true,
+    "include": {"model_doubao_unlocked": true},
+    "effect": {"brain": 3},
+    "postEvent": "🐳 豆包说：'不要小瞧我哦！' 这次康康信了。"
+  },
+  "model_token_burn_01": {
+    "month": [3, 12],
+    "text": "这个月Token消耗速度惊人！一个复杂功能就烧掉了100M Token。",
+    "type": "bad",
+    "system": "model",
+    "weight": 0.7,
+    "include": {"token": "<150"},
+    "effect": {"token": -50},
+    "postEvent": "康康开始认真研究如何优化Prompt，减少无效消耗。"
+  }
+}

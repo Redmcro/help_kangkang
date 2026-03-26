@@ -285,25 +285,29 @@ help_kangkang/
 
 ## 七、TODO
 
+> 详细任务分配见 [TODO.md](./TODO.md)
+
 ### 代码重构（v1→v2）
-- [ ] `property.js` 属性系统对齐 v2（hp/money/brain/token/bossSatisfy）
-- [ ] `engine.js` 从年龄循环改为月份循环
-- [ ] `app.js` + `index.html` 重构为 IDE 风格 UI
-- [ ] `events.js` 事件筛选从 `age` 改为 `month`
-- [ ] `save.js` 存档格式更新
+- [x] `property.js` 属性系统对齐 v2（含 charm/luck 隐藏属性）
+- [x] `engine.js` 从年龄循环改为月份循环（基础完成，缺 luck 修正和 charm/luck 结局）
+- [x] `app.js` + `index.html` 重构为 IDE 风格 UI（基础完成，缺 Overlay 逻辑）
+- [x] `events.js` 事件筛选从 `age` 改为 `month`（完成，缺 luck 概率修正）
+- [/] `save.js` 存档格式更新（被回退，需恢复 events_seen/achievements_unlocked/audio）
 
 ### 内容扩充
-- [ ] 各系统事件填充（用 `/generate-events` 工作流）
+- [/] 事件内容（当前仅 general+colleagues 两个文件，需补 monthly/random/choice/daily/models）
 - [ ] 事件权重平衡调整
 
 ### UI 增强
 - [x] IDE 主题实现（Dracula 配色）
 - [x] 月份 Tab Bar
-- [x] 月度结算面板（Git diff 风格）
+- [x] 月度结算面板
 - [x] 代码字符雨背景
+- [x] Overlay HTML 结构（图鉴/结局/成就 三个面板）
+- [ ] Overlay JS 逻辑（打开/关闭/渲染数据）
 
 ### 系统扩展
-- [x] 成就系统（16个成就，含隐藏）
-- [x] 事件收集图鉴（按系统分Tab + 进度条）
-- [x] 结局收集系统（13个结局，分类展示）
-- [x] 音效/BGM（Web Audio API 合成，9种音效 + 生成式BGM）
+- [/] 成就系统（数据 achievements.json 就绪，achievement.js 被删需重建）
+- [ ] 事件收集图鉴（需 Overlay JS + save.js 恢复 events_seen）
+- [ ] 结局收集系统（engine.js 有 determineEnding，但缺 endings.json 独立数据）
+- [/] 音效/BGM（audio.js 被删需重建，index.html 按钮已有）

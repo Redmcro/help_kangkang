@@ -1,0 +1,142 @@
+{
+  "daily_ui_button_01": {
+    "month": [1, 6],
+    "text": "任务：修改登录按钮的圆角和颜色。⭐ 简单任务。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 1.5,
+    "filler": true,
+    "effect": {"bossSatisfy": 1}
+  },
+  "daily_ui_layout_01": {
+    "month": [1, 8],
+    "text": "任务：调整设置面板的排版，让它在手机上也能正常显示。⭐ 简单任务。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 1.2,
+    "filler": true,
+    "effect": {"bossSatisfy": 1}
+  },
+  "daily_feature_sort_01": {
+    "month": [2, 10],
+    "text": "任务：实现背包物品排序功能。⭐⭐ 中等任务。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 1,
+    "filler": true,
+    "effect": {"bossSatisfy": 2, "brain": -2}
+  },
+  "daily_feature_settings_01": {
+    "month": [2, 10],
+    "text": "任务：做一个音量调节的设置页面。⭐⭐ 中等任务。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 1,
+    "filler": true,
+    "effect": {"bossSatisfy": 2, "brain": -3}
+  },
+  "daily_system_dialog_01": {
+    "month": [3, 12],
+    "text": "任务：重构对话系统，支持分支剧情。⭐⭐⭐ 复杂任务。Token消耗不少。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.8,
+    "filler": true,
+    "include": {"month": ">2"},
+    "effect": {"bossSatisfy": 3, "brain": -5, "token": -30}
+  },
+  "daily_system_quest_01": {
+    "month": [4, 12],
+    "text": "任务：实现任务追踪系统。需要跟策划反复对需求。⭐⭐⭐ 复杂任务。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.8,
+    "filler": true,
+    "include": {"month": ">3"},
+    "effect": {"bossSatisfy": 3, "brain": -5, "token": -25}
+  },
+  "daily_arch_ecs_01": {
+    "month": [7, 12],
+    "text": "任务：将现有代码迁移到ECS架构。⭐⭐⭐⭐ 架构级任务。AI模型也在挣扎。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.6,
+    "filler": true,
+    "include": {"month": ">6"},
+    "effect": {"bossSatisfy": 4, "brain": -10, "token": -80},
+    "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
+  },
+  "daily_arch_network_01": {
+    "month": [8, 12],
+    "text": "任务：实现多人联机的网络同步模块。⭐⭐⭐⭐ 架构级任务。连Opus也直冒冷汗。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.5,
+    "filler": true,
+    "include": {"month": ">7"},
+    "effect": {"bossSatisfy": 5, "brain": -12, "token": -100}
+  },
+  "daily_bug_crash_01": {
+    "month": [2, 12],
+    "text": "紧急！线上崩溃了！用户反馈游戏闪退，必须今天修复。⭐⭐ 紧急Bug。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.8,
+    "effect": {"bossSatisfy": -2, "brain": -5},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "快速定位到是空指针异常，十分钟修好了。老板松了口气。",
+        "type": "good",
+        "effect": {"bossSatisfy": 3, "brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "排查了一整天才找到Bug。修了一个又冒出来两个……头要炸了。",
+        "type": "bad",
+        "effect": {"bossSatisfy": -3, "brain": -8, "hp": -5}
+      }
+    ]
+  },
+  "daily_bug_memory_01": {
+    "month": [4, 12],
+    "text": "QA报了一个内存泄漏的Bug。游戏玩久了就会卡死。⭐⭐ 紧急修复。",
+    "type": "bad",
+    "system": "daily",
+    "weight": 0.6,
+    "effect": {"brain": -5},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "用Profiler精准定位，是个Texture没释放。修完还顺便优化了加载流程。",
+        "type": "good",
+        "effect": {"brain": -3, "bossSatisfy": 4}
+      },
+      {
+        "cond": {},
+        "text": "折腾了两天，改了十几处代码，还是会偶尔泄漏。最终贴了个定时清理的创可贴方案。",
+        "type": "bad",
+        "effect": {"brain": -8, "hp": -3, "bossSatisfy": -1}
+      }
+    ]
+  },
+  "daily_code_review_01": {
+    "month": [2, 12],
+    "text": "今天要做Code Review。看了下提交记录，有三个PR等着你审。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 1,
+    "filler": true,
+    "effect": {"brain": -2, "bossSatisfy": 1}
+  },
+  "daily_doc_writing_01": {
+    "month": [1, 12],
+    "text": "老板说要补技术文档。'就写个简单的就行。' 结果写了一整天。",
+    "type": "neutral",
+    "system": "daily",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"brain": -3, "bossSatisfy": 2},
+    "postEvent": "康康发誓下次让AI写文档。等等，AI写的文档更长……"
+  }
+}

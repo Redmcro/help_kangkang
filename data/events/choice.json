@@ -1,0 +1,334 @@
+{
+  "choice_training_budget_01": {
+    "month": [2, 6],
+    "text": "公司出了一笔培训预算，每人可以选一个方向。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 2,
+    "title": "📚 培训预算",
+    "desc": "公司给了3000块培训预算，你选什么方向？",
+    "choices": [
+      {
+        "text": "🤖 AI/Prompt Engineering 进阶",
+        "hint": "brain+10, 长期收益",
+        "result": "系统学习了高级Prompt技巧，写AI代码的效率提升了一个档次。",
+        "effect": {"brain": 10},
+        "setFlag": "training_ai"
+      },
+      {
+        "text": "🎮 Unity底层架构课",
+        "hint": "brain+5, bossSatisfy+3",
+        "result": "虽然AI能写代码，但理解底层原理让你更能判断AI输出的质量。",
+        "effect": {"brain": 5, "bossSatisfy": 3}
+      },
+      {
+        "text": "💼 沟通/管理技能",
+        "hint": "charm+10, 转管理路线",
+        "result": "学了一些职场沟通技巧。以后跟产品经理battle更有底气了。",
+        "effect": {"charm": 10, "bossSatisfy": 2}
+      }
+    ]
+  },
+  "choice_overtime_culture_01": {
+    "month": [3, 10],
+    "text": "老板暗示大家'主动'加班。整个组都没走，你怎么办？",
+    "type": "choice",
+    "system": "choice",
+    "weight": 1.5,
+    "title": "🌙 加班文化",
+    "desc": "全组都在加班，你走还是不走？",
+    "choices": [
+      {
+        "text": "💪 留下来卷：加班到十点",
+        "hint": "hp-8, bossSatisfy+3",
+        "result": "加班到十点，老板临走时拍了拍你的肩膀。打车回家花了80块。",
+        "effect": {"hp": -8, "brain": -3, "bossSatisfy": 3, "money": -80}
+      },
+      {
+        "text": "🚶 准时下班：到点就走",
+        "hint": "hp+3, bossSatisfy-2",
+        "result": "收拾东西走人的时候，感觉背后有目光。但下班后跑了步，精神好多了。",
+        "effect": {"hp": 3, "brain": 2, "bossSatisfy": -2}
+      },
+      {
+        "text": "🎭 摸鱼假装加班：开着IDE看视频",
+        "hint": "啥也不亏，有风险",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 75, "result": "成功摸鱼两小时，看完了一部电影，心情不错。", "type": "good", "effect": {"hp": 2, "brain": 1}},
+          {"chance": 25, "result": "被老板发现在看视频……场面极其尴尬。", "type": "bad", "effect": {"bossSatisfy": -5, "charm": -3}}
+        ]
+      }
+    ]
+  },
+  "choice_stock_option_01": {
+    "month": [4, 8],
+    "text": "公司推出期权激励计划。给你分了一批期权，但要签竞业协议。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 2,
+    "title": "📈 期权 vs 自由",
+    "desc": "签竞业拿期权，还是保持自由身？",
+    "choices": [
+      {
+        "text": "✍️ 签了：赌公司上市",
+        "hint": "长期money+，被绑定",
+        "result": "签了竞业协议，拿到了一批期权。感觉自己跟公司绑定了。",
+        "effect": {"bossSatisfy": 5, "charm": -3},
+        "setFlag": "signed_compete_clause"
+      },
+      {
+        "text": "✋ 不签：自由比钱重要",
+        "hint": "bossSatisfy-3, 保持选择权",
+        "result": "拒绝了期权。老板表情有点微妙。",
+        "effect": {"bossSatisfy": -3, "brain": 2}
+      },
+      {
+        "text": "🤔 谈条件：要更多期权才签",
+        "hint": "需要charm 60+",
+        "require": {"charm": 60},
+        "success": "凭借谈判技巧，拿到了双倍期权。老板说：'你太会谈了。'",
+        "successEffect": {"money": 5000, "bossSatisfy": 2, "charm": 3},
+        "fail": "老板笑了笑：'条件就这些，想好了来找我。' 没谈拢。",
+        "failEffect": {"bossSatisfy": -2},
+        "setFlag": "signed_compete_clause"
+      }
+    ]
+  },
+  "choice_ai_ethics_01": {
+    "month": [3, 8],
+    "text": "公司让你用AI生成大量'原创'内容上线，其中有些明显是从别人项目里'学'来的。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "title": "⚖️ AI伦理困境",
+    "desc": "用AI生成的内容涉嫌抄袭？老板说没人会发现……",
+    "choices": [
+      {
+        "text": "😇 拒绝：'这不太合适'",
+        "hint": "bossSatisfy-5, charm+5",
+        "result": "你坚持了原则。老板虽然不高兴，但其他同事对你另眼相看了。",
+        "effect": {"bossSatisfy": -5, "charm": 5, "brain": 3}
+      },
+      {
+        "text": "🤫 照做：听老板的不会错",
+        "hint": "bossSatisfy+3, 有后患",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 60, "result": "上线了，暂时没人发现。但你心里总有点不踏实。", "type": "neutral", "effect": {"bossSatisfy": 3}},
+          {"chance": 40, "result": "被原作者发现了，对方在Twitter上公开吐槽。公关危机！", "type": "bad", "effect": {"bossSatisfy": -8, "charm": -5}}
+        ]
+      },
+      {
+        "text": "🔧 改造后再用：加点自己的东西",
+        "hint": "brain-5, 折中方案",
+        "result": "花了额外时间大幅修改，让内容足够'独特'。累但心安。",
+        "effect": {"brain": -5, "bossSatisfy": 1, "charm": 2}
+      }
+    ]
+  },
+  "choice_remote_work_01": {
+    "month": [4, 10],
+    "text": "同事偷偷建了个远程办公群，想跟老板提居家办公的事。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "title": "🏠 居家办公",
+    "desc": "有人想推动居家办公，你是站在哪边？",
+    "choices": [
+      {
+        "text": "📢 带头跟老板提：'效率更高！'",
+        "hint": "charm+5，bossSatisfy±",
+        "require": {"charm": 50},
+        "success": "老板被说服了，试行一周居家办公。大家都很开心！你成了英雄。",
+        "successEffect": {"charm": 8, "bossSatisfy": 2, "hp": 5},
+        "fail": "老板冷冷地说：'效率更高？那为什么上周的需求还没交？'",
+        "failEffect": {"bossSatisfy": -5, "charm": -3}
+      },
+      {
+        "text": "🤐 不参与：别惹事",
+        "hint": "安全，但没存在感",
+        "result": "你明智地选择不站队。最终提案被否决了，但没人记得你。",
+        "effect": {}
+      },
+      {
+        "text": "📊 写一份详细数据报告支持",
+        "hint": "brain-5, 理性路线",
+        "result": "你用数据证明了居家办公的可行性。老板虽然没同意，但记住了你的专业态度。",
+        "effect": {"brain": -5, "bossSatisfy": 3, "charm": 3}
+      }
+    ]
+  },
+  "choice_mentor_01": {
+    "month": [2, 6],
+    "text": "新来的实习生被分配给你带。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "title": "👶 带实习生",
+    "desc": "HR说你是最适合带新人的人。但这会占用你大量时间……",
+    "choices": [
+      {
+        "text": "🎓 认真教：手把手带",
+        "hint": "brain-8, charm+10, bossSatisfy+3",
+        "result": "你耐心地教了实习生三周。他进步神速，临走时送了你一杯奶茶。",
+        "effect": {"brain": -8, "charm": 10, "bossSatisfy": 3, "hp": -3}
+      },
+      {
+        "text": "📎 丢文档给他：'自己看'",
+        "hint": "省事，但风险",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 50, "result": "实习生自学能力很强，居然自己搞定了。你白赚了一个带新人的功劳。", "type": "good", "effect": {"bossSatisfy": 2}},
+          {"chance": 50, "result": "实习生写的代码把测试环境搞崩了。你被老板叫去谈话。", "type": "bad", "effect": {"bossSatisfy": -5, "brain": -5}}
+        ]
+      },
+      {
+        "text": "🤝 让他用AI自学，你偶尔指点",
+        "hint": "平衡路线",
+        "result": "你教他用AI辅助开发，自己也没太耽误工作。效果还不错。",
+        "effect": {"brain": -3, "charm": 3, "bossSatisfy": 1}
+      }
+    ]
+  },
+  "choice_salary_negotiate_01": {
+    "month": [6, 10],
+    "text": "最近物价涨了不少，你觉得工资有点配不上工作量了。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "title": "💰 要不要谈加薪",
+    "desc": "你觉得工资低了。但在这个环境下谈加薪……",
+    "choices": [
+      {
+        "text": "🗣️ 直接找老板谈：亮出成绩单",
+        "hint": "需要bossSatisfy 60+",
+        "require": {"bossSatisfy": 60},
+        "success": "老板看了你的成绩，点点头：'下个月起加2000。' 你的坚持有了回报。",
+        "successEffect": {"money": 2000, "bossSatisfy": -2, "charm": 5},
+        "fail": "老板说：'现在大环境不好，别人都在降薪，你还想加？'",
+        "failEffect": {"bossSatisfy": -5, "charm": -3}
+      },
+      {
+        "text": "🤫 算了，忍忍吧",
+        "hint": "安全但憋屈",
+        "result": "你决定忍一忍。晚上回家看了眼余额，叹了口气。",
+        "effect": {"hp": -3}
+      },
+      {
+        "text": "📱 出去面试拿offer倒逼涨薪",
+        "hint": "高风险高回报",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 40, "result": "拿到了一个不错的offer！以此为谈判筹码，成功加薪3000。", "type": "good", "effect": {"money": 3000, "charm": 5}},
+          {"chance": 35, "result": "面试没拿到满意的offer，但至少了解了市场行情。", "type": "neutral", "effect": {"brain": 2}},
+          {"chance": 25, "result": "面试请假被老板发现了。'你是不是想走？' 尴尬。", "type": "bad", "effect": {"bossSatisfy": -8}}
+        ]
+      }
+    ]
+  },
+  "choice_open_source_01": {
+    "month": [5, 10],
+    "text": "你在业余时间写的开源项目开始有人关注了。有人邀请你做一次线上分享。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1,
+    "title": "🌐 开源社区邀约",
+    "desc": "有人邀请你在线上社区做技术分享。名声和人脉都是加分项。",
+    "choices": [
+      {
+        "text": "🎤 接受邀请：认真准备分享",
+        "hint": "brain-5, charm+8, 建立人脉",
+        "result": "分享很成功，直播间来了200多人。有几家公司的HR私信你问要不要聊聊。",
+        "effect": {"brain": -5, "charm": 8, "bossSatisfy": 1},
+        "setFlag": "opensource_fame"
+      },
+      {
+        "text": "✍️ 写篇博客代替：不想露脸",
+        "hint": "brain-3, charm+3",
+        "result": "写了一篇长文，被技术社区转发了不少。低调但有效。",
+        "effect": {"brain": -3, "charm": 3}
+      },
+      {
+        "text": "🙅 婉拒：太忙了没空",
+        "hint": "啥也不变",
+        "result": "你礼貌地拒绝了。对方表示理解，说以后有机会再合作。",
+        "effect": {}
+      }
+    ]
+  },
+  "choice_health_crisis_01": {
+    "month": [5, 12],
+    "text": "体检报告出来了，有几个指标亮了黄灯。医生建议：'少熬夜，多运动。'",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.5,
+    "include": {"hp": "<60"},
+    "title": "🏥 体检报告",
+    "desc": "医生说你的身体在报警。怎么办？",
+    "choices": [
+      {
+        "text": "🏃 办健身卡：每周去三次",
+        "hint": "money-1200, hp+15 长期",
+        "require": {"money": 1200},
+        "success": "坚持了一个月，身体状态明显好转。同事说你气色好了。",
+        "successEffect": {"money": -1200, "hp": 15, "brain": 3, "charm": 3},
+        "fail": "钱不够办卡……只能先在家做做俯卧撑。",
+        "failEffect": {"hp": 3}
+      },
+      {
+        "text": "💊 买点保健品应付一下",
+        "hint": "money-300, hp+5",
+        "result": "买了几瓶维生素丸。效果嘛……聊胜于无。",
+        "effect": {"money": -300, "hp": 5}
+      },
+      {
+        "text": "🙈 假装没看到",
+        "hint": "短期省事，长期危险",
+        "result": "把体检报告塞进抽屉，继续996。总觉得自己还年轻扛得住。",
+        "effect": {"hp": -3}
+      }
+    ]
+  },
+  "choice_team_conflict_01": {
+    "month": [3, 10],
+    "text": "和另一个程序员关于技术方案产生了分歧。他要用传统方案，你想用AI辅助方案。",
+    "type": "choice",
+    "system": "choice",
+    "once": true,
+    "weight": 1.2,
+    "title": "⚔️ 技术之争",
+    "desc": "技术方案分歧：传统 vs AI。谁也不服谁。",
+    "choices": [
+      {
+        "text": "🎯 据理力争：做个Demo证明AI方案更好",
+        "hint": "brain-8, 可能赢",
+        "chanceBased": true,
+        "branches": [
+          {"chance": 55, "result": "Demo效果惊艳！对方服了。老板拍板：'就用AI方案。'", "type": "good", "effect": {"brain": -8, "bossSatisfy": 5, "charm": 5}},
+          {"chance": 45, "result": "Demo翻车了。AI生成的代码在演示时各种报错……对方笑而不语。", "type": "bad", "effect": {"brain": -8, "bossSatisfy": -3, "charm": -5}}
+        ]
+      },
+      {
+        "text": "🤝 妥协融合：各取所长",
+        "hint": "脑力-3, 都不得罪",
+        "result": "你提了个折中方案：核心逻辑手写，辅助功能用AI。双方都能接受。",
+        "effect": {"brain": -3, "charm": 3, "bossSatisfy": 1}
+      },
+      {
+        "text": "🏳️ 让步：随便吧，你说了算",
+        "hint": "省脑力，但没存在感",
+        "result": "你让步了。项目最终用了传统方案，多花了三倍时间。",
+        "effect": {"bossSatisfy": -1, "charm": -2}
+      }
+    ]
+  }
+}

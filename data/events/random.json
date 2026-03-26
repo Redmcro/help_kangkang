@@ -1,0 +1,189 @@
+{
+  "random_good_gym_01": {
+    "month": [1, 12],
+    "text": "公司楼下新开了健身房，第一个月免费体验。康康去跑了20分钟步，出了一身汗。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "effect": {"hp": 5, "brain": 2}
+  },
+  "random_good_cat_01": {
+    "month": [1, 12],
+    "text": "公司来了一只流浪猫，赖在服务器机房不走。大家轮流喂它，心情都好了不少。",
+    "type": "good",
+    "system": "random",
+    "weight": 1.2,
+    "effect": {"hp": 3, "brain": 3, "charm": 2}
+  },
+  "random_good_bonus_01": {
+    "month": [3, 12],
+    "text": "项目上线后收到了客户表扬信，老板在群里点名表扬了整个团队。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "include": {"bossSatisfy": ">50"},
+    "effect": {"bossSatisfy": 3, "money": 500, "charm": 2}
+  },
+  "random_good_inspiration_01": {
+    "month": [2, 12],
+    "text": "半夜刷B站看到一个技术视频，突然想明白了困扰一周的架构问题。",
+    "type": "good",
+    "system": "random",
+    "weight": 1,
+    "effect": {"brain": 8, "hp": -2},
+    "postEvent": "虽然第二天上班有点犯困，但心情很好。"
+  },
+  "random_good_raise_01": {
+    "month": [4, 12],
+    "text": "主管私下告诉你：'下个月工资可能有调整，往好的方向。'",
+    "type": "good",
+    "system": "random",
+    "weight": 0.5,
+    "once": true,
+    "include": {"bossSatisfy": ">65"},
+    "effect": {"money": 1500},
+    "postEvent": "康康忍住没笑出来。"
+  },
+  "random_bad_meeting_01": {
+    "month": [1, 12],
+    "text": "一个两小时的无意义会议，讨论的内容跟你完全没关系。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1.5,
+    "effect": {"brain": -5, "hp": -2}
+  },
+  "random_bad_backpain_01": {
+    "month": [3, 12],
+    "text": "久坐导致腰疼发作！站起来的时候差点直不起来。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1,
+    "effect": {"hp": -8},
+    "postEvent": "康康决定买个人体工学椅……等发工资再说。"
+  },
+  "random_bad_scope_creep_01": {
+    "month": [2, 12],
+    "text": "产品经理临时加需求：'再加个小功能，很简单的。' 说完转身就走了。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1.5,
+    "effect": {"brain": -5, "bossSatisfy": -2},
+    "postEvent": "程序员听到的'很简单'永远不简单。"
+  },
+  "random_bad_api_down_01": {
+    "month": [2, 12],
+    "text": "AI模型API全线宕机！整个上午什么都写不了，只能刷手机。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"brain": -3, "token": -10},
+    "branch": [
+      {
+        "cond": {"brain": ">70"},
+        "text": "API宕机了，但康康发现自己还能纯手写代码。自信心暴涨。",
+        "type": "good",
+        "effect": {"brain": 5, "bossSatisfy": 2}
+      },
+      {
+        "cond": {},
+        "text": "AI模型API宕机了，康康看着空白的编辑器发呆了一上午。",
+        "type": "bad",
+        "effect": {"brain": -5, "bossSatisfy": -2}
+      }
+    ]
+  },
+  "random_bad_data_loss_01": {
+    "month": [3, 12],
+    "text": "Git操作失误，reset --hard了两天的代码。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.6,
+    "effect": {"brain": -10, "hp": -3},
+    "branch": [
+      {
+        "cond": {"brain": ">60"},
+        "text": "虽然代码丢了，但康康凭记忆重写了大部分。效率比原来还高。",
+        "type": "neutral",
+        "effect": {"brain": -3}
+      },
+      {
+        "cond": {},
+        "text": "两天的工作全没了。康康对着屏幕欲哭无泪。",
+        "type": "bad",
+        "effect": {"brain": -10, "hp": -5, "bossSatisfy": -2}
+      }
+    ]
+  },
+  "random_neutral_lunch_01": {
+    "month": [1, 12],
+    "text": "食堂今天的菜意外地好吃。红烧肉、番茄鸡蛋、青菜豆腐，全是康康爱吃的。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 1,
+    "filler": true,
+    "effect": {"hp": 3}
+  },
+  "random_neutral_weather_01": {
+    "month": [3, 5],
+    "text": "窗外在下雨。看着雨滴打在玻璃上，康康走了一会儿神。",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"brain": 1, "hp": 1}
+  },
+  "random_good_opensource_01": {
+    "month": [3, 12],
+    "text": "康康在GitHub上开源了一个小工具，居然收到了50个Star！",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"brain": 5, "charm": 5, "bossSatisfy": 2},
+    "postEvent": "评论区有人说：'这正是我需要的，太感谢了！' 康康笑了。"
+  },
+  "random_bad_comparison_01": {
+    "month": [4, 12],
+    "text": "朋友圈刷到前同事晒新公司年薪百万的消息。康康默默关掉了手机。",
+    "type": "bad",
+    "system": "random",
+    "weight": 0.8,
+    "effect": {"brain": -3, "hp": -2}
+  },
+  "random_good_code_zen_01": {
+    "month": [2, 12],
+    "text": "今天进入了心流状态！键盘啪啪响个不停，四个小时一抬头——功能全做完了。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.8,
+    "include": {"brain": ">60"},
+    "effect": {"brain": 5, "bossSatisfy": 3, "hp": -2}
+  },
+  "random_bad_insomnia_01": {
+    "month": [3, 12],
+    "text": "昨晚失眠了。闭上眼满脑子都是代码和需求文档。今天上班脑子像浆糊。",
+    "type": "bad",
+    "system": "random",
+    "weight": 1,
+    "include": {"hp": "<50"},
+    "effect": {"brain": -8, "hp": -5}
+  },
+  "random_neutral_elevator_01": {
+    "month": [1, 12],
+    "text": "电梯里遇到老板，尴尬地对视了三秒。老板问：'最近项目怎么样？' 你说：'挺好的。'",
+    "type": "neutral",
+    "system": "random",
+    "weight": 0.8,
+    "filler": true,
+    "effect": {"charm": 1}
+  },
+  "random_good_side_income_01": {
+    "month": [5, 12],
+    "text": "之前写的技术文章被约稿了！平台给了500块稿费。",
+    "type": "good",
+    "system": "random",
+    "weight": 0.6,
+    "once": true,
+    "effect": {"money": 500, "brain": 2, "charm": 3}
+  }
+}
