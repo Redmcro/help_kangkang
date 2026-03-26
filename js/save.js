@@ -2,7 +2,7 @@
 // v2: Handles localStorage persistence for legacy/meta-progression data
 
 const SAVE_KEY = 'kk2';
-const AUDIO_KEY = 'kk2_audio';
+
 const SAVE_VERSION = 2;
 
 const DEFAULT_LEGACY = {
@@ -65,28 +65,3 @@ export function addToLegacySet(legacy, field, value) {
     }
 }
 
-// ===== Audio Preferences =====
-
-const DEFAULT_AUDIO_PREFS = {
-    sfxVolume: 0.7,
-    bgmVolume: 0.4,
-    muted: false
-};
-
-export function loadAudioPrefs() {
-    try {
-        const d = localStorage.getItem(AUDIO_KEY);
-        if (!d) return { ...DEFAULT_AUDIO_PREFS };
-        return { ...DEFAULT_AUDIO_PREFS, ...JSON.parse(d) };
-    } catch {
-        return { ...DEFAULT_AUDIO_PREFS };
-    }
-}
-
-export function saveAudioPrefs(prefs) {
-    try {
-        localStorage.setItem(AUDIO_KEY, JSON.stringify(prefs));
-    } catch {
-        console.warn('Failed to save audio preferences');
-    }
-}

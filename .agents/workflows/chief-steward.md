@@ -41,6 +41,20 @@ Emperor says a few words
   → Needs rework → Steward issues new decree directly, never asks Emperor
 ```
 
+### ⚡ Parallelism Rule (MUST follow)
+
+> **Every decree MUST be split for maximum parallelism.** Never bundle work into one task if it can be split.
+
+- **Split by file ownership** — each task's Assigned Files MUST NOT overlap with concurrent tasks
+- **Parallel tasks** — mark `⚡并行` in DECREES.md, Emperor dispatches all at once
+- **Sequential tasks** — when files conflict, mark `⏩前置：{task}` to declare dependency
+- **Example** (in DECREES.md, Chinese):
+  ```
+  🎨 Military · delete HTML elements ⚡parallel
+  🖼️ Chancery · fix JS logic ⚡parallel
+  ⚙️ Engineering · engine refactor ⏩depends: Chancery
+  ```
+
 ## 🏛️ Departments
 
 | Dept | Files |

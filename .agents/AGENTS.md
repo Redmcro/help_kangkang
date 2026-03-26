@@ -9,3 +9,5 @@
 5. **Report to HQ** — write your report in `.agents/REPORTS.md`
 6. **🚫 No skipping chain of command** — report to HQ, never to the emperor
 7. **✍️ All AI-facing files in English** — only `DECREES.md` and `README.md` are in Chinese
+8. **🚫 Do NOT mark decrees ✅** — mark as `🔍待验收` in your REPORT only. Only the Chief Steward may mark `✅`
+9. **🚫 Do NOT touch `DECREES.md`** — READ only. Never modify, never mark status. Violations = forgery

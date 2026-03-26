@@ -1,11 +1,12 @@
 // ===== App.js =====
 // v2: IDE-themed UI Controller. Only file that touches the DOM.
-// Module 4: Overlay panels (Gallery, Endings, Achievements) + achievement integration
-// Module 5: Token Shop, Model Switch, Side Gig interaction panels.
+// Module 4: Overlay panels (Endings, Achievements) + achievement integration
+// Module 5: Model Switch interaction panel.
 
 import { GameEngine, AI_MODELS } from './engine.js';
 import { AchievementManager } from './achievement.js';
 import { saveLegacy } from './save.js';
+// NOTE: audio imports removed per decree
 
 const game = new GameEngine();
 const achieveMgr = new AchievementManager();
@@ -15,10 +16,6 @@ const $ = id => document.getElementById(id);
 let endingsData = {};   // from data/endings.json
 
 
-
-
-let gigUsedThisMonth = false;
-let currentGigMonth = 0;
 
 // ===== Code Rain =====
 
@@ -90,18 +87,18 @@ function updateUI(state, stageName) {
     updateBar('valBoss', 'barBoss', state.bossSatisfy, 100);
     updateBar('valShaoye', 'barShaoye', state.shaoye_rel, 100);
     updateBar('valYimin', 'barYimin', state.yimin_rel, 100);
-    updateBar('valGfRel', 'barGfRel', state.gf_rel || 0, 100);
+    updateBar('valGf', 'barGf', state.gf_rel || 0, 100);
+    const gfRow = $('gfRelRow');
+    if (gfRow) gfRow.style.display = state.has_girlfriend === false ? 'none' : '';
     $('valMoney').textContent = '¥' + Math.floor(state.money).toLocaleString('zh-CN');
     const mn = { doubao: '🐳 豆包', gpt54: '🤖 GPT-5.4', opus46: '🎯 Opus 4.6', deepseek_v4: '🔮 DeepSeek V4', cheapgpt: '💀 CheapGPT', fakeopus: '🎪 FakeOpus' };
     $('currentModelDisplay').textContent = mn[state.current_model] || '🐳 豆包';
     $('stageDisplay').textContent = stageName;
     updateTabs(state.month);
 
-    // Module 5: Reset gig cooldown when month changes
-    if (state.month !== currentGigMonth) {
-        currentGigMonth = state.month;
-        gigUsedThisMonth = false;
-    }
+    // Fix 5: Show current model name in editor tab
+    const modelName = AI_MODELS[state.current_model]?.name || '🧠 纯人肉';
+    $('editorTabName').textContent = `kangkang_life.log — ${modelName}`;
 }
 
 function updateBar(valId, barId, value, max) {
@@ -371,8 +368,6 @@ function renderModelSwitch() {
         const flagKey = `model_${id}_unlocked`;
         const unlocked = !!state[flagKey];
         const isCurrent = currentModel === id;
-        const minCost = m.cost[0] * m.tokenPrice;
-        const maxCost = m.cost[3] * m.tokenPrice;
         const bugPct = Math.round(m.bugRate * 100);
 
         const item = document.createElement('div');
@@ -381,7 +376,7 @@ function renderModelSwitch() {
             <div class="mi-icon">${m.name.split(' ')[0]}</div>
             <div class="mi-info">
                 <div class="mi-name">${m.name}</div>
-                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}% · ¥${m.tokenPrice}/M · ⭐¥${minCost}~⭐⭐⭐⭐¥${maxCost}</div>
+                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}%</div>
             </div>
             ${isCurrent ? '<span class="mi-badge current">当前</span>' : ''}
             ${!unlocked ? '<span class="mi-badge" style="color:var(--text3);border:1px solid var(--border)">🔒 未解锁</span>' : ''}`;
@@ -389,76 +384,21 @@ function renderModelSwitch() {
         if (unlocked && !isCurrent) {
             item.addEventListener('click', () => {
                 game.property.set('current_model', id);
-                game.emitUI();
                 addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
                 showToast(`已切换到 ${m.name}`);
                 renderModelSwitch();
+                // Fix 1: close overlay and resume game after model switch
+                closeOverlay('modelSwitchOverlay');
+                game.paused = false;
+                const ctx = game._pcc || { month: state.month, day: state.day || 1, totalDays: 3 };
+                game.scheduleNext(() => game.processWorkDay(ctx.month, ctx.day + 1, ctx.totalDays));
             });
         }
         list.appendChild(item);
     }
 }
 
-// ===== Module 5: Side Gig =====
 
-function rng(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-
-function renderSideGig() {
-    const state = game.property.toJSON();
-    const charm = state.charm || 50;
-    const baseIncome = rng(1000, 5000);
-    const charmMod = 1 + (charm - 50) / 100;
-    const income = Math.round(baseIncome * charmMod);
-    const discoverChance = 30;
-
-    const panel = $('gigPanel');
-
-    if (gigUsedThisMonth) {
-        panel.innerHTML = `
-            <div class="gig-desc">🚫 本月已经接过私活了，下个月再来吧。</div>
-            <div class="gig-cooldown">每月只能接一次私活</div>
-            <div class="gig-actions" style="margin-top:12px">
-                <button class="gig-btn cancel" id="gigCancelBtn">关闭</button>
-            </div>`;
-        $('gigCancelBtn').addEventListener('click', () => closeOverlay('sideGigOverlay'));
-        return;
-    }
-
-    panel.innerHTML = `
-        <div class="gig-desc">
-            有个朋友介绍了一个外包项目，加班偷偷做可以赚点外快。<br>
-            但如果被老板发现就麻烦了……
-        </div>
-        <div class="gig-stats">
-            <span class="gs-good">💰 预计收入: ¥${income.toLocaleString('zh-CN')}</span>
-            <span class="gs-bad">⚠️ 发现概率: ${discoverChance}%</span>
-        </div>
-        <div class="gig-actions">
-            <button class="gig-btn confirm" id="gigConfirmBtn">接活！</button>
-            <button class="gig-btn cancel" id="gigCancelBtn">算了</button>
-        </div>`;
-
-    $('gigConfirmBtn').addEventListener('click', () => {
-        gigUsedThisMonth = true;
-        const discovered = Math.random() < (discoverChance / 100);
-
-        game.property.applyEffect({ money: income });
-
-        if (discovered) {
-            game.property.applyEffect({ bossSatisfy: -5 });
-            addEventLine(state.month, state.day || 1, `💼 接私活赚了 ¥${income.toLocaleString('zh-CN')}，但被老板发现了！满意度 -5`, 'bad');
-            showToast('⚠️ 接私活被老板发现了！');
-        } else {
-            addEventLine(state.month, state.day || 1, `💼 偷偷接了个私活，赚了 ¥${income.toLocaleString('zh-CN')}！`, 'good');
-            showToast(`💰 私活到账！+¥${income.toLocaleString('zh-CN')}`);
-        }
-
-        game.emitUI();
-        closeOverlay('sideGigOverlay');
-    });
-
-    $('gigCancelBtn').addEventListener('click', () => closeOverlay('sideGigOverlay'));
-}
 
 // ===== Callbacks =====
 
@@ -503,8 +443,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (game.start()) {
             $('eventStream').innerHTML = '';
             lineNum = 1;
-            gigUsedThisMonth = false;
-            currentGigMonth = 0;
             $('gameActions').style.display = 'flex';
             showScreen('gameScreen');
         }
@@ -541,10 +479,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         openOverlay('modelSwitchOverlay');
     });
 
-    $('sideGigBtn').addEventListener('click', () => {
-        renderSideGig();
-        openOverlay('sideGigOverlay');
-    });
+
 
     // ===== Overlay close handlers (all overlays including Module 5) =====
     document.querySelectorAll('.overlay-close[data-close]').forEach(btn => {
