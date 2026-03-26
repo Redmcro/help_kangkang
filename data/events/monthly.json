@@ -358,8 +358,8 @@
         "hint": "省事但可能翻车",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "豆包写了篇完美的计划书。唯一的问题是——它建议你转行做产品经理。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
-          {"chance": 50, "result": "计划书里出现了'根据我的知识截止日期'这种经典AI痕迹。老板皱了眉。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+          {"chance": 50, "result": "豆包写了篇完美的计划书。唯一的问题是——它建议你转行做产品经理。", "type": "good", "effect": {"bossSatisfy": 3}},
+          {"chance": 50, "result": "计划书里出现了'根据我的知识截止日期'这种经典AI痕迹。老板皱了眉。", "type": "bad", "effect": {"bossSatisfy": -3}}
         ]
       },
       {
@@ -391,8 +391,8 @@
         "hint": "用AI写关于AI的文章，很meta",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "豆包洋洋洒洒写了2000字，文笔华丽到HR以为你是中文系毕业的。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
-          {"chance": 50, "result": "文章里出现了'作为一个AI语言模型'……全场爆笑，你恨不得钻进显示器里。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+          {"chance": 50, "result": "豆包洋洋洒洒写了2000字，文笔华丽到HR以为你是中文系毕业的。", "type": "good", "effect": {"bossSatisfy": 3}},
+          {"chance": 50, "result": "文章里出现了'作为一个AI语言模型'……全场爆笑，你恨不得钻进显示器里。", "type": "bad", "effect": {"bossSatisfy": -3}}
         ]
       },
       {
@@ -424,8 +424,8 @@
         "hint": "用AI记录AI使用，很合理吧",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "脚本跑得很完美，每天自动生成一份精美日志。老板夸你有工程师思维。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
-          {"chance": 50, "result": "脚本Bug了，连续三天提交的日志内容一模一样。老板叫你去办公室喝茶。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+          {"chance": 50, "result": "脚本跑得很完美，每天自动生成一份精美日志。老板夸你有工程师思维。", "type": "good", "effect": {"bossSatisfy": 3}},
+          {"chance": 50, "result": "脚本Bug了，连续三天提交的日志内容一模一样。老板叫你去办公室喝茶。", "type": "bad", "effect": {"bossSatisfy": -3}}
         ]
       },
       {
@@ -457,8 +457,8 @@
         "hint": "30页模板交给AI，一刻钟搞定",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "AI填得又快又好，还自动加了甘特图。老板以为你加了一整晚的班。", "type": "good", "effect": {"bossSatisfy": 3, "money": -30}},
-          {"chance": 50, "result": "AI在'短期目标'里写了'取代人类程序员'。老板的表情非常精彩。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -30}}
+          {"chance": 50, "result": "AI填得又快又好，还自动加了甘特图。老板以为你加了一整晚的班。", "type": "good", "effect": {"bossSatisfy": 3}},
+          {"chance": 50, "result": "AI在'短期目标'里写了'取代人类程序员'。老板的表情非常精彩。", "type": "bad", "effect": {"bossSatisfy": -3}}
         ]
       },
       {

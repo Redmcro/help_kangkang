@@ -278,6 +278,8 @@ body{
 .ev-line.special .ev-prefix{color:var(--purple)}
 .ev-line.money{color:var(--yellow)}
 .ev-line.money .ev-prefix{color:var(--yellow)}
+.ev-line.money-good{color:#ff4444}
+.ev-line.money-good .ev-prefix{color:#ff4444}
 .ev-line.choice-made{color:var(--cyan)}
 .ev-line.choice-made .ev-prefix{color:var(--cyan)}
 .ev-line.neutral{color:var(--text2)}

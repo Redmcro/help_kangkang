@@ -95,6 +95,26 @@ export class EventManager {
                 return { text: choice.fail || choice.result, effect: choice.failEffect || {}, type: 'bad' };
             }
         }
+        // branch — condition-based outcomes (first matching cond wins)
+        if (choice.branch && Array.isArray(choice.branch)) {
+            for (const b of choice.branch) {
+                const condMet = !b.cond || Object.keys(b.cond).length === 0 || this.#checkCondition(b.cond, state);
+                if (condMet) {
+                    // Nested chanceBased inside branch — resolve probabilistically
+                    if (b.chanceBased && b.branches) {
+                        return this.executeChoice(b, state);
+                    }
+                    const flags = {};
+                    if (b.setFlag || choice.setFlag) flags[b.setFlag || choice.setFlag] = true;
+                    return {
+                        text: b.result || b.text,
+                        effect: b.effect || choice.effect || {},
+                        flags,
+                        type: b.type || choice.type
+                    };
+                }
+            }
+        }
         const flags = {}; if (choice.setFlag) flags[choice.setFlag] = true;
         return { text: choice.result, effect: choice.effect || {}, flags, type: choice.type };
     }

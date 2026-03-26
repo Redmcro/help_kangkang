@@ -566,5 +566,124 @@
     "weight": 0.8,
     "effect": {"money": -150, "charm": 5, "shaoye_rel": 2, "yimin_rel": 2, "hp": 3},
     "postEvent": "少爷嘴里塞着薯片说：'以后每周来一次。' 亿民默默拿走了最后一包坚果。"
+  },
+
+  "general_new_first_standup_01": {
+    "month": [1, 1],
+    "text": "第一次参加站会。所有人轮流汇报昨天干了什么、今天要干什么。轮到康康的时候，脑子一片空白——他昨天在装软件。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1.2,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"brain": ">55"},
+        "text": "康康灵机一动：'昨天完成了开发环境搭建和依赖配置。'听起来很专业的样子，老板点了点头。",
+        "type": "good",
+        "effect": {"bossSatisfy": 2, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "康康结结巴巴说了句'呃……在熟悉项目'。全场沉默了两秒，主持人说：'好的，下一位。'",
+        "type": "neutral",
+        "effect": {"charm": -1}
+      }
+    ],
+    "postEvent": "会后亿民悄悄告诉他：'站会的秘诀就是把简单的事说复杂。'"
+  },
+  "general_new_cafeteria_01": {
+    "month": [1, 1],
+    "text": "第一次去公司食堂吃饭。菜单上写着'宫保鸡丁''鱼香肉丝'，端上来的却像是同一道菜换了不同颜色的酱。",
+    "type": "bad",
+    "system": "general",
+    "weight": 1,
+    "once": true,
+    "effect": {"hp": -2},
+    "postEvent": "康康嚼着难以辨认的肉块，决定明天开始带饭……然后第二天就忘了。"
+  },
+  "general_new_one_on_one_01": {
+    "month": [1, 2],
+    "text": "第一次和直属上司一对一面谈。老板问：'你的三年职业规划是什么？' 康康心想：三年后还有没有这个岗位都不好说。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1.2,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"charm": ">50"},
+        "text": "康康真诚地说了自己想在AI领域深耕的想法。老板满意地点头：'不错，有想法。'",
+        "type": "good",
+        "effect": {"bossSatisfy": 3, "charm": 2}
+      },
+      {
+        "cond": {},
+        "text": "康康支支吾吾说了句'跟着公司走'。老板面无表情地在本子上写了几个字。康康很想知道他写了什么。",
+        "type": "neutral",
+        "effect": {"bossSatisfy": -1}
+      }
+    ]
+  },
+  "general_new_tea_lady_01": {
+    "month": [1, 2],
+    "text": "茶水间遇到了打扫卫生的王阿姨。她看了看康康的工牌：'哟，新来的啊？你们组上个月走了三个人呢。'",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1,
+    "once": true,
+    "effect": {"brain": -2, "charm": 2},
+    "postEvent": "康康后来发现，王阿姨知道的公司八卦比任何人都多。跟她搞好关系绝对没亏。"
+  },
+  "general_new_internal_tool_01": {
+    "month": [1, 2],
+    "text": "第一次用公司内部的项目管理系统——界面像是2015年的产物，加载一个页面要8秒钟。据说是前CTO亲手写的，谁都不敢动。",
+    "type": "bad",
+    "system": "general",
+    "weight": 1,
+    "once": true,
+    "effect": {"brain": -3, "hp": -2},
+    "postEvent": "康康试着提了个优化建议，被告知：'这个系统没人敢改，上次试图重构的人已经离职了。'"
+  },
+  "general_new_fire_drill_01": {
+    "month": [1, 2],
+    "text": "消防演习！警报突然响起，康康从椅子上弹了起来。周围所有人淡定地拿起手机往楼下走，只有他在认真找灭火器。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 0.8,
+    "once": true,
+    "effect": {"hp": 2, "charm": 1},
+    "postEvent": "演习结束后康康才发现自己是整层楼第一个到集合点的人。安全主任表扬了他，老员工们投来了复杂的目光。"
+  },
+  "general_new_lost_building_01": {
+    "month": [1, 1],
+    "text": "上厕所回来找不到工位了。这栋楼每层长得一模一样，康康在三楼转了两圈才发现自己在四楼。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 0.8,
+    "once": true,
+    "filler": true,
+    "effect": {"charm": -1, "hp": -1},
+    "postEvent": "康康在手机备忘录里记了一句：'工位在3楼，左拐第二排靠窗。'"
+  },
+  "general_new_team_lunch_01": {
+    "month": [1, 2],
+    "text": "第一次参加组里的集体午餐。少爷问康康想吃什么，康康说'随便'。结果被带去了一家人均120的日料店。",
+    "type": "neutral",
+    "system": "general",
+    "weight": 1,
+    "once": true,
+    "branch": [
+      {
+        "cond": {"money": ">2000"},
+        "text": "虽然贵，但寿司确实好吃。少爷豪气地说：'第一次请客，以后你们请我。' 康康默默算了算钱包。",
+        "type": "good",
+        "effect": {"money": -120, "shaoye_rel": 3, "charm": 2, "hp": 3}
+      },
+      {
+        "cond": {},
+        "text": "康康看着菜单上的价格，默默点了最便宜的味噌汤套餐。少爷瞟了一眼：'兄弟，别省了，AA的。'",
+        "type": "neutral",
+        "effect": {"money": -120, "shaoye_rel": 1, "hp": 2}
+      }
+    ]
   }
 }

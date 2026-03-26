@@ -143,7 +143,12 @@ function addEventLineHTML(month, day, html, type) {
 }
 
 function colorDelta(label, delta, isMoney = false) {
-    const color = delta > 0 ? 'var(--green)' : 'var(--red)';
+    let color;
+    if (isMoney && delta > 0) {
+        color = '#ff4444'; // Red envelope color for positive money
+    } else {
+        color = delta > 0 ? 'var(--green)' : 'var(--red)';
+    }
     const sign = delta > 0 ? '+' : '';
     const val = isMoney ? `¥${sign}${delta}` : `${sign}${delta}`;
     return `<span style="color:${color}">${label}${val}</span>`;
@@ -386,6 +391,15 @@ function renderModelSwitch() {
         const isCurrent = currentModel === id;
         const bugPct = Math.round(m.bugRate * 100);
 
+        let bugDisplay = `${bugPct}%`;
+        if (id === 'doubao') {
+            const dqb = state.doubao_quality_bonus || 0;
+            if (dqb > 0) {
+                const correctedRate = Math.max(0, Math.round((m.bugRate - dqb / 100) * 100));
+                bugDisplay = `${bugPct}% (${correctedRate}%)`;
+            }
+        }
+
         const priceLabel = m.tokenPrice === 0 ? '免费' : `¥${m.tokenPrice}/M`;
         const item = document.createElement('div');
         item.className = 'model-item' + (isCurrent ? ' active' : '') + (!unlocked ? ' locked' : '');
@@ -393,7 +407,7 @@ function renderModelSwitch() {
             <div class="mi-icon">${m.name.split(' ')[0]}</div>
             <div class="mi-info">
                 <div class="mi-name">${m.name}</div>
-                <div class="mi-stats">质量:${m.quality} · Bug:${bugPct}% · ${priceLabel}</div>
+                <div class="mi-stats">质量:${m.quality} · Bug:${bugDisplay} · ${priceLabel}</div>
             </div>
             ${isCurrent ? '<span class="mi-badge current">当前</span>' : ''}
             ${!unlocked ? '<span class="mi-badge" style="color:var(--text3);border:1px solid var(--border)">🔒 未解锁</span>' : ''}`;
@@ -438,10 +452,13 @@ game.onDaySummary = (data) => {
 
     let html = parts.join(' | ');
 
-    // Append narrative events (bugs, overtime, special effects, choices)
     if (data.events && data.events.length > 0) {
         data.events.forEach(ev => {
-            html += `<br>　　→ ${ev}`;
+            let evColor = 'var(--text2)';
+            if (/🐛|⚠️|Bug|加班/.test(ev)) evColor = 'var(--red)';
+            else if (/🔓|🎯|🔮|解锁|成功|奖/.test(ev)) evColor = 'var(--purple)';
+            else if (/💸|余额不足/.test(ev)) evColor = 'var(--orange)';
+            html += `<br>　　<span style="color:${evColor}">→ ${ev}</span>`;
         });
     }
 

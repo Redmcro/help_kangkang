@@ -36,7 +36,38 @@ const IDLE_DAY_PHRASES = [
     '又是和 Bug 和平共处的一天。',
     '康康今天的代码提交记录：0 commits。但他很忙。',
     '今天的站会只开了两分钟，创下了新纪录。',
-    '康康在工位上睡着了，醒来发现没人注意到。'
+    '康康在工位上睡着了，醒来发现没人注意到。',
+    '康康在Stack Overflow上看了一个问题，不知不觉看了两小时答案区的骂战。',
+    '今天的AI生成了一段完美的代码。可惜需求已经变了。',
+    '开了一天的会，唯一的产出是会议纪要里的一个typo。',
+    '康康花了三小时给变量起名字，最后还是用了temp。',
+    '有人在群里发了张猫的表情包，全组笑了十分钟。产出为零。',
+    '中午点了一杯瑞幸，结果取错了别人的单。别说，还挺好喝。',
+    '今天终于搞懂了一个Bug的原因。原因是：昨天自己手贱改的。',
+    '写了个巨复杂的函数，运行完发现结果跟一行正则一样。',
+    '同事拿了一盒费列罗来分享，康康多拿了一颗。这是今天最大的胜利。',
+    '公司WiFi断了五分钟，全层程序员同时掏出手机开热点。场面壮观。',
+    '康康对着一个warning看了半天，决定加一行 // eslint-disable 解决问题。',
+    '今天代码写得特别顺，然后发现是在错误的分支上。'
+];
+
+const BUG_NARRATIVES = [
+    '🐛 代码编译都没过！康康盯着报错信息陷入沉思',
+    '🐛 测试跑出了个NaN，康康debug了一个小时才发现是类型转换问题',
+    '🐛 一个空指针异常导致服务器重启，康康的手在发抖',
+    '🐛 产品经理说"这个功能昨天还好好的"。git log显示最后一次修改是你做的',
+    '🐛 Bug修好了！……等等，怎么又出了两个新Bug？',
+    '🐛 代码Review被打回来了，reviewer评论："这段AI生成的吧？"',
+    '🐛 一个off-by-one错误，让10000个用户收到了同一条推送通知',
+];
+
+const OVERTIME_NARRATIVES = [
+    '⚠️ 质量不达标，康康不得不加班到凌晨',
+    '⚠️ 又要加班了。康康打开外卖App点了杯美式，准备长期作战',
+    '⚠️ 加班写代码到深夜，康康开始怀疑写代码到底是工作还是生活方式',
+    '⚠️ 凌晨的办公室只剩康康和保安。保安大叔递过来一根烟：兄弟，又加班啊',
+    '⚠️ 连续加班3天，康康的黑眼圈已经遮不住了',
+    '⚠️ 连续加班5天！强制休息',
 ];
 
 const STAT_EMOJI = {
@@ -63,7 +94,7 @@ export class GameEngine {
         this.selectedBuffs = new Set();
         this.speed = 800;
         this.autoTimer = null;
-        this.paused = false;
+        this.pauseDepth = 0;
         this.timeline = [];
         // Daily report tracking
         this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
@@ -79,6 +110,11 @@ export class GameEngine {
         this.onDaySummary = null;
         this.onChoiceResult = null;
     }
+
+    pause() { this.pauseDepth++; clearTimeout(this.autoTimer); }
+    resume() { this.pauseDepth = Math.max(0, this.pauseDepth - 1); if (this.pauseDepth === 0) this.emitUI(); }
+    get paused() { return this.pauseDepth > 0; }
+    set paused(val) { if (val) this.pause(); else this.resume(); }
 
     async init() {
         try {
@@ -128,7 +164,7 @@ export class GameEngine {
         this.property.reset();
         this.eventMgr.reset();
         this.timeline = [];
-        this.paused = false;
+        this.pauseDepth = 0;
         this.monthQualities = [];
 
         this.selectedBuffs.forEach(id => {
@@ -161,7 +197,10 @@ export class GameEngine {
 
         if (month > 1) {
             this.property.monthlyExpense();
-            this.emitEvent(`月初结算：工资 +¥${this.property.get('salary') || 12000}，生活费 -¥${this.property.get('living_cost') || 6000}`, 'money');
+            const salary = this.property.get('salary') || 3000;
+            const cost = this.property.get('living_cost') || 2500;
+            const costDisplay = cost >= 0 ? `-¥${cost}` : `+¥${Math.abs(cost)}`;
+            this.emitEvent(`月初结算：工资 +¥${salary}，生活费 ${costDisplay}`, 'money');
         }
         this.property.monthlyRecovery();
 
@@ -258,11 +297,8 @@ export class GameEngine {
             this.property.applyEffect({ brain: -bc });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
             const bugDelta = buildDeltaStr({ brain: -bc });
-            if (stars >= 3) {
-                this.dayReport.events.push('🐛 复杂Bug！康康debug了两小时才找到问题' + bugDelta);
-            } else {
-                this.dayReport.events.push('🐛 代码出了Bug，康康花了30分钟手动排查修复' + bugDelta);
-            }
+            const bugMsg = BUG_NARRATIVES[Math.floor(Math.random() * BUG_NARRATIVES.length)];
+            this.dayReport.events.push(bugMsg + bugDelta);
         }
 
         this.monthQualities.push(quality);
@@ -274,18 +310,18 @@ export class GameEngine {
             this.property.applyEffect({ hp: -hpLoss, brain: -brainLoss });
             this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
             this.dayReport.overtime = true;
-            const overtimeDelta = buildDeltaStr({ hp: -hpLoss, brain: -brainLoss });
 
             const overtime = this.property.get('consecutive_overtime');
             if (overtime >= 5) {
                 this.property.set('consecutive_overtime', 0);
                 const extraHpLoss = rng(5, 10);
                 this.property.applyEffect({ hp: -extraHpLoss });
-                this.dayReport.events.push('⚠️ 连续加班5天！强制休息' + buildDeltaStr({ hp: -(hpLoss + extraHpLoss), brain: -brainLoss }));
+                this.dayReport.events.push(OVERTIME_NARRATIVES[5] + buildDeltaStr({ hp: -(hpLoss + extraHpLoss), brain: -brainLoss }));
             } else if (overtime >= 3) {
-                this.dayReport.events.push('⚠️ 连续加班3天，康康的黑眼圈已经遮不住了' + overtimeDelta);
+                this.dayReport.events.push(OVERTIME_NARRATIVES[4] + buildDeltaStr({ hp: -hpLoss, brain: -brainLoss }));
             } else {
-                this.dayReport.events.push('⚠️ 质量不达标，康康不得不加班到凌晨' + overtimeDelta);
+                const idx = Math.floor(Math.random() * 4);
+                this.dayReport.events.push(OVERTIME_NARRATIVES[idx] + buildDeltaStr({ hp: -hpLoss, brain: -brainLoss }));
             }
         } else {
             this.property.set('consecutive_overtime', 0);
@@ -385,8 +421,7 @@ export class GameEngine {
     }
 
     showChoice(ev, month, day, totalDays) {
-        this.paused = true;
-        clearTimeout(this.autoTimer);
+        this.pause();
         this._pcc = { month, day, totalDays };
         if (this.onShowChoice) this.onShowChoice(ev, this.property.toJSON());
     }
@@ -408,7 +443,7 @@ export class GameEngine {
         const month = this.property.get('month');
         this.timeline.push({ month, text: result.text, type: 'choice-made' });
         this.emitUI();
-        this.paused = false;
+        this.resume();
         const go = this.property.isGameOver();
         if (go) { this.endGame(go); return; }
         const ctx = this._pcc || { month, day: 1, totalDays: 3 };
@@ -453,7 +488,7 @@ export class GameEngine {
 
     endGame(cause) {
         clearTimeout(this.autoTimer);
-        this.paused = true;
+        this.pause();
         const state = this.property.toJSON();
         const month = state.month > 12 ? 12 : state.month;
         const avgQ = state.avg_quality || 0;
