@@ -43,7 +43,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
-    "effect": {"bossSatisfy": 3, "brain": -3, "money": -90}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-60, -120]}
   },
   "daily_system_quest_01": {
     "month": [4, 12],
@@ -53,7 +53,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">3"},
-    "effect": {"bossSatisfy": 3, "brain": -3, "money": -75}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-50, -100]}
   },
   "daily_arch_ecs_01": {
     "month": [7, 12],
@@ -63,7 +63,7 @@
     "weight": 0.6,
     "filler": true,
     "include": {"month": ">6"},
-    "effect": {"bossSatisfy": 4, "brain": -4, "money": -240},
+    "effect": {"bossSatisfy": [3, 5], "brain": [-3, -6], "money": [-180, -300]},
     "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
   },
   "daily_arch_network_01": {
@@ -74,7 +74,7 @@
     "weight": 0.5,
     "filler": true,
     "include": {"month": ">7"},
-    "effect": {"bossSatisfy": 5, "brain": -5, "money": -300}
+    "effect": {"bossSatisfy": [3, 6], "brain": [-3, -7], "money": [-200, -400]}
   },
   "daily_bug_crash_01": {
     "month": [2, 12],

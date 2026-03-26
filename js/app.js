@@ -90,7 +90,9 @@ function updateUI(state, stageName) {
     updateBar('valGf', 'barGf', state.gf_rel || 0, 100);
     const gfRow = $('gfRelRow');
     if (gfRow) gfRow.style.display = state.has_girlfriend === false ? 'none' : '';
-    $('valMoney').textContent = '¥' + Math.floor(state.money).toLocaleString('zh-CN');
+    const moneyEl = $('valMoney');
+    moneyEl.textContent = '¥' + Math.floor(state.money).toLocaleString('zh-CN');
+    moneyEl.classList.toggle('money-negative', state.money < 0);
     const mn = { doubao: '🐳 豆包', gpt54: '🤖 GPT-5.4', opus46: '🎯 Opus 4.6', deepseek_v4: '🔮 DeepSeek V4', cheapgpt: '💀 CheapGPT', fakeopus: '🎪 FakeOpus' };
     $('currentModelDisplay').textContent = mn[state.current_model] || '🐳 豆包';
     $('stageDisplay').textContent = stageName;
@@ -168,7 +170,8 @@ function showChoicePanel(ev, state) {
         const lr = game.eventMgr.getLockReason(ch);
         const b = document.createElement('button');
         b.className = 'cp-btn' + (locked ? ' locked' : '');
-        b.innerHTML = `<div>${ch.text}</div>${locked ? `<div class="cpb-lock">${lr}</div>` : ''}`;
+        const hintHtml = ch.hint && !locked ? `<div class="cpb-hint">${ch.hint}</div>` : '';
+        b.innerHTML = `<div>${ch.text}</div>${hintHtml}${locked ? `<div class="cpb-lock">${lr}</div>` : ''}`;
         if (!locked) b.addEventListener('click', () => game.makeChoice(ch));
         btns.appendChild(b);
     });
@@ -186,11 +189,12 @@ function showEndScreen(data) {
     t.textContent = ending.title;
     t.className = ending.isWin ? 'win' : 'lose';
     $('endDesc').innerHTML = ending.desc;
+    const moneyColor = money < 0 ? 'var(--red)' : 'var(--green)';
     $('endGrid').innerHTML = `
         <div class="eg-item"><div class="eg-l">存活月份</div><div class="eg-v">${month}/12</div></div>
         <div class="eg-item"><div class="eg-l">代码质量</div><div class="eg-v">${avgQuality}</div></div>
         <div class="eg-item"><div class="eg-l">老板满意度</div><div class="eg-v">${bossSatisfy}</div></div>
-        <div class="eg-item"><div class="eg-l">最终存款</div><div class="eg-v" style="color:var(--green)">¥${Math.floor(money).toLocaleString('zh-CN')}</div></div>`;
+        <div class="eg-item"><div class="eg-l">最终存款</div><div class="eg-v" style="color:${moneyColor}">¥${Math.floor(money).toLocaleString('zh-CN')}</div></div>`;
     const tl = $('endTimeline');
     if (timeline && timeline.length > 0) {
         tl.innerHTML = '<div class="tl-title">📜 关键事件</div>' + timeline.map(e => `<div class="tl-item"><span class="tl-month">[${e.month}月]</span> ${e.text}</div>`).join('');
@@ -418,11 +422,7 @@ function renderModelSwitch() {
                 addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
                 showToast(`已切换到 ${m.name}`);
                 renderModelSwitch();
-                // Fix 1: close overlay and resume game after model switch
                 closeOverlay('modelSwitchOverlay');
-                game.paused = false;
-                const ctx = game._pcc || { month: state.month, day: state.day || 1, totalDays: 3 };
-                game.scheduleNext(() => game.processWorkDay(ctx.month, ctx.day + 1, ctx.totalDays));
             });
         }
         list.appendChild(item);

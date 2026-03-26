@@ -232,6 +232,7 @@ body{
 }
 .stat-val.stat-danger{color:var(--red) !important}
 .stat-val-money{color:var(--green);width:auto;flex:1;text-align:right}
+.stat-val-money.money-negative{color:var(--red)}
 
 .model-display{
   padding:4px 8px;font-size:12px;color:var(--cyan);

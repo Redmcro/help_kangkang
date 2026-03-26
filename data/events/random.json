@@ -5,7 +5,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": 5, "brain": 3}
+    "effect": {"hp": [3, 7], "brain": [2, 4]}
   },
   "random_good_cat_01": {
     "month": [1, 12],
@@ -13,7 +13,7 @@
     "type": "good",
     "system": "random",
     "weight": 1.2,
-    "effect": {"hp": 3, "brain": 3, "charm": 2}
+    "effect": {"hp": [2, 5], "brain": [2, 4], "charm": [1, 3]}
   },
   "random_good_bonus_01": {
     "month": [3, 12],
@@ -22,7 +22,7 @@
     "system": "random",
     "weight": 0.8,
     "include": {"bossSatisfy": ">50"},
-    "effect": {"bossSatisfy": 3, "money": 500, "charm": 2}
+    "effect": {"bossSatisfy": [2, 5], "money": [300, 800], "charm": [1, 3]}
   },
   "random_good_inspiration_01": {
     "month": [2, 12],
@@ -30,7 +30,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"brain": 8, "hp": -2},
+    "effect": {"brain": [5, 10], "hp": [-3, -1]},
     "postEvent": "虽然第二天上班有点犯困，但心情很好。"
   },
   "random_good_raise_01": {
@@ -50,7 +50,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.5,
-    "effect": {"brain": -5, "hp": -2}
+    "effect": {"brain": [-3, -7], "hp": [-1, -3]}
   },
   "random_bad_backpain_01": {
     "month": [3, 12],
@@ -58,7 +58,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": -8},
+    "effect": {"hp": [-5, -10]},
     "postEvent": "康康决定买个人体工学椅……等发工资再说。"
   },
   "random_bad_scope_creep_01": {
@@ -67,7 +67,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.5,
-    "effect": {"brain": -5, "bossSatisfy": -2},
+    "effect": {"brain": [-3, -7], "bossSatisfy": [-1, -3]},
     "postEvent": "程序员听到的'很简单'永远不简单。"
   },
   "random_bad_api_down_01": {
@@ -157,7 +157,7 @@
     "system": "random",
     "weight": 0.8,
     "include": {"brain": ">60"},
-    "effect": {"brain": 5, "bossSatisfy": 3, "hp": -2}
+    "effect": {"brain": [3, 8], "bossSatisfy": [2, 5], "hp": [-3, -1]}
   },
   "random_bad_insomnia_01": {
     "month": [3, 12],
@@ -166,7 +166,7 @@
     "system": "random",
     "weight": 1,
     "include": {"hp": "<50"},
-    "effect": {"brain": -8, "hp": -5}
+    "effect": {"brain": [-5, -10], "hp": [-3, -7]}
   },
   "random_neutral_elevator_01": {
     "month": [1, 12],
@@ -193,7 +193,7 @@
     "type": "good",
     "system": "random",
     "weight": 0.8,
-    "effect": {"brain": 10, "hp": -2},
+    "effect": {"brain": [6, 12], "hp": [-3, -1]},
     "postEvent": "康康开始怀疑：是AI入侵了梦境，还是自己压力太大了？"
   },
   "random_good_quantum_keyboard_01": {

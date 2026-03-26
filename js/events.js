@@ -58,7 +58,7 @@ export class EventManager {
     }
 
     execute(id, ev, state) {
-        this.#usedEvents.add(id);
+        if (ev.once) this.#usedEvents.add(id);
         if (ev.branch && ev.type !== 'choice') {
             for (const b of ev.branch) {
                 if (b.cond && Object.keys(b.cond).length > 0 && this.#checkCondition(b.cond, state)) {

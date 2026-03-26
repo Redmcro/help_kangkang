@@ -42,14 +42,34 @@
       {
         "text": "💪 留下来卷：加班到十点",
         "hint": "老板会记住你的付出",
-        "result": "加班到十点，老板临走时拍了拍你的肩膀。打车回家花了80块。",
-        "effect": {"hp": -5, "brain": -2, "bossSatisfy": 3, "money": -80}
+        "branch": [
+          {
+            "cond": {"bossSatisfy": ">60"},
+            "result": "加班到十点，老板临走时说：'辛苦了，下周给你调休一天。'",
+            "effect": {"hp": -5, "brain": -2, "bossSatisfy": 5, "money": -80}
+          },
+          {
+            "cond": {},
+            "result": "加班到十点，老板临走时拍了拍你的肩膀。打车回家花了80块。",
+            "effect": {"hp": -5, "brain": -2, "bossSatisfy": 3, "money": -80}
+          }
+        ]
       },
       {
         "text": "🚶 准时下班：到点就走",
         "hint": "身体是革命的本钱",
-        "result": "收拾东西走人的时候，感觉背后有目光。但下班后跑了步，精神好多了。",
-        "effect": {"hp": 3, "brain": 2, "bossSatisfy": -2}
+        "branch": [
+          {
+            "cond": {"charm": ">60"},
+            "result": "到点走人，同事笑着说'又准时下班'。但没人真的在意，你回家后跑了步，精神好多了。",
+            "effect": {"hp": 5, "brain": 3, "bossSatisfy": -1}
+          },
+          {
+            "cond": {},
+            "result": "收拾东西走人的时候，感觉背后有目光。但下班后跑了步，精神好多了。",
+            "effect": {"hp": 3, "brain": 2, "bossSatisfy": -2}
+          }
+        ]
       },
       {
         "text": "🎭 摸鱼假装加班：开着IDE看视频",
@@ -375,8 +395,18 @@
       {
         "text": "🔧 花3小时修掉：对代码负责",
         "hint": "负责任的程序员，代码不留隐患",
-        "result": "你加班修好了Bug。代码审查时，少爷说：'你这段逻辑改得漂亮。'",
-        "effect": {"hp": -3, "brain": -3, "bossSatisfy": 2, "shaoye_rel": 3}
+        "branch": [
+          {
+            "cond": {"brain": ">60"},
+            "result": "你快速定位到问题根源，只用了1小时就修好了。少爷说：'你这debug速度，比AI还快。'",
+            "effect": {"hp": -2, "brain": -2, "bossSatisfy": 3, "shaoye_rel": 5}
+          },
+          {
+            "cond": {},
+            "result": "你加班修好了Bug。代码审查时，少爷说：'你这段逻辑改得漂亮。'",
+            "effect": {"hp": -3, "brain": -3, "bossSatisfy": 2, "shaoye_rel": 3}
+          }
+        ]
       },
       {
         "text": "🙈 不修：又不是我写的",
@@ -441,14 +471,34 @@
       {
         "text": "📖 肝技术：学最新的AI框架",
         "hint": "充电蓄力，用知识武装自己",
-        "result": "窝在家里看了两天教程和源码。眼睛酸了，但技术储备涨了不少。",
-        "effect": {"brain": 8, "hp": -3}
+        "branch": [
+          {
+            "cond": {"brain": ">70"},
+            "result": "基础扎实就是不一样，半天就搞懂了新框架的核心原理。剩下时间还顺手做了个小Demo。",
+            "effect": {"brain": 10, "hp": -2}
+          },
+          {
+            "cond": {},
+            "result": "窝在家里看了两天教程和源码。眼睛酸了，但技术储备涨了不少。",
+            "effect": {"brain": 8, "hp": -3}
+          }
+        ]
       },
       {
         "text": "🏃 运动社交：约人打球+跑步",
         "hint": "出汗交友，身心都放松",
-        "result": "周六打球周日跑步。出了一身汗，晚上睡得特别好。还认识了几个新朋友。",
-        "effect": {"hp": 10, "charm": 5, "brain": -2}
+        "branch": [
+          {
+            "cond": {"charm": ">55"},
+            "result": "球场上认识了一个做AI创业的人，聊了很久。出了一身汗，还拓展了人脉。",
+            "effect": {"hp": 10, "charm": 8, "brain": -1}
+          },
+          {
+            "cond": {},
+            "result": "周六打球周日跑步。出了一身汗，晚上睡得特别好。还认识了几个新朋友。",
+            "effect": {"hp": 10, "charm": 5, "brain": -2}
+          }
+        ]
       },
       {
         "text": "🎮 打游戏：犒劳自己",
@@ -577,14 +627,34 @@
       {
         "text": "🙅 不接：专心本职工作",
         "hint": "安全",
-        "result": "你拒绝了诱惑。周末看了场电影，休息得不错。",
-        "effect": {"hp": 3, "brain": 2}
+        "branch": [
+          {
+            "cond": {"hp": "<40"},
+            "result": "你拒绝了诱惑。身体已经在抗议了，周末好好休息了两天。正确的选择。",
+            "effect": {"hp": 8, "brain": 3}
+          },
+          {
+            "cond": {},
+            "result": "你拒绝了诱惑。周末看了场电影，休息得不错。",
+            "effect": {"hp": 3, "brain": 2}
+          }
+        ]
       },
       {
         "text": "🤝 拉亿民一起做：分钱分活",
         "hint": "兄弟齐心，分钱也分活",
-        "result": "你和亿民分工写了小程序，一人拿4000。合作还挺愉快的，关系更近了。",
-        "effect": {"money": 4000, "hp": -5, "brain": -3, "yimin_rel": 5}
+        "branch": [
+          {
+            "cond": {"yimin_rel": ">60"},
+            "result": "你和亿民默契配合，两天就搞定了。亿民说：'下次有活继续叫我！' 钱到手，关系更铁了。",
+            "effect": {"money": 4000, "hp": -3, "brain": -2, "yimin_rel": 8}
+          },
+          {
+            "cond": {},
+            "result": "你和亿民分工写了小程序，一人拿4000。合作还挺愉快的，关系更近了。",
+            "effect": {"money": 4000, "hp": -5, "brain": -3, "yimin_rel": 5}
+          }
+        ]
       }
     ]
   },
@@ -669,20 +739,50 @@
       {
         "text": "📚 化焦虑为动力：疯狂学习AI",
         "hint": "把焦虑变成动力，卷起来！",
-        "result": "你开始每天多学2小时AI。熬了一周，黑眼圈加重了，但确实对AI的理解深了一层。",
-        "effect": {"brain": 8, "hp": -8}
+        "branch": [
+          {
+            "cond": {"brain": ">65"},
+            "result": "因为基础好，学新东西特别快。一周后你觉得AI不但不会取代你，反而是你的超能力。",
+            "effect": {"brain": 10, "hp": -5}
+          },
+          {
+            "cond": {},
+            "result": "你开始每天多学2小时AI。熬了一周，黑眼圈加重了，但确实对AI的理解深了一层。",
+            "effect": {"brain": 8, "hp": -8}
+          }
+        ]
       },
       {
         "text": "🧘 保持冷静：这种文章每年都有",
         "hint": "冷静看待，这种文章年年有",
-        "result": "你深呼吸，关掉了手机。'18个月前也说要取代了，我不还好好的？'",
-        "effect": {"hp": 3, "luck": 3, "brain": 2}
+        "branch": [
+          {
+            "cond": {"luck": ">60"},
+            "result": "你刷到了一篇反驳文章，论点清晰有力，转发后收获了很多赞同。焦虑一扫而空。",
+            "effect": {"hp": 5, "luck": 3, "brain": 3, "charm": 2}
+          },
+          {
+            "cond": {},
+            "result": "你深呼吸，关掉了手机。'18个月前也说要取代了，我不还好好的？'",
+            "effect": {"hp": 3, "luck": 3, "brain": 2}
+          }
+        ]
       },
       {
         "text": "🍻 约同事喝酒吐槽：集体焦虑变集体狂欢",
         "hint": "喝酒吐槽，焦虑变段子",
-        "result": "约了少爷和亿民去撸串。三杯啤酒下肚，焦虑变成了段子。'AI取代我？那AI来改这Bug试试？'",
-        "effect": {"charm": 5, "money": -200, "hp": -2, "shaoye_rel": 3, "yimin_rel": 3}
+        "branch": [
+          {
+            "cond": {"shaoye_rel": ">60", "yimin_rel": ">60"},
+            "result": "三兄弟喝到凌晨，从AI聊到人生。最后少爷醉醺醺地说：'就算AI取代了我们，至少我们还有彼此。' 感动。",
+            "effect": {"charm": 8, "money": -300, "hp": -3, "shaoye_rel": 5, "yimin_rel": 5}
+          },
+          {
+            "cond": {},
+            "result": "约了少爷和亿民去撸串。三杯啤酒下肚，焦虑变成了段子。'AI取代我？那AI来改这Bug试试？'",
+            "effect": {"charm": 5, "money": -200, "hp": -2, "shaoye_rel": 3, "yimin_rel": 3}
+          }
+        ]
       }
     ]
   },
@@ -699,14 +799,34 @@
       {
         "text": "📢 在Review里详细写出来：对事不对人",
         "hint": "对事不对人，但可能伤感情",
-        "result": "你写了三页的Review意见。少爷面子挂不住，但老板觉得你很专业。",
-        "effect": {"bossSatisfy": 2, "shaoye_rel": -5, "brain": -3}
+        "branch": [
+          {
+            "cond": {"shaoye_rel": ">70"},
+            "result": "你写了详细的Review意见。少爷看完后说：'说得对，我改。'关系好就是不一样。",
+            "effect": {"bossSatisfy": 3, "shaoye_rel": -2, "brain": -3}
+          },
+          {
+            "cond": {},
+            "result": "你写了三页的Review意见。少爷面子挂不住，但老板觉得你很专业。",
+            "effect": {"bossSatisfy": 2, "shaoye_rel": -5, "brain": -3}
+          }
+        ]
       },
       {
         "text": "🤫 私下告诉他：给他留面子",
         "hint": "留面子修关系，私下解决",
-        "result": "你拉少爷去茶水间悄悄说了问题。他感激你没公开说，主动改了代码。",
-        "effect": {"shaoye_rel": 5, "brain": -3, "charm": 3}
+        "branch": [
+          {
+            "cond": {"charm": ">55"},
+            "result": "你巧妙地把问题说成'优化建议'。少爷欣然接受，还请你喝了杯奶茶。",
+            "effect": {"shaoye_rel": 8, "brain": -2, "charm": 3}
+          },
+          {
+            "cond": {},
+            "result": "你拉少爷去茶水间悄悄说了问题。他感激你没公开说，主动改了代码。",
+            "effect": {"shaoye_rel": 5, "brain": -3, "charm": 3}
+          }
+        ]
       },
       {
         "text": "😶 放过去：不值得得罪人",
@@ -814,8 +934,18 @@
       {
         "text": "😴 假装没看到：明天早上再说",
         "hint": "眼不见为净，但明天迟早要面对",
-        "result": "你把手机调成静音翻了个身。第二天到公司，老板铁青着脸：'昨晚系统挂了4个小时。'",
-        "effect": {"hp": 5, "bossSatisfy": -8, "charm": -3}
+        "branch": [
+          {
+            "cond": {"luck": ">65"},
+            "result": "你把手机调成静音翻了个身。第二天到公司发现运维半夜自动回滚了，影响很小。你松了口气。",
+            "effect": {"hp": 5, "bossSatisfy": -3}
+          },
+          {
+            "cond": {},
+            "result": "你把手机调成静音翻了个身。第二天到公司，老板铁青着脸：'昨晚系统挂了4个小时。'",
+            "effect": {"hp": 5, "bossSatisfy": -8, "charm": -3}
+          }
+        ]
       }
     ]
   },

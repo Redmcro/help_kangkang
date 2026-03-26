@@ -355,17 +355,20 @@ export class GameEngine {
                 const result = this.eventMgr.execute(id, ev, state);
                 addToLegacySet(this.legacy, 'events_seen', id);
 
-                // 2c: charm 影响关系变化（GAME_DESIGN §二.2.3）
-                if (result.effect) {
-                    const charmMod = ((state.charm || 50) - 50) / 100;
-                    if (result.effect.shaoye_rel)
-                        result.effect.shaoye_rel = Math.round(result.effect.shaoye_rel * (1 + charmMod));
-                    if (result.effect.yimin_rel)
-                        result.effect.yimin_rel = Math.round(result.effect.yimin_rel * (1 + charmMod));
-                }
+                const resolved = this.property.applyEffect(result.effect);
 
-                this.property.applyEffect(result.effect);
-                const deltaStr = buildDeltaStr(result.effect);
+                // 2c: charm 影响关系变化（GAME_DESIGN §二.2.3）
+                if (resolved) {
+                    const charmMod = ((state.charm || 50) - 50) / 100;
+                    for (const rk of ['shaoye_rel', 'yimin_rel']) {
+                        if (resolved[rk]) {
+                            const adj = Math.round(resolved[rk] * charmMod);
+                            if (adj !== 0) this.property.applyEffect({ [rk]: adj });
+                            resolved[rk] += adj;
+                        }
+                    }
+                }
+                const deltaStr = buildDeltaStr(resolved);
                 if (result.setFlag) this.property.setFlag(result.setFlag);
                 // Push event text to dayReport only (displayed via emitDayReport)
                 this.dayReport.events.push(result.text + deltaStr);

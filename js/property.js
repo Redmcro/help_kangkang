@@ -76,21 +76,32 @@ export class PropertyManager {
 
     /**
      * Apply an effect object like { hp: -5, brain: 3, money: 200 }
+     * Supports [min, max] range values: { hp: [-3, -7] } resolves to a random int in that range.
      * Numeric values are added; non-numeric values are set directly.
      * Bounded stats (hp, brain, bossSatisfy, charm, luck, relations) are clamped 0-100.
+     * Returns the resolved effect with all ranges replaced by actual values.
      */
     applyEffect(effect) {
-        if (!effect) return;
+        if (!effect) return null;
+        const resolved = {};
         const clampedKeys = ['hp', 'brain', 'bossSatisfy', 'charm', 'luck', 'shaoye_rel', 'yimin_rel', 'gf_rel'];
         for (const [key, delta] of Object.entries(effect)) {
-            if (typeof delta === 'number') {
-                let newVal = (this.#data[key] || 0) + delta;
+            let val = delta;
+            if (Array.isArray(delta) && delta.length === 2) {
+                const lo = Math.min(delta[0], delta[1]);
+                const hi = Math.max(delta[0], delta[1]);
+                val = lo + Math.floor(Math.random() * (hi - lo + 1));
+            }
+            if (typeof val === 'number') {
+                let newVal = (this.#data[key] || 0) + val;
                 if (clampedKeys.includes(key)) newVal = clamp(newVal, 0, 100);
                 this.set(key, newVal);
             } else {
-                this.set(key, delta);
+                this.set(key, val);
             }
+            resolved[key] = val;
         }
+        return resolved;
     }
 
     applyBuff(effect) {

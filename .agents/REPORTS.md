@@ -13,12 +13,17 @@
 
 ## 📦 Archive
 
+- ✅ ⚙️ Engineering · T1 Model Switch Pause Lock + Choice Hint + Ending Color — removed double-resume bug, added hint display for unlocked choices, end screen red for negative money
+- ✅ 📚 Hanlin · T2 Effect Range Values — applyEffect() resolves [min,max] arrays, engine charm-mod refactored, ~25 events converted to ranges, schema updated
+- ✅ 🎨 Military · T3 Negative Money Red CSS — .money-negative class, updateUI toggles on state.money<0
+- ✅ 🖼️ Chancery · T4 Once Event Fix + Choice Branch Upgrade — execute() only marks once:true as used, 7 choice events upgraded with branch outcomes
+
 - ✅ ⚙️ Engineering · T1 Pause Lock + Day Report — pauseDepth计数锁, 22条摸鱼语, 7条bug语, 6条加班语, 双减号修复
 - ✅ 🎨 Military · T3 UI Color Fixes — 正钱红包色, bug率括号修正, 日报逐事件染色, money-good CSS
 - ✅ 🎨 · T3 ⚠️发现问题 → T1已修复（双减号 Math.abs）
 - ✅ 🖼️ Chancery · T4 Choice Branch — choice选项支持branch条件分支 + 嵌套chanceBased递归
 - ✅ 📚 Hanlin · T2 Part 1 — 豆包money:-30移除(4个pledge事件), 8个新月1开场事件
-- 🔄 📚 Hanlin · T2 Part 2 — 卡在: 每月3-5个choice事件补充(弱月份4,7,9,10-12)
+- ✅ 📚 Hanlin · T2 Part 2 — 取消：复查发现每月choice已达标(min 5/月)，无需补充
 - ✅ 🎨 Military · T2 Choice Delta Rendering — onChoiceResult shows emoji deltas with colorDelta HTML. ⚠️未报告
 - ✅ 📚 Hanlin · T3 Onboarding+Pledge Randomization — 5 start variants, 4 pledge variants, originals removed. ⚠️未报告
 - ✅ 💾 Treasury · T4 Economy Rework — salary 3000, living_cost 2500, quarterly reviews, rent/gf housing events. ⚠️未报告
