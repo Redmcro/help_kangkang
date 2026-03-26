@@ -1,0 +1,82 @@
+{
+  "ach_first_run": {
+    "icon": "👶", "name": "初来乍到", "desc": "完成1次人生",
+    "condition": { "type": "stat_gte", "stat": "runs", "value": 1 },
+    "reward": 10, "hidden": false
+  },
+  "ach_veteran": {
+    "icon": "🔄", "name": "轮回老手", "desc": "完成5次转世",
+    "condition": { "type": "stat_gte", "stat": "runs", "value": 5 },
+    "reward": 30, "hidden": false
+  },
+  "ach_first_win": {
+    "icon": "🌟", "name": "逆天改命", "desc": "第一次胜利结局",
+    "condition": { "type": "stat_gte", "stat": "wins", "value": 1 },
+    "reward": 20, "hidden": false
+  },
+  "ach_first_blood": {
+    "icon": "🩸", "name": "第一滴血", "desc": "被裁员成为骑手",
+    "condition": { "type": "ending_unlocked", "endingId": "rider" },
+    "reward": 15, "hidden": false
+  },
+  "ach_master": {
+    "icon": "🏆", "name": "大师之路", "desc": "达成AI大师结局",
+    "condition": { "type": "ending_unlocked", "endingId": "ai_master" },
+    "reward": 30, "hidden": false
+  },
+  "ach_all_victory": {
+    "icon": "👑", "name": "全胜通关", "desc": "解锁所有胜利结局",
+    "condition": { "type": "endings_all", "endingIds": ["ai_master", "indie_dev", "survived"] },
+    "reward": 50, "hidden": false
+  },
+  "ach_bug_hunter": {
+    "icon": "🐛", "name": "Bug猎人", "desc": "累计修复100个Bug",
+    "condition": { "type": "stat_gte", "stat": "total_bugs_fixed", "value": 100 },
+    "reward": 30, "hidden": false
+  },
+  "ach_token_whale": {
+    "icon": "🐋", "name": "Token巨鲸", "desc": "累计消耗1B Token",
+    "condition": { "type": "stat_gte", "stat": "total_tokens_spent", "value": 1000 },
+    "reward": 25, "hidden": false
+  },
+  "ach_money_king": {
+    "icon": "💎", "name": "打工皇帝", "desc": "累计赚50万元",
+    "condition": { "type": "stat_gte", "stat": "total_earned", "value": 500000 },
+    "reward": 40, "hidden": false
+  },
+  "ach_12month": {
+    "icon": "⚔️", "name": "12月勇士", "desc": "存活到12月",
+    "condition": { "type": "stat_gte", "stat": "best_month", "value": 12 },
+    "reward": 20, "hidden": false
+  },
+  "ach_collector_25": {
+    "icon": "📖", "name": "图鉴收集者", "desc": "收集25个事件",
+    "condition": { "type": "events_count_gte", "value": 25 },
+    "reward": 20, "hidden": false
+  },
+  "ach_collector_50": {
+    "icon": "📚", "name": "百科全书", "desc": "收集50个事件",
+    "condition": { "type": "events_count_gte", "value": 50 },
+    "reward": 40, "hidden": false
+  },
+  "ach_burnout": {
+    "icon": "🔥", "name": "燃烧殆尽", "desc": "过劳猝死",
+    "condition": { "type": "ending_unlocked", "endingId": "death" },
+    "reward": 15, "hidden": false
+  },
+  "ach_hidden_hunter": {
+    "icon": "🕵️", "name": "隐藏猎人", "desc": "解锁所有隐藏结局",
+    "condition": { "type": "endings_all", "endingIds": ["ai_shape", "ending_awakened", "ending_lucky", "ending_zen", "ending_doubao_god", "ending_triangle"] },
+    "reward": 100, "hidden": true
+  },
+  "ach_doubao_god": {
+    "icon": "🐳", "name": "豆包之神", "desc": "达成豆包之神结局",
+    "condition": { "type": "ending_unlocked", "endingId": "ending_doubao_god" },
+    "reward": 50, "hidden": true
+  },
+  "ach_triangle": {
+    "icon": "🤝", "name": "铁三角", "desc": "达成铁三角结局",
+    "condition": { "type": "ending_unlocked", "endingId": "ending_triangle" },
+    "reward": 40, "hidden": true
+  }
+}

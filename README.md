@@ -11,8 +11,9 @@
 
 | 文档 | 内容 | 谁来看 |
 |:---|:---|:---|
-| [GAME_DESIGN.md](./GAME_DESIGN.md) | 🎮 游戏基础设定（属性/数值/机制/结局） | 内容创作 AI + 设计师 |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | 🏗️ 系统架构（代码模块/接口/数据格式） | 写代码的 AI + 开发者 |
+| [GAME_DESIGN.md](./design/GAME_DESIGN.md) | 🎮 游戏基础设定（属性/数值/机制/结局） | 内容创作 AI + 设计师 |
+| [ARCHITECTURE.md](./design/ARCHITECTURE.md) | 🏗️ 系统架构（代码模块/接口/数据格式） | 写代码的 AI + 开发者 |
+| [TODO.md](./design/TODO.md) | 📋 任务分配表（模块/验收标准） | 大内总管 + 各部门 AI |
 | [design/README.md](./design/README.md) | 🎨 设计系统使用指南 | 内容创作 AI |
 | [design/WORKFLOW.md](./design/WORKFLOW.md) | 🔧 AI 内容生成工作流 | 内容创作 AI |
 
@@ -60,11 +61,13 @@ help_kangkang/
 │   ├── events/         ← 模块化事件
 │   ├── stages.json     ← 月份阶段
 │   └── buffs.json      ← 转世 Buff
-├── design/             ← 设计系统（AI 工作流用）
+├── design/             ← 设计文档 + AI 工作流
+│   ├── GAME_DESIGN.md  ← 游戏设定
+│   ├── ARCHITECTURE.md ← 系统架构
+│   ├── TODO.md         ← 任务分配表
 │   ├── _global/        ← 全局规范
 │   └── {system}/       ← 各系统设计文件
-├── GAME_DESIGN.md      ← 游戏设定
-├── ARCHITECTURE.md     ← 系统架构
+├── DECREES.md          ← 皇上旨意（进度总览）
 └── README.md           ← 本文件
 ```
 
@@ -79,6 +82,6 @@ help_kangkang/
 | AI-1 | `design/colleagues/settings.md` + `data/events/colleagues.json` | `_global/` |
 | AI-2 | `design/random_events/settings.md` + `data/events/random.json` | `_global/` |
 | AI-3 | `design/monthly/settings.md` + `data/events/monthly.json` | `_global/` + `ai_models/` |
-| AI-4 | `js/*.js` + `index.html` | `ARCHITECTURE.md` + `GAME_DESIGN.md` |
+| AI-4 | `js/*.js` + `index.html` | `design/ARCHITECTURE.md` + `design/GAME_DESIGN.md` |
 
-> **规则**：每个 AI 只修改自己负责的文件。`GAME_DESIGN.md` 和 `_global/` 是只读参考。
+> **规则**：每个 AI 只修改自己负责的文件。`design/GAME_DESIGN.md` 和 `design/_global/` 是只读参考。

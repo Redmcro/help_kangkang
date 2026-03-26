@@ -1,7 +1,7 @@
 # 🐷 康康逆天改命 — 系统架构设计
 
 > **本文件专注于代码架构和模块接口。**
-> 游戏设计（属性、数值、机制、结局等）请见 [GAME_DESIGN.md](./GAME_DESIGN.md)。
+> 游戏设计（属性、数值、机制、结局等）请见 [GAME_DESIGN.md](./GAME_DESIGN.md)（同目录）。
 > 最后更新：2026-03-26
 
 ---
@@ -18,16 +18,20 @@ help_kangkang/
 │   ├── engine.js           ← 游戏引擎：月份循环 + 状态机 + 成就/音效集成
 │   ├── events.js           ← 事件管理器：加载、筛选、执行 + 图鉴记录
 │   ├── achievement.js      ← 成就管理器：条件检测 + 跨转世追踪
-│   ├── audio.js            ← 音效管理器：Web Audio API 合成音效 + BGM
 │   ├── property.js         ← 属性管理器：数值系统 + 观察者
-│   └── save.js             ← 存档管理器：localStorage 持久化 + 音频偏好
+│   └── save.js             ← 存档管理器：localStorage 持久化
 ├── data/
 │   ├── events/             ← 模块化事件数据库
 │   │   ├── _manifest.json  ← 系统注册清单
 │   │   ├── general.json    ← 通用事件
-│   │   └── colleagues.json ← 同事系统事件
-│   ├── achievements.json   ← 成就定义（16个）
-│   ├── endings.json        ← 结局定义（13个）
+│   │   ├── colleagues.json ← 同事系统事件
+│   │   ├── monthly.json    ← 月份主线事件
+│   │   ├── random.json     ← 随机事件
+│   │   ├── choice.json     ← 选择事件
+│   │   ├── daily.json      ← 每日任务事件
+│   │   └── models.json     ← AI模型相关事件
+│   ├── achievements.json   ← ✅ 成就定义（16条）
+│   ├── endings.json        ← ✅ 结局定义（13条）
 │   ├── stages.json         ← 月份阶段配置
 │   └── buffs.json          ← 转世Buff配置
 ├── design/                 ← 游戏内容设计系统（AI工作流用）
@@ -42,9 +46,10 @@ help_kangkang/
 │   ├── economy/            ← 经济系统设计
 │   └── reincarnation/      ← 转世系统设计
 ├── .agents/workflows/      ← 工作流定义
-├── ARCHITECTURE.md         ← 本文件（系统架构）
-├── GAME_DESIGN.md          ← 游戏基础设定
+├── DECREES.md              ← 皇上旨意（进度总览）
 └── README.md               ← 项目导航
+
+注：本文件(ARCHITECTURE.md)、GAME_DESIGN.md、TODO.md 均在 design/ 目录下
 ```
 
 ## 二、分层架构
@@ -62,8 +67,8 @@ help_kangkang/
 │  事件管理器   │  属性管理器   │  存档管理器    │
 │  events.js   │  property.js │  save.js      │
 ├──────────────┼──────────────┼───────────────┤
-│  成就管理器   │  音效管理器   │               │
-│  achievement │  audio.js    │               │
+│  成就管理器   │               │
+│  achievement │               │
 ├──────────────┴──────────────┴───────────────┤
 │              数据层 (Data)                    │
 │   events/*.json  stages.json  buffs.json    │
@@ -248,19 +253,7 @@ help_kangkang/
 
 ---
 
-### 3.6 AudioManager (`js/audio.js`)
 
-**角色**：纯 Web Audio API 合成音效 + BGM（零外部文件）
-
-| 方法 | 功能 |
-|:---|:---|
-| `init()` | 创建 AudioContext（需用户交互后） |
-| `play(soundId)` | 播放音效（click/good/bad/special/choice/achievement/month_end/win/lose） |
-| `startBGM()` / `stopBGM()` | BGM 控制 |
-| `setSfxVolume(val)` / `setBgmVolume(val)` | 音量调节 |
-| `toggleMute()` | 静音切换（偏好持久化） |
-
----
 
 ## 六、扩展指南
 
@@ -285,29 +278,39 @@ help_kangkang/
 
 ## 七、TODO
 
-> 详细任务分配见 [TODO.md](./TODO.md)
+> 详细任务分配见 [TODO.md](./TODO.md)（同目录）
+> 管理工作流见 `.agents/workflows/chief-steward.md`
 
 ### 代码重构（v1→v2）
 - [x] `property.js` 属性系统对齐 v2（含 charm/luck 隐藏属性）
-- [x] `engine.js` 从年龄循环改为月份循环（基础完成，缺 luck 修正和 charm/luck 结局）
+- [x] `engine.js` 月份循环 + luck 微调 + charm/luck 结局 + events_seen 追踪
 - [x] `app.js` + `index.html` 重构为 IDE 风格 UI（基础完成，缺 Overlay 逻辑）
-- [x] `events.js` 事件筛选从 `age` 改为 `month`（完成，缺 luck 概率修正）
-- [/] `save.js` 存档格式更新（被回退，需恢复 events_seen/achievements_unlocked/audio）
+- [x] `events.js` 事件筛选 month + luck 概率修正
+- [x] `save.js` 存档格式更新（含 events_seen/achievements_unlocked/音频偏好）
+
+### 引擎功能缺失（待补）
+- [ ] 模型特殊效果（GAME_DESIGN §4.2，6个模型各有独特机制）
+- [ ] 隐藏结局补全（禅意程序员/豆包之神/铁三角，3/6 未实现）
+- [ ] charm 影响机制（关系修正/老板印象/私活谈判/社交事件）
+- [ ] 熬夜机制（代码质量<50 触发，连续加班计数器）
+- [ ] `doubao_quality_bonus` buff 引擎支持
+
+### 数据文件（已完成）
+- [x] `data/achievements.json` — 成就定义（16条，户部已完成）
+- [x] `data/endings.json` — 结局定义（13条，户部已完成）
 
 ### 内容扩充
-- [/] 事件内容（当前仅 general+colleagues 两个文件，需补 monthly/random/choice/daily/models）
+- [x] 事件内容（7系统/118事件：general+colleagues+monthly+random+choice+daily+models）
 - [ ] 事件权重平衡调整
 
 ### UI 增强
 - [x] IDE 主题实现（Dracula 配色）
-- [x] 月份 Tab Bar
-- [x] 月度结算面板
-- [x] 代码字符雨背景
-- [x] Overlay HTML 结构（图鉴/结局/成就 三个面板）
+- [x] 月份 Tab Bar + 月度结算面板 + 代码字符雨
+- [x] Overlay HTML 结构（图鉴/结局/成就三个面板）
 - [ ] Overlay JS 逻辑（打开/关闭/渲染数据）
+- [ ] Token 购买 / 模型切换 / 接私活 UI
 
 ### 系统扩展
-- [/] 成就系统（数据 achievements.json 就绪，achievement.js 被删需重建）
-- [ ] 事件收集图鉴（需 Overlay JS + save.js 恢复 events_seen）
-- [ ] 结局收集系统（engine.js 有 determineEnding，但缺 endings.json 独立数据）
-- [/] 音效/BGM（audio.js 被删需重建，index.html 按钮已有）
+- [ ] 成就系统（achievements.json 待创建 + achievement.js 待重建）
+- [ ] 事件收集图鉴（Overlay JS + save.js events_seen）
+- [ ] 结局收集系统（endings.json 待创建 + Overlay JS）

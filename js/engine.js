@@ -99,6 +99,11 @@ export class GameEngine {
         });
 
         this.property.setFlag('model_doubao_unlocked', true);
+
+        // 2b: initialize hidden ending tracking flags
+        this.property.setFlag('used_ai', false);
+        this.property.setFlag('only_doubao', true);
+
         this.emitEvent('康康正式入职了！新的一年，新的挑战...', 'special');
         this.emitUI();
         this.scheduleNext(() => this.processMonth());
@@ -148,16 +153,42 @@ export class GameEngine {
         const stars = pool[rng(0, pool.length - 1)];
         const modelId = this.property.get('current_model');
         const model = AI_MODELS[modelId];
-        const quality = this.calcQuality(model, stars);
 
+        // 2b: update hidden ending tracking flags
         if (model) {
-            const tc = model.cost[stars - 1] || model.cost[0];
-            const ct = this.property.get('token');
-            if (ct >= tc) this.property.set('token', ct - tc);
-            else { this.emitEvent('Token不足！纯人肉写代码...脑力消耗翻倍', 'bad'); this.property.applyEffect({ brain: -rng(5, 10) }); }
+            this.property.setFlag('used_ai', true);
+            if (modelId !== 'doubao') {
+                this.property.setFlag('only_doubao', false);
+            }
         }
 
-        // 🍀 luck 修正 Bug 率（GAME_DESIGN §2.3）
+        // 2a: Opus 4.6 - 8% chance to refuse (no token cost, no output)
+        if (modelId === 'opus46' && Math.random() < 0.08) {
+            this.emitEvent(`${month}\u6708${day}\u65E5 \u00B7 ${'\u2B50'.repeat(stars)} \u00B7 \uD83C\uDFAF Opus \u62D2\u7EDD\u751F\u6210\uFF01\u201C\u6211\u65E0\u6CD5\u5B8C\u6210\u8FD9\u4E2A\u4EFB\u52A1\u201D`, 'bad');
+            this.monthQualities.push(0);
+            this.emitUI();
+            this.scheduleNext(() => this.processDayEvent(month, day, totalDays));
+            return;
+        }
+
+        const quality = this.calcQuality(model, stars, modelId);
+
+        if (model) {
+            let tc = model.cost[stars - 1] || model.cost[0];
+
+            // 2a: DeepSeek V4 - 12% chance extra 30% token cost
+            if (modelId === 'deepseek_v4' && Math.random() < 0.12) {
+                const extraCost = Math.floor(tc * 0.3);
+                tc += extraCost;
+                this.emitEvent(`\uD83D\uDD2E DeepSeek \u8F93\u51FA\u8D85\u957F\u4EE3\u7801\uFF01\u989D\u5916\u6D88\u8017 ${extraCost}M Token`, 'bad');
+            }
+
+            const ct = this.property.get('token');
+            if (ct >= tc) this.property.set('token', ct - tc);
+            else { this.emitEvent('Token\u4E0D\u8DB3\uFF01\u7EAF\u4EBA\u8089\u5199\u4EE3\u7801...\u8111\u529B\u6D88\u8017\u7FFD\u500D', 'bad'); this.property.applyEffect({ brain: -rng(5, 10) }); }
+        }
+
+        // luck bug rate correction (GAME_DESIGN 2.3)
         const luck = this.property.get('luck') || 50;
         const baseBugRate = model ? model.bugRate : 0.3;
         const hasBug = Math.random() < baseBugRate * (1 - (luck - 50) / 200);
@@ -165,12 +196,33 @@ export class GameEngine {
             const bc = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 3);
             this.property.applyEffect({ brain: -bc });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
-            this.emitEvent(`${month}月${day}日 · ${'⭐'.repeat(stars)} · 出Bug了！脑力-${bc}`, 'bad');
+            this.emitEvent(`${month}\u6708${day}\u65E5 \u00B7 ${'\u2B50'.repeat(stars)} \u00B7 \u51FABug\u4E86\uFF01\u8111\u529B-${bc}`, 'bad');
         } else {
-            this.emitEvent(`${month}月${day}日 · ${'⭐'.repeat(stars)} · 代码质量 ${quality}`, quality >= 70 ? 'good' : 'neutral');
+            this.emitEvent(`${month}\u6708${day}\u65E5 \u00B7 ${'\u2B50'.repeat(stars)} \u00B7 \u4EE3\u7801\u8D28\u91CF ${quality}`, quality >= 70 ? 'good' : 'neutral');
         }
 
         this.monthQualities.push(quality);
+
+        // 2d: overtime mechanism - quality < 50 triggers overtime
+        if (quality < 50) {
+            const hpLoss = rng(5, 15);
+            const brainLoss = rng(3, 8);
+            this.property.applyEffect({ hp: -hpLoss, brain: -brainLoss });
+            this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
+            this.emitEvent(`\u7184\u591C\u52A0\u73ED\u4FEE\u4EE3\u7801\uFF01HP-${hpLoss} \u8111\u529B-${brainLoss}`, 'bad');
+
+            const overtime = this.property.get('consecutive_overtime');
+            if (overtime >= 5) {
+                this.property.set('consecutive_overtime', 0);
+                this.property.applyEffect({ hp: -rng(5, 10) });
+                this.emitEvent('\u26A0\uFE0F \u8FDE\u7EED\u52A0\u73ED5\u5929\uFF01\u8EAB\u4F53\u6297\u4E0D\u4F4F\u4E86\uFF0C\u5F3A\u5236\u4F11\u606F...', 'bad');
+            } else if (overtime >= 3) {
+                this.emitEvent('\u26A0\uFE0F \u8FDE\u7EED\u52A0\u73ED3\u5929\uFF01\u518D\u8FD9\u6837\u4E0B\u53BB\u8981\u731D\u6B7B\u4E86\uFF01', 'bad');
+            }
+        } else {
+            this.property.set('consecutive_overtime', 0);
+        }
+
         this.emitUI();
 
         const go = this.property.isGameOver();
@@ -197,6 +249,16 @@ export class GameEngine {
                 }
                 const result = this.eventMgr.execute(id, ev, state);
                 addToLegacySet(this.legacy, 'events_seen', id);
+
+                // 2c: charm 影响关系变化（GAME_DESIGN §二.2.3）
+                if (result.effect) {
+                    const charmMod = ((state.charm || 50) - 50) / 100;
+                    if (result.effect.shaoye_rel)
+                        result.effect.shaoye_rel = Math.round(result.effect.shaoye_rel * (1 + charmMod));
+                    if (result.effect.yimin_rel)
+                        result.effect.yimin_rel = Math.round(result.effect.yimin_rel * (1 + charmMod));
+                }
+
                 this.property.applyEffect(result.effect);
                 if (result.setFlag) this.property.setFlag(result.setFlag);
                 this.emitEvent(result.text, result.type || 'neutral');
@@ -218,6 +280,10 @@ export class GameEngine {
         let sd = 0;
         if (avgQ >= 90) sd = 2; else if (avgQ >= 70) sd = 1; else if (avgQ >= 50) sd = 0;
         else if (avgQ >= 30) sd = -2; else sd = -5;
+
+        // 2c: charm 微调 bossSatisfy（GAME_DESIGN §二.2.3）
+        const charm = this.property.get('charm') || 50;
+        sd = Math.round(sd * (1 + (charm - 50) / 200));
 
         this.property.applyEffect({ bossSatisfy: sd });
         this.property.set('avg_quality', avgQ);
@@ -262,16 +328,38 @@ export class GameEngine {
         this.scheduleNext(() => this.processWorkDay(ctx.month, ctx.day + 1, ctx.totalDays));
     }
 
-    calcQuality(model, stars) {
+    calcQuality(model, stars, modelId) {
         const brain = this.property.get('brain');
         const luck = this.property.get('luck') || 50;
         let bq = model ? model.quality : brain * 0.5;
         const bb = (brain - 50) * 0.3;
         const tp = [0, 0, -5, -10, -20][stars] || 0;
-        const rr = rng(-8, 8);
+        let rr = rng(-8, 8);
         const luckBonus = (luck - 50) * 0.05; // 🍀 luck 微调代码质量（±2.5）
         if (brain < 30) bq -= 20;
-        return Math.round(Math.max(0, Math.min(100, bq + bb + tp + rr + luckBonus)));
+
+        // 2a: 模型特殊效果（GAME_DESIGN §四.2）
+        let modelSpecial = 0;
+        switch (modelId) {
+            case 'doubao':
+                if (stars === 1) modelSpecial += 10;           // 简单任务(⭐)质量+10
+                if (Math.random() < 0.10) modelSpecial += 20;  // 10%概率超常发挥
+                // 2e: doubao_quality_bonus 支持（buff_doubao）
+                const dqb = this.property.get('doubao_quality_bonus');
+                if (dqb) modelSpecial += dqb;
+                break;
+            case 'gpt54':
+                rr = rng(-3, 3);  // 波动缩小至 ±3
+                break;
+            case 'cheapgpt':
+                if (Math.random() < 0.20) return 0;  // 20%概率输出完全无关内容
+                break;
+            case 'fakeopus':
+                modelSpecial -= 15;  // 质量偷偷 -15
+                break;
+        }
+
+        return Math.round(Math.max(0, Math.min(100, bq + bb + tp + rr + luckBonus + modelSpecial)));
     }
 
     endGame(cause) {
@@ -313,6 +401,17 @@ export class GameEngine {
             return { id: 'ending_awakened', icon: '🌟', title: '人间清醒', desc: '高情商的康康在职场如鱼得水，活成了所有人羡慕的样子！', isWin: true, coins: 110 };
         if ((state.luck || 50) >= 90)
             return { id: 'ending_lucky', icon: '🍀', title: '欧皇降临', desc: '运气逆天的康康，做什么都顺风顺水！', isWin: true, coins: 120 };
+
+        // === 2b: 新增隐藏结局（GAME_DESIGN §八） ===
+        // 🧘 禅意程序员：brain >= 90 且全程不用AI
+        if (state.brain >= 90 && !state.used_ai)
+            return { id: 'ending_zen', icon: '🧘', title: '禅意程序员', desc: '从不依赖AI，纯靠脑力写出了完美代码！真正的编程禅师！', isWin: true, coins: 100 };
+        // 🐳 豆包之神：全程只用豆包 + avg_quality >= 75
+        if (state.only_doubao && avgQ >= 75)
+            return { id: 'ending_doubao_god', icon: '🐳', title: '豆包之神', desc: '只用豆包也能写出高质量代码，康康成为了传说中的豆包之王！', isWin: true, coins: 130 };
+        // 🤝 铁三角：shaoye_rel >= 90 && yimin_rel >= 90
+        if ((state.shaoye_rel || 0) >= 90 && (state.yimin_rel || 0) >= 90)
+            return { id: 'ending_triangle', icon: '🤝', title: '铁三角', desc: '康康和少爷、亿民结成了牢不可破的铁三角，职场无敌！', isWin: true, coins: 100 };
 
         // === 胜利结局 ===
         if (bossSat >= 80 && avgQ >= 80) return { id: 'ai_master', icon: '🏆', title: 'AI 大师', desc: '康康成为了公司的AI编程专家！大幅加薪！', isWin: true, coins: 150 };
