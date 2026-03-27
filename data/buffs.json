@@ -10,5 +10,7 @@
   {"id": "buff_lucky_star", "icon": "🌟", "name": "天选之人", "desc": "幸运+30，事件结果倾向正面", "cost": 60, "effect": {"luck": 30}, "unlock": "完成5局"},
   {"id": "buff_boss_spy", "icon": "🕵️", "name": "老板心腹", "desc": "老板初始满意度+20，但同事关系-10", "cost": 40, "effect": {"bossSatisfy": 20, "shaoye_rel": -10, "yimin_rel": -10}, "unlock": "AI大师结局"},
   {"id": "buff_hacker", "icon": "👾", "name": "代码鬼才", "desc": "脑力+20，初始解锁DeepSeek V4", "cost": 100, "effect": {"brain": 20}, "unlock": "人间清醒结局"},
-  {"id": "buff_minimalist", "icon": "🏕️", "name": "极简生活", "desc": "生活费减半(每月省¥3000)", "cost": 30, "effect": {"living_cost": -3000}, "unlock": "破产回家结局"}
+  {"id": "buff_minimalist", "icon": "🏕️", "name": "极简生活", "desc": "生活费减半(每月省¥3000)", "cost": 30, "effect": {"living_cost": -3000}, "unlock": "破产回家结局"},
+  {"id": "buff_hp_regen", "icon": "🧘", "name": "身体调理", "desc": "每月自动恢复HP+5（加班减半）", "cost": 30, "effect": {"hp_regen_rate": 5}, "unlock": "完成1局"},
+  {"id": "buff_brain_regen", "icon": "🧠", "name": "冥想术", "desc": "每月自动恢复Brain+5（加班减半）", "cost": 30, "effect": {"brain_regen_rate": 5}, "unlock": "完成1局"}
 ]

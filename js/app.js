@@ -175,10 +175,21 @@ function showChoicePanel(ev, state) {
         if (!locked) b.addEventListener('click', () => game.makeChoice(ch));
         btns.appendChild(b);
     });
-    p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Fix: Add bottom padding to event stream so content isn't hidden behind panel
+    const es = $('eventStream');
+    requestAnimationFrame(() => {
+        const panelHeight = p.offsetHeight;
+        es.style.paddingBottom = panelHeight + 'px';
+        es.scrollTop = es.scrollHeight;
+    });
 }
 
-function hideChoicePanel() { $('choicePanel').classList.remove('show'); }
+function hideChoicePanel() {
+    $('choicePanel').classList.remove('show');
+    // Fix: Remove extra padding when choice panel closes
+    $('eventStream').style.paddingBottom = '';
+}
 
 // ===== End Screen =====
 

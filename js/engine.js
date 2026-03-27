@@ -204,7 +204,13 @@ export class GameEngine {
             const costDisplay = cost >= 0 ? `-¥${cost}` : `+¥${Math.abs(cost)}`;
             this.emitEvent(`月初结算：工资 +¥${salary}，生活费 ${costDisplay}`, 'money');
         }
-        this.property.monthlyRecovery();
+        const recovery = this.property.monthlyRecovery();
+        if (recovery.brainRecover > 0 || recovery.hpRecover > 0) {
+            const parts = [];
+            if (recovery.hpRecover > 0) parts.push(`❤️+${recovery.hpRecover}`);
+            if (recovery.brainRecover > 0) parts.push(`🧠+${recovery.brainRecover}`);
+            this.emitEvent(`月初恢复：${parts.join(' ')}`, 'good');
+        }
 
         for (const [id, model] of Object.entries(AI_MODELS)) {
             const fk = `model_${id}_unlocked`;
@@ -314,6 +320,9 @@ export class GameEngine {
         let brainLoss = 0;
         if (hasBug) {
             brainLoss = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 3);
+            // Extra brain drain: 2~5 scaled by task difficulty
+            const extraBrainDrain = rng(2, Math.min(5, 2 + stars));
+            brainLoss += extraBrainDrain;
             this.property.applyEffect({ brain: -brainLoss });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
         }
@@ -323,19 +332,23 @@ export class GameEngine {
         // 2d: overtime mechanism - quality < 40 triggers overtime
         if (quality < 40) {
             let hpLoss = rng(3, 8);
+            // Extra HP drain: 2~5 scaled by overtime intensity
+            const overtime = this.property.get('consecutive_overtime');
+            const extraHpDrain = rng(2, Math.min(5, 2 + overtime));
+            hpLoss += extraHpDrain;
             this.property.applyEffect({ hp: -hpLoss });
             this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
             this.dayReport.overtime = true;
 
-            const overtime = this.property.get('consecutive_overtime');
-            if (overtime >= 5) {
+            const overtimeAfter = overtime + 1;
+            if (overtimeAfter >= 5) {
                 this.property.set('consecutive_overtime', 0);
                 const extraHpLoss = rng(3, 6);
                 hpLoss += extraHpLoss;
                 this.property.applyEffect({ hp: -extraHpLoss });
                 const bugPart = hasBug ? `，期间还修了个Bug 🧠-${brainLoss}` : '';
                 this.dayReport.events.push(`⚠️ 连续加班5天！强制休息（质检${quality}分${bugPart}） ❤️-${hpLoss}`);
-            } else if (overtime >= 3) {
+            } else if (overtimeAfter >= 3) {
                 const bugPart = hasBug ? `，外加修Bug 🧠-${brainLoss}` : '';
                 this.dayReport.events.push(`⚠️ 代码只有${quality}分，连续加班3天，黑眼圈已经遮不住了${bugPart} ❤️-${hpLoss}`);
             } else {

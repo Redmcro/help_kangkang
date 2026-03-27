@@ -44,6 +44,10 @@ export class PropertyManager {
             months_bankrupt: 0,
             living_cost: 1500,
 
+            // Recovery rates (from buffs)
+            hp_regen_rate: 0,
+            brain_regen_rate: 0,
+
             // Story flags
             gamejam_won: false,
 
@@ -126,14 +130,17 @@ export class PropertyManager {
 
     /**
      * Monthly recovery (called at start of each month).
-     * brain +8, hp +5 (halved if overtime last month).
+     * Recovery based on purchased buff rates (halved if overtime).
      */
     monthlyRecovery() {
         const wasOvertime = this.#data.consecutive_overtime > 0;
-        const brainRecover = wasOvertime ? 4 : 8;
-        const hpRecover = wasOvertime ? 3 : 5;
-        this.set('brain', clamp(this.#data.brain + brainRecover, 0, 100));
-        this.set('hp', clamp(this.#data.hp + hpRecover, 0, 100));
+        const brainRate = this.#data.brain_regen_rate || 0;
+        const hpRate = this.#data.hp_regen_rate || 0;
+        const brainRecover = wasOvertime ? Math.floor(brainRate / 2) : brainRate;
+        const hpRecover = wasOvertime ? Math.floor(hpRate / 2) : hpRate;
+        if (brainRecover > 0) this.set('brain', clamp(this.#data.brain + brainRecover, 0, 100));
+        if (hpRecover > 0) this.set('hp', clamp(this.#data.hp + hpRecover, 0, 100));
+        return { brainRecover, hpRecover };
     }
 
     /**

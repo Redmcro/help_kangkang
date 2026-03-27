@@ -457,7 +457,7 @@ body{
 
   /* Editor fills remaining space */
   .editor{min-height:280px}
-  .event-stream{min-height:200px;max-height:60vh;font-size:12px}
+  .event-stream{min-height:200px;max-height:60vh;font-size:12px;transition:padding-bottom .3s ease}
   .ev-line .ev-prefix{font-size:10px}
 
   /* Choice panel → bottom sheet */
@@ -480,6 +480,7 @@ body{
 }
 @supports(padding:env(safe-area-inset-bottom)){
   .terminal-bar{padding-bottom:env(safe-area-inset-bottom)}
+  .choice-panel{padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 }
 
 /* ===== START SCREEN SUB BUTTONS ===== */
