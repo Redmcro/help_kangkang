@@ -6,20 +6,33 @@
 
 ## 零、v3 Authoring/Runtime 合约（必须遵守）
 
-- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
-- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
+- 当节点声明 `actions`（包括 `[]`）时，运行时只执行 native actions，不再编译 Legacy 字段。
+- 仅当节点未声明 `actions` 时，才会编译 `effect` / `setFlag` / `flags` / `tokenCost`。
+- 普通事件 `branch` 可回退继承父级 native actions；`choice` 分支不会继承父级 native actions。
 - 事件（策划内容）只表达意图（intent）；运行时（engine）负责结算（settlement）与定价（pricing）。
 
 ### 0.1 Action 与属性映射口径
 
-| Action | 关键字段 | 本文件约束 |
-|:---|:---|:---|
-| `stat_delta` | `delta` | `delta` 中键名必须来自本文件属性表 |
-| `set_state` | `key`, `value` | `key` 必须是已登记状态键（如 `current_model` / `month`） |
-| `set_flag` | `flag`, `value` | `flag` 必须在“Flag 注册表”登记 |
-| `switch_model` | `modelId` | 只表达“切模型”意图，不写价格与扣费公式 |
-| `unlock_model` | `modelId` | 只表达“解锁模型”意图，不写解锁后的经济结算 |
-| `charge_tokens` | `amount`, `reason` | 只表达扣费意图；运行时按模型规则折算并扣减 `money` |
+| Action | 推荐字段（新内容） | 运行时兼容字段 | 本文件约束 |
+|:---|:---|:---|:---|
+| `stat_delta` | `delta` | `effect` / `values` / `stats` / `key+value` | `delta` 键名必须来自本文件属性表 |
+| `set_state` | `state` | `set` / `patch` / `values` / `key+value` | 状态键必须是已登记状态键（如 `current_model` / `month`） |
+| `set_flag` | `flag`, `value` | `key`, `value` / `flags` / `map` | `flag` 必须在“Flag 注册表”登记 |
+| `switch_model` | `modelId` | `model` / `id` / `target` | 只表达“切模型”意图，不写价格与扣费公式 |
+| `unlock_model` | `modelId` | `model` / `id` / `target` | 只表达“解锁模型”意图，不写解锁后的经济结算 |
+| `charge_tokens` | `amount`, `reason` | `tokens` / `tokenCost` | 只表达扣费意图；运行时按模型规则折算并扣减 `money` |
+
+### 0.2 审计后反模式（禁止）
+
+- 文本写了“切换/换成某模型”，但 action 没有 `switch_model`。
+- 用 `effect.money` 直接扣钱来伪造模型 Token 扣费，而不是 `charge_tokens`。
+
+### 0.3 提交前检查清单（短版）
+
+- 模型动作与文案一致：切换=`switch_model`，解锁=`unlock_model`。
+- 模型扣费统一用 `charge_tokens`，不用 `effect.money` 模拟。
+- 若声明 `actions`，确认 Legacy 字段确实应被忽略。
+- 新增 Flag 已登记到本文件“Flag 注册表”。
 
 ---
 

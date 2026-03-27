@@ -26,21 +26,41 @@
 
 ### 1.1 v3 Authoring/Runtime 合约（策划落版口径）
 
-- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
-- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
-- 事件（策划内容）只表达意图（intent）；运行时（engine）负责结算（settlement）与定价（pricing）。
-- 模型切换、模型解锁、扣费统一写 action 意图，不在事件里硬编码价格、折扣和余额判定公式。
+- 当节点声明 `actions`（含 `[]`）时，运行时只执行 native actions，不再编译 `effect/setFlag/flags/tokenCost`。
+- 仅当节点未声明 `actions` 时，才编译 Legacy 字段。
+- 普通事件 `branch` 可回退继承父级 native actions；`choice` 分支不会继承父级 native actions。
+- 事件只写意图，结算（定价/扣费/合法性校验）由运行时统一处理。
+
+| Action | 推荐字段 | 运行时兼容字段 |
+|:---|:---|:---|
+| `stat_delta` | `delta` | `effect` / `values` / `stats` / `key+value` |
+| `set_state` | `state` | `set` / `patch` / `values` / `key+value` |
+| `set_flag` | `flag`, `value` | `key`, `value` / `flags` / `map` |
+| `switch_model` | `modelId` | `model` / `id` / `target` |
+| `unlock_model` | `modelId` | `model` / `id` / `target` |
+| `charge_tokens` | `amount`, `reason` | `tokens` / `tokenCost` |
 
 #### v3 示例（只写意图，不写结算公式）
 
 ```jsonc
 "actions": [
-  { "type": "switch_model", "modelId": "gpt54" },
-  { "type": "charge_tokens", "amount": 1500, "reason": "model_usage" },
-  { "type": "stat_delta", "delta": { "brain": -4, "bossSatisfy": 1 } },
-  { "type": "set_flag", "flag": "switched_to_gpt54", "value": true }
+  { "type": "unlock_model", "modelId": "opus46" },
+  { "type": "switch_model", "modelId": "opus46" },
+  { "type": "charge_tokens", "amount": 3.2, "reason": "m5_feature_delivery" },
+  { "type": "stat_delta", "delta": { "brain": 3, "bossSatisfy": 2 } },
+  { "type": "set_flag", "flag": "switched_to_opus46", "value": true }
 ]
 ```
+
+反模式（禁止）：
+- 文本写“切换/换成模型”却没有 `switch_model`。
+- 用 `effect.money` 直接扣钱伪装模型 Token 扣费，而不是 `charge_tokens`。
+
+提交前短清单：
+- 模型语义动作与文案一致（切换/解锁）。
+- 模型扣费统一写 `charge_tokens`。
+- 若声明 `actions`，确认 Legacy 字段应被忽略。
+- 新 Flag 已登记在 `design/_global/attributes.md`。
 
 ---
 

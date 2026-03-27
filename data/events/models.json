@@ -360,6 +360,13 @@
     "include": {
       "money": "<450"
     },
+    "actions": [
+      {
+        "type": "charge_tokens",
+        "amount": 1.9,
+        "reason": "heavy_feature_token_burn"
+      }
+    ],
     "effect": {
       "money": -28
     },
@@ -463,8 +470,16 @@
     "system": "model",
     "weight": 0.6,
     "include": {
-      "model_opus46_unlocked": true
+      "model_opus46_unlocked": true,
+      "current_model": "=opus46"
     },
+    "actions": [
+      {
+        "type": "charge_tokens",
+        "amount": 1,
+        "reason": "opus_verbose_comments"
+      }
+    ],
     "effect": {
       "money": -25
     },

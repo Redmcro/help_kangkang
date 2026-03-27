@@ -1,5 +1,4 @@
 # 🏛️ Active Tasks
 
 > Each `.md` = one task. Deleted after review.
-
-No active tasks.
+Use task files in this folder as the current active queue.

@@ -43,12 +43,36 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
+    "actions": [
+      {
+        "type": "charge_tokens",
+        "amount": 1.5,
+        "reason": "dialog_system_complexity"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "bossSatisfy": [2, 4],
+          "brain": [-2, -4]
+        }
+      }
+    ],
     "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-22, -45]},
     "branch": [
       {
         "cond": {"brain": ">72", "current_model": "=gpt54"},
         "text": "你把上下文拆成可复用模板并加了缓存层，GPT-5.4输出稳定，Token浪费大幅下降。隔壁项目直接抄作业，预算还返了你一笔。",
         "type": "good",
+        "actions": [
+          {
+            "type": "stat_delta",
+            "delta": {
+              "bossSatisfy": [3, 5],
+              "brain": [-2, -4],
+              "money": [60, 160]
+            }
+          }
+        ],
         "effect": {"bossSatisfy": [3, 5], "brain": [-2, -4], "money": [60, 160]}
       }
     ]

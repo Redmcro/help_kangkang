@@ -501,6 +501,27 @@
         "text": "💰 挑最贵的用——贵的肯定好",
         "hint": "简单粗暴，贵的就是好的",
         "result": "Opus 4.6质量确实好，但Token烧得飞快。一个月的预算三天就花完了。",
+        "actions": [
+          {
+            "type": "unlock_model",
+            "modelId": "opus46"
+          },
+          {
+            "type": "switch_model",
+            "modelId": "opus46"
+          },
+          {
+            "type": "charge_tokens",
+            "amount": 3.2,
+            "reason": "premium_model_choice"
+          },
+          {
+            "type": "stat_delta",
+            "delta": {
+              "brain": 3
+            }
+          }
+        ],
         "effect": {"money": -80, "brain": 3}
       },
       {

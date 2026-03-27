@@ -445,7 +445,8 @@
     "type": "bad",
     "system": "random",
     "weight": 1.2,
-    "effect": {"brain": -5, "money": -30},
+    "effect": {"brain": -5},
+    "tokenCost": 2,
     "postEvent": "康康重新组织了语言又试了三次，Token哗哗地流走了。"
   },
   "random_good_first_slack_01": {

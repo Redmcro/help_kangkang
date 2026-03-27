@@ -76,7 +76,7 @@ No business mutation in projection code.
 
 ## 4. Event Contract v3
 
-`actions` becomes first-class payload for event and choice outcomes.
+`actions` is the first-class payload for both event outcomes and choice outcomes.
 
 Example:
 
@@ -90,8 +90,8 @@ Example:
       {
         "text": "Switch to Doubao",
         "actions": [
-          { "type": "switch_model", "model": "doubao" },
-          { "type": "set_flag", "key": "switched_to_doubao", "value": true }
+          { "type": "switch_model", "modelId": "doubao" },
+          { "type": "set_flag", "flag": "switched_to_doubao", "value": true }
         ],
         "result": "Switched to Doubao for cost control."
       }
@@ -100,7 +100,7 @@ Example:
 }
 ```
 
-Minimum action set:
+Current runtime-supported action set:
 
 - `stat_delta`
 - `set_state`
@@ -108,58 +108,99 @@ Minimum action set:
 - `switch_model`
 - `unlock_model`
 - `charge_tokens`
-- `apply_modifier`
-- `remove_modifier`
+
+### 4.1 Canonical Fields (and Runtime Alias Compatibility)
+
+| Action | Canonical fields (new authoring) | Runtime-compatible aliases |
+|:---|:---|:---|
+| `stat_delta` | `delta` | `effect` / `values` / `stats` / `key+value` |
+| `set_state` | `state` | `set` / `patch` / `values` / `key+value` |
+| `set_flag` | `flag`, `value` | `key`, `value` / `flags` / `map` |
+| `switch_model` | `modelId` | `model` / `id` / `target` |
+| `unlock_model` | `modelId` | `model` / `id` / `target` |
+| `charge_tokens` | `amount`, `reason` | `tokens` / `tokenCost` |
+
+### 4.2 Precedence and Fallback Rules (Authoritative)
+
+1. If a node has an `actions` property (including `[]`), runtime executes native actions only.
+2. If a node has no `actions` property, runtime compiles legacy fields (`effect/setFlag/flags/tokenCost`) into actions.
+3. Non-choice `branch`: matched branch can fall back to parent native `actions` when branch has no own `actions`.
+4. `choice` branch/result: parent native `actions` are not inherited automatically; each branch/result must declare its own native actions.
+5. Legacy field lookup is source-first, then fallback-node.
+
+### 4.3 Audit Anti-Patterns (Must Be Rejected)
+
+- Text implies model switching, but action payload has no `switch_model`.
+- Model-cost intent is encoded as raw `effect.money` delta instead of `charge_tokens`.
+
+### 4.4 Author Checklist (Before JSON Submission)
+
+1. Model switch/unlock intents map to `switch_model` / `unlock_model`.
+2. Model charging intent maps to `charge_tokens` (not raw money delta).
+3. If `actions` exists, verify ignoring legacy fields is intentional.
+4. For `choice` branches, verify each branch/result has explicit native action payload when needed.
+5. New flags are registered in global attribute docs.
 
 ## 5. Action Semantics
 
 ### 5.1 `switch_model`
 
-- Validates target model is unlocked.
-- Mutates `model_runtime.current_model`.
-- Produces explicit log entry for audit/UI.
+- Canonical field: `modelId` (aliases: `model/id/target`).
+- Validates model exists and is unlocked before mutation.
+- Mutates `current_model` immediately in the same tick.
+- Unknown/locked targets are rejected as safe no-op (no crash).
 
 ### 5.2 `unlock_model`
 
-- Adds model to unlocked set/flags.
-- Optional `equip: true` can immediately switch model.
+- Canonical field: `modelId` (aliases: `model/id/target`).
+- Validates model id exists before unlock.
+- Unlock only; current runtime does not support `equip` auto-switch semantics.
+- Unknown ids are rejected as safe no-op.
 
 ### 5.3 `charge_tokens`
 
-- Uses current model price (plus modifiers) from rule layer.
-- Rejects raw flat-money bypass for model charging paths.
+- Canonical field: `amount` (must be positive number). `reason` is optional metadata.
+- Aliases: `tokens` / `tokenCost`.
+- Settlement formula: `moneyCost = round(amount * currentModel.tokenPrice)`.
+- Uses active model at execution time; no active model means safe no-op.
 
 ### 5.4 `stat_delta` and `set_state`
 
 - `stat_delta` for additive change (supports ranges).
-- `set_state` for exact assignment.
-- Both are validated against schema/invariants.
+- `set_state` for exact assignment (`state` canonical object payload).
+- For `current_model` assignment via `set_state`, unknown/locked models are rejected.
+- Invalid payload shapes are safe no-op and logged.
+
+### 5.5 `set_flag`
+
+- Canonical fields: `flag`, `value`.
+- Aliases: `key`, `value` and map mode (`flags` / `map`).
+- Missing `value` defaults to `true`.
 
 ## 6. Runtime Flow (Authoritative)
 
-For each day/event resolution:
+For each event/choice resolution:
 
 1. Snapshot current state.
-2. Build candidate event pool via trigger constraints.
-3. Pick event by priority/weight.
+2. Build candidate pool with month/include/exclude filters.
+3. Pick event by priority policy (`choice` chance gate -> `special` chance gate -> non-filler -> weighted fallback).
 4. Resolve branch/choice outcome.
-5. Build action plan:
-   - Use `actions` if provided.
-   - Else compile legacy `effect/setFlag/tokenCost` into actions.
-6. Execute actions in order (single executor).
-7. Run post-rules (overtime, monthly counters, derived modifiers).
-8. Emit normalized log payload.
-9. Persist state and update projection/UI.
+5. Build action plan from precedence rules (native first, otherwise legacy compile).
+6. Execute actions in order with no-throw/no-crash handling for invalid payloads.
+7. Apply runtime derived adjustments (for example charm-based relation adjustment for `shaoye_rel/yimin_rel` deltas).
+8. Append normalized deltas/token usage into day report and UI logs.
+9. Persist updated state and continue monthly/day loop.
 
 ## 7. Invariants
 
 Must hold after every execution:
 
-- clamped stats remain in defined bounds
-- `current_model` is either valid unlocked model or null-human mode
-- no token-charge action bypasses model pricing rule
-- flags and state keys are schema-valid
-- event execution result is deterministic for fixed RNG seeds
+- executor never crashes on invalid action payload; invalid actions are safe no-op.
+- supported action types are fixed to current runtime list (see section 4).
+- `current_model` transition is allowed only to known and unlocked models.
+- `charge_tokens` always settles by active model price path (no semantic bypass via raw money delta).
+- legacy-compiled actions preserve behavior when native `actions` is absent.
+- `choice` branch outcomes do not inherit parent native actions implicitly.
 
 ## 8. Backward Compatibility
 
@@ -195,10 +236,11 @@ Mixed content mode is supported:
 ## 10. First Acceptance Scenarios
 
 1. "Switch to Doubao" choice immediately updates `current_model`.
-2. Same-day and later token charging follows Doubao price.
-3. Unlock event with `equip` changes both unlock status and active model.
-4. Legacy events without `actions` still run with unchanged outcomes.
-5. Logs show both narrative text and executed semantic actions.
+2. If `switch_model` and `charge_tokens` are in one action plan, charging uses the switched model price in the same tick.
+3. Unknown/locked model in `switch_model` or `set_state.current_model` is rejected with no crash and no state mutation.
+4. `actions: []` suppresses legacy fallback intentionally (no implicit `effect/setFlag/tokenCost` execution).
+5. Non-choice branch can use parent native actions fallback; `choice` branch cannot.
+6. Legacy events without `actions` still run via adapter with unchanged intent outcome.
 
 ## 11. Task Split Recommendation
 
@@ -224,8 +266,8 @@ Bridge emits a normalized action plan:
 {
   "planId": "event_xxx@month-day",
   "actions": [
-    { "type": "switch_model", "model": "doubao" },
-    { "type": "set_flag", "key": "switched_to_doubao", "value": true }
+    { "type": "switch_model", "modelId": "doubao" },
+    { "type": "set_flag", "flag": "switched_to_doubao", "value": true }
   ],
   "meta": { "source": "event_id", "mode": "native|legacy_compiled" }
 }
@@ -233,24 +275,27 @@ Bridge emits a normalized action plan:
 
 ### 12.3 Precedence Rules
 
-1. If `actions[]` exists and non-empty: execute `actions[]` only.
-2. If no `actions[]`: compile legacy fields into actions.
-3. During migration, dual-write is allowed in JSON, but runtime source of truth is still rule #1.
+1. If a node has `actions` property (including empty array), execute native `actions` only.
+2. If a node has no `actions` property, compile legacy fields into actions.
+3. For non-choice `branch`, native action lookup can fallback to parent event node.
+4. For `choice` branch/result, parent native actions are not fallback source.
+5. During migration, dual-write is allowed in JSON, but runtime source of truth stays with the above precedence.
 
 ### 12.4 Legacy Mapping Table
 
 - `effect` numeric -> `stat_delta`
-- `effect` non-numeric -> `set_state`
-- `setFlag: "x"` -> `set_flag(key="x", value=true)`
-- `flags: {k:v}` (choice branch style) -> multiple `set_flag`
-- `tokenCost: N` -> `charge_tokens(amount=N, model="current")`
+- `effect` non-numeric -> `set_state(state={...})`
+- `setFlag: "x"` -> `set_flag(key="x", value=true)` (runtime-compatible alias)
+- `flags: {k:v}` -> multiple `set_flag(key=k, value=!!v)`
+- `tokenCost: N` -> `charge_tokens(amount=N)`
 
 ### 12.5 Rejection / No-op Rules
 
 - invalid model in `switch_model` -> rejected with reason, no crash
 - locked model switch -> rejected with reason, no state mutation
-- unknown path in `set_state`/`stat_delta` -> rejected with reason
-- all rejections are appended to action logs for review
+- invalid payload shape/type in any action -> safe no-op with runtime warning log
+- non-positive `charge_tokens.amount` or no active model -> safe no-op
+- all rejections/no-ops are appended to action logs for review
 
 ## 13. Parallel Delivery Strategy
 

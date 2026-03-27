@@ -4,37 +4,54 @@
 
 ## 零、v3 Authoring/Runtime 合约（必须遵守）
 
-### 0.1 优先级规则（authoritative）
+### 0.1 优先级与回退规则（authoritative）
 
-- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
-- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
+- 当节点声明了 `actions` 字段（即使是空数组 `[]`），运行时只走 native action 路径，不再编译 Legacy 字段。
+- 仅当节点没有 `actions` 字段时，才会编译 `effect` / `setFlag` / `flags` / `tokenCost`。
+- 普通事件 `branch`：命中分支若未声明 `actions`，会回退继承父事件的 native `actions`。
+- 选择事件（`choice`）分支：不会回退继承父级 native `actions`，每个分支/结果要显式写自己的 `actions`。
+- Legacy 字段取值遵循“命中节点优先、父节点兜底”。
 
 ### 0.2 领域边界（intent vs settlement）
 
 - 事件（策划内容）只表达意图（intent），例如“切模型”“扣费意图”“加状态”。
 - 运行时（engine）负责结算（settlement）与定价（pricing），例如模型单价、折扣、余额校验与实际 `money` 扣减。
 
-### 0.3 v3 标准动作类型
+### 0.3 v3 标准动作类型（含运行时兼容别名）
 
-| `type` | 用途 | 关键字段 |
+| `type` | 推荐字段（新内容） | 运行时兼容字段（旧内容/过渡） |
 |:---|:---|:---|
-| `stat_delta` | 修改数值属性 | `delta` |
-| `set_state` | 设置状态键 | `key`, `value` |
-| `set_flag` | 设置 Flag | `flag`, `value` |
-| `switch_model` | 切换当前模型 | `modelId` |
-| `unlock_model` | 解锁模型 | `modelId` |
-| `charge_tokens` | 表达扣费意图（由运行时结算到 `money`） | `amount`, `reason` |
+| `stat_delta` | `delta` | `effect` / `values` / `stats` / `key+value` |
+| `set_state` | `state` | `set` / `patch` / `values` / `key+value` |
+| `set_flag` | `flag`, `value` | `key`, `value` / `flags` / `map` |
+| `switch_model` | `modelId` | `model` / `id` / `target` |
+| `unlock_model` | `modelId` | `model` / `id` / `target` |
+| `charge_tokens` | `amount`, `reason` | `tokens` / `tokenCost` |
 
 ### 0.4 v3 示例（事件层只写意图）
 
 ```jsonc
 "actions": [
-  { "type": "switch_model", "modelId": "gpt54" },
-  { "type": "charge_tokens", "amount": 1500, "reason": "model_usage" },
-  { "type": "stat_delta", "delta": { "brain": -4, "bossSatisfy": 1 } },
-  { "type": "set_flag", "flag": "switched_to_gpt54", "value": true }
+  { "type": "unlock_model", "modelId": "opus46" },
+  { "type": "switch_model", "modelId": "opus46" },
+  { "type": "charge_tokens", "amount": 3.2, "reason": "m5_feature_delivery" },
+  { "type": "stat_delta", "delta": { "brain": 3, "bossSatisfy": 2 } },
+  { "type": "set_flag", "flag": "switched_to_opus46", "value": true }
 ]
 ```
+
+### 0.5 审计后反模式（禁止）
+
+- 文本表达了“切模型/换模型”，却没有 `switch_model` action。
+- 用 `effect.money` 直接扣钱去模拟模型 Token 扣费，而不是 `charge_tokens`。
+
+### 0.6 事件 JSON 提交前检查清单（短版）
+
+- 模型意图：切换用 `switch_model`，解锁用 `unlock_model`。
+- 扣费意图：模型使用费统一用 `charge_tokens`，不用 `effect.money` 伪造。
+- 动作来源：若声明 `actions`，确认你期望 Legacy 字段被忽略。
+- 分支语义：`choice` 分支不继承父级 native actions，分支内要写全。
+- Flag 合规：新增 Flag 已登记到 `_global/attributes.md`。
 
 ---
 

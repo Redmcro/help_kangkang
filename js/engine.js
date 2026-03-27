@@ -364,8 +364,20 @@ export class GameEngine {
         }
 
         for (const [key, value] of Object.entries(statePatch)) {
-            if (key === 'current_model' && typeof value === 'string' && value.trim()) this.setCurrentModelId(value.trim());
-            else this.property.set(key, value);
+            if (key === 'current_model' && typeof value === 'string' && value.trim()) {
+                const modelId = value.trim();
+                if (!AI_MODELS[modelId]) {
+                    this.logActionNoop(action, `set_state rejected unknown model "${modelId}"`, contextLabel);
+                    continue;
+                }
+                if (!this.isModelUnlocked(modelId)) {
+                    this.logActionNoop(action, `set_state rejected for locked model "${modelId}"`, contextLabel);
+                    continue;
+                }
+                this.setCurrentModelId(modelId);
+                continue;
+            }
+            this.property.set(key, value);
         }
     }
 
@@ -410,6 +422,10 @@ export class GameEngine {
         const modelId = this.getActionModelId(action);
         if (!modelId) {
             this.logActionNoop(action, 'unlock_model missing model id', contextLabel);
+            return;
+        }
+        if (!AI_MODELS[modelId]) {
+            this.logActionNoop(action, `unlock_model unknown model "${modelId}"`, contextLabel);
             return;
         }
         if (this.isModelUnlocked(modelId)) return;
@@ -653,8 +669,15 @@ export class GameEngine {
                 if (ev.type === 'choice' && ev.choices) {
                     const result = this.eventMgr.execute(id, ev, state);
                     addToLegacySet(this.legacy, 'events_seen', id);
-                    this.emitEvent(result.text, 'special');
+                    const promptSummary = this.executeActionPlan(result.actions, `choice-entry:${id}`);
+                    this.applyCharmRelationAdjustment(promptSummary.statDelta, state);
+                    if (promptSummary.tokensCharged > 0) this.dayReport.tokensUsed += promptSummary.tokensCharged;
+                    const promptDeltaStr = buildDeltaStr(promptSummary.statDelta);
+                    this.emitEvent(result.text + promptDeltaStr, 'special');
+                    if (result.postEvent) this.dayReport.events.push(result.postEvent);
                     this.emitUI();
+                    const go = this.property.isGameOver();
+                    if (go) { this.endGame(go); return; }
                     this.showChoice(ev, month, day, totalDays);
                     return;
                 }
@@ -721,6 +744,7 @@ export class GameEngine {
         const before = { ...this.property.toJSON() };
         const result = this.eventMgr.executeChoice(choice, state);
         const actionSummary = this.executeActionPlan(result.actions, 'choice');
+        this.applyCharmRelationAdjustment(actionSummary.statDelta, state);
         if (actionSummary.tokensCharged > 0) this.dayReport.tokensUsed += actionSummary.tokensCharged;
         const after = this.property.toJSON();
         const deltas = {};

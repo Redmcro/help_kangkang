@@ -60,11 +60,18 @@ export class EventManager {
     execute(id, ev, state) {
         if (ev.once) this.#usedEvents.add(id);
         if (ev.branch && ev.type !== 'choice') {
+            let fallbackBranch = null;
             for (const b of ev.branch) {
-                if (b.cond && Object.keys(b.cond).length > 0 && this.#checkCondition(b.cond, state)) {
-                    return this.#buildEventResult(b, ev);
+                if (!b || typeof b !== 'object') continue;
+                const cond = (b.cond && typeof b.cond === 'object') ? b.cond : null;
+                if (!cond || Object.keys(cond).length === 0) {
+                    // Keep first empty/missing-cond branch as explicit fallback.
+                    if (!fallbackBranch) fallbackBranch = b;
+                    continue;
                 }
+                if (this.#checkCondition(cond, state)) return this.#buildEventResult(b, ev);
             }
+            if (fallbackBranch) return this.#buildEventResult(fallbackBranch, ev);
         }
         return this.#buildEventResult(ev);
     }
@@ -198,7 +205,9 @@ export class EventManager {
         };
     }
 
-    #buildChoiceResult(payload, primary = null, fallback = null) {
+    #buildChoiceResult(payload, primary = null, fallback = null, options = {}) {
+        // Branch outcomes should not silently inherit parent native actions.
+        const allowFallbackNativeActions = !!options.allowFallbackNativeActions;
         const effect = Object.prototype.hasOwnProperty.call(payload, 'effect')
             ? payload.effect
             : this.#resolveLegacyField(primary, fallback, 'effect') || {};
@@ -218,7 +227,12 @@ export class EventManager {
             setFlag,
             tokenCost,
             type: payload.type,
-            actions: this.#resolveActions(payload, primary, { effect, setFlag, flags, tokenCost }, fallback)
+            actions: this.#resolveActions(
+                payload,
+                primary,
+                { effect, setFlag, flags, tokenCost },
+                allowFallbackNativeActions ? fallback : null
+            )
         };
     }
 

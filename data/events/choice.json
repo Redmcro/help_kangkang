@@ -1423,7 +1423,8 @@
         "effect": {
           "money": 450,
           "brain": -3
-        }
+        },
+        "tokenCost": 12
       },
       {
         "text": "🏗️ 搭建自己的AI工具再接单",
@@ -2128,6 +2129,29 @@
           "hp": -3,
           "bossSatisfy": 5,
           "money": -40
+        },
+        "actions": [
+          {
+            "type": "switch_model",
+            "modelId": "gpt54"
+          },
+          {
+            "type": "stat_delta",
+            "delta": {
+              "brain": -5,
+              "hp": -3,
+              "bossSatisfy": 5,
+              "money": -40
+            }
+          },
+          {
+            "type": "set_flag",
+            "flag": "switched_to_doubao",
+            "value": false
+          }
+        ],
+        "flags": {
+          "switched_to_doubao": false
         }
       },
       {
