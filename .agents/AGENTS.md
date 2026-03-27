@@ -4,6 +4,15 @@
 
 ---
 
+## 🧭 BOOTSTRAP — IDENTITY FIRST
+
+1. Parse role keywords from the first user message:
+   - `大内总管` / `总管` / `Chief Steward` => role = `Chief Steward`
+2. If role = `Chief Steward`, read `.agents/workflows/chief-steward.md` BEFORE task scanning.
+3. Then continue this document's mandatory workflow in order.
+
+---
+
 ## 🚨 ABSOLUTE BANS
 
 These will result in INSTANT TERMINATION of your work:
@@ -55,7 +64,7 @@ Append to `.agents/REPORTS.md` under `## 🔍 Pending Reports`:
 
 **Completion report** (required):
 ```
-[date] [dept emoji] [dept name] · [task name] — 🔍待验收 — [brief summary]
+[date] [dept] [task] — [🔍待验收] — [brief summary]
 ```
 
 **Bug/problem found** (if any):
