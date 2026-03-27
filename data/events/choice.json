@@ -1,6 +1,9 @@
 {
   "choice_training_budget_01": {
-    "month": [2, 6],
+    "month": [
+      2,
+      6
+    ],
     "text": "公司出了一笔培训预算，每人可以选一个方向。",
     "type": "choice",
     "system": "choice",
@@ -13,25 +16,36 @@
         "text": "🤖 AI/Prompt Engineering 进阶",
         "hint": "系统学习，打好基础",
         "result": "系统学习了高级Prompt技巧，写AI代码的效率提升了一个档次。",
-        "effect": {"brain": 10},
+        "effect": {
+          "brain": 10
+        },
         "setFlag": "training_ai"
       },
       {
         "text": "🎮 Unity底层架构课",
         "hint": "理解原理才能驾驭AI",
         "result": "虽然AI能写代码，但理解底层原理让你更能判断AI输出的质量。",
-        "effect": {"brain": 5, "bossSatisfy": 3}
+        "effect": {
+          "brain": 5,
+          "bossSatisfy": 3
+        }
       },
       {
         "text": "💼 沟通/管理技能",
         "hint": "为人处世也是本事",
         "result": "学了一些职场沟通技巧。以后跟产品经理battle更有底气了。",
-        "effect": {"charm": 10, "bossSatisfy": 2}
+        "effect": {
+          "charm": 10,
+          "bossSatisfy": 2
+        }
       }
     ]
   },
   "choice_overtime_culture_01": {
-    "month": [3, 10],
+    "month": [
+      3,
+      10
+    ],
     "text": "老板暗示大家'主动'加班。整个组都没走，你怎么办？",
     "type": "choice",
     "system": "choice",
@@ -44,14 +58,26 @@
         "hint": "老板会记住你的付出",
         "branch": [
           {
-            "cond": {"bossSatisfy": ">60"},
+            "cond": {
+              "bossSatisfy": ">60"
+            },
             "result": "加班到十点，老板临走时说：'辛苦了，下周给你调休一天。'",
-            "effect": {"hp": -5, "brain": -2, "bossSatisfy": 5, "money": -80}
+            "effect": {
+              "hp": -5,
+              "brain": -2,
+              "bossSatisfy": 5,
+              "money": -20
+            }
           },
           {
             "cond": {},
             "result": "加班到十点，老板临走时拍了拍你的肩膀。打车回家花了80块。",
-            "effect": {"hp": -5, "brain": -2, "bossSatisfy": 3, "money": -80}
+            "effect": {
+              "hp": -5,
+              "brain": -2,
+              "bossSatisfy": 3,
+              "money": -20
+            }
           }
         ]
       },
@@ -60,14 +86,24 @@
         "hint": "身体是革命的本钱",
         "branch": [
           {
-            "cond": {"charm": ">60"},
+            "cond": {
+              "charm": ">60"
+            },
             "result": "到点走人，同事笑着说'又准时下班'。但没人真的在意，你回家后跑了步，精神好多了。",
-            "effect": {"hp": 5, "brain": 3, "bossSatisfy": -1}
+            "effect": {
+              "hp": 5,
+              "brain": 3,
+              "bossSatisfy": -1
+            }
           },
           {
             "cond": {},
             "result": "收拾东西走人的时候，感觉背后有目光。但下班后跑了步，精神好多了。",
-            "effect": {"hp": 3, "brain": 2, "bossSatisfy": -2}
+            "effect": {
+              "hp": 3,
+              "brain": 2,
+              "bossSatisfy": -2
+            }
           }
         ]
       },
@@ -76,14 +112,33 @@
         "hint": "啥也不亏，有风险",
         "chanceBased": true,
         "branches": [
-          {"chance": 75, "result": "成功摸鱼两小时，看完了一部电影，心情不错。", "type": "good", "effect": {"hp": 2, "brain": 1}},
-          {"chance": 25, "result": "被老板发现在看视频……场面极其尴尬。", "type": "bad", "effect": {"bossSatisfy": -5, "charm": -3}}
+          {
+            "chance": 75,
+            "result": "成功摸鱼两小时，看完了一部电影，心情不错。",
+            "type": "good",
+            "effect": {
+              "hp": 2,
+              "brain": 1
+            }
+          },
+          {
+            "chance": 25,
+            "result": "被老板发现在看视频……场面极其尴尬。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -5,
+              "charm": -3
+            }
+          }
         ]
       }
     ]
   },
   "choice_stock_option_01": {
-    "month": [4, 8],
+    "month": [
+      4,
+      8
+    ],
     "text": "公司推出期权激励计划。给你分了一批期权，但要签竞业协议。",
     "type": "choice",
     "system": "choice",
@@ -96,29 +151,46 @@
         "text": "✍️ 签了：赌公司上市",
         "hint": "赌一个未来，但从此身不由己",
         "result": "签了竞业协议，拿到了一批期权。感觉自己跟公司绑定了。",
-        "effect": {"bossSatisfy": 5, "charm": -3},
+        "effect": {
+          "bossSatisfy": 5,
+          "charm": -3
+        },
         "setFlag": "signed_compete_clause"
       },
       {
         "text": "✋ 不签：自由比钱重要",
         "hint": "自由无价，但可能得罪人",
         "result": "拒绝了期权。老板表情有点微妙。",
-        "effect": {"bossSatisfy": -3, "brain": 2}
+        "effect": {
+          "bossSatisfy": -3,
+          "brain": 2
+        }
       },
       {
         "text": "🤔 谈条件：要更多期权才签",
         "hint": "需要charm 60+",
-        "require": {"charm": 60},
+        "require": {
+          "charm": 60
+        },
         "success": "凭借谈判技巧，拿到了双倍期权。老板说：'你太会谈了。'",
-        "successEffect": {"money": 5000, "bossSatisfy": 2, "charm": 3},
+        "successEffect": {
+          "money": 1350,
+          "bossSatisfy": 2,
+          "charm": 3
+        },
         "fail": "老板笑了笑：'条件就这些，想好了来找我。' 没谈拢。",
-        "failEffect": {"bossSatisfy": -2},
+        "failEffect": {
+          "bossSatisfy": -2
+        },
         "setFlag": "signed_compete_clause"
       }
     ]
   },
   "choice_ai_ethics_01": {
-    "month": [3, 8],
+    "month": [
+      3,
+      8
+    ],
     "text": "公司让你用AI生成大量'原创'内容上线，其中有些明显是从别人项目里'学'来的。",
     "type": "choice",
     "system": "choice",
@@ -131,27 +203,53 @@
         "text": "😇 拒绝：'这不太合适'",
         "hint": "坚持原则，赢得尊重",
         "result": "你坚持了原则。老板虽然不高兴，但其他同事对你另眼相看了。",
-        "effect": {"bossSatisfy": -5, "charm": 5, "brain": 3}
+        "effect": {
+          "bossSatisfy": -5,
+          "charm": 5,
+          "brain": 3
+        }
       },
       {
         "text": "🤫 照做：听老板的不会错",
         "hint": "听话省事，但良心不安",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "上线了，暂时没人发现。但你心里总有点不踏实。", "type": "neutral", "effect": {"bossSatisfy": 3}},
-          {"chance": 40, "result": "被原作者发现了，对方在Twitter上公开吐槽。公关危机！", "type": "bad", "effect": {"bossSatisfy": -8, "charm": -5}}
+          {
+            "chance": 60,
+            "result": "上线了，暂时没人发现。但你心里总有点不踏实。",
+            "type": "neutral",
+            "effect": {
+              "bossSatisfy": 3
+            }
+          },
+          {
+            "chance": 40,
+            "result": "被原作者发现了，对方在Twitter上公开吐槽。公关危机！",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -8,
+              "charm": -5
+            }
+          }
         ]
       },
       {
         "text": "🔧 改造后再用：加点自己的东西",
         "hint": "多花点功夫，求个心安",
         "result": "花了额外时间大幅修改，让内容足够'独特'。累但心安。",
-        "effect": {"brain": -5, "bossSatisfy": 1, "charm": 2}
+        "effect": {
+          "brain": -5,
+          "bossSatisfy": 1,
+          "charm": 2
+        }
       }
     ]
   },
   "choice_remote_work_01": {
-    "month": [4, 10],
+    "month": [
+      4,
+      10
+    ],
     "text": "同事偷偷建了个远程办公群，想跟老板提居家办公的事。",
     "type": "choice",
     "system": "choice",
@@ -163,11 +261,20 @@
       {
         "text": "📢 带头跟老板提：'效率更高！'",
         "hint": "出头鸟不好当，但万一成了呢",
-        "require": {"charm": 50},
+        "require": {
+          "charm": 50
+        },
         "success": "老板被说服了，试行一周居家办公。大家都很开心！你成了英雄。",
-        "successEffect": {"charm": 8, "bossSatisfy": 2, "hp": 5},
+        "successEffect": {
+          "charm": 8,
+          "bossSatisfy": 2,
+          "hp": 5
+        },
         "fail": "老板冷冷地说：'效率更高？那为什么上周的需求还没交？'",
-        "failEffect": {"bossSatisfy": -5, "charm": -3}
+        "failEffect": {
+          "bossSatisfy": -5,
+          "charm": -3
+        }
       },
       {
         "text": "🤐 不参与：别惹事",
@@ -179,12 +286,19 @@
         "text": "📊 写一份详细数据报告支持",
         "hint": "用数据说话，理性出击",
         "result": "你用数据证明了居家办公的可行性。老板虽然没同意，但记住了你的专业态度。",
-        "effect": {"brain": -5, "bossSatisfy": 3, "charm": 3}
+        "effect": {
+          "brain": -5,
+          "bossSatisfy": 3,
+          "charm": 3
+        }
       }
     ]
   },
   "choice_mentor_01": {
-    "month": [2, 6],
+    "month": [
+      2,
+      6
+    ],
     "text": "新来的实习生被分配给你带。",
     "type": "choice",
     "system": "choice",
@@ -197,27 +311,54 @@
         "text": "🎓 认真教：手把手带",
         "hint": "用心带人，费时但暖心",
         "result": "你耐心地教了实习生三周。他进步神速，临走时送了你一杯奶茶。",
-        "effect": {"brain": -8, "charm": 10, "bossSatisfy": 3, "hp": -3}
+        "effect": {
+          "brain": -8,
+          "charm": 10,
+          "bossSatisfy": 3,
+          "hp": -3
+        }
       },
       {
         "text": "📎 丢文档给他：'自己看'",
         "hint": "省事，但风险",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "实习生自学能力很强，居然自己搞定了。你白赚了一个带新人的功劳。", "type": "good", "effect": {"bossSatisfy": 2}},
-          {"chance": 50, "result": "实习生写的代码把测试环境搞崩了。你被老板叫去谈话。", "type": "bad", "effect": {"bossSatisfy": -5, "brain": -5}}
+          {
+            "chance": 50,
+            "result": "实习生自学能力很强，居然自己搞定了。你白赚了一个带新人的功劳。",
+            "type": "good",
+            "effect": {
+              "bossSatisfy": 2
+            }
+          },
+          {
+            "chance": 50,
+            "result": "实习生写的代码把测试环境搞崩了。你被老板叫去谈话。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -5,
+              "brain": -5
+            }
+          }
         ]
       },
       {
         "text": "🤝 让他用AI自学，你偶尔指点",
         "hint": "平衡路线",
         "result": "你教他用AI辅助开发，自己也没太耽误工作。效果还不错。",
-        "effect": {"brain": -3, "charm": 3, "bossSatisfy": 1}
+        "effect": {
+          "brain": -3,
+          "charm": 3,
+          "bossSatisfy": 1
+        }
       }
     ]
   },
   "choice_salary_negotiate_01": {
-    "month": [6, 10],
+    "month": [
+      6,
+      10
+    ],
     "text": "最近物价涨了不少，你觉得工资有点配不上工作量了。",
     "type": "choice",
     "system": "choice",
@@ -229,32 +370,68 @@
       {
         "text": "🗣️ 直接找老板谈：亮出成绩单",
         "hint": "需要bossSatisfy 60+",
-        "require": {"bossSatisfy": 60},
+        "require": {
+          "bossSatisfy": 60
+        },
         "success": "老板看了你的成绩，点点头：'下个月起加2000。' 你的坚持有了回报。",
-        "successEffect": {"money": 2000, "bossSatisfy": -2, "charm": 5},
+        "successEffect": {
+          "money": 550,
+          "bossSatisfy": -2,
+          "charm": 5
+        },
         "fail": "老板说：'现在大环境不好，别人都在降薪，你还想加？'",
-        "failEffect": {"bossSatisfy": -5, "charm": -3}
+        "failEffect": {
+          "bossSatisfy": -5,
+          "charm": -3
+        }
       },
       {
         "text": "🤫 算了，忍忍吧",
         "hint": "安全但憋屈",
         "result": "你决定忍一忍。晚上回家看了眼余额，叹了口气。",
-        "effect": {"hp": -3}
+        "effect": {
+          "hp": -3
+        }
       },
       {
         "text": "📱 出去面试拿offer倒逼涨薪",
         "hint": "高风险高回报",
         "chanceBased": true,
         "branches": [
-          {"chance": 40, "result": "拿到了一个不错的offer！以此为谈判筹码，成功加薪3000。", "type": "good", "effect": {"money": 3000, "charm": 5}},
-          {"chance": 35, "result": "面试没拿到满意的offer，但至少了解了市场行情。", "type": "neutral", "effect": {"brain": 2}},
-          {"chance": 25, "result": "面试请假被老板发现了。'你是不是想走？' 尴尬。", "type": "bad", "effect": {"bossSatisfy": -8}}
+          {
+            "chance": 40,
+            "result": "拿到了一个不错的offer！以此为谈判筹码，成功加薪3000。",
+            "type": "good",
+            "effect": {
+              "money": 800,
+              "charm": 5
+            }
+          },
+          {
+            "chance": 35,
+            "result": "面试没拿到满意的offer，但至少了解了市场行情。",
+            "type": "neutral",
+            "effect": {
+              "brain": 2
+            }
+          },
+          {
+            "chance": 25,
+            "result": "面试请假被老板发现了。'你是不是想走？' 尴尬。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -8
+            }
+          }
         ]
       }
     ]
   },
   "choice_open_source_01": {
-    "month": [5, 10],
+    "month": [
+      5,
+      10
+    ],
     "text": "你在业余时间写的开源项目开始有人关注了。有人邀请你做一次线上分享。",
     "type": "choice",
     "system": "choice",
@@ -267,14 +444,21 @@
         "text": "🎤 接受邀请：认真准备分享",
         "hint": "露脸的机会，人脉就是这么来的",
         "result": "分享很成功，直播间来了200多人。有几家公司的HR私信你问要不要聊聊。",
-        "effect": {"brain": -5, "charm": 8, "bossSatisfy": 1},
+        "effect": {
+          "brain": -5,
+          "charm": 8,
+          "bossSatisfy": 1
+        },
         "setFlag": "opensource_fame"
       },
       {
         "text": "✍️ 写篇博客代替：不想露脸",
         "hint": "低调输出，文字自有力量",
         "result": "写了一篇长文，被技术社区转发了不少。低调但有效。",
-        "effect": {"brain": -3, "charm": 3}
+        "effect": {
+          "brain": -3,
+          "charm": 3
+        }
       },
       {
         "text": "🙅 婉拒：太忙了没空",
@@ -285,41 +469,63 @@
     ]
   },
   "choice_health_crisis_01": {
-    "month": [5, 12],
+    "month": [
+      5,
+      12
+    ],
     "text": "体检报告出来了，有几个指标亮了黄灯。医生建议：'少熬夜，多运动。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"hp": "<60"},
+    "include": {
+      "hp": "<60"
+    },
     "title": "🏥 体检报告",
     "desc": "医生说你的身体在报警。怎么办？",
     "choices": [
       {
         "text": "🏃 办健身卡：每周去三次",
         "hint": "花钱买健康，长期投资",
-        "require": {"money": 1200},
+        "require": {
+          "money": 325
+        },
         "success": "坚持了一个月，身体状态明显好转。同事说你气色好了。",
-        "successEffect": {"money": -1200, "hp": 15, "brain": 3, "charm": 3},
+        "successEffect": {
+          "money": -325,
+          "hp": 15,
+          "brain": 3,
+          "charm": 3
+        },
         "fail": "钱不够办卡……只能先在家做做俯卧撑。",
-        "failEffect": {"hp": 3}
+        "failEffect": {
+          "hp": 3
+        }
       },
       {
         "text": "💊 买点保健品应付一下",
         "hint": "聊胜于无的心理安慰",
         "result": "买了几瓶维生素丸。效果嘛……聊胜于无。",
-        "effect": {"money": -300, "hp": 5}
+        "effect": {
+          "money": -80,
+          "hp": 5
+        }
       },
       {
         "text": "🙈 假装没看到",
         "hint": "短期省事，长期危险",
         "result": "把体检报告塞进抽屉，继续996。总觉得自己还年轻扛得住。",
-        "effect": {"hp": -3}
+        "effect": {
+          "hp": -3
+        }
       }
     ]
   },
   "choice_team_conflict_01": {
-    "month": [3, 10],
+    "month": [
+      3,
+      10
+    ],
     "text": "和另一个程序员关于技术方案产生了分歧。他要用传统方案，你想用AI辅助方案。",
     "type": "choice",
     "system": "choice",
@@ -333,26 +539,54 @@
         "hint": "拿实力说话，但翻车也很尴尬",
         "chanceBased": true,
         "branches": [
-          {"chance": 55, "result": "Demo效果惊艳！对方服了。老板拍板：'就用AI方案。'", "type": "good", "effect": {"brain": -8, "bossSatisfy": 5, "charm": 5}},
-          {"chance": 45, "result": "Demo翻车了。AI生成的代码在演示时各种报错……对方笑而不语。", "type": "bad", "effect": {"brain": -8, "bossSatisfy": -3, "charm": -5}}
+          {
+            "chance": 55,
+            "result": "Demo效果惊艳！对方服了。老板拍板：'就用AI方案。'",
+            "type": "good",
+            "effect": {
+              "brain": -8,
+              "bossSatisfy": 5,
+              "charm": 5
+            }
+          },
+          {
+            "chance": 45,
+            "result": "Demo翻车了。AI生成的代码在演示时各种报错……对方笑而不语。",
+            "type": "bad",
+            "effect": {
+              "brain": -8,
+              "bossSatisfy": -3,
+              "charm": -5
+            }
+          }
         ]
       },
       {
         "text": "🤝 妥协融合：各取所长",
         "hint": "各退一步，皆大欢喜",
         "result": "你提了个折中方案：核心逻辑手写，辅助功能用AI。双方都能接受。",
-        "effect": {"brain": -3, "charm": 3, "bossSatisfy": 1}
+        "effect": {
+          "brain": -3,
+          "charm": 3,
+          "bossSatisfy": 1
+        }
       },
       {
         "text": "🏳️ 让步：随便吧，你说了算",
         "hint": "省脑力，但没存在感",
         "result": "你让步了。项目最终用了传统方案，多花了三倍时间。",
-        "effect": {"bossSatisfy": -1, "charm": -2}
+        "effect": {
+          "bossSatisfy": -1,
+          "charm": -2
+        }
       }
     ]
   },
   "choice_side_gig_01": {
-    "month": [3, 10],
+    "month": [
+      3,
+      10
+    ],
     "text": "前同事发来消息：'我现在跑外卖月入过万，要不要一起？周末就能干。'",
     "type": "choice",
     "system": "choice",
@@ -365,26 +599,38 @@
         "text": "🏍️ 试试看：反正周末也闲着",
         "hint": "体力活换零花钱，累但真实",
         "result": "跑了一天外卖，腿酸得走不动路。不过赚了800块，还挺有成就感。顺便想通了一些事。",
-        "effect": {"money": 800, "hp": -8, "brain": -2},
+        "effect": {
+          "money": 225,
+          "hp": -8,
+          "brain": -2
+        },
         "setFlag": "considered_delivery"
       },
       {
         "text": "🙅 拒绝：我还是好好写代码吧",
         "hint": "程序员的尊严不能丢",
         "result": "你婉拒了前同事。挂断电话后默默打开了LeetCode。",
-        "effect": {"brain": 3}
+        "effect": {
+          "brain": 3
+        }
       },
       {
         "text": "🤔 问问具体收入再说",
         "hint": "了解一下市场行情也不亏",
         "result": "前同事发来了详细的收入截图。虽然没去跑，但这些数据让你对职场有了新的认知。",
-        "effect": {"luck": 5, "brain": 2},
+        "effect": {
+          "luck": 5,
+          "brain": 2
+        },
         "setFlag": "considered_delivery"
       }
     ]
   },
   "choice_ai_bug_dilemma_01": {
-    "month": [2, 11],
+    "month": [
+      2,
+      11
+    ],
     "text": "AI生成的代码里你发现了一个隐藏的逻辑Bug。修了要多花3小时，不修大概率测试也发现不了。",
     "type": "choice",
     "system": "choice",
@@ -397,14 +643,26 @@
         "hint": "负责任的程序员，代码不留隐患",
         "branch": [
           {
-            "cond": {"brain": ">60"},
+            "cond": {
+              "brain": ">60"
+            },
             "result": "你快速定位到问题根源，只用了1小时就修好了。少爷说：'你这debug速度，比AI还快。'",
-            "effect": {"hp": -2, "brain": -2, "bossSatisfy": 3, "shaoye_rel": 5}
+            "effect": {
+              "hp": -2,
+              "brain": -2,
+              "bossSatisfy": 3,
+              "shaoye_rel": 5
+            }
           },
           {
             "cond": {},
             "result": "你加班修好了Bug。代码审查时，少爷说：'你这段逻辑改得漂亮。'",
-            "effect": {"hp": -3, "brain": -3, "bossSatisfy": 2, "shaoye_rel": 3}
+            "effect": {
+              "hp": -3,
+              "brain": -3,
+              "bossSatisfy": 2,
+              "shaoye_rel": 3
+            }
           }
         ]
       },
@@ -413,20 +671,40 @@
         "hint": "短期省事",
         "chanceBased": true,
         "branches": [
-          {"chance": 55, "result": "测试环境没触发这个Bug。你松了口气。", "type": "neutral", "effect": {}},
-          {"chance": 45, "result": "上线第二天炸了。老板问：'谁review的这段代码？' 全组看向你。", "type": "bad", "effect": {"bossSatisfy": -8, "shaoye_rel": -5, "charm": -3}}
+          {
+            "chance": 55,
+            "result": "测试环境没触发这个Bug。你松了口气。",
+            "type": "neutral",
+            "effect": {}
+          },
+          {
+            "chance": 45,
+            "result": "上线第二天炸了。老板问：'谁review的这段代码？' 全组看向你。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -8,
+              "shaoye_rel": -5,
+              "charm": -3
+            }
+          }
         ]
       },
       {
         "text": "📝 记录下来先标TODO",
         "hint": "先标记，以后再说",
         "result": "你在代码里写了详细注释和TODO标记。虽然没改，但至少不会忘。",
-        "effect": {"brain": -2, "bossSatisfy": 1}
+        "effect": {
+          "brain": -2,
+          "bossSatisfy": 1
+        }
       }
     ]
   },
   "choice_rival_interview_01": {
-    "month": [5, 11],
+    "month": [
+      5,
+      11
+    ],
     "text": "LinkedIn上收到竞品公司的消息：'我们在找有AI开发经验的人，薪资上浮40%。'",
     "type": "choice",
     "system": "choice",
@@ -440,27 +718,60 @@
         "hint": "骑驴找马，有风险也有机会",
         "chanceBased": true,
         "branches": [
-          {"chance": 35, "result": "面试表现出色！对方直接给了offer。你有了底气，心情大好。", "type": "good", "effect": {"brain": -3, "charm": 8, "luck": 5}},
-          {"chance": 40, "result": "面试聊得还行，对方说回去等消息。最终石沉大海。", "type": "neutral", "effect": {"brain": -3}},
-          {"chance": 25, "result": "请假面试被同事看到并告诉了老板。'你想跳就跳，别脚踩两条船。'", "type": "bad", "effect": {"brain": -3, "bossSatisfy": -10, "charm": -5}}
+          {
+            "chance": 35,
+            "result": "面试表现出色！对方直接给了offer。你有了底气，心情大好。",
+            "type": "good",
+            "effect": {
+              "brain": -3,
+              "charm": 8,
+              "luck": 5
+            }
+          },
+          {
+            "chance": 40,
+            "result": "面试聊得还行，对方说回去等消息。最终石沉大海。",
+            "type": "neutral",
+            "effect": {
+              "brain": -3
+            }
+          },
+          {
+            "chance": 25,
+            "result": "请假面试被同事看到并告诉了老板。'你想跳就跳，别脚踩两条船。'",
+            "type": "bad",
+            "effect": {
+              "brain": -3,
+              "bossSatisfy": -10,
+              "charm": -5
+            }
+          }
         ]
       },
       {
         "text": "🙏 婉拒：现在不是时候",
         "hint": "安稳",
         "result": "你礼貌地回复了猎头。关闭手机后，又打开了公司的项目。",
-        "effect": {"brain": 2}
+        "effect": {
+          "brain": 2
+        }
       },
       {
         "text": "🕵️ 套信息：问问对面公司的情况",
         "hint": "知己知彼，信息就是力量",
         "result": "你跟猎头聊了半小时，摸清了竞品公司的技术栈和团队规模。信息就是力量。",
-        "effect": {"charm": 3, "brain": 3}
+        "effect": {
+          "charm": 3,
+          "brain": 3
+        }
       }
     ]
   },
   "choice_weekend_plan_01": {
-    "month": [1, 12],
+    "month": [
+      1,
+      12
+    ],
     "text": "难得的双休周末！你被三件事困扰：学不完的AI新技术、好久没运动的身体、Steam上打折的游戏。",
     "type": "choice",
     "system": "choice",
@@ -473,14 +784,22 @@
         "hint": "充电蓄力，用知识武装自己",
         "branch": [
           {
-            "cond": {"brain": ">70"},
+            "cond": {
+              "brain": ">70"
+            },
             "result": "基础扎实就是不一样，半天就搞懂了新框架的核心原理。剩下时间还顺手做了个小Demo。",
-            "effect": {"brain": 10, "hp": -2}
+            "effect": {
+              "brain": 10,
+              "hp": -2
+            }
           },
           {
             "cond": {},
             "result": "窝在家里看了两天教程和源码。眼睛酸了，但技术储备涨了不少。",
-            "effect": {"brain": 8, "hp": -3}
+            "effect": {
+              "brain": 8,
+              "hp": -3
+            }
           }
         ]
       },
@@ -489,14 +808,24 @@
         "hint": "出汗交友，身心都放松",
         "branch": [
           {
-            "cond": {"charm": ">55"},
+            "cond": {
+              "charm": ">55"
+            },
             "result": "球场上认识了一个做AI创业的人，聊了很久。出了一身汗，还拓展了人脉。",
-            "effect": {"hp": 10, "charm": 8, "brain": -1}
+            "effect": {
+              "hp": 10,
+              "charm": 8,
+              "brain": -1
+            }
           },
           {
             "cond": {},
             "result": "周六打球周日跑步。出了一身汗，晚上睡得特别好。还认识了几个新朋友。",
-            "effect": {"hp": 10, "charm": 5, "brain": -2}
+            "effect": {
+              "hp": 10,
+              "charm": 5,
+              "brain": -2
+            }
           }
         ]
       },
@@ -504,12 +833,19 @@
         "text": "🎮 打游戏：犒劳自己",
         "hint": "快乐是真实的，运气说不定也会变好",
         "result": "连续打了两天游戏。虽然啥也没学到，但快乐是真实的。运气似乎也变好了。",
-        "effect": {"hp": 3, "luck": 5, "brain": -3}
+        "effect": {
+          "hp": 2,
+          "luck": 5,
+          "brain": 3
+        }
       }
     ]
   },
   "choice_team_building_01": {
-    "month": [3, 10],
+    "month": [
+      3,
+      10
+    ],
     "text": "团建通知：周六去密室逃脱。'不强制参加，但老板会去。'",
     "type": "choice",
     "system": "choice",
@@ -522,33 +858,62 @@
         "text": "🎯 积极参加：当团队C位",
         "hint": "刷脸的好机会，全场焦点",
         "result": "你在密室逃脱里表现亮眼，带着全队解开了最后一关。老板说：'没想到你这么厉害！'",
-        "effect": {"charm": 5, "bossSatisfy": 3, "hp": -3, "shaoye_rel": 3, "yimin_rel": 3}
+        "effect": {
+          "charm": 5,
+          "bossSatisfy": 3,
+          "hp": -3,
+          "shaoye_rel": 3,
+          "yimin_rel": 3,
+          "brain": 2
+        }
       },
       {
         "text": "😷 请假：'身体不舒服'",
         "hint": "省时间，但……",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "老板没多问。你在家舒舒服服地过了一天。", "type": "neutral", "effect": {"hp": 5}},
-          {"chance": 40, "result": "连续第三个人请病假了。老板在群里说：'下次团建改工作日。' 标记了全体。", "type": "bad", "effect": {"bossSatisfy": -3}}
+          {
+            "chance": 60,
+            "result": "老板没多问。你在家舒舒服服地过了一天。",
+            "type": "neutral",
+            "effect": {
+              "hp": 5
+            }
+          },
+          {
+            "chance": 40,
+            "result": "连续第三个人请病假了。老板在群里说：'下次团建改工作日。' 标记了全体。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -3
+            }
+          }
         ]
       },
       {
         "text": "🤐 去但划水：打酱油就好",
         "hint": "不出彩也不出错",
         "result": "你全程跟在后面，不出风头也不拖后腿。老板似乎都没注意到你。",
-        "effect": {"hp": -2, "bossSatisfy": 1}
+        "effect": {
+          "hp": -2,
+          "bossSatisfy": 1
+        }
       }
     ]
   },
   "choice_coffee_addiction_01": {
-    "month": [2, 12],
+    "month": [
+      2,
+      12
+    ],
     "text": "你发现自己一天不喝三杯咖啡就写不动代码了。同事说你桌上的空杯子能搭金字塔。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1,
-    "include": {"hp": "<70"},
+    "include": {
+      "hp": "<70"
+    },
     "title": "☕ 咖啡中毒",
     "desc": "你的身体在抗议：一天三杯美式真的好吗？",
     "choices": [
@@ -556,24 +921,40 @@
         "text": "💪 戒咖啡：换成绿茶",
         "hint": "戒断很痛苦，但身体会感谢你",
         "result": "前三天头疼得要命，代码效率暴跌。但一周后居然感觉清爽多了。",
-        "effect": {"hp": 8, "brain": -5}
+        "effect": {
+          "hp": 8,
+          "brain": -5
+        }
       },
       {
         "text": "☕ 继续喝：快乐水不能停",
         "hint": "续命水虽香，心脏不太行",
         "result": "你又点了一杯浓缩。咖啡因激活，手速飙升，心脏也跟着加速……",
-        "effect": {"brain": 3, "hp": -2, "money": -200}
+        "effect": {
+          "brain": 3,
+          "hp": -2,
+          "money": -50
+        }
       },
       {
         "text": "🧪 升级装备：买一台手冲壶自己做",
         "hint": "入坑手冲，同事都来蹭",
         "result": "你入了手冲咖啡的坑。品质上去了，钱也没少花。但同事们开始排队来你工位蹭咖啡。",
-        "effect": {"money": -500, "charm": 5, "hp": 2, "shaoye_rel": 2, "yimin_rel": 2}
+        "effect": {
+          "money": -125,
+          "charm": 5,
+          "hp": 2,
+          "shaoye_rel": 2,
+          "yimin_rel": 2
+        }
       }
     ]
   },
   "choice_model_migration_01": {
-    "month": [4, 10],
+    "month": [
+      4,
+      10
+    ],
     "text": "公司从GPT迁移到开源模型以降低成本。老板让你主导迁移，但你不熟悉开源模型的部署。",
     "type": "choice",
     "system": "choice",
@@ -585,28 +966,50 @@
       {
         "text": "🚀 接下来！带头冲",
         "hint": "大机会也是大挑战，扛住就是英雄",
-        "require": {"brain": 50},
+        "require": {
+          "brain": 50
+        },
         "success": "你花了两周搞定了迁移。模型推理成本降了60%！老板在全员会上点名表扬。",
-        "successEffect": {"brain": -10, "bossSatisfy": 8, "charm": 8, "money": 600},
+        "successEffect": {
+          "brain": -10,
+          "bossSatisfy": 8,
+          "charm": 8,
+          "money": 150
+        },
         "fail": "你硬着头皮接下来，但部署总是出问题。最终找了外部顾问才搞定……",
-        "failEffect": {"brain": -10, "bossSatisfy": -3, "charm": -3}
+        "failEffect": {
+          "brain": -10,
+          "bossSatisfy": -3,
+          "charm": -3
+        }
       },
       {
         "text": "🤝 推荐亿民来做：他对这个更熟",
         "hint": "让贤是美德，但机会错过不再来",
         "result": "你把机会让给了亿民。他干得不错，在老板面前露了脸。你嘛……存在感下降了。",
-        "effect": {"yimin_rel": 5, "bossSatisfy": -2, "charm": -2}
+        "effect": {
+          "yimin_rel": 5,
+          "bossSatisfy": -2,
+          "charm": -2
+        }
       },
       {
         "text": "📊 提方案但不亲自做：当架构师",
         "hint": "动脑不动手，稳妥的架构师路线",
         "result": "你写了详细的迁移方案和技术选型报告，让别人执行。老板觉得你有大局观。",
-        "effect": {"brain": -5, "bossSatisfy": 3, "charm": 3}
+        "effect": {
+          "brain": -5,
+          "bossSatisfy": 3,
+          "charm": 3
+        }
       }
     ]
   },
   "choice_moonlight_coding_01": {
-    "month": [3, 11],
+    "month": [
+      3,
+      11
+    ],
     "text": "朋友介绍了个私活：帮一个小公司做微信小程序，报酬8000块。但要两周内交付。",
     "type": "choice",
     "system": "choice",
@@ -619,9 +1022,37 @@
         "hint": "用AI赶工，赚钱但透支身体",
         "chanceBased": true,
         "branches": [
-          {"chance": 45, "result": "靠AI辅助，一周就搞定了！8000块到账，爽！", "type": "good", "effect": {"money": 8000, "hp": -10, "brain": -5}},
-          {"chance": 30, "result": "赶出来了但bug很多，甲方要求返工。两头都在赶，快崩溃了。", "type": "bad", "effect": {"money": 4000, "hp": -15, "brain": -8}},
-          {"chance": 25, "result": "接私活的事被老板发现了。'上班时间搞副业？' 气氛冰冷。", "type": "bad", "effect": {"money": 8000, "hp": -10, "bossSatisfy": -10, "brain": -5}}
+          {
+            "chance": 45,
+            "result": "靠AI辅助，一周就搞定了！8000块到账，爽！",
+            "type": "good",
+            "effect": {
+              "money": 2150,
+              "hp": -10,
+              "brain": -5
+            }
+          },
+          {
+            "chance": 30,
+            "result": "赶出来了但bug很多，甲方要求返工。两头都在赶，快崩溃了。",
+            "type": "bad",
+            "effect": {
+              "money": 1100,
+              "hp": -15,
+              "brain": -8
+            }
+          },
+          {
+            "chance": 25,
+            "result": "接私活的事被老板发现了。'上班时间搞副业？' 气氛冰冷。",
+            "type": "bad",
+            "effect": {
+              "money": 2150,
+              "hp": -10,
+              "bossSatisfy": -10,
+              "brain": -5
+            }
+          }
         ]
       },
       {
@@ -629,14 +1060,22 @@
         "hint": "安全",
         "branch": [
           {
-            "cond": {"hp": "<40"},
+            "cond": {
+              "hp": "<40"
+            },
             "result": "你拒绝了诱惑。身体已经在抗议了，周末好好休息了两天。正确的选择。",
-            "effect": {"hp": 8, "brain": 3}
+            "effect": {
+              "hp": 8,
+              "brain": 3
+            }
           },
           {
             "cond": {},
             "result": "你拒绝了诱惑。周末看了场电影，休息得不错。",
-            "effect": {"hp": 3, "brain": 2}
+            "effect": {
+              "hp": 3,
+              "brain": 2
+            }
           }
         ]
       },
@@ -645,21 +1084,36 @@
         "hint": "兄弟齐心，分钱也分活",
         "branch": [
           {
-            "cond": {"yimin_rel": ">60"},
+            "cond": {
+              "yimin_rel": ">60"
+            },
             "result": "你和亿民默契配合，两天就搞定了。亿民说：'下次有活继续叫我！' 钱到手，关系更铁了。",
-            "effect": {"money": 4000, "hp": -3, "brain": -2, "yimin_rel": 8}
+            "effect": {
+              "money": 1100,
+              "hp": -3,
+              "brain": -2,
+              "yimin_rel": 8
+            }
           },
           {
             "cond": {},
             "result": "你和亿民分工写了小程序，一人拿4000。合作还挺愉快的，关系更近了。",
-            "effect": {"money": 4000, "hp": -5, "brain": -3, "yimin_rel": 5}
+            "effect": {
+              "money": 1100,
+              "hp": -5,
+              "brain": -3,
+              "yimin_rel": 5
+            }
           }
         ]
       }
     ]
   },
   "choice_tech_conference_01": {
-    "month": [5, 9],
+    "month": [
+      5,
+      9
+    ],
     "text": "行业顶级AI技术大会本周末在本市举办。门票1500块，但嘉宾阵容超强。",
     "type": "choice",
     "system": "choice",
@@ -672,29 +1126,46 @@
         "text": "🎫 自费去：投资自己",
         "hint": "投资自己，开拓视野和人脉",
         "result": "大会上听了几场顶级分享，视野瞬间被打开了。还和几位大佬交换了名片。",
-        "effect": {"money": -1500, "brain": 10, "charm": 5},
+        "effect": {
+          "money": -400,
+          "brain": 10,
+          "charm": 5
+        },
         "setFlag": "attended_ai_conf"
       },
       {
         "text": "📺 看线上直播：免费的不香吗",
         "hint": "白嫖直播，有总比没有好",
         "result": "你在B站上看了直播。画质一般，弹幕倒是很有趣。能学到一点，但少了线下的冲击感。",
-        "effect": {"brain": 3}
+        "effect": {
+          "brain": 3
+        }
       },
       {
         "text": "🙋 申请公司报销：说这是学习机会",
         "hint": "需要bossSatisfy 50+",
-        "require": {"bossSatisfy": 50},
+        "require": {
+          "bossSatisfy": 50
+        },
         "success": "老板批了！公费参会，学到了东西还不花自己的钱。开心！",
-        "successEffect": {"brain": 10, "charm": 5, "bossSatisfy": 1},
+        "successEffect": {
+          "brain": 10,
+          "charm": 5,
+          "bossSatisfy": 1
+        },
         "fail": "老板说：'公司没这个预算。' 你灰溜溜地回到工位。",
-        "failEffect": {"bossSatisfy": -2},
+        "failEffect": {
+          "bossSatisfy": -2
+        },
         "setFlag": "attended_ai_conf"
       }
     ]
   },
   "choice_internal_transfer_01": {
-    "month": [6, 11],
+    "month": [
+      6,
+      11
+    ],
     "text": "公司新成立了一个AI研究部门，内部转岗通道开放了。",
     "type": "choice",
     "system": "choice",
@@ -706,29 +1177,48 @@
       {
         "text": "🚀 申请转岗：拥抱变化",
         "hint": "需要brain 60+, 大机会",
-        "require": {"brain": 60},
+        "require": {
+          "brain": 60
+        },
         "success": "面试通过了！新部门给了你更高的Title和15%加薪。从此你是AI工程师了。",
-        "successEffect": {"money": 3000, "brain": 5, "bossSatisfy": 5, "charm": 5},
+        "successEffect": {
+          "money": 800,
+          "brain": 5,
+          "bossSatisfy": 5,
+          "charm": 5
+        },
         "fail": "面试被刷了。面试官说：'基础不错，但对大模型的理解还差点。'",
-        "failEffect": {"bossSatisfy": -2, "charm": -3},
+        "failEffect": {
+          "bossSatisfy": -2,
+          "charm": -3
+        },
         "setFlag": "tried_transfer"
       },
       {
         "text": "👀 观望：先看看谁去了再说",
         "hint": "稳了，但可能错过窗口期",
         "result": "你没有行动。三个月后，转到那边的同事已经开始做很酷的项目了。你有点后悔。",
-        "effect": {"brain": -2}
+        "effect": {
+          "brain": -2
+        }
       },
       {
         "text": "🗣️ 找新部门领导聊聊：先摸底",
         "hint": "先摸底再决定，不打无准备的仗",
         "result": "你请新部门的负责人喝了杯咖啡，了解了团队方向和技术栈。知己知彼，以后再做决定。",
-        "effect": {"charm": 3, "brain": 2, "money": -50}
+        "effect": {
+          "charm": 3,
+          "brain": 2,
+          "money": -15
+        }
       }
     ]
   },
   "choice_ai_replace_panic_01": {
-    "month": [4, 12],
+    "month": [
+      4,
+      12
+    ],
     "text": "Hacker News上一篇文章火了：'AI将在18个月内取代90%的程序员。' 朋友圈被刷屏了。",
     "type": "choice",
     "system": "choice",
@@ -741,14 +1231,22 @@
         "hint": "把焦虑变成动力，卷起来！",
         "branch": [
           {
-            "cond": {"brain": ">65"},
+            "cond": {
+              "brain": ">65"
+            },
             "result": "因为基础好，学新东西特别快。一周后你觉得AI不但不会取代你，反而是你的超能力。",
-            "effect": {"brain": 10, "hp": -5}
+            "effect": {
+              "brain": 10,
+              "hp": -5
+            }
           },
           {
             "cond": {},
             "result": "你开始每天多学2小时AI。熬了一周，黑眼圈加重了，但确实对AI的理解深了一层。",
-            "effect": {"brain": 8, "hp": -8}
+            "effect": {
+              "brain": 8,
+              "hp": -8
+            }
           }
         ]
       },
@@ -757,14 +1255,25 @@
         "hint": "冷静看待，这种文章年年有",
         "branch": [
           {
-            "cond": {"luck": ">60"},
+            "cond": {
+              "luck": ">60"
+            },
             "result": "你刷到了一篇反驳文章，论点清晰有力，转发后收获了很多赞同。焦虑一扫而空。",
-            "effect": {"hp": 5, "luck": 3, "brain": 3, "charm": 2}
+            "effect": {
+              "hp": 5,
+              "luck": 3,
+              "brain": 3,
+              "charm": 2
+            }
           },
           {
             "cond": {},
             "result": "你深呼吸，关掉了手机。'18个月前也说要取代了，我不还好好的？'",
-            "effect": {"hp": 3, "luck": 3, "brain": 2}
+            "effect": {
+              "hp": 3,
+              "luck": 3,
+              "brain": 2
+            }
           }
         ]
       },
@@ -773,26 +1282,48 @@
         "hint": "喝酒吐槽，焦虑变段子",
         "branch": [
           {
-            "cond": {"shaoye_rel": ">60", "yimin_rel": ">60"},
+            "cond": {
+              "shaoye_rel": ">60",
+              "yimin_rel": ">60"
+            },
             "result": "三兄弟喝到凌晨，从AI聊到人生。最后少爷醉醺醺地说：'就算AI取代了我们，至少我们还有彼此。' 感动。",
-            "effect": {"charm": 8, "money": -300, "hp": -3, "shaoye_rel": 5, "yimin_rel": 5}
+            "effect": {
+              "charm": 8,
+              "money": -80,
+              "hp": -3,
+              "shaoye_rel": 5,
+              "yimin_rel": 5,
+              "brain": 5
+            }
           },
           {
             "cond": {},
             "result": "约了少爷和亿民去撸串。三杯啤酒下肚，焦虑变成了段子。'AI取代我？那AI来改这Bug试试？'",
-            "effect": {"charm": 5, "money": -200, "hp": -2, "shaoye_rel": 3, "yimin_rel": 3}
+            "effect": {
+              "charm": 5,
+              "money": -50,
+              "hp": -2,
+              "shaoye_rel": 3,
+              "yimin_rel": 3,
+              "brain": 3
+            }
           }
         ]
       }
     ]
   },
   "choice_code_review_war_01": {
-    "month": [2, 11],
+    "month": [
+      2,
+      11
+    ],
     "text": "你Review代码时发现少爷写的模块有严重的性能问题。他觉得没问题，你们产生了分歧。",
     "type": "choice",
     "system": "choice",
     "weight": 1.2,
-    "include": {"shaoye_rel": ">30"},
+    "include": {
+      "shaoye_rel": ">30"
+    },
     "title": "🔍 Code Review之战",
     "desc": "少爷的代码有问题。说，还是不说？",
     "choices": [
@@ -801,14 +1332,24 @@
         "hint": "对事不对人，但可能伤感情",
         "branch": [
           {
-            "cond": {"shaoye_rel": ">70"},
+            "cond": {
+              "shaoye_rel": ">70"
+            },
             "result": "你写了详细的Review意见。少爷看完后说：'说得对，我改。'关系好就是不一样。",
-            "effect": {"bossSatisfy": 3, "shaoye_rel": -2, "brain": -3}
+            "effect": {
+              "bossSatisfy": 3,
+              "shaoye_rel": -2,
+              "brain": -3
+            }
           },
           {
             "cond": {},
             "result": "你写了三页的Review意见。少爷面子挂不住，但老板觉得你很专业。",
-            "effect": {"bossSatisfy": 2, "shaoye_rel": -5, "brain": -3}
+            "effect": {
+              "bossSatisfy": 2,
+              "shaoye_rel": -5,
+              "brain": -3
+            }
           }
         ]
       },
@@ -817,14 +1358,24 @@
         "hint": "留面子修关系，私下解决",
         "branch": [
           {
-            "cond": {"charm": ">55"},
+            "cond": {
+              "charm": ">55"
+            },
             "result": "你巧妙地把问题说成'优化建议'。少爷欣然接受，还请你喝了杯奶茶。",
-            "effect": {"shaoye_rel": 8, "brain": -2, "charm": 3}
+            "effect": {
+              "shaoye_rel": 8,
+              "brain": -2,
+              "charm": 3
+            }
           },
           {
             "cond": {},
             "result": "你拉少爷去茶水间悄悄说了问题。他感激你没公开说，主动改了代码。",
-            "effect": {"shaoye_rel": 5, "brain": -3, "charm": 3}
+            "effect": {
+              "shaoye_rel": 5,
+              "brain": -3,
+              "charm": 3
+            }
           }
         ]
       },
@@ -833,14 +1384,30 @@
         "hint": "风险：可能爆雷",
         "chanceBased": true,
         "branches": [
-          {"chance": 40, "result": "这个模块上线后一直没出问题。你松了口气。也许你想多了。", "type": "neutral", "effect": {}},
-          {"chance": 60, "result": "上线一周后，这个模块在高并发下直接炸了。老板追查责任时发现你Review过……", "type": "bad", "effect": {"bossSatisfy": -8, "shaoye_rel": -3}}
+          {
+            "chance": 40,
+            "result": "这个模块上线后一直没出问题。你松了口气。也许你想多了。",
+            "type": "neutral",
+            "effect": {}
+          },
+          {
+            "chance": 60,
+            "result": "上线一周后，这个模块在高并发下直接炸了。老板追查责任时发现你Review过……",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -8,
+              "shaoye_rel": -3
+            }
+          }
         ]
       }
     ]
   },
   "choice_freelance_platform_01": {
-    "month": [3, 9],
+    "month": [
+      3,
+      9
+    ],
     "text": "你刷到了一个AI接单平台：帮人用AI生成内容就能赚钱。上面标价最高的单子有5000块。",
     "type": "choice",
     "system": "choice",
@@ -853,31 +1420,44 @@
         "text": "🎯 注册接单：先从小单做起",
         "hint": "薅AI羊毛来赚外快",
         "result": "你接了几个生成Logo和文案的小单。用AI几分钟搞定，赚了2000块。但Token也消耗了不少。",
-        "effect": {"money": 1700, "brain": -3}
+        "effect": {
+          "money": 450,
+          "brain": -3
+        }
       },
       {
         "text": "🏗️ 搭建自己的AI工具再接单",
         "hint": "先磨刀后砍柴，长远布局",
         "result": "你花了一周写了个自动化工具。虽然还没接到大单，但工具本身让你对AI更熟练了。",
-        "effect": {"brain": -8, "charm": 3},
+        "effect": {
+          "brain": -8,
+          "charm": 3
+        },
         "setFlag": "built_ai_tool"
       },
       {
         "text": "🙅 算了：怕影响正职",
         "hint": "安稳",
         "result": "你关掉了网页。'还是别折腾了，上班已经够累了。'",
-        "effect": {"hp": 2}
+        "effect": {
+          "hp": 2
+        }
       }
     ]
   },
   "choice_burnout_crisis_01": {
-    "month": [6, 12],
+    "month": [
+      6,
+      12
+    ],
     "text": "连续高强度工作几个月后，你早上不想起床了。闹钟响了五遍才爬起来，到公司后对着屏幕发呆。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 2,
-    "include": {"hp": "<50"},
+    "include": {
+      "hp": "<50"
+    },
     "title": "🔥 职业倦怠",
     "desc": "身体和精神都在罢工。你需要做个决定。",
     "choices": [
@@ -885,27 +1465,49 @@
         "text": "🏖️ 请年假：休息一周",
         "hint": "给自己放个假，重启身心",
         "result": "你鼓起勇气请了一周假。去了海边，什么都不想。回来后感觉重启了一样。",
-        "effect": {"hp": 15, "brain": 10, "bossSatisfy": -3, "luck": 5}
+        "effect": {
+          "hp": 15,
+          "brain": 10,
+          "bossSatisfy": -3,
+          "luck": 5
+        }
       },
       {
         "text": "💊 硬撑：吃片止痛药继续干",
         "hint": "硬撑着，但能撑多久？",
         "result": "你继续坚持了。但效率越来越低，代码错误率直线上升。身体在发出更强的警告。",
-        "effect": {"hp": -8, "brain": -3, "bossSatisfy": 1}
+        "effect": {
+          "hp": -8,
+          "brain": -3,
+          "bossSatisfy": 1
+        }
       },
       {
         "text": "🗣️ 找老板谈：请求调整工作节奏",
         "hint": "需要charm 50+",
-        "require": {"charm": 50},
+        "require": {
+          "charm": 50
+        },
         "success": "老板理解了你的状况，把你从紧急项目中撤了出来。'先调整一下，别把人搞垮了。'",
-        "successEffect": {"hp": 10, "brain": 5, "bossSatisfy": 1, "charm": 3},
+        "successEffect": {
+          "hp": 10,
+          "brain": 5,
+          "bossSatisfy": 1,
+          "charm": 3
+        },
         "fail": "老板说：'团队都这样，你坚持一下。' 你沉默了。",
-        "failEffect": {"hp": -3, "bossSatisfy": -2}
+        "failEffect": {
+          "hp": -3,
+          "bossSatisfy": -2
+        }
       }
     ]
   },
   "choice_debug_marathon_01": {
-    "month": [2, 11],
+    "month": [
+      2,
+      11
+    ],
     "text": "晚上11点，生产环境突然告警：核心功能挂了。你的手机开始疯狂震动。",
     "type": "choice",
     "system": "choice",
@@ -916,19 +1518,45 @@
       {
         "text": "💻 打开电脑：连夜修",
         "hint": "连夜救火，累但有担当",
-        "require": {"brain": 40},
+        "require": {
+          "brain": 40
+        },
         "success": "你远程排查了2小时，找到问题是一个边界条件没处理。修好后倒头就睡。第二天老板专门感谢了你。",
-        "successEffect": {"hp": -8, "brain": -3, "bossSatisfy": 5, "charm": 3},
+        "successEffect": {
+          "hp": -8,
+          "brain": -3,
+          "bossSatisfy": 5,
+          "charm": 3
+        },
         "fail": "你折腾了3小时也没找到原因，脑子已经转不动了。最终还是叫了值班运维临时回滚。",
-        "failEffect": {"hp": -8, "brain": -5, "bossSatisfy": 1}
+        "failEffect": {
+          "hp": -8,
+          "brain": -5,
+          "bossSatisfy": 1
+        }
       },
       {
         "text": "📱 转发给同事：'不好意思，我喝了点酒'",
         "hint": "甩锅有风险，但至少有人接",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "少爷接手修好了。虽然帮了忙，但他心里有点不爽。", "type": "neutral", "effect": {"shaoye_rel": -3}},
-          {"chance": 50, "result": "少爷也没修好，最终还是回滚了。第二天老板问：'昨晚你们都在干嘛？'", "type": "bad", "effect": {"shaoye_rel": -5, "bossSatisfy": -5}}
+          {
+            "chance": 50,
+            "result": "少爷接手修好了。虽然帮了忙，但他心里有点不爽。",
+            "type": "neutral",
+            "effect": {
+              "shaoye_rel": -3
+            }
+          },
+          {
+            "chance": 50,
+            "result": "少爷也没修好，最终还是回滚了。第二天老板问：'昨晚你们都在干嘛？'",
+            "type": "bad",
+            "effect": {
+              "shaoye_rel": -5,
+              "bossSatisfy": -5
+            }
+          }
         ]
       },
       {
@@ -936,28 +1564,41 @@
         "hint": "眼不见为净，但明天迟早要面对",
         "branch": [
           {
-            "cond": {"luck": ">65"},
+            "cond": {
+              "luck": ">65"
+            },
             "result": "你把手机调成静音翻了个身。第二天到公司发现运维半夜自动回滚了，影响很小。你松了口气。",
-            "effect": {"hp": 5, "bossSatisfy": -3}
+            "effect": {
+              "hp": 5,
+              "bossSatisfy": -3
+            }
           },
           {
             "cond": {},
             "result": "你把手机调成静音翻了个身。第二天到公司，老板铁青着脸：'昨晚系统挂了4个小时。'",
-            "effect": {"hp": 5, "bossSatisfy": -8, "charm": -3}
+            "effect": {
+              "hp": 5,
+              "bossSatisfy": -8,
+              "charm": -3
+            }
           }
         ]
       }
     ]
   },
-
   "choice_training_ai_advanced_01": {
-    "month": [4, 10],
+    "month": [
+      4,
+      10
+    ],
     "text": "之前学的AI课程平台发来通知：'恭喜你完成初级课程！高级班名额有限，现在报名享8折优惠。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"training_ai": true},
+    "include": {
+      "training_ai": true
+    },
     "title": "🎓 AI进阶班",
     "desc": "初级课程的基础让你尝到了甜头。要不要继续深造？",
     "choices": [
@@ -965,32 +1606,46 @@
         "text": "🚀 报名高级班：系统学Transformer架构",
         "hint": "深入底层原理，成为真正的AI工程师",
         "result": "你花了两个月啃完了高级课程。Transformer的注意力机制、LoRA微调、RAG架构……现在你不只是用AI，你开始理解AI了。",
-        "effect": {"money": -2000, "brain": 12, "bossSatisfy": 3},
+        "effect": {
+          "money": -550,
+          "brain": 12,
+          "bossSatisfy": 3
+        },
         "setFlag": "ai_advanced_cert"
       },
       {
         "text": "📖 自学路线：GitHub上找开源教程",
         "hint": "省钱但需要自律，野路子也有野路子的好",
         "result": "你在GitHub上找到了一套star过万的教程，跟着做了几个小项目。虽然不系统，但动手能力提升了。",
-        "effect": {"brain": 8, "hp": -3}
+        "effect": {
+          "brain": 8,
+          "hp": -3
+        }
       },
       {
         "text": "🙅 算了，初级够用了",
         "hint": "见好就收，把精力放在别处",
         "result": "你觉得现在的AI水平已经够应付工作了。关掉了邮件，打开了Steam。",
-        "effect": {"hp": 3, "luck": 2}
+        "effect": {
+          "hp": 3,
+          "luck": 2
+        }
       }
     ]
   },
-
   "choice_compete_clause_recruiter_01": {
-    "month": [5, 11],
+    "month": [
+      5,
+      11
+    ],
     "text": "LinkedIn上收到字节跳动的HR私信：'看了你的profile，我们有个很match的岗位，薪资double。'然后你想起来——自己签了竞业协议。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"signed_compete_clause": true},
+    "include": {
+      "signed_compete_clause": true
+    },
     "title": "🔒 竞业锁链",
     "desc": "心仪的offer就在眼前，但竞业协议是把锁。",
     "choices": [
@@ -998,34 +1653,60 @@
         "text": "😔 诚实告知：'我签了竞业，去不了'",
         "hint": "遗憾但体面，留个好印象",
         "result": "HR表示理解：'竞业到期了联系我。'你挂断电话，盯着那份竞业协议发了十分钟呆。",
-        "effect": {"hp": -5, "charm": 3}
+        "effect": {
+          "hp": -5,
+          "charm": 3
+        }
       },
       {
         "text": "🕵️ 偷偷面试：先聊聊又不犯法",
         "hint": "踩线操作，万一被发现后果严重",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "面了两轮，对方给了口头offer。虽然不能去，但至少知道了自己的市场价值。", "type": "neutral", "effect": {"brain": 3, "charm": 3}},
-          {"chance": 40, "result": "面试的消息不知怎么传到了老板耳朵里。'签了竞业还到处面试？' 气氛瞬间冰冻。", "type": "bad", "effect": {"bossSatisfy": -10, "charm": -5}}
+          {
+            "chance": 60,
+            "result": "面了两轮，对方给了口头offer。虽然不能去，但至少知道了自己的市场价值。",
+            "type": "neutral",
+            "effect": {
+              "brain": 3,
+              "charm": 3
+            }
+          },
+          {
+            "chance": 40,
+            "result": "面试的消息不知怎么传到了老板耳朵里。'签了竞业还到处面试？' 气氛瞬间冰冻。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -10,
+              "charm": -5
+            }
+          }
         ]
       },
       {
         "text": "📋 研究竞业条款：找法律漏洞",
         "hint": "知识就是力量，先搞清楚规则",
         "result": "你花了一晚上研究竞业协议条款。发现了一些灰色地带，至少心里有了底。顺便了解了劳动法。",
-        "effect": {"brain": 5, "charm": 2}
+        "effect": {
+          "brain": 5,
+          "charm": 2
+        }
       }
     ]
   },
-
   "choice_opensource_bigco_hr_01": {
-    "month": [6, 11],
+    "month": [
+      6,
+      11
+    ],
     "text": "上次开源分享火了之后，腾讯AI Lab的技术总监直接发了私信：'我们团队在做大模型基础设施，你有兴趣聊聊吗？'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"opensource_fame": true},
+    "include": {
+      "opensource_fame": true
+    },
     "title": "🏢 大厂橄榄枝",
     "desc": "开源声望带来了大厂的主动邀约。这可是技术总监亲自联系。",
     "choices": [
@@ -1033,34 +1714,52 @@
         "text": "🤝 约个咖啡聊聊：了解一下机会",
         "hint": "不一定要跳槽，但了解市场永远没错",
         "result": "你和对方聊了两小时。了解到大厂AI团队的技术方向和薪资体系。对方说：'随时欢迎你来面试。' 你感觉自己多了一条退路。",
-        "effect": {"charm": 8, "brain": 3}
+        "effect": {
+          "charm": 8,
+          "brain": 3
+        }
       },
       {
         "text": "🙏 委婉拒绝：'目前团队需要我'",
         "hint": "忠诚度拉满，但可能错过窗口",
         "result": "你礼貌地婉拒了。老板不知怎么听说了这件事，在周会上说：'康康很有忠诚度。' 然后什么也没发生。",
-        "effect": {"bossSatisfy": 3, "charm": -2}
+        "effect": {
+          "bossSatisfy": 3,
+          "charm": -2
+        }
       },
       {
         "text": "💡 反向操作：邀请他来自己公司做技术分享",
         "hint": "化竞对为资源，社交鬼才的操作",
-        "require": {"charm": 60},
+        "require": {
+          "charm": 60
+        },
         "success": "对方居然答应了！来公司做了一场内部分享。老板觉得你很有人脉资源，你的存在感暴涨。",
-        "successEffect": {"bossSatisfy": 5, "charm": 8, "brain": 5},
+        "successEffect": {
+          "bossSatisfy": 5,
+          "charm": 8,
+          "brain": 5
+        },
         "fail": "对方笑着说：'这个嘛……不太方便。' 你有点尴尬。",
-        "failEffect": {"charm": -3}
+        "failEffect": {
+          "charm": -3
+        }
       }
     ]
   },
-
   "choice_opensource_collab_01": {
-    "month": [7, 12],
+    "month": [
+      7,
+      12
+    ],
     "text": "一个GitHub上star过5万的知名开源项目维护者给你发了邮件：'看了你的项目和分享，想邀请你成为我们的core contributor。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1,
-    "include": {"opensource_fame": true},
+    "include": {
+      "opensource_fame": true
+    },
     "title": "⭐ 顶级开源邀约",
     "desc": "成为顶级开源项目的核心贡献者——简历上最闪亮的一行。但时间就那么多。",
     "choices": [
@@ -1068,32 +1767,46 @@
         "text": "🔥 全力加入：每周投入10小时",
         "hint": "顶级背书，但业余时间全没了",
         "result": "你成为了核心贡献者。三个月后，你的GitHub主页多了一个闪闪发光的badge。圈内都知道你了。",
-        "effect": {"hp": -5, "brain": 5, "charm": 12},
+        "effect": {
+          "hp": -5,
+          "brain": 5,
+          "charm": 12
+        },
         "setFlag": "opensource_collab"
       },
       {
         "text": "⚖️ 量力而行：做一些力所能及的贡献",
         "hint": "参与但不透支，平衡是种智慧",
         "result": "你提交了几个PR，修了几个issue。虽然不是核心贡献者，但也被加到了contributor列表。",
-        "effect": {"brain": -3, "charm": 5, "hp": -3}
+        "effect": {
+          "brain": -3,
+          "charm": 5,
+          "hp": -3
+        }
       },
       {
         "text": "📝 先收藏：等忙完这阵子再说",
         "hint": "拖延症犯了，但也许真的太忙",
         "result": "你给邮件标了星标。三个月后再看时，项目已经招满了人。机会就是这样溜走的。",
-        "effect": {"brain": 2}
+        "effect": {
+          "brain": 2
+        }
       }
     ]
   },
-
   "choice_ai_conf_connection_01": {
-    "month": [6, 11],
+    "month": [
+      6,
+      11
+    ],
     "text": "上次AI大会上认识的一位技术VP突然打来电话：'我们在做一个AI+游戏的项目，要不要来当技术顾问？周末干就行，按天计费。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"attended_ai_conf": true},
+    "include": {
+      "attended_ai_conf": true
+    },
     "title": "📞 人脉变现",
     "desc": "大会结识的人脉终于开花了。这是一个用AI技能赚外快的机会。",
     "choices": [
@@ -1101,31 +1814,45 @@
         "text": "💼 接了！周末当顾问",
         "hint": "赚外快长经验，但周末没了",
         "result": "你开始了顾问生涯。每周末去对方公司指导AI接入。日薪2000，还接触到了游戏行业前沿的AI应用。",
-        "effect": {"money": 2000, "brain": 5, "hp": -3, "charm": 5}
+        "effect": {
+          "money": 550,
+          "brain": 5,
+          "hp": -3,
+          "charm": 5
+        }
       },
       {
         "text": "🤔 先问问报酬和时间安排",
         "hint": "谨慎是好事，先问清楚再决定",
         "result": "对方详细介绍了项目情况。你还没决定，但至少知道了AI顾问的市场行情。这层人脉关系更近了。",
-        "effect": {"charm": 5, "brain": 3}
+        "effect": {
+          "charm": 5,
+          "brain": 3
+        }
       },
       {
         "text": "🙅 婉拒：精力不够了",
         "hint": "别把自己累坏了",
         "result": "你礼貌地拒绝了。对方说：'没关系，有其他合适的机会再推荐给你。' 人脉还在。",
-        "effect": {"hp": 3}
+        "effect": {
+          "hp": 3
+        }
       }
     ]
   },
-
   "choice_ai_tool_company_adopt_01": {
-    "month": [5, 10],
+    "month": [
+      5,
+      10
+    ],
     "text": "你之前搭的AI接单工具在公司内部传开了。老板找你谈话：'这个工具能不能部署到公司内部用？效率提升太明显了。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 2,
-    "include": {"built_ai_tool": true},
+    "include": {
+      "built_ai_tool": true
+    },
     "title": "🏢 工具被公司看上了",
     "desc": "个人项目意外吸引了公司注意。是卖给公司，还是自己留着？",
     "choices": [
@@ -1133,36 +1860,56 @@
         "text": "🤝 免费给公司用：当内部工具推广",
         "hint": "不赚钱但刷存在感，老板会记住",
         "result": "你把工具部署到了内部服务器。全组都在用你写的工具，效率提升了30%。老板在周报里专门提了这件事。",
-        "effect": {"bossSatisfy": 8, "charm": 8, "brain": -3},
+        "effect": {
+          "bossSatisfy": 8,
+          "charm": 8,
+          "brain": -3
+        },
         "setFlag": "ai_tool_adopted"
       },
       {
         "text": "💰 谈授权费：'这算我的知识产权'",
         "hint": "需要charm 60+，谈钱伤感情但不谈钱伤自己",
-        "require": {"charm": 60},
+        "require": {
+          "charm": 60
+        },
         "success": "老板犹豫了一下，最终同意按月付你5000块使用费。同事们的目光里多了一份敬意。",
-        "successEffect": {"money": 5000, "bossSatisfy": 2, "charm": 5},
+        "successEffect": {
+          "money": 1350,
+          "bossSatisfy": 2,
+          "charm": 5
+        },
         "fail": "老板冷笑：'上班时间写的东西算公司的吧？' 气氛突然尴尬了。",
-        "failEffect": {"bossSatisfy": -5, "charm": -3},
+        "failEffect": {
+          "bossSatisfy": -5,
+          "charm": -3
+        },
         "setFlag": "ai_tool_adopted"
       },
       {
         "text": "🔒 拒绝：'这是个人项目，不适合公司用'",
         "hint": "保护自己的知识产权，但可能得罪老板",
         "result": "老板有点不高兴：'你用公司时间写的东西不给公司用？' 你辩解说是下班后写的。气氛不太好。",
-        "effect": {"bossSatisfy": -5, "brain": 2}
+        "effect": {
+          "bossSatisfy": -5,
+          "brain": 2
+        }
       }
     ]
   },
-
   "choice_ai_tool_startup_01": {
-    "month": [7, 12],
+    "month": [
+      7,
+      12
+    ],
     "text": "一个前同事看了你的AI工具后眼前一亮：'兄弟，这东西商业化潜力很大！要不要一起创业？我来投第一笔钱。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1,
-    "include": {"built_ai_tool": true},
+    "include": {
+      "built_ai_tool": true
+    },
     "title": "🚀 创业邀约",
     "desc": "你的AI工具被看中了！创业还是继续打工？人生的分叉路口。",
     "choices": [
@@ -1170,67 +1917,104 @@
         "text": "🔥 干了！先兼职试试水",
         "hint": "两头跑很累，但万一起飞了呢？",
         "result": "你开始白天上班、晚上创业。两个月后工具有了第一批付费用户。虽然只有23个人，但那种感觉——真的不一样。",
-        "effect": {"money": 3000, "hp": -8, "brain": -3, "charm": 8},
+        "effect": {
+          "money": 800,
+          "hp": -8,
+          "brain": -3,
+          "charm": 8
+        },
         "setFlag": "ai_startup_offer"
       },
       {
         "text": "🤝 聊聊商业计划再说",
         "hint": "理性分析，不冲动决定",
         "result": "你们一起做了市场调研和财务预测。虽然最终没有马上行动，但你第一次认真思考了'如果不打工'的可能性。",
-        "effect": {"brain": 5, "charm": 3}
+        "effect": {
+          "brain": 5,
+          "charm": 3
+        }
       },
       {
         "text": "🙅 拒绝：打工虽苦但稳定",
         "hint": "稳定即正义，创业九死一生",
         "result": "你婉拒了。前同事有点失望，但表示理解。你回到工位打开IDE，觉得屏幕上的代码突然有点无聊。",
-        "effect": {"hp": 2, "brain": -2}
+        "effect": {
+          "hp": 2,
+          "brain": -2
+        }
       }
     ]
   },
-
   "choice_transfer_result_01": {
-    "month": [7, 12],
+    "month": [
+      7,
+      12
+    ],
     "text": "转到AI部门已经一个月了。新技术栈完全不同，你每天都在恶补大模型相关知识。新老板今天约你one-on-one。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 2,
-    "include": {"tried_transfer": true},
+    "include": {
+      "tried_transfer": true
+    },
     "title": "🆕 新部门适应期",
     "desc": "转岗后的第一次绩效谈话。新老板会说什么？",
     "choices": [
       {
         "text": "📊 主动汇报：展示学习成果和项目进展",
         "hint": "有准备就有底气，主动出击",
-        "require": {"brain": 50},
+        "require": {
+          "brain": 50
+        },
         "success": "新老板看了你的学习笔记和Demo，频频点头：'进步很快，下个迭代你来lead一个模块。'",
-        "successEffect": {"bossSatisfy": 8, "brain": 5, "charm": 5},
+        "successEffect": {
+          "bossSatisfy": 8,
+          "brain": 5,
+          "charm": 5
+        },
         "fail": "你展示的Demo在演示时出了几个低级错误。新老板委婉地说：'基础还要再打扎实。'",
-        "failEffect": {"bossSatisfy": -3, "brain": -3, "charm": -2}
+        "failEffect": {
+          "bossSatisfy": -3,
+          "brain": -3,
+          "charm": -2
+        }
       },
       {
         "text": "🎧 认真倾听：先听老板怎么说",
         "hint": "少说多听，新人低调为上",
         "result": "新老板给了你一些中肯的反馈：技术基底不错，但对大模型的工程化理解还需加强。你记在了本子上。",
-        "effect": {"brain": 3, "bossSatisfy": 2, "charm": 2}
+        "effect": {
+          "brain": 3,
+          "bossSatisfy": 2,
+          "charm": 2
+        }
       },
       {
         "text": "😰 表达困难：'说实话，我有点跟不上节奏'",
         "hint": "诚实不一定是坏事，示弱也需要勇气",
         "result": "新老板笑了：'每个转岗的人都这么说。'他给你安排了一位mentor，还多给了两周适应时间。",
-        "effect": {"bossSatisfy": 1, "charm": 3, "hp": 3}
+        "effect": {
+          "bossSatisfy": 1,
+          "charm": 3,
+          "hp": 3
+        }
       }
     ]
   },
-
   "choice_delivery_fulltime_01": {
-    "month": [6, 12],
+    "month": [
+      6,
+      12
+    ],
     "text": "外卖平台推了个'精英骑手计划'：月跑满500单奖2万。前同事发来消息：'兄弟，你上次跑得不错，要不要正式加入？全职骑手收入比你想的高。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"considered_delivery": true},
+    "include": {
+      "considered_delivery": true
+    },
     "title": "🛵 骑手进阶邀约",
     "desc": "正式转型当骑手？还是把这当成退路？人生的岔路口又来了。",
     "choices": [
@@ -1238,34 +2022,53 @@
         "text": "🏍️ 周末兼职试一个月：保留退路",
         "hint": "两头跑很累，但至少两条腿走路",
         "result": "你开始周末跑单。一个月下来赚了4000块，腿也粗了一圈。同事问你周末去哪了，你笑而不语。",
-        "effect": {"money": 4000, "hp": -6, "charm": 3}
+        "effect": {
+          "money": 1100,
+          "hp": -6,
+          "charm": 3
+        }
       },
       {
         "text": "🙅 拒绝：我是程序员，不是骑手",
         "hint": "坚守本行，用代码证明自己",
         "result": "你坚定地拒绝了。回到工位打开IDE，心里默念：'我要用AI证明程序员不会被淘汰。'",
-        "effect": {"brain": 5, "hp": 3}
+        "effect": {
+          "brain": 5,
+          "hp": 3
+        }
       },
       {
         "text": "💡 反向操作：给骑手平台做个AI调度工具",
         "hint": "用程序员思维解决骑手问题，降维打击",
-        "require": {"brain": 60},
+        "require": {
+          "brain": 60
+        },
         "success": "你花两周写了个路线优化工具。前同事用了之后每天多跑50单，直呼'程序员就是不一样'。你开始考虑把它商业化。",
-        "successEffect": {"brain": -8, "charm": 8, "money": 2000},
+        "successEffect": {
+          "brain": -8,
+          "charm": 8,
+          "money": 550
+        },
         "fail": "想法很好，但实现起来比想象中复杂。调度算法涉及太多变量，暂时搁置了。",
-        "failEffect": {"brain": -5}
+        "failEffect": {
+          "brain": -5
+        }
       }
     ]
   },
-
   "choice_ai_course_mentor_01": {
-    "month": [5, 11],
+    "month": [
+      5,
+      11
+    ],
     "text": "之前买的AI课程平台发来邮件：'你的课程评价和笔记获得了大量好评！我们想邀请你当兼职讲师，录制实战课程。课时费每小时500。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.2,
-    "include": {"learned_ai_course": true},
+    "include": {
+      "learned_ai_course": true
+    },
     "title": "🎓 讲师邀约",
     "desc": "从学生变老师。教别人也是巩固自己，但时间就那么多。",
     "choices": [
@@ -1273,31 +2076,46 @@
         "text": "📹 接了！录课赚外快",
         "hint": "教学相长，还有钱拿",
         "result": "你花了三周录了8节实战课。过程中发现自己对AI的理解又深了一层。课上线后收到了很多感谢留言。",
-        "effect": {"money": 4000, "brain": 5, "charm": 8, "hp": -5}
+        "effect": {
+          "money": 1100,
+          "brain": 5,
+          "charm": 8,
+          "hp": -5
+        }
       },
       {
         "text": "✍️ 写文字教程代替：不想露脸",
         "hint": "文字也是力量，低调输出",
         "result": "你写了一套图文教程发在掘金上。阅读量破万，评论区有人说'这是我看过最接地气的AI教程'。",
-        "effect": {"brain": 3, "charm": 5, "hp": -3}
+        "effect": {
+          "brain": 3,
+          "charm": 5,
+          "hp": -3
+        }
       },
       {
         "text": "🙅 婉拒：我还在学习阶段",
         "hint": "谦虚是美德，但机会不等人",
         "result": "你觉得自己还不够资格教别人。过了三个月，另一个学员接了这个活。你有点后悔。",
-        "effect": {"brain": 2}
+        "effect": {
+          "brain": 2
+        }
       }
     ]
   },
-
   "choice_doubao_crisis_01": {
-    "month": [5, 11],
+    "month": [
+      5,
+      11
+    ],
     "text": "新闻推送：'豆包大模型被曝训练数据含大量未授权内容，多家公司紧急下架相关服务。' 你刚切过去的主力模型……",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"switched_to_doubao": true},
+    "include": {
+      "switched_to_doubao": true
+    },
     "title": "🚨 豆包数据风波",
     "desc": "主力模型出事了！项目用的全是豆包生成的代码，要不要紧急切换？",
     "choices": [
@@ -1305,34 +2123,63 @@
         "text": "🔄 紧急切回其他模型：安全第一",
         "hint": "迁移有成本，但不能冒险",
         "result": "你花了一整天把项目中依赖豆包的部分全部迁移。虽然累，但老板很满意你的风险意识。",
-        "effect": {"brain": -5, "hp": -3, "bossSatisfy": 5, "money": -150}
+        "effect": {
+          "brain": -5,
+          "hp": -3,
+          "bossSatisfy": 5,
+          "money": -40
+        }
       },
       {
         "text": "🤔 观望一下：也许只是公关危机",
         "hint": "不要慌，等官方声明",
         "chanceBased": true,
         "branches": [
-          {"chance": 50, "result": "三天后豆包发了官方声明，澄清了大部分质疑。虚惊一场，你省了一次迁移的功夫。", "type": "good", "effect": {"brain": 3, "luck": 3}},
-          {"chance": 50, "result": "事态升级了。监管部门介入调查，豆包API限流降速。你的项目进度直接受影响，老板脸色很难看。", "type": "bad", "effect": {"bossSatisfy": -5, "brain": -5}}
+          {
+            "chance": 50,
+            "result": "三天后豆包发了官方声明，澄清了大部分质疑。虚惊一场，你省了一次迁移的功夫。",
+            "type": "good",
+            "effect": {
+              "brain": 3,
+              "luck": 3
+            }
+          },
+          {
+            "chance": 50,
+            "result": "事态升级了。监管部门介入调查，豆包API限流降速。你的项目进度直接受影响，老板脸色很难看。",
+            "type": "bad",
+            "effect": {
+              "bossSatisfy": -5,
+              "brain": -5
+            }
+          }
         ]
       },
       {
         "text": "📊 写风险评估报告给老板：把决定权上交",
         "hint": "专业分析，让领导做决定",
         "result": "你连夜写了一份风险评估报告，分析了迁移成本和不迁移的风险。老板看完说：'你考虑得很周全。' 最终决定部分迁移。",
-        "effect": {"brain": -5, "bossSatisfy": 3, "charm": 3}
+        "effect": {
+          "brain": -5,
+          "bossSatisfy": 3,
+          "charm": 3
+        }
       }
     ]
   },
-
   "choice_gamejam_indie_01": {
-    "month": [7, 12],
+    "month": [
+      7,
+      12
+    ],
     "text": "GameJam获奖作品在itch.io上意外火了！一个独立游戏发行商发来邮件：'我们对你的作品很感兴趣，想聊聊发行合作。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1,
-    "include": {"gamejam_won": true},
+    "include": {
+      "gamejam_won": true
+    },
     "title": "🎮 发行商敲门",
     "desc": "GameJam的小品级作品被发行商看上了。独立开发的梦，要醒吗？",
     "choices": [
@@ -1340,66 +2187,102 @@
         "text": "🤝 谈合作：把作品做成完整版",
         "hint": "圆梦独立游戏，但要兼顾主业",
         "result": "你和发行商签了合作意向书。利用周末和晚上时间扩展作品。三个月后，Steam页面上线了你的第一款独立游戏。虽然还在Early Access，但评价出奇地好。",
-        "effect": {"money": 5000, "hp": -8, "brain": -3, "charm": 10}
+        "effect": {
+          "money": 1350,
+          "hp": -8,
+          "brain": -3,
+          "charm": 10
+        }
       },
       {
         "text": "📋 先了解条件再说",
         "hint": "不冲动，先搞清楚分成和timeline",
         "result": "你详细了解了合作条件：三七分成，你七。deadline有点紧但不是不可能。你把方案存进了备忘录，还没决定。",
-        "effect": {"brain": 3, "charm": 3}
+        "effect": {
+          "brain": 3,
+          "charm": 3
+        }
       },
       {
         "text": "🙅 婉拒：只是玩票心态",
         "hint": "保持初心，GameJam就是图个开心",
         "result": "你礼貌地回复了发行商。关掉邮件后，看着itch.io上的下载数，还是忍不住笑了。至少证明了自己的创意是被认可的。",
-        "effect": {"hp": 3, "brain": 2}
+        "effect": {
+          "hp": 3,
+          "brain": 2
+        }
       }
     ]
   },
-
   "choice_ai_cert_promotion_01": {
-    "month": [8, 12],
+    "month": [
+      8,
+      12
+    ],
     "text": "公司年中晋升窗口开放了。HR发来通知：'请准备晋升答辩材料。' 你看了看自己的AI高级认证证书，觉得这次有戏。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"ai_advanced_cert": true},
+    "include": {
+      "ai_advanced_cert": true
+    },
     "title": "📈 晋升答辩",
     "desc": "手握AI高级认证，晋升之路似乎近了。但答辩不只看证书……",
     "choices": [
       {
         "text": "🎯 全力准备：证书+项目成果双管齐下",
         "hint": "拼一把，用实力说话",
-        "require": {"bossSatisfy": 50},
+        "require": {
+          "bossSatisfy": 50
+        },
         "success": "你的答辩PPT做了40页，从AI认证到项目落地全覆盖。评委点头频率明显高于其他候选人。一周后收到通知：晋升成功，薪资上调20%！",
-        "successEffect": {"money": 5000, "bossSatisfy": 5, "charm": 8, "brain": -5},
+        "successEffect": {
+          "money": 1350,
+          "bossSatisfy": 5,
+          "charm": 8,
+          "brain": -5
+        },
         "fail": "答辩表现不错，但评委说：'技术能力很强，但团队管理经验还差一点。' 这次没过，但拿到了明确的改进方向。",
-        "failEffect": {"bossSatisfy": -2, "brain": 3}
+        "failEffect": {
+          "bossSatisfy": -2,
+          "brain": 3
+        }
       },
       {
         "text": "📝 随便准备一下：该晋升自然会晋升",
         "hint": "佛系应对，不内卷",
         "result": "你花了一个晚上做了个简洁的PPT。答辩时不紧不慢地讲完。结果是：'再等等下一次。' 你说：'行吧。'",
-        "effect": {"hp": 3, "brain": 2}
+        "effect": {
+          "hp": 3,
+          "brain": 2
+        }
       },
       {
         "text": "🗣️ 先跟老板通个气：摸清胜算再说",
         "hint": "先摸底再出手，稳中求进",
         "result": "老板说：'你今年表现不错，我会帮你说话。但你答辩的时候要重点讲AI落地的成果。' 有了老板的提示，你心里有了底。",
-        "effect": {"bossSatisfy": 2, "charm": 3, "brain": -2}
+        "effect": {
+          "bossSatisfy": 2,
+          "charm": 3,
+          "brain": -2
+        }
       }
     ]
   },
-
   "choice_opensource_foundation_01": {
-    "month": [9, 12],
+    "month": [
+      9,
+      12
+    ],
     "text": "CNCF（云原生计算基金会）发来正式邀请：希望你加入某AI工具链项目的Technical Advisory Board。这意味着你的名字将出现在基金会官网上。",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 0.8,
-    "include": {"opensource_collab": true},
+    "include": {
+      "opensource_collab": true
+    },
     "title": "🏛️ 基金会邀约",
     "desc": "从开源贡献者到技术顾问委员会成员。这是圈内顶级的荣誉。",
     "choices": [
@@ -1407,31 +2290,46 @@
         "text": "🔥 加入！这是简历上的王炸",
         "hint": "顶级背书，但责任也很重",
         "result": "你正式成为了TAB成员。每月参加一次线上会议，review技术方案。LinkedIn上多了一行'CNCF TAB Member'，私信瞬间爆炸。",
-        "effect": {"charm": 12, "brain": -3, "hp": -5, "bossSatisfy": 3}
+        "effect": {
+          "charm": 12,
+          "brain": -3,
+          "hp": -5,
+          "bossSatisfy": 3
+        }
       },
       {
         "text": "🤔 问问时间投入再决定",
         "hint": "了解清楚再承诺，别过度承诺",
         "result": "对方详细介绍了时间投入：每月约10小时。你评估了一下，觉得可以handle。但还没正式答复。",
-        "effect": {"charm": 5, "brain": 2}
+        "effect": {
+          "charm": 5,
+          "brain": 2
+        }
       },
       {
         "text": "🙏 暂时婉拒：精力有限",
         "hint": "适可而止，不要每个机会都接",
         "result": "你诚恳地回复了邮件。对方说：'完全理解，席位给你保留到下个季度。' 至少证明你的开源贡献被最高层看到了。",
-        "effect": {"charm": 3, "hp": 3}
+        "effect": {
+          "charm": 3,
+          "hp": 3
+        }
       }
     ]
   },
-
   "choice_ai_tool_scale_01": {
-    "month": [7, 12],
+    "month": [
+      7,
+      12
+    ],
     "text": "老板找你开会：'你做的AI工具其他部门也想用。我打算让你成立一个内部工具小组，带两个人专门做这个。你愿意吗？'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.5,
-    "include": {"ai_tool_adopted": true},
+    "include": {
+      "ai_tool_adopted": true
+    },
     "title": "👥 工具小组组长",
     "desc": "从个人项目到部门级产品。你的工具要升级了，但管人比写代码难多了。",
     "choices": [
@@ -1439,34 +2337,56 @@
         "text": "💪 接受！带团队做大",
         "hint": "从写代码到带团队，新的挑战",
         "result": "你成了内部工具小组的负责人。虽然管人比写代码累十倍，但看着工具被全公司使用的感觉——很不一样。三个月后工具日活跃用户突破200人。",
-        "effect": {"bossSatisfy": 8, "charm": 8, "brain": -3, "hp": -3}
+        "effect": {
+          "bossSatisfy": 8,
+          "charm": 8,
+          "brain": -3,
+          "hp": -3
+        }
       },
       {
         "text": "🔧 只做技术负责人：不想管人",
         "hint": "专注技术，管理的事交给别人",
         "result": "你跟老板说自己更适合做技术。老板找了另一个人当组长，你当技术顾问。写代码的快乐保住了，但升职路线窄了一点。",
-        "effect": {"brain": 3, "bossSatisfy": 2, "charm": -2}
+        "effect": {
+          "brain": 3,
+          "bossSatisfy": 2,
+          "charm": -2
+        }
       },
       {
         "text": "📋 提条件：要加薪+调岗",
         "hint": "需要charm 55+，谈判是门艺术",
-        "require": {"charm": 55},
+        "require": {
+          "charm": 55
+        },
         "success": "你提出了加薪15%和正式调岗的条件。老板考虑了两天后同意了。你成了公司第一个'AI工具工程师'。",
-        "successEffect": {"money": 3000, "bossSatisfy": 3, "charm": 5},
+        "successEffect": {
+          "money": 800,
+          "bossSatisfy": 3,
+          "charm": 5
+        },
         "fail": "老板说：'加薪的事年底再说，先把事情做起来。' 你有点失望，但也理解。",
-        "failEffect": {"bossSatisfy": -2, "charm": -2}
+        "failEffect": {
+          "bossSatisfy": -2,
+          "charm": -2
+        }
       }
     ]
   },
-
   "choice_startup_pivot_01": {
-    "month": [9, 12],
+    "month": [
+      9,
+      12
+    ],
     "text": "创业产品有了几十个付费用户，但增长遇到了瓶颈。合伙人提议：'要不要pivot（转型）到企业市场？to B的客单价高十倍。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1.2,
-    "include": {"ai_startup_offer": true},
+    "include": {
+      "ai_startup_offer": true
+    },
     "title": "🔀 创业十字路口",
     "desc": "to C增长见顶，to B看起来更赚钱。但转型意味着几乎从零开始。",
     "choices": [
@@ -1475,33 +2395,63 @@
         "hint": "高风险高回报，客单价直接翻十倍",
         "chanceBased": true,
         "branches": [
-          {"chance": 45, "result": "你们用了一个月重新包装产品。第一个企业客户签了年费5万的合同。虽然只有一个客户，但这个方向看起来很有前景。", "type": "good", "effect": {"money": 8000, "brain": -5, "hp": -5, "charm": 5}},
-          {"chance": 55, "result": "转型后发现企业客户的需求复杂度远超想象。定制化开发做了两个月，客户还是不满意。钱烧了不少，团队士气下降。", "type": "bad", "effect": {"money": -3000, "brain": -6, "hp": -6}}
+          {
+            "chance": 45,
+            "result": "你们用了一个月重新包装产品。第一个企业客户签了年费5万的合同。虽然只有一个客户，但这个方向看起来很有前景。",
+            "type": "good",
+            "effect": {
+              "money": 2150,
+              "brain": -5,
+              "hp": -5,
+              "charm": 5
+            }
+          },
+          {
+            "chance": 55,
+            "result": "转型后发现企业客户的需求复杂度远超想象。定制化开发做了两个月，客户还是不满意。钱烧了不少，团队士气下降。",
+            "type": "bad",
+            "effect": {
+              "money": -800,
+              "brain": -6,
+              "hp": -6
+            }
+          }
         ]
       },
       {
         "text": "📊 先做市场调研再决定",
         "hint": "用数据说话，不拍脑袋",
         "result": "你花了两周做了详细的市场调研。结论是：to B确实有机会，但需要先找到一个垂直场景切入。合伙人说：'你比我理性，听你的。'",
-        "effect": {"brain": -3, "charm": 3}
+        "effect": {
+          "brain": -3,
+          "charm": 3
+        }
       },
       {
         "text": "🎯 坚持to C：先把现有用户服务好",
         "hint": "深耕存量，口碑裂变",
         "result": "你决定专注现有用户。优化了产品体验后，用户活跃度提升了40%，还有几个用户主动发了推荐。慢就是快。",
-        "effect": {"brain": -3, "charm": 5, "hp": -3}
+        "effect": {
+          "brain": -3,
+          "charm": 5,
+          "hp": -3
+        }
       }
     ]
   },
-
   "choice_doubao_community_01": {
-    "month": [4, 9],
+    "month": [
+      4,
+      9
+    ],
     "text": "豆包开发者社区的运营给你发了私信：'你在社区的回答帮助了很多人，要不要做我们的官方版主？有月度补贴和内测资格。'",
     "type": "choice",
     "system": "choice",
     "once": true,
     "weight": 1,
-    "include": {"switched_to_doubao": true},
+    "include": {
+      "switched_to_doubao": true
+    },
     "title": "🏅 社区版主邀约",
     "desc": "成为官方版主意味着内测优先权和补贴，但也意味着更多时间投入。",
     "choices": [
@@ -1509,19 +2459,29 @@
         "text": "🙋 接受：当版主拿内测资格",
         "hint": "内测新模型，比别人快一步",
         "result": "你成了豆包社区官方版主。每月补贴800块不多，但内测新模型的资格让你总是第一个用上最新功能。同事们都来找你问'豆包那个新功能怎么用'。",
-        "effect": {"money": 800, "brain": 5, "charm": 5, "hp": -3}
+        "effect": {
+          "money": 225,
+          "brain": 5,
+          "charm": 5,
+          "hp": -3
+        }
       },
       {
         "text": "📝 只做内容贡献者：不想被绑定",
         "hint": "自由输出，不受约束",
         "result": "你委婉地说自己更适合自由创作。运营表示理解，给了你一个'优质创作者'的标签。没有补贴，但也没有KPI。",
-        "effect": {"charm": 3, "brain": 2}
+        "effect": {
+          "charm": 3,
+          "brain": 2
+        }
       },
       {
         "text": "🙅 拒绝：怕耽误正事",
         "hint": "主业优先，社区的事放一放",
         "result": "你拒绝了。过了一个月，看到新版主在群里晒内测截图，有一丢丢后悔。",
-        "effect": {"hp": 2}
+        "effect": {
+          "hp": 2
+        }
       }
     ]
   }

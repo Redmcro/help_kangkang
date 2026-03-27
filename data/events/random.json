@@ -5,7 +5,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": [3, 7], "brain": [2, 4]}
+    "effect": {"hp": [5, 8], "brain": 0}
   },
   "random_good_cat_01": {
     "month": [1, 12],
@@ -13,7 +13,7 @@
     "type": "good",
     "system": "random",
     "weight": 1.2,
-    "effect": {"hp": [2, 5], "brain": [2, 4], "charm": [1, 3]}
+    "effect": {"hp": 0, "brain": [3, 6], "charm": [1, 3]}
   },
   "random_good_bonus_01": {
     "month": [3, 12],
@@ -22,7 +22,7 @@
     "system": "random",
     "weight": 0.8,
     "include": {"bossSatisfy": ">50"},
-    "effect": {"bossSatisfy": [2, 5], "money": [300, 800], "charm": [1, 3]}
+    "effect": {"bossSatisfy": [2, 5], "money": [200, 500], "charm": [1, 3]}
   },
   "random_good_inspiration_01": {
     "month": [2, 12],
@@ -41,7 +41,7 @@
     "weight": 0.5,
     "once": true,
     "include": {"bossSatisfy": ">65"},
-    "effect": {"money": 1500},
+    "effect": {"money": 600},
     "postEvent": "康康忍住没笑出来。"
   },
   "random_bad_meeting_01": {
@@ -50,7 +50,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.5,
-    "effect": {"brain": [-3, -7], "hp": [-1, -3]}
+    "effect": {"brain": [-3, -5], "hp": 0}
   },
   "random_bad_backpain_01": {
     "month": [3, 12],
@@ -76,7 +76,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.8,
-    "effect": {"brain": -3, "money": -30},
+    "effect": {"brain": -3, "money": -15},
     "branch": [
       {
         "cond": {"brain": ">70"},
@@ -98,7 +98,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.6,
-    "effect": {"brain": -10, "hp": -3},
+    "effect": {"brain": -10, "hp": 0},
     "branch": [
       {
         "cond": {"brain": ">60"},
@@ -110,7 +110,7 @@
         "cond": {},
         "text": "两天的工作全没了。康康对着屏幕欲哭无泪。",
         "type": "bad",
-        "effect": {"brain": -10, "hp": -5, "bossSatisfy": -2}
+        "effect": {"brain": -12, "hp": 0, "bossSatisfy": -2}
       }
     ]
   },
@@ -148,7 +148,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.8,
-    "effect": {"brain": -3, "hp": -2}
+    "effect": {"brain": -5, "hp": 0}
   },
   "random_good_code_zen_01": {
     "month": [2, 12],
@@ -157,7 +157,7 @@
     "system": "random",
     "weight": 0.8,
     "include": {"brain": ">60"},
-    "effect": {"brain": [3, 8], "bossSatisfy": [2, 5], "hp": [-3, -1]}
+    "effect": {"brain": [-2, 0], "bossSatisfy": [2, 5], "hp": [-3, -1]}
   },
   "random_bad_insomnia_01": {
     "month": [3, 12],
@@ -166,7 +166,7 @@
     "system": "random",
     "weight": 1,
     "include": {"hp": "<50"},
-    "effect": {"brain": [-5, -10], "hp": [-3, -7]}
+    "effect": {"hp": [-5, -8], "brain": [-2, -3]}
   },
   "random_neutral_elevator_01": {
     "month": [1, 12],
@@ -184,7 +184,7 @@
     "system": "random",
     "weight": 0.6,
     "once": true,
-    "effect": {"money": 500, "brain": 2, "charm": 3}
+    "effect": {"money": 300, "brain": 2, "charm": 3}
   },
 
   "random_good_ai_dream_01": {
@@ -239,7 +239,7 @@
     "type": "good",
     "system": "random",
     "weight": 0.8,
-    "effect": {"hp": 5, "charm": 5, "money": 100},
+    "effect": {"hp": 5, "charm": 5, "money": 50},
     "postEvent": "从此康康成了'什么都能修'的全能选手。"
   },
   "random_good_duck_alive_01": {
@@ -268,7 +268,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1,
-    "effect": {"brain": -10, "hp": -5},
+    "effect": {"brain": -10, "hp": -3},
     "postEvent": "康康怀疑自己进入了时间循环。甚至开始确认今天的日期。"
   },
   "random_bad_chatgpt_resign_01": {
@@ -298,7 +298,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1,
-    "effect": {"brain": -8, "hp": -3},
+    "effect": {"brain": -8, "hp": 0},
     "postEvent": "最后用了石头剪刀布决定保留谁的版本。"
   },
   "random_bad_coffee_sentient_01": {
@@ -307,7 +307,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.2,
-    "effect": {"brain": -5, "hp": -3},
+    "effect": {"brain": -5, "hp": 0},
     "postEvent": "有人开始从家里带咖啡壶来上班。"
   },
   "random_bad_compiler_consciousness_01": {
@@ -347,7 +347,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.8,
-    "effect": {"brain": -5, "hp": -2},
+    "effect": {"brain": -5, "hp": 0},
     "postEvent": "最后IT在群里发了一句：'WiFi名不要超过20个字，谢谢。'"
   },
   "random_bad_stackoverflow_down_01": {
@@ -365,7 +365,7 @@
     "type": "bad",
     "system": "random",
     "weight": 0.5,
-    "effect": {"brain": -5, "hp": -3},
+    "effect": {"brain": -5, "hp": 0},
     "postEvent": "康康截图发到群里，大家笑完之后都沉默了。"
   },
 
@@ -445,7 +445,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.2,
-    "effect": {"brain": -5, "money": -60},
+    "effect": {"brain": -5, "money": -30},
     "postEvent": "康康重新组织了语言又试了三次，Token哗哗地流走了。"
   },
   "random_good_first_slack_01": {
@@ -454,7 +454,7 @@
     "type": "good",
     "system": "random",
     "weight": 1,
-    "effect": {"hp": 3, "brain": 3},
+    "effect": {"hp": 0, "brain": 5},
     "postEvent": "刚关掉视频，主管就走过来了。虚惊一场。"
   },
   "random_bad_req_change_01": {
@@ -463,7 +463,7 @@
     "type": "bad",
     "system": "random",
     "weight": 1.3,
-    "effect": {"brain": -8, "hp": -3, "bossSatisfy": -2},
+    "effect": {"brain": -8, "hp": 0, "bossSatisfy": -2},
     "postEvent": "康康默默按下Ctrl+A，深吸一口气，按下了Delete。"
   },
   "random_good_mentor_tips_01": {
@@ -585,7 +585,7 @@
     "weight": 0.8,
     "once": true,
     "include": {"attended_ai_conf": true},
-    "effect": {"money": 2000, "charm": 5},
+    "effect": {"money": 1000, "charm": 5},
     "postEvent": "康康推荐了一个前同事，对方成功入职。伯乐奖到手的那天，康康请少爷和亿民吃了顿火锅。"
   },
   "random_good_ai_conf_insider_01": {
@@ -596,7 +596,7 @@
     "weight": 0.7,
     "once": true,
     "include": {"attended_ai_conf": true},
-    "effect": {"brain": 8, "bossSatisfy": 3, "money": 150},
+    "effect": {"brain": 8, "bossSatisfy": 3, "money": 80},
     "postEvent": "模型开源当天，康康是全组第一个跑通Demo的人。老板问：'你怎么这么快？' 康康微微一笑。"
   },
 
@@ -608,7 +608,7 @@
     "weight": 0.8,
     "once": true,
     "include": {"built_ai_tool": true},
-    "effect": {"money": 5000, "charm": 5, "brain": -3},
+    "effect": {"money": 2000, "charm": 5, "brain": -3},
     "postEvent": "康康第一次体会到了'被甲方追着付钱'的感觉。这感觉，比升职加薪还爽。"
   },
 

@@ -33,7 +33,7 @@
     "system": "monthly",
     "weight": 50,
     "once": true,
-    "effect": {"money": 3000}
+    "effect": {"money": 1500}
   },
   "monthly_m3_model_war": {
     "month": [3, 3],
@@ -72,7 +72,7 @@
     "system": "monthly",
     "weight": 80,
     "once": true,
-    "effect": {"brain": 3, "money": 150},
+    "effect": {"brain": 3, "money": 80},
     "postEvent": "康康心想：这年头，开源才是王道啊。"
   },
   "monthly_m5_tech_share": {
@@ -125,7 +125,7 @@
     "system": "monthly",
     "weight": 100,
     "once": true,
-    "effect": {"hp": -4, "brain": -3, "bossSatisfy": -3},
+    "effect": {"hp": -5, "brain": -5, "bossSatisfy": -3},
     "postEvent": "康康连续三天加班到凌晨，泡面桶堆满了垃圾桶。"
   },
   "monthly_m6_deadline_push": {
@@ -142,7 +142,7 @@
         "text": "💪 通宵干完：一个都不能少",
         "hint": "拼命赶工，老板会记住的",
         "result": "通宵把三个功能全赶出来了！代码质量不敢保证，但至少交付了。",
-        "effect": {"hp": -8, "brain": -3, "bossSatisfy": 10}
+        "effect": {"hp": -8, "brain": -5, "bossSatisfy": 10}
       },
       {
         "text": "🎩 只做两个，第三个跟老板谈延期",
@@ -171,7 +171,7 @@
     "system": "monthly",
     "weight": 90,
     "once": true,
-    "effect": {"hp": -3, "brain": -3},
+    "effect": {"hp": -5, "brain": 0},
     "postEvent": "康康买了个USB小风扇，对着脸吹热风。"
   },
   "monthly_m7_summer_intern": {
@@ -196,7 +196,7 @@
         "cond": {"bossSatisfy": ">60"},
         "text": "考核评价：B+。老板说：'继续保持。' 松了一口气。",
         "type": "good",
-        "effect": {"money": 2000, "hp": 5}
+        "effect": {"money": 800, "hp": 5}
       },
       {
         "cond": {"bossSatisfy": ">40"},
@@ -236,7 +236,7 @@
         "hint": "全力以赴，赢了改变命运",
         "chanceBased": true,
         "branches": [
-          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 10000, "hp": -8, "brain": 10, "bossSatisfy": 5, "charm": 5}},
+          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 5000, "hp": -8, "brain": 10, "bossSatisfy": 5, "charm": 5}},
           {"chance": 45, "result": "作品不错但没获奖。收获了经验和几个新朋友。", "type": "neutral", "effect": {"hp": -6, "brain": 5, "charm": 3}},
           {"chance": 20, "result": "48小时只做了个半成品，Demo都跑不起来……", "type": "bad", "effect": {"hp": -6, "brain": -5}}
         ]
@@ -263,7 +263,7 @@
     "system": "monthly",
     "weight": 90,
     "once": true,
-    "effect": {"money": 300},
+    "effect": {"money": 150},
     "postEvent": "康康感叹：卷到最后连AI都开始卷价格了。"
   },
   "monthly_m10_national_day": {
@@ -280,7 +280,7 @@
         "text": "🫡 主动值班：拍老板马屁",
         "hint": "牺牲假期，换老板一个好印象",
         "result": "整个假期就你和老板在公司。老板很感动，多发了2000块加班费。",
-        "effect": {"bossSatisfy": 8, "hp": -3, "money": 2000}
+        "effect": {"bossSatisfy": 8, "hp": -3, "money": 1000}
       },
       {
         "text": "🙋 只值一天意思意思",
@@ -303,7 +303,7 @@
     "system": "monthly",
     "weight": 100,
     "once": true,
-    "effect": {"hp": -2, "brain": -2},
+    "effect": {"hp": -3, "brain": 0},
     "postEvent": "康康看了看自己的KPI完成率……37%。还有两个月。"
   },
   "monthly_m11_bonus_rumor": {
@@ -495,13 +495,13 @@
         "text": "🧪 每个模型都试一遍，做个对比测试",
         "hint": "专业测评，费钱但能出名",
         "result": "你花了整整两天，做了一份20页的模型对比报告。发到技术群里被疯传，老板也看到了。",
-        "effect": {"brain": 8, "money": -90, "bossSatisfy": 5, "charm": 3}
+        "effect": {"brain": 8, "money": -50, "bossSatisfy": 5, "charm": 3}
       },
       {
         "text": "💰 挑最贵的用——贵的肯定好",
         "hint": "简单粗暴，贵的就是好的",
         "result": "Opus 4.6质量确实好，但Token烧得飞快。一个月的预算三天就花完了。",
-        "effect": {"money": -150, "brain": 3}
+        "effect": {"money": -80, "brain": 3}
       },
       {
         "text": "🐳 继续用豆包——免费的才是最好的",
@@ -534,7 +534,7 @@
         "text": "💼 拿赔偿——体面离开",
         "hint": "拿钱走人，但以后的路更难",
         "result": "你拿了N+1走人。HR递纸巾的手都在抖。走出大楼时阳光很刺眼。",
-        "effect": {"money": 15000, "bossSatisfy": -20, "hp": -8},
+        "effect": {"money": 5000, "bossSatisfy": -20, "hp": -8},
         "setFlag": "considered_delivery"
       }
     ]
@@ -577,13 +577,13 @@
         "text": "💎 充3000块——囤他个够",
         "hint": "大手笔囤货，安全感拉满",
         "result": "一口气充了3000块。看着账户里金灿灿的Token数字，你感受到了前所未有的安全感。",
-        "effect": {"money": -2400}
+        "effect": {"money": -1000}
       },
       {
         "text": "🪙 充500块意思意思",
         "hint": "理性消费，小囤一点",
         "result": "理性消费。同事们拿着'充值截图'炫耀时，你默默关上了手机。",
-        "effect": {"money": -350}
+        "effect": {"money": -200}
       },
       {
         "text": "🚫 一分钱不充——打折也是消费主义陷阱",
@@ -623,7 +623,7 @@
         "text": "☕ 去星巴克蹭电蹭网",
         "hint": "换个环境，花点小钱图个舒服",
         "result": "你在星巴克的角落里打开笔记本。空调、WiFi、咖啡一应俱全。效率竟然比公司还高。",
-        "effect": {"money": -50, "hp": 3, "brain": 3}
+        "effect": {"money": -30, "hp": 3, "brain": 3}
       }
     ]
   },
@@ -648,7 +648,7 @@
         "text": "😤 '我就是要比AI更快更好！'",
         "hint": "卷到极致，身体可能吃不消",
         "result": "你开始疯狂学习各种AI工具，立志成为全公司AI使用效率最高的人。目标明确，但身体在抗议。",
-        "effect": {"brain": 5, "hp": -3, "bossSatisfy": 3}
+        "effect": {"brain": 5, "hp": -5, "bossSatisfy": 3}
       },
       {
         "text": "😔 '算了，能活一天是一天……'",
@@ -764,19 +764,19 @@
         "cond": {"bossSatisfy": ">75"},
         "text": "【S级】老板亲自打来电话：'恭喜！你是今年转型最成功的员工。明年你带个小组。' 年终奖：3个月工资。你在厕所里偷偷哭了。",
         "type": "good",
-        "effect": {"money": 20000, "brain": 10, "hp": 10, "charm": 5}
+        "effect": {"money": 6000, "brain": 10, "hp": 10, "charm": 5}
       },
       {
         "cond": {"bossSatisfy": ">55"},
         "text": "【B级】评语：'转型进度优秀，尚有提升空间。建议继续深耕AI技术栈。' 年终奖：1.5个月工资。活下来了。",
         "type": "good",
-        "effect": {"money": 10000, "brain": 5, "hp": 5}
+        "effect": {"money": 3000, "brain": 5, "hp": 5}
       },
       {
         "cond": {"bossSatisfy": ">35"},
         "text": "【C级】评语：'AI转型进度落后于团队平均水平。Q1需提交改进计划。' 年终奖：0.5个月工资。勉强保住饭碗，但头顶的剑更近了。",
         "type": "neutral",
-        "effect": {"money": 3000, "brain": -5}
+        "effect": {"money": 1000, "brain": -5}
       },
       {
         "cond": {},

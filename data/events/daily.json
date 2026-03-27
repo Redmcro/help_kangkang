@@ -6,7 +6,7 @@
     "system": "daily",
     "weight": 1.5,
     "filler": true,
-    "effect": {"bossSatisfy": 1, "hp": 2, "brain": 1}
+    "effect": {"bossSatisfy": 1, "hp": 0, "brain": 0}
   },
   "daily_ui_layout_01": {
     "month": [1, 8],
@@ -15,7 +15,7 @@
     "system": "daily",
     "weight": 1.2,
     "filler": true,
-    "effect": {"bossSatisfy": 1, "hp": 2, "brain": 1}
+    "effect": {"bossSatisfy": 1, "hp": 0, "brain": 0}
   },
   "daily_feature_sort_01": {
     "month": [2, 10],
@@ -43,7 +43,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
-    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-60, -120]}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-30, -60]}
   },
   "daily_system_quest_01": {
     "month": [4, 12],
@@ -53,7 +53,7 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">3"},
-    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-50, -100]}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-25, -50]}
   },
   "daily_arch_ecs_01": {
     "month": [7, 12],
@@ -63,7 +63,7 @@
     "weight": 0.6,
     "filler": true,
     "include": {"month": ">6"},
-    "effect": {"bossSatisfy": [3, 5], "brain": [-3, -6], "money": [-180, -300]},
+    "effect": {"bossSatisfy": [3, 5], "brain": [-3, -6], "money": [-80, -150]},
     "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
   },
   "daily_arch_network_01": {
@@ -74,7 +74,7 @@
     "weight": 0.5,
     "filler": true,
     "include": {"month": ">7"},
-    "effect": {"bossSatisfy": [3, 6], "brain": [-3, -7], "money": [-200, -400]}
+    "effect": {"bossSatisfy": [3, 6], "brain": [-3, -7], "money": [-90, -180]}
   },
   "daily_bug_crash_01": {
     "month": [2, 12],
@@ -94,7 +94,7 @@
         "cond": {},
         "text": "排查了一整天才找到Bug。修了一个又冒出来两个……头要炸了。",
         "type": "bad",
-        "effect": {"bossSatisfy": -3, "brain": -5, "hp": -5}
+        "effect": {"bossSatisfy": -3, "brain": -5, "hp": -3}
       }
     ]
   },
@@ -116,7 +116,7 @@
         "cond": {},
         "text": "折腾了两天，改了十几处代码，还是会偶尔泄漏。最终贴了个定时清理的创可贴方案。",
         "type": "bad",
-        "effect": {"brain": -3, "hp": -3, "bossSatisfy": -1}
+        "effect": {"brain": -5, "hp": 0, "bossSatisfy": -1}
       }
     ]
   },
@@ -147,13 +147,13 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["职场", "压力"],
-    "effect": {"brain": -2, "money": -60},
+    "effect": {"brain": -2, "money": -30},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你用ARFoundation搭了个能扫二维码弹出3D模型的Demo，虽然模型是个旋转的茶壶，但客户居然觉得很酷！",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -3, "money": -90}
+        "effect": {"bossSatisfy": 5, "brain": -3, "money": -45}
       },
       {
         "cond": {},
@@ -178,7 +178,7 @@
         "text": "🔧 硬着头皮做",
         "hint": "正面刚，做出来就是功劳",
         "result": "你用最便宜的API加了一大堆Prompt限制，NPC终于不会教玩家造火箭了。策划满意地点点头。",
-        "effect": {"money": -120, "brain": -3, "bossSatisfy": 3}
+        "effect": {"money": -60, "brain": -3, "bossSatisfy": 3}
       },
       {
         "text": "📝 写个假AI（随机回复）",
@@ -260,7 +260,7 @@
     "weight": 0.7,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -3, "money": -60},
+    "effect": {"brain": -3, "money": -30},
     "branch": [
       {
         "cond": {"brain": ">65"},
@@ -285,7 +285,7 @@
     "weight": 0.5,
     "once": true,
     "tags": ["职场", "压力"],
-    "effect": {"hp": -5},
+    "effect": {"hp": -3},
     "branch": [
       {
         "cond": {"brain": ">60", "luck": ">50"},
@@ -297,7 +297,7 @@
         "cond": {},
         "text": "报错弹窗后面跟着蓝屏。大老板的微笑凝固了。投资人礼貌地说'我们再考虑考虑'。你感觉自己的灵魂离开了身体。",
         "type": "bad",
-        "effect": {"bossSatisfy": -8, "hp": -8, "brain": -3}
+        "effect": {"bossSatisfy": -8, "hp": -3, "brain": -8}
       }
     ]
   },
@@ -337,7 +337,7 @@
     "filler": true,
     "tags": ["技术"],
     "include": {"month": ">5"},
-    "effect": {"brain": -2, "money": -45},
+    "effect": {"brain": -2, "money": -25},
     "postEvent": "你花了半天把硬编码的中文改成了key-value。然后发现还有800条……AI翻译器，启动！"
   },
 
@@ -374,7 +374,7 @@
     "weight": 0.6,
     "tags": ["技术", "压力"],
     "include": {"month": ">4"},
-    "effect": {"brain": -3, "money": -105},
+    "effect": {"brain": -3, "money": -50},
     "branch": [
       {
         "cond": {"brain": ">70"},
@@ -399,13 +399,13 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">5"},
-    "effect": {"brain": -3, "money": -75},
+    "effect": {"brain": -3, "money": -40},
     "branch": [
       {
         "cond": {"brain": ">65"},
         "text": "你把关键数值验算移到了服务端，还加了行为检测。外挂党发帖：'这游戏没法挂了，退坑了。' 老板破例给你点了杯奶茶。",
         "type": "good",
-        "effect": {"bossSatisfy": 5, "brain": -3, "money": 500}
+        "effect": {"bossSatisfy": 5, "brain": -3, "money": 300}
       },
       {
         "cond": {},
@@ -423,13 +423,13 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["职场", "压力"],
-    "effect": {"brain": -3, "hp": -3},
+    "effect": {"brain": -3, "hp": 0},
     "branch": [
       {
         "cond": {"brain": ">60"},
         "text": "你通宵肝了一个'限时礼包+登录奖励'的活动页面，虽然UI有点糙但功能正常。运营竖起了大拇指。",
         "type": "good",
-        "effect": {"bossSatisfy": 3, "brain": -3, "hp": -3}
+        "effect": {"bossSatisfy": 3, "brain": -3, "hp": -5}
       },
       {
         "cond": {},
@@ -448,7 +448,7 @@
     "weight": 0.5,
     "tags": ["技术", "压力"],
     "include": {"month": ">6"},
-    "effect": {"brain": -4, "money": -150},
+    "effect": {"brain": -4, "money": -80},
     "branch": [
       {
         "cond": {"brain": ">75"},
@@ -486,7 +486,7 @@
         "hint": "用代码筛图，程序员的浪漫",
         "require": {"brain": 65},
         "success": "你用OpenCV写了个自动检测异常的脚本，成功筛掉了80%的问题图。剩下的手动改改就好。",
-        "successEffect": {"brain": -3, "bossSatisfy": 4, "money": -30},
+        "successEffect": {"brain": -3, "bossSatisfy": 4, "money": -15},
         "fail": "脚本跑了一晚上，把正常的图也删了一半。你默默按下了Ctrl+Z。",
         "failEffect": {"brain": -5, "hp": -3}
       },
@@ -543,7 +543,7 @@
     "system": "daily",
     "weight": 0.8,
     "tags": ["技术", "搞笑"],
-    "effect": {"bossSatisfy": 3, "brain": 2},
+    "effect": {"bossSatisfy": 3, "brain": 3},
     "branch": [
       {
         "cond": {"luck": ">60"},
@@ -719,13 +719,13 @@
     "system": "daily",
     "weight": 0.7,
     "tags": ["搞笑"],
-    "effect": {"brain": 3, "hp": 2},
+    "effect": {"brain": 3, "hp": 0},
     "branch": [
       {
         "cond": {"luck": ">60"},
         "text": "你喝了一口咖啡，觉得这杯有魔力。从此你每次编译失败都先去泡咖啡。神奇的是，成功率确实提高了——可能是因为冷静了两分钟。",
         "type": "good",
-        "effect": {"brain": 4, "hp": 3, "luck": 1}
+        "effect": {"brain": 5, "hp": 0, "luck": 1}
       },
       {
         "cond": {},

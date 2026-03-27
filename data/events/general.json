@@ -78,7 +78,7 @@
     "type": "bad",
     "system": "general",
     "weight": 1,
-    "effect": {"hp": -5, "brain": -3}
+    "effect": {"hp": -5, "brain": 0}
   },
   "coffee_break": {
     "month": [1, 12],
@@ -87,7 +87,7 @@
     "system": "general",
     "weight": 1,
     "filler": true,
-    "effect": {"hp": 3, "brain": 2}
+    "effect": {"hp": 0, "brain": 3}
   },
   "bug_crisis": {
     "month": [3, 12],
@@ -230,13 +230,13 @@
           {
             "chance": 70,
             "result": "顺利完成！赚了3000块，没被发现。",
-            "effect": {"money": 3000},
+            "effect": {"money": 1500},
             "type": "money"
           },
           {
             "chance": 30,
             "result": "被老板发现了！挨了一顿批评...",
-            "effect": {"money": 3000, "bossSatisfy": -8},
+            "effect": {"money": 1500, "bossSatisfy": -8},
             "type": "bad"
           }
         ]
@@ -311,7 +311,7 @@
     "weight": 0.8,
     "once": true,
     "filler": true,
-    "effect": {"charm": 1, "money": -20},
+    "effect": {"charm": 1, "money": -10},
     "postEvent": "行政在群里发了一条：'请大家节约用纸。'——所有人都@了康康。"
   },
   "general_first_code_review_01": {
@@ -354,7 +354,7 @@
     "system": "general",
     "weight": 1,
     "once": true,
-    "effect": {"brain": 3, "money": -800, "hp": 2},
+    "effect": {"brain": 3, "money": -300, "hp": 2},
     "postEvent": "隔壁的亿民戴上了降噪耳机。少爷评价：'声音感人，跟拖拉机似的。'"
   },
   "general_first_deadline_01": {
@@ -397,7 +397,7 @@
     "system": "general",
     "weight": 1.2,
     "filler": true,
-    "effect": {"hp": 5, "brain": 3},
+    "effect": {"hp": 3, "brain": 3},
     "postEvent": "亿民低声说：'你打呼了知道吗？' 康康：'不可能，我只是在思考。'"
   },
   "general_good_lunch_treat_01": {
@@ -416,7 +416,7 @@
     "system": "general",
     "weight": 1,
     "filler": true,
-    "effect": {"hp": 3, "brain": 2},
+    "effect": {"hp": 0, "brain": 3},
     "postEvent": "后来才知道主持人在厕所看手机忘了时间。"
   },
   "general_neutral_elevator_01": {
@@ -444,7 +444,7 @@
     "type": "good",
     "system": "general",
     "weight": 0.8,
-    "effect": {"hp": 5, "brain": 3, "charm": 1},
+    "effect": {"hp": 0, "brain": 5, "charm": 1},
     "postEvent": "五点半所有人准时关电脑。亿民说：'这才是团队凝聚力。'"
   },
   "general_bad_meeting_bomb_01": {
@@ -464,7 +464,7 @@
         "cond": {},
         "text": "康康支支吾吾说了五分钟，全场沉默。CTO说'好的，下一个。'那个'好的'杀伤力极大。",
         "type": "bad",
-        "effect": {"brain": -5, "bossSatisfy": -3, "charm": -2}
+        "effect": {"brain": -5, "hp": 0, "bossSatisfy": -3, "charm": -2}
       }
     ]
   },
@@ -544,7 +544,7 @@
         "cond": {},
         "text": "匆忙上线后周六凌晨就炸了。康康在被窝里远程hotfix到凌晨3点。",
         "type": "bad",
-        "effect": {"hp": -10, "brain": -8, "bossSatisfy": -3}
+        "effect": {"hp": -8, "brain": -5, "bossSatisfy": -3}
       }
     ]
   },
@@ -564,7 +564,7 @@
     "type": "good",
     "system": "general",
     "weight": 0.8,
-    "effect": {"money": -150, "charm": 5, "shaoye_rel": 2, "yimin_rel": 2, "hp": 3},
+    "effect": {"money": -80, "charm": 5, "shaoye_rel": 2, "yimin_rel": 2, "hp": 3},
     "postEvent": "少爷嘴里塞着薯片说：'以后每周来一次。' 亿民默默拿走了最后一包坚果。"
   },
 
@@ -640,7 +640,7 @@
     "system": "general",
     "weight": 1,
     "once": true,
-    "effect": {"brain": -3, "hp": -2},
+    "effect": {"brain": -3, "hp": 0},
     "postEvent": "康康试着提了个优化建议，被告知：'这个系统没人敢改，上次试图重构的人已经离职了。'"
   },
   "general_new_fire_drill_01": {
@@ -676,13 +676,13 @@
         "cond": {"money": ">2000"},
         "text": "虽然贵，但寿司确实好吃。少爷豪气地说：'第一次请客，以后你们请我。' 康康默默算了算钱包。",
         "type": "good",
-        "effect": {"money": -120, "shaoye_rel": 3, "charm": 2, "hp": 3}
+        "effect": {"money": -80, "shaoye_rel": 3, "charm": 2, "hp": 3}
       },
       {
         "cond": {},
         "text": "康康看着菜单上的价格，默默点了最便宜的味噌汤套餐。少爷瞟了一眼：'兄弟，别省了，AA的。'",
         "type": "neutral",
-        "effect": {"money": -120, "shaoye_rel": 1, "hp": 2}
+        "effect": {"money": -80, "shaoye_rel": 1, "hp": 2}
       }
     ]
   }

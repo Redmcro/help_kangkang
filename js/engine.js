@@ -61,14 +61,16 @@ const BUG_NARRATIVES = [
     '🐛 一个off-by-one错误，让10000个用户收到了同一条推送通知',
 ];
 
-const OVERTIME_NARRATIVES = [
-    '⚠️ 质量不达标，康康不得不加班到凌晨',
-    '⚠️ 又要加班了。康康打开外卖App点了杯美式，准备长期作战',
-    '⚠️ 加班写代码到深夜，康康开始怀疑写代码到底是工作还是生活方式',
-    '⚠️ 凌晨的办公室只剩康康和保安。保安大叔递过来一根烟：兄弟，又加班啊',
-    '⚠️ 连续加班3天，康康的黑眼圈已经遮不住了',
-    '⚠️ 连续加班5天！强制休息',
-];
+function buildOvertimeMsg(quality, hasBug, hpLoss, brainLoss) {
+    const bugPart = hasBug ? `修了个Bug 🧠-${brainLoss}，` : '';
+    const msgs = [
+        `⚠️ 代码质量${quality}分，${bugPart}加班返工到深夜`,
+        `⚠️ 今天写的代码只有${quality}分，${bugPart}不得不留下来重写`,
+        `⚠️ 代码没过质检(${quality}分)，${bugPart}康康叹了口气开始加班`,
+        `⚠️ ${quality}分的代码交不了差，${bugPart}又是一个加班夜`,
+    ];
+    return msgs[Math.floor(Math.random() * msgs.length)] + ` ❤️-${hpLoss}`;
+}
 
 const STAT_EMOJI = {
     hp: '❤️', brain: '🧠', money: '💰', bossSatisfy: '👔',
@@ -198,7 +200,7 @@ export class GameEngine {
         if (month > 1) {
             this.property.monthlyExpense();
             const salary = this.property.get('salary') || 3000;
-            const cost = this.property.get('living_cost') || 2500;
+            const cost = this.property.get('living_cost') || 1500;
             const costDisplay = cost >= 0 ? `-¥${cost}` : `+¥${Math.abs(cost)}`;
             this.emitEvent(`月初结算：工资 +¥${salary}，生活费 ${costDisplay}`, 'money');
         }
@@ -292,39 +294,43 @@ export class GameEngine {
         const luck = this.property.get('luck') || 50;
         const baseBugRate = model ? model.bugRate : 0.3;
         const hasBug = Math.random() < baseBugRate * (1 - (luck - 50) / 200);
+        let brainLoss = 0;
         if (hasBug) {
-            const bc = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 5);
-            this.property.applyEffect({ brain: -bc });
+            brainLoss = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 3);
+            this.property.applyEffect({ brain: -brainLoss });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
-            const bugDelta = buildDeltaStr({ brain: -bc });
-            const bugMsg = BUG_NARRATIVES[Math.floor(Math.random() * BUG_NARRATIVES.length)];
-            this.dayReport.events.push(bugMsg + bugDelta);
         }
 
         this.monthQualities.push(quality);
 
-        // 2d: overtime mechanism - quality < 50 triggers overtime
-        if (quality < 50) {
-            const hpLoss = rng(8, 20);
-            const brainLoss = rng(5, 12);
-            this.property.applyEffect({ hp: -hpLoss, brain: -brainLoss });
+        // 2d: overtime mechanism - quality < 40 triggers overtime
+        if (quality < 40) {
+            let hpLoss = rng(3, 8);
+            this.property.applyEffect({ hp: -hpLoss });
             this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
             this.dayReport.overtime = true;
 
             const overtime = this.property.get('consecutive_overtime');
             if (overtime >= 5) {
                 this.property.set('consecutive_overtime', 0);
-                const extraHpLoss = rng(5, 10);
+                const extraHpLoss = rng(3, 6);
+                hpLoss += extraHpLoss;
                 this.property.applyEffect({ hp: -extraHpLoss });
-                this.dayReport.events.push(OVERTIME_NARRATIVES[5] + buildDeltaStr({ hp: -(hpLoss + extraHpLoss), brain: -brainLoss }));
+                const bugPart = hasBug ? `，期间还修了个Bug 🧠-${brainLoss}` : '';
+                this.dayReport.events.push(`⚠️ 连续加班5天！强制休息（质检${quality}分${bugPart}） ❤️-${hpLoss}`);
             } else if (overtime >= 3) {
-                this.dayReport.events.push(OVERTIME_NARRATIVES[4] + buildDeltaStr({ hp: -hpLoss, brain: -brainLoss }));
+                const bugPart = hasBug ? `，外加修Bug 🧠-${brainLoss}` : '';
+                this.dayReport.events.push(`⚠️ 代码只有${quality}分，连续加班3天，黑眼圈已经遮不住了${bugPart} ❤️-${hpLoss}`);
             } else {
-                const idx = Math.floor(Math.random() * 4);
-                this.dayReport.events.push(OVERTIME_NARRATIVES[idx] + buildDeltaStr({ hp: -hpLoss, brain: -brainLoss }));
+                this.dayReport.events.push(buildOvertimeMsg(quality, hasBug, hpLoss, brainLoss));
             }
         } else {
             this.property.set('consecutive_overtime', 0);
+            if (hasBug) {
+                const bugDelta = buildDeltaStr({ brain: -brainLoss });
+                const bugMsg = BUG_NARRATIVES[Math.floor(Math.random() * BUG_NARRATIVES.length)];
+                this.dayReport.events.push(bugMsg + bugDelta);
+            }
         }
 
         this.emitUI();
@@ -397,8 +403,8 @@ export class GameEngine {
             ? Math.round(this.monthQualities.reduce((a, b) => a + b, 0) / this.monthQualities.length) : 50;
 
         let sd = 0;
-        if (avgQ >= 90) sd = 2; else if (avgQ >= 70) sd = 1; else if (avgQ >= 50) sd = -1;
-        else if (avgQ >= 30) sd = -4; else sd = -8;
+        if (avgQ >= 90) sd = 2; else if (avgQ >= 70) sd = 1; else if (avgQ >= 50) sd = 0;
+        else if (avgQ >= 30) sd = -2; else sd = -5;
 
         // 2c: charm 微调 bossSatisfy（GAME_DESIGN §二.2.3）
         const charm = this.property.get('charm') || 50;

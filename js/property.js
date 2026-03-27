@@ -42,7 +42,7 @@ export class PropertyManager {
             total_bugs: 0,
             salary: 3000,
             months_bankrupt: 0,
-            living_cost: 2500,
+            living_cost: 1500,
 
             // Story flags
             gamejam_won: false,
@@ -126,12 +126,12 @@ export class PropertyManager {
 
     /**
      * Monthly recovery (called at start of each month).
-     * brain +10, hp +5 (halved if overtime last month).
+     * brain +8, hp +5 (halved if overtime last month).
      */
     monthlyRecovery() {
         const wasOvertime = this.#data.consecutive_overtime > 0;
-        const brainRecover = wasOvertime ? 3 : 5;
-        const hpRecover = wasOvertime ? 2 : 3;
+        const brainRecover = wasOvertime ? 4 : 8;
+        const hpRecover = wasOvertime ? 3 : 5;
         this.set('brain', clamp(this.#data.brain + brainRecover, 0, 100));
         this.set('hp', clamp(this.#data.hp + hpRecover, 0, 100));
     }
@@ -142,7 +142,7 @@ export class PropertyManager {
      */
     monthlyExpense() {
         const salary = this.#data.salary || 3000;
-        const cost = this.#data.living_cost || 2500;
+        const cost = this.#data.living_cost || 1500;
         this.set('money', this.#data.money + salary - cost);
     }
 
