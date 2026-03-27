@@ -18,7 +18,7 @@ description: Chief Steward workflow — project coordination, task dispatch, rev
 |:---|:---|
 | `DECREES.md` | Decrees: `⛔规矩` at top + dept + ≤5 words per item (Chinese). **NO bullet details** — officials read task specs for specifics. |
 | `.agents/tasks/*.md` | Task specs: detailed, officials self-serve (English) |
-| `.agents/REPORTS.md` | **Pending Reports** + **Archive** |
+| `.agents/REPORTS.md` | **Pending Reports** + **Verified** only. No archive — use `git log` for history. |
 | `.agents/AGENTS.md` | Official rules + mandatory 6-step workflow |
 
 ## 📝 Steward Workflow
@@ -29,7 +29,7 @@ Emperor says a few words
   → Steward writes task spec (.agents/tasks/{id}.md)
   → Emperor sends decree line to official in new chat
   → Official reads AGENTS.md → finds task → analyzes → executes → reports
-  → Steward reviews → pass = archive + delete task
+  → Steward reviews → pass = delete task + git commit + push
 ```
 
 ### ⚡ Parallelism
@@ -48,10 +48,11 @@ Emperor says a few words
 
 ## 📨 Post-Review
 
-- Pass → archive report, delete task file
-- Pass but no report → archive with `⚠️未报告` tag, still accept if work is correct
+- Pass → move report to ✅ Verified, delete task file, `git add -A && git commit && git push`
+- Pass but no report → accept if work correct, note `⚠️未报告` in commit message
 - Fail → issue rework decree directly (include `MUST submit report` reminder)
 - Report to Emperor: ≤3 lines
+- **No archive section in REPORTS.md** — `git log` is the archive
 
 ## 🔄 Handling Official Feedback
 
