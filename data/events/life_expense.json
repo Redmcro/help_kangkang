@@ -53,7 +53,7 @@
     "system": "economy",
     "weight": 1,
     "include": {"is_overtime": true},
-    "effect": {"money": [-80, -150], "hp": [-2, -5]},
+    "effect": {"money": [-70, -130], "hp": [-1, -4]},
     "postEvent": "司机聊天说：'你们程序员经常这么晚啊？我开夜班都没你们辛苦。'"
   },
   "life_expense_water_heater_01": {
@@ -465,6 +465,48 @@
         "hint": "省钱但通勤变长",
         "result": "搬到了郊区，每天通勤两小时。但房租便宜了一半。",
         "effect": {"living_cost": -300, "hp": -3, "brain": -2}
+      }
+    ]
+  },
+  "life_expense_overtime_night_snack_01": {
+    "month": [1, 12],
+    "text": "加班到十点，楼下只剩24小时便利店。你抱着'再扛一会儿'的心态买了热狗和咖啡。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 1,
+    "include": {"is_overtime": true},
+    "effect": {"money": -60, "brain": 2, "hp": -1},
+    "postEvent": "脑子是清醒了，胃也开始抗议了。"
+  },
+  "life_expense_recovery_massage_01": {
+    "month": [2, 12],
+    "text": "脖子硬得像水泥板。你在团购上看到'程序员颈肩急救套餐'，犹豫了三秒就下单了。",
+    "type": "good",
+    "system": "economy",
+    "weight": 0.7,
+    "include": {"consecutive_overtime": 2},
+    "effect": {"money": -180, "hp": 6, "brain": 2},
+    "postEvent": "按完整个人都松了，但看到账单还是肉疼。"
+  },
+  "life_expense_bug_hotfix_subsidy_01": {
+    "month": [3, 12],
+    "text": "周末紧急Hotfix。你来回打车、点夜宵、补咖啡，花费不少。项目收尾后财务说可以申请一部分补贴。",
+    "type": "neutral",
+    "system": "economy",
+    "weight": 0.8,
+    "include": {"total_bugs": ">10"},
+    "branch": [
+      {
+        "cond": {"bossSatisfy": ">55"},
+        "text": "老板认可你扛住了线上风险，报销审批当天就过了。",
+        "type": "good",
+        "effect": {"money": 80, "hp": -2, "brain": -2, "bossSatisfy": 1}
+      },
+      {
+        "cond": {},
+        "text": "报销单被退回了两次，最后只批了一小部分。你看着余额沉默了十秒。",
+        "type": "bad",
+        "effect": {"money": -120, "hp": -2, "brain": -2}
       }
     ]
   }

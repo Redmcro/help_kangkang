@@ -43,7 +43,15 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">2"},
-    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-30, -60]}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-22, -45]},
+    "branch": [
+      {
+        "cond": {"brain": ">72", "current_model": "=gpt54"},
+        "text": "你把上下文拆成可复用模板并加了缓存层，GPT-5.4输出稳定，Token浪费大幅下降。隔壁项目直接抄作业，预算还返了你一笔。",
+        "type": "good",
+        "effect": {"bossSatisfy": [3, 5], "brain": [-2, -4], "money": [60, 160]}
+      }
+    ]
   },
   "daily_system_quest_01": {
     "month": [4, 12],
@@ -53,7 +61,15 @@
     "weight": 0.8,
     "filler": true,
     "include": {"month": ">3"},
-    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-25, -50]}
+    "effect": {"bossSatisfy": [2, 4], "brain": [-2, -4], "money": [-18, -40]},
+    "branch": [
+      {
+        "cond": {"brain": ">68", "current_model": "=deepseek_v4"},
+        "text": "你让DeepSeek先产原型再手动收口，交付速度比预计快一倍。策划当场把后续迭代预算批给了你。",
+        "type": "good",
+        "effect": {"bossSatisfy": [3, 5], "brain": [-2, -4], "money": [40, 120]}
+      }
+    ]
   },
   "daily_arch_ecs_01": {
     "month": [7, 12],
@@ -63,7 +79,7 @@
     "weight": 0.6,
     "filler": true,
     "include": {"month": ">6"},
-    "effect": {"bossSatisfy": [3, 5], "brain": [-3, -6], "money": [-80, -150]},
+    "effect": {"bossSatisfy": [3, 5], "brain": [-3, -6], "money": [-55, -110]},
     "postEvent": "写了六个小时，核心逻辑只完成了60%。剩下的明天再说吧。"
   },
   "daily_arch_network_01": {
@@ -74,7 +90,15 @@
     "weight": 0.5,
     "filler": true,
     "include": {"month": ">7"},
-    "effect": {"bossSatisfy": [3, 6], "brain": [-3, -7], "money": [-90, -180]}
+    "effect": {"bossSatisfy": [3, 6], "brain": [-3, -7], "money": [-60, -125]},
+    "branch": [
+      {
+        "cond": {"brain": ">80", "current_model": "=opus46"},
+        "text": "你借助Opus把同步层重构成可复用组件，线上压测一次过。老板当场拍板：这套方案外卖给兄弟项目，提成归你。",
+        "type": "good",
+        "effect": {"bossSatisfy": [4, 6], "brain": [-3, -5], "money": [90, 220]}
+      }
+    ]
   },
   "daily_bug_crash_01": {
     "month": [2, 12],
@@ -178,7 +202,7 @@
         "text": "🔧 硬着头皮做",
         "hint": "正面刚，做出来就是功劳",
         "result": "你用最便宜的API加了一大堆Prompt限制，NPC终于不会教玩家造火箭了。策划满意地点点头。",
-        "effect": {"money": -60, "brain": -3, "bossSatisfy": 3}
+        "effect": {"money": -45, "brain": -3, "bossSatisfy": 3}
       },
       {
         "text": "📝 写个假AI（随机回复）",

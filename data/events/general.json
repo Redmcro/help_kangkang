@@ -78,7 +78,7 @@
     "type": "bad",
     "system": "general",
     "weight": 1,
-    "effect": {"hp": -5, "brain": 0}
+    "effect": {"hp": -5, "brain": -2, "money": -40}
   },
   "coffee_break": {
     "month": [1, 12],
@@ -95,7 +95,7 @@
     "type": "bad",
     "system": "general",
     "weight": 0.8,
-    "effect": {"bossSatisfy": -5, "brain": -5},
+    "effect": {"bossSatisfy": -5, "brain": -5, "money": -80},
     "include": {"month": ">2"}
   },
   "token_shortage": {
@@ -685,5 +685,48 @@
         "effect": {"money": -80, "shaoye_rel": 1, "hp": 2}
       }
     ]
+  },
+  "general_pressure_bug_queue_01": {
+    "month": [3, 12],
+    "text": "本周累计Bug数量飙升，群里不断有人@你确认修复时间。看板像着火了一样。",
+    "type": "bad",
+    "system": "general",
+    "weight": 1.1,
+    "include": {"total_bugs": ">6"},
+    "branch": [
+      {
+        "cond": {"brain": ">65"},
+        "text": "你先拆出了两条高风险路径，虽然还没全清，但最危险的点暂时稳住了。",
+        "type": "neutral",
+        "effect": {"brain": -3, "hp": -2, "bossSatisfy": 1, "money": -30}
+      },
+      {
+        "cond": {},
+        "text": "你排查到深夜还是没能彻底止血，老板在群里追问ETA。压力直接拉满。",
+        "type": "bad",
+        "effect": {"brain": -5, "hp": -3, "bossSatisfy": -3, "money": -80}
+      }
+    ],
+    "postEvent": "你把第二天上午第一个会议改成了'线上问题复盘'。"
+  },
+  "general_pressure_overtime_fog_01": {
+    "month": [2, 12],
+    "text": "连续加班后大脑像浆糊。你在PR里把变量名改乱了，Reviewer在群里连发三个问号。",
+    "type": "bad",
+    "system": "general",
+    "weight": 1,
+    "include": {"consecutive_overtime": 2},
+    "effect": {"brain": -4, "hp": -3, "bossSatisfy": -2},
+    "postEvent": "你决定明天先补觉，再谈效率。"
+  },
+  "general_recovery_pair_debug_01": {
+    "month": [2, 12],
+    "text": "你拉着同事做了30分钟结对排错，把最烦人的循环依赖拆开了。压在心口那块石头轻了不少。",
+    "type": "good",
+    "system": "general",
+    "weight": 0.9,
+    "include": {"total_bugs": ">3", "brain": "<70"},
+    "effect": {"brain": 3, "bossSatisfy": 2, "hp": 1},
+    "postEvent": "少爷说：'早这么拆不就好了。' 你点头如捣蒜。"
   }
 }

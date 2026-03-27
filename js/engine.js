@@ -97,6 +97,7 @@ export class GameEngine {
         this.speed = 800;
         this.autoTimer = null;
         this.pauseDepth = 0;
+        this.pendingStep = null;
         this.timeline = [];
         // Daily report tracking
         this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
@@ -113,8 +114,33 @@ export class GameEngine {
         this.onChoiceResult = null;
     }
 
-    pause() { this.pauseDepth++; clearTimeout(this.autoTimer); }
-    resume() { this.pauseDepth = Math.max(0, this.pauseDepth - 1); if (this.pauseDepth === 0) this.emitUI(); }
+    clearAutoTimer() {
+        if (this.autoTimer) {
+            clearTimeout(this.autoTimer);
+            this.autoTimer = null;
+        }
+    }
+
+    flushPendingStep() {
+        if (this.paused || this.autoTimer || typeof this.pendingStep !== 'function') return;
+        const next = this.pendingStep;
+        this.autoTimer = setTimeout(() => {
+            this.autoTimer = null;
+            if (this.paused) return;
+            if (this.pendingStep !== next) return;
+            this.pendingStep = null;
+            next();
+        }, this.speed);
+    }
+
+    pause() { this.pauseDepth++; this.clearAutoTimer(); }
+    resume() {
+        this.pauseDepth = Math.max(0, this.pauseDepth - 1);
+        if (this.pauseDepth === 0) {
+            this.flushPendingStep();
+            this.emitUI();
+        }
+    }
     get paused() { return this.pauseDepth > 0; }
     set paused(val) { if (val) this.pause(); else this.resume(); }
 
@@ -162,7 +188,8 @@ export class GameEngine {
         if (cost > this.legacy.coins && cost > 0) { if (this.onError) this.onError('传世金币不足！'); return false; }
         if (cost > 0) { this.legacy.coins -= cost; saveLegacy(this.legacy); }
 
-        clearTimeout(this.autoTimer);
+        this.clearAutoTimer();
+        this.pendingStep = null;
         this.property.reset();
         this.eventMgr.reset();
         this.timeline = [];
@@ -189,8 +216,10 @@ export class GameEngine {
     setSpeed(s) { this.speed = s; }
 
     scheduleNext(fn) {
-        if (this.paused) return;
-        this.autoTimer = setTimeout(() => fn(), this.speed);
+        if (typeof fn !== 'function') return;
+        this.pendingStep = fn;
+        this.clearAutoTimer();
+        this.flushPendingStep();
     }
 
     processMonth() {
@@ -262,6 +291,7 @@ export class GameEngine {
         if (modelId === 'opus46' && Math.random() < 0.08) {
             this.dayReport.events.push('🎯 Opus 拒绝生成！');
             this.monthQualities.push(0);
+            this.property.set('is_overtime', true);
             this.emitUI();
             this.scheduleNext(() => this.processDayEvent(month, day, totalDays));
             return;
@@ -331,6 +361,7 @@ export class GameEngine {
 
         // 2d: overtime mechanism - quality < 40 triggers overtime
         if (quality < 40) {
+            this.property.set('is_overtime', true);
             let hpLoss = rng(3, 8);
             // Extra HP drain: 2~5 scaled by overtime intensity
             const overtime = this.property.get('consecutive_overtime');
@@ -355,6 +386,7 @@ export class GameEngine {
                 this.dayReport.events.push(buildOvertimeMsg(quality, hasBug, hpLoss, brainLoss));
             }
         } else {
+            this.property.set('is_overtime', false);
             this.property.set('consecutive_overtime', 0);
             if (hasBug) {
                 const bugDelta = buildDeltaStr({ brain: -brainLoss });
@@ -528,7 +560,7 @@ export class GameEngine {
     }
 
     endGame(cause) {
-        clearTimeout(this.autoTimer);
+        this.pendingStep = null;
         this.pause();
         const state = this.property.toJSON();
         const month = state.month > 12 ? 12 : state.month;
@@ -616,6 +648,7 @@ export class GameEngine {
         if (this.onEvent) this.onEvent(this.property.get('month'), this.property.get('day') || 1, text, type);
     }
     emitUI() {
+        this.flushPendingStep();
         const state = this.property.toJSON();
         if (this.onUpdateUI) this.onUpdateUI(state, this.getStageName(state.month || 1));
     }

@@ -18,10 +18,10 @@
 选Buff(最多3个) → 进入1月 → 每月循环 → 12月年终审判 → 结局
                                 ↓
 每月流程：
-  月初（发工资/扣生活费/自然恢复/模型解锁）
-  → 工作日（3~5天，选模型写代码/修Bug/可能熬夜）
+  月初（2~12月发工资与扣生活费 / 按恢复率恢复 / 模型解锁）
+  → 工作日（5~7天，选模型写代码→扣费→判定Bug→低质量触发加班）
   → 穿插随机事件/选择事件/同事事件/女朋友事件/生活开销事件
-  → 月末结算（代码质量→老板满意度→下月预告）
+  → 月末结算（平均质量→老板满意度，money≤0累计破产月）
 ```
 
 ---
@@ -139,10 +139,15 @@ Bug 率修正：
 |:---|:---|:---|:---|
 | 当前模型 | `current_model` | string | 当前使用的AI模型键名 |
 | 当前月份 | `month` | number | 1–12 |
-| 是否加班 | `is_overtime` | bool | 当前加班状态 |
-| 连续加班天数 | `consecutive_overtime` | number | ≥3触发猝死警告，≥5强制休息 |
+| 当前工作日 | `day` | number | 当月工作日序号（1~7） |
+| 是否加班 | `is_overtime` | bool | 当日 `quality < 40` 时为 true，否则为 false |
+| 连续加班天数 | `consecutive_overtime` | number | ≥3进入高压警告，≥5触发额外HP损失后清零 |
 | 平均代码质量 | `avg_quality` | number | 月度/全局统计 |
 | 累计Bug数 | `total_bugs` | number | 统计数据 |
+| Bug积压数 | `bug_backlog` | number | 经济骨干预留字段（已注册，待接入主结算） |
+| 本月新增Bug | `new_bugs_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
+| 本月修复Bug | `fixed_bugs_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
+| 本月加班时长 | `overtime_hours_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
 | 月薪 | `salary` | number | 初始3000，可加薪 |
 | 生活费 | `living_cost` | number | 月初扣除，初始1500 |
 | 连续破产月 | `months_bankrupt` | number | 连续3月触发破产结局 |
@@ -177,19 +182,38 @@ Bug 率修正：
 
 ## 三、数值机制
 
-### 3.1 每月自然恢复/扣除（月初自动执行）
+### 3.0 经济-压力闭环（实现口径）
 
 ```
-brain += 8（休息恢复，上限100）
-hp    += 5（自然恢复，上限100）
+模型档位选择（质量/价格/bug率）
+  → 任务质量与花费
+  → Bug触发与脑力消耗（`total_bugs` 累计）
+  → 低质量触发加班与HP流失
+  → 月末 avg_quality 结算 bossSatisfy
+  → bossSatisfy 与 money 决定是否能活到年底
+  → 通过恢复行为（午休、摸鱼、吃饭、健身等事件）补回 hp/brain 继续循环
+```
 
-如果上月有连续加班：
-  brain 恢复量减半（+4）
-  hp 恢复量减半（+3）
+注：`bug_backlog/new_bugs_month/fixed_bugs_month/overtime_hours_month` 已作为经济字段注册，当前版本先用于字段对齐，后续版本再接入月结算。
 
-每月固定扣除：
-  money -= living_cost（生活费，初始1500）
-  money += salary（月薪，初始3000）
+### 3.1 每月恢复与工资结算（月初自动执行）
+
+```
+if month > 1:
+  money += salary - living_cost
+
+brainRecoverBase = brain_regen_rate（默认 0）
+hpRecoverBase    = hp_regen_rate（默认 0）
+
+if consecutive_overtime > 0:
+  brainRecover = floor(brainRecoverBase / 2)
+  hpRecover    = floor(hpRecoverBase / 2)
+else:
+  brainRecover = brainRecoverBase
+  hpRecover    = hpRecoverBase
+
+brain += brainRecover（上限100）
+hp    += hpRecover（上限100）
 ```
 
 ### 3.2 属性联动 & 阈值
@@ -197,64 +221,73 @@ hp    += 5（自然恢复，上限100）
 ```
 hp ≤ 0        → 猝死结局
 brain ≤ 0     → 精神崩溃结局
-money < 0 连续3月 → 破产结局
 bossSatisfy < 15  → 被裁 → 外卖骑手结局
+months_bankrupt ≥ 3 → 破产结局
 
-brain < 30    → 「脑雾状态」代码质量 -20
-brain < 15    → 无法正常工作
-brain < 5     → 强制休息
+brain < 30    → 质量基础值额外 -20（脑雾）
 
-money 不足模型费用 → 自动切纯人肉（脑力消耗翻倍）
-money ≤ 0     → 触发"吃泡面"事件
+money 不足当前模型费用
+  → 当天自动切纯人肉
+  → 追加 brain -[8,15]
+
+月末结算时：
+  if money <= 0: months_bankrupt += 1
+  else: months_bankrupt = 0
 ```
 
 ### 3.3 代码质量计算
 
 ```
 baseQuality   = 模型基础质量值（纯人肉 = brain × 0.5）
-brainBonus    = (brain - 50) × 0.3
-bugPenalty    = hasBug ? -(bugDifficulty × 0.3) : 0
-randomRoll    = random(-8, +8)
-taskPenalty   = ⭐:0, ⭐⭐:-5, ⭐⭐⭐:-10, ⭐⭐⭐⭐:-20
-modelSpecial  = 模型特殊效果修正
-luckBonus     = (luck - 50) × 0.05         ← 🍀 运气微调代码质量（±2.5）
+if brain < 30:
+  baseQuality -= 20
 
-finalQuality  = clamp(baseQuality + brainBonus + bugPenalty + randomRoll + taskPenalty + modelSpecial + luckBonus, 0, 100)
+brainBonus    = (brain - 50) × 0.3
+taskPenalty   = ⭐:0, ⭐⭐:-5, ⭐⭐⭐:-10, ⭐⭐⭐⭐:-20
+randomRoll    = random(-8, +8)（GPT-5.4改为 random(-3, +3)）
+luckBonus     = (luck - 50) × 0.05         ← 🍀 运气微调代码质量（±2.5）
+modelSpecial  = 模型特殊效果修正
+
+finalQuality  = clamp(baseQuality + brainBonus + taskPenalty + randomRoll + luckBonus + modelSpecial, 0, 100)
 ```
 
 ### 3.4 老板满意度规则
 
-| 行为 | 变化 |
-|:---|:---|
-| 代码质量 ≥ 90 | +2 |
-| 代码质量 70–89 | +1 |
-| 代码质量 50–69 | 0 |
-| 代码质量 30–49 | -2 |
-| 代码质量 < 30 | -5 |
-| 按时交付 Deadline | +5 |
-| 延期 | -8 |
-| 学AI新技能 | +3 |
-| 接私活被发现 | -5 |
-| 主动加班 | +1（hp -3） |
+```
+月末基础变动（按 avg_quality）：
+  avg_quality ≥ 90  → +2
+  avg_quality ≥ 70  → +1
+  avg_quality ≥ 50  → 0
+  avg_quality ≥ 30  → -2
+  avg_quality < 30  → -5
+
+魅力修正：
+  satisfyDelta = round(baseDelta × (1 + (charm - 50) / 200))
+```
 
 | 满意度 | 状态 |
 |:---|:---|
 | ≥ 80 | 🌟 晋升/大幅加薪 |
 | 60–79 | ✅ 安全区 |
 | 40–59 | ⚠️ 危险，可能被约谈 |
-| 20–39 | 🔴 裁员名单 |
-| < 20 | 💀 立即被裁 |
+| 15–39 | 🔴 高危区 |
+| < 15 | 💀 立即被裁 |
 
 ### 3.5 熬夜机制
 
 ```
 当代码质量 < 40 时触发加班：
-    hp    -= random(3, 8)
-    brain 不受加班影响（仅Bug消耗brain）
+    is_overtime = true
+    hp -= random(3, 8) + random(2, min(5, 2 + consecutive_overtime))
+    consecutive_overtime += 1
 
-连续加班计数器 (consecutive_overtime)：
-    ≥ 3：触发"猝死警告"
-    ≥ 5：强制休息3天
+当代码质量 ≥ 40：
+    is_overtime = false
+    consecutive_overtime = 0
+
+连续加班计数器：
+    ≥ 3：触发高压加班提示（风险警告）
+    ≥ 5：额外 hp -random(3, 6) 后清零计数器
 ```
 
 ---
@@ -265,17 +298,17 @@ finalQuality  = clamp(baseQuality + brainBonus + bugPenalty + randomRoll + taskP
 
 | 模型 | 键名 | 解锁月 | 任务消耗(⭐~⭐⭐⭐⭐) | 单价(¥/M) | 质量基础 | Bug率 |
 |:---|:---|:---|:---|:---|:---|:---|
-| 🐳 豆包 | `doubao` | 1月 | 10/30/80/200M | ¥5 | 45 | 40% |
+| 🐳 豆包 | `doubao` | 1月 | 10/30/80/200M | ¥0 | 45 | 40% |
 | 🤖 GPT-5.4 | `gpt54` | 2月 | 40/100/300/800M | ¥15 | 80 | 12% |
 | 🎯 Opus 4.6 | `opus46` | 3月 | 60/150/400/1000M | ¥25 | 92 | 5% |
 | 🔮 DeepSeek V4 | `deepseek_v4` | 4月 | 15/50/120/300M | ¥8 | 72 | 18% |
-| 💀 CheapGPT | `cheapgpt` | 3月 | 5/20/50/120M | ¥3 | 30 | 60% |
-| 🎪 FakeOpus | `fakeopus` | 5月 | 8/30/70/180M | ¥5 | 35 | 55% |
+| 💀 CheapGPT | `cheapgpt` | 3月 | 5/20/50/120M | ¥3 | 30 | 10%~80%（日波动） |
+| 🎪 FakeOpus | `fakeopus` | 5月 | 8/30/70/180M | ¥5 | 35 | 15%~75%（日波动） |
 | 🧠 纯人肉 | — | — | — | — | brain×0.5 | — |
 
 > **费用计算**：每次任务实际花费 = 任务消耗(M) × 单价(¥/M)。
 > 例：用 GPT-5.4 做⭐⭐任务 = 100M × ¥15 = ¥1500，直接从 `money` 扣除。
-> 余额不足时自动降级为纯人肉写代码（脑力消耗翻倍）。
+> 余额不足时自动降级为纯人肉写代码，并额外 `brain -[8,15]`。
 
 ### 4.2 模型特殊效果
 
@@ -293,11 +326,8 @@ finalQuality  = clamp(baseQuality + brainBonus + bugPenalty + randomRoll + taskP
 ```
 if random() < bugRate:
     bugSeverity = taskComplexity × (1 - modelQuality / 100)
-    brainCost   = floor(bugSeverity × 0.5)
+    brainCost   = floor(bugSeverity × 3) + random(2, min(5, 2 + taskComplexity))
     brain -= brainCost
-
-    if brain < 30 after fix:
-        代码质量额外 -20（脑雾状态）
 ```
 
 ---
@@ -315,9 +345,9 @@ if random() < bugRate:
 ### 每月流程
 
 ```
-月初：发工资(+3000) → 扣生活费(-1500) → 自然恢复 → 模型解锁 → 月份大事件
-工作日(5~7天)：选模型写代码 → 可能出Bug → 可能熬夜 → 穿插随机/选择/同事事件
-月末：代码质量统计 → 老板满意度变化 → 切换模型 → 下月预告
+月初：2~12月执行工资结算(money += salary - living_cost) → 按恢复率恢复 → 模型解锁 → 月份大事件
+工作日(5~7天)：选模型写代码并扣费 → 可能出Bug(掉brain) → 低质量触发加班(掉hp) → 穿插随机/选择/同事事件
+月末：代码质量统计(avg_quality) → 老板满意度变化 → money≤0累计破产月 → 下月预告
 ```
 
 ---
@@ -345,8 +375,9 @@ if random() < bugRate:
 
 | 来源 | 金额 | 频率 |
 |:---|:---|:---|
-| 月薪 | 3000（`salary`） | 每月 |
-| 加薪 | +500~1500 | bossSatisfy ≥ 70 |
+| 开局现金 | 3000 | 开局一次 |
+| 月薪 | 3000（`salary`） | 2~12月月初 |
+| 季度考核调薪 | 常见 +500 / -300（改 `salary`） | 3/6/9月事件 |
 | 接私活 | 300~1500 | 主动选择（有风险） |
 | GameJam获奖 | 10000 | 一次性 |
 
@@ -354,7 +385,7 @@ if random() < bugRate:
 
 | 支出项 | 金额 | 频率 | 说明 |
 |:---|:---|:---|:---|
-| 生活费 | 1500（`living_cost`） | 每月 | 月初自动扣除 |
+| 生活费 | 1500（`living_cost`） | 2~12月月初 | 月初自动扣除 |
 | AI模型费用 | 任务消耗×单价 | 每个工作日 | 按任务直接从money扣 |
 | 生活开销事件 | 不定 | 随机 | 聚餐、医疗、购物等 |
 | 女友约会 | 不定 | 随机 | 女朋友相关事件消费 |
@@ -364,9 +395,10 @@ if random() < bugRate:
 ### 破产机制
 
 ```
-money ≤ 0：AI模型用不起 + "吃泡面"事件
-连续2月 money ≤ 0："房东催租"事件
-连续3月 money ≤ 0：破产结局
+money 不足当前模型费用：当天自动切纯人肉 + 追加 brain 消耗
+月末 money ≤ 0：months_bankrupt +1
+月末 money > 0：months_bankrupt 清零
+months_bankrupt ≥ 3：破产结局
 ```
 
 ---
@@ -387,10 +419,10 @@ money ≤ 0：AI模型用不起 + "吃泡面"事件
 
 | 结局 | 条件 | 金币 |
 |:---|:---|:---|
-| 🛵 外卖骑手 | bossSatisfy < 20 / 年终不达标 | 30 |
+| 🛵 外卖骑手 | bossSatisfy < 15 / 年终不达标 | 30 |
 | 💀 过劳猝死 | hp ≤ 0 | 20 |
 | 😵 精神崩溃 | brain ≤ 0 | 20 |
-| 💸 破产回家 | money < 0 连续3月 | 10 |
+| 💸 破产回家 | months_bankrupt ≥ 3 | 10 |
 
 ### 隐藏结局
 
@@ -444,6 +476,14 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
 ---
 
 ## 十、数值平衡参考
+
+### 10.0 难度目标（本轮调优基线）
+
+```
+目标通关率（isWin）≈ 40%
+可接受区间：35% ~ 45%
+样本口径：平均水平玩家、多局游玩后统计
+```
 
 ### 单次事件效果推荐范围
 

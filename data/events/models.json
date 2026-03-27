@@ -119,12 +119,28 @@
     "system": "model",
     "weight": 0.7,
     "include": {
-      "model_gpt54_unlocked": true
+      "model_gpt54_unlocked": true,
+      "current_model": "=gpt54"
     },
     "effect": {
       "bossSatisfy": 3,
-      "brain": 2
+      "brain": 2,
+      "money": 35
     },
+    "branch": [
+      {
+        "cond": {
+          "brain": ">75"
+        },
+        "text": "你把GPT-5.4产出的模块封成了公司通用脚手架，隔壁项目直接拿去复用。财务按节省工时给你补了一笔预算。",
+        "type": "good",
+        "effect": {
+          "bossSatisfy": 4,
+          "brain": 2,
+          "money": 120
+        }
+      }
+    ],
     "postEvent": "🤖 贵有贵的道理。但钱包在哭。"
   },
   "model_opus_refuse_01": {
@@ -137,10 +153,12 @@
     "system": "model",
     "weight": 0.8,
     "include": {
-      "model_opus46_unlocked": true
+      "model_opus46_unlocked": true,
+      "current_model": "=opus46"
     },
     "effect": {
-      "brain": -1
+      "brain": -1,
+      "money": -25
     },
     "branch": [
       {
@@ -151,7 +169,8 @@
         "type": "good",
         "effect": {
           "brain": 5,
-          "bossSatisfy": 2
+          "bossSatisfy": 2,
+          "money": 45
         }
       },
       {
@@ -159,7 +178,7 @@
         "text": "Opus拒绝干活了。你只好换成GPT凑合。多花了50M Token。",
         "type": "bad",
         "effect": {
-          "money": -40,
+          "money": -25,
           "brain": -1
         }
       }
@@ -265,7 +284,7 @@
       "money": "<450"
     },
     "effect": {
-      "money": -40
+      "money": -28
     },
     "postEvent": "康康开始认真研究如何优化Prompt，减少无效消耗。"
   },
@@ -491,9 +510,12 @@
     "type": "bad",
     "system": "model",
     "weight": 0.7,
+    "include": {
+      "current_model": "=gpt54"
+    },
     "effect": {
-      "money": -70,
-      "brain": -3
+      "money": -45,
+      "brain": -2
     },
     "postEvent": "康康开始怀疑AI到底是在帮他写代码还是在帮自己赚Token。"
   },
@@ -826,8 +848,12 @@
     "type": "bad",
     "system": "model",
     "weight": 0.6,
+    "include": {
+      "current_model": "=opus46"
+    },
     "effect": {
-      "money": -600
+      "money": -180,
+      "brain": -2
     },
     "postEvent": "那首诗写得确实不错：'月明加班夜，Bug满天飞。Delete键已碎，明天继续写。'"
   },
@@ -899,7 +925,12 @@
     "system": "model",
     "weight": 0.5,
     "include": {
-      "model_doubao_unlocked": true
+      "model_doubao_unlocked": true,
+      "current_model": "=doubao"
+    },
+    "effect": {
+      "bossSatisfy": 2,
+      "money": 20
     },
     "branch": [
       {
@@ -910,7 +941,8 @@
         "type": "good",
         "effect": {
           "bossSatisfy": 4,
-          "brain": 3
+          "brain": 3,
+          "money": 70
         }
       },
       {

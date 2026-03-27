@@ -181,6 +181,44 @@ body{
   border-color:var(--purple);color:var(--text);
   background:rgba(189,147,249,.08);
 }
+.ctrl-btn:active{
+  transform:translateY(1px);
+}
+.ctrl-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  border-color:var(--border);
+  color:var(--text3);
+  background:rgba(255,255,255,.015);
+}
+.ctrl-btn:disabled:hover{
+  border-color:var(--border);
+  color:var(--text3);
+  background:rgba(255,255,255,.015);
+}
+.ctrl-subheader{
+  font-size:10px;
+  color:var(--comment);
+  padding:2px 2px 4px;
+  letter-spacing:.3px;
+}
+.action-btn-group{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-bottom:8px;
+}
+.ctrl-btn-action{
+  margin-bottom:0;
+  border-color:rgba(139,233,253,.25);
+  background:linear-gradient(90deg,rgba(139,233,253,.07),rgba(80,250,123,.04));
+  color:var(--text);
+  font-weight:500;
+}
+.ctrl-btn-action:hover{
+  border-color:rgba(139,233,253,.55);
+  background:linear-gradient(90deg,rgba(139,233,253,.16),rgba(80,250,123,.1));
+}
 .explorer-controls .speed-ctrl{
   display:flex;flex-direction:column;gap:3px;
 }

@@ -2852,6 +2852,122 @@
         ]
       }
     ]
+  },
+  "choice_recovery_tea_chat_nap_01": {
+    "month": [2, 12],
+    "text": "连续盯屏幕几个小时后，你的肩膀开始发硬。茶水间有人在聊天，工位抽屉里还有一只折叠眼罩。",
+    "type": "choice",
+    "system": "choice",
+    "weight": 3,
+    "include": {"brain": "<75"},
+    "title": "🫖 微恢复时间",
+    "desc": "只花15-20分钟，能不能把状态拉回来？",
+    "choices": [
+      {
+        "text": "🍵 泡杯热茶站着放空",
+        "hint": "小额花费，稳定回血",
+        "result": "你在茶水间慢慢喝完一杯热茶，呼吸终于顺了。回工位时手是暖的，脑子也清醒了些。",
+        "effect": {"money": -20, "brain": 2, "hp": 1}
+      },
+      {
+        "text": "🗣️ 和同事聊10分钟",
+        "hint": "社交减压，顺便交换信息",
+        "result": "你和同事吐槽了十分钟需求变更，顺便对齐了几个技术口径。焦虑降下去了，配合也顺了。",
+        "effect": {"brain": 2, "charm": 2, "bossSatisfy": 1}
+      },
+      {
+        "text": "😴 工位趴睡15分钟",
+        "hint": "恢复最多，但有睡过头风险",
+        "chanceBased": true,
+        "branches": [
+          {
+            "chance": 75,
+            "result": "你定了闹钟小睡15分钟，醒来像重启了一次系统，眼睛也没那么酸了。",
+            "type": "good",
+            "effect": {"hp": 4, "brain": 2}
+          },
+          {
+            "chance": 25,
+            "result": "你一觉睡过了头，被同事拍醒时会议都快开始了。虽然身体恢复了一点，但老板脸色不太好看。",
+            "type": "bad",
+            "effect": {"hp": 2, "bossSatisfy": -2}
+          }
+        ]
+      }
+    ]
+  },
+  "choice_overtime_recovery_tradeoff_01": {
+    "month": [2, 12],
+    "text": "你已经连续几天因为质量问题加班。今晚又要返工，站在公司楼下时你必须决定：花钱换恢复，还是硬扛换进度。",
+    "type": "choice",
+    "system": "choice",
+    "weight": 2.2,
+    "include": {"consecutive_overtime": 2},
+    "title": "🌙 加班夜抉择",
+    "desc": "每个选项都在透支某种资源。",
+    "choices": [
+      {
+        "text": "🚕 打车回家，立刻睡觉",
+        "hint": "花钱止损，优先保状态",
+        "result": "你咬牙打车回家，洗完就睡。第二天虽然钱包瘦了，但人是活过来的。",
+        "effect": {"money": -80, "hp": 5, "brain": 3}
+      },
+      {
+        "text": "💻 再加一小时把高危点修完",
+        "hint": "老板满意，但继续掉血",
+        "result": "你硬顶着把最危险的两处问题先处理了。上线风险降了，黑眼圈加深了。",
+        "effect": {"bossSatisfy": 3, "money": 80, "hp": -4, "brain": -3}
+      },
+      {
+        "text": "🤝 拉同事结对排雷后收工",
+        "hint": "效率中庸，压力更稳",
+        "result": "你拉了个同事一起排查，把最可能爆的点先封住。没有大胜利，但今晚能睡个整觉。",
+        "effect": {"brain": 1, "hp": 1, "bossSatisfy": 1, "charm": 2, "money": -20}
+      }
+    ]
+  },
+  "choice_bug_backlog_triage_01": {
+    "month": [3, 12],
+    "text": "看板上的Bug红成一片，产品经理催提测，老板盯着进度条。你要怎么切这个雷区？",
+    "type": "choice",
+    "system": "choice",
+    "weight": 2,
+    "include": {"total_bugs": ">8"},
+    "title": "🐛 Bug 积压警报",
+    "desc": "不处理会炸，硬处理会掉状态。",
+    "choices": [
+      {
+        "text": "🔧 今晚清三条高风险Bug",
+        "hint": "短痛换稳定",
+        "result": "你咬牙把三条高风险Bug清掉，提测终于不再全红。人快散架，但项目稳住了。",
+        "effect": {"brain": -4, "hp": -3, "bossSatisfy": 4, "money": 100}
+      },
+      {
+        "text": "📝 先做优先级清单，逐个压风险",
+        "hint": "节省体力，稳住节奏",
+        "result": "你把问题拆成了可落地的修复列表，先封最危险路径。推进不快，但没有继续失控。",
+        "effect": {"brain": -1, "bossSatisfy": 1, "hp": 1}
+      },
+      {
+        "text": "🙈 先压着，等下周再说",
+        "hint": "赌今天不爆",
+        "chanceBased": true,
+        "branches": [
+          {
+            "chance": 60,
+            "result": "今天居然没炸。你松了口气，但知道这只是把雷往后挪。",
+            "type": "neutral",
+            "effect": {}
+          },
+          {
+            "chance": 40,
+            "result": "晚上客户触发了连锁报错。你被电话叫起来远程处理到凌晨。",
+            "type": "bad",
+            "effect": {"bossSatisfy": -4, "hp": -2, "money": -120}
+          }
+        ]
+      }
+    ]
   }
 
 }
