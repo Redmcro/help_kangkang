@@ -281,44 +281,4 @@ help_kangkang/
 2. 在 `design/_global/attributes.md` 添加对应 Flag
 3. 用 `/generate-events` 工作流生成解锁事件
 
----
 
-## 七、TODO
-
-> 详细任务分配见 `DECREES.md`
-> 管理工作流见 `.agents/workflows/chief-steward.md`
-
-### 代码重构（v1→v2→v3）
-- [x] `property.js` 属性系统对齐 v2（含 charm/luck 隐藏属性）
-- [x] `property.js` v3: 移除 token 属性，加入 gf_rel/has_girlfriend/married/salary/living_cost
-- [x] `engine.js` 月份循环 + luck 微调 + charm/luck 结局 + events_seen 追踪
-- [x] `engine.js` Token→Money 重构：AI模型费用直接从 money 扣除（tokenPrice机制）
-- [x] `engine.js` 每日工作简报系统
-- [x] `engine.js` 模型特殊效果 + 隐藏结局 + charm影响 + 熬夜机制 + doubao_quality_bonus
-- [x] `app.js` + `index.html` 重构为 IDE 风格 UI（基础完成，缺 Overlay 逻辑）
-- [x] `events.js` 事件筛选 month + luck 概率修正
-- [x] `save.js` 存档格式更新（含 events_seen/achievements_unlocked/音频偏好）
-- [x] `buffs.json` 对齐 v3（token→money，效果值修正）
-
-### 事件内容
-- [x] 7系统/118事件：general+colleagues+monthly+random+choice+daily+models
-- [ ] girlfriend 女朋友事件（JSON 待创建）
-- [ ] life_expense 生活开销事件（JSON 待创建）
-- [ ] 事件权重平衡调整
-
-### UI 增强
-- [x] IDE 主题实现（Dracula 配色）
-- [x] 月份 Tab Bar + 月度结算面板 + 代码字符雨
-- [x] Overlay HTML 结构（图鉴/结局/成就三个面板）
-- [ ] Overlay JS 逻辑（打开/关闭/渲染数据）
-- [ ] 模型切换 / 接私活 UI
-- [ ] 移动端 UI 适配
-
-### 数据文件
-- [x] `data/achievements.json` — 成就定义（16条）
-- [x] `data/endings.json` — 结局定义（13条）
-
-### 系统扩展
-- [ ] 成就系统集成（achievement.js 已有，待与 UI 联动）
-- [ ] 事件收集图鉴（Overlay JS + save.js events_seen）
-- [ ] 结局收集系统（Overlay JS）
