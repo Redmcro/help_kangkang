@@ -40,12 +40,12 @@
 
 | 属性 | 键名 | 初始值 | 范围 | 图标 | 说明 |
 |:---|:---|:---|:---|:---|:---|
-| 生命 | `hp` | 100 | 0–100 | ❤️ | 健康/体力，归零=猝死 |
-| 金钱 | `money` | 5000 | 0–∞ | 💰 | 单位：元，AI模型直接扣钱 |
-| 脑力 | `brain` | 80 | 0–100 | 🧠 | 理解/改Bug能力 |
-| 老板满意度 | `bossSatisfy` | 50 | 0–100 | 👔 | 决定结局的核心 |
-| 月薪 | `salary` | 15000 | 0–∞ | 💰 | 每月固定收入 |
-| 生活开销 | `living_cost` | 5000 | 0–∞ | 💸 | 每月固定支出 |
+| 生命 | `hp` | 80 | 0–100 | ❤️ | 健康/体力，归零=猝死 |
+| 金钱 | `money` | 3000 | -9,999,999 ~ 9,999,999 | 💰 | 单位：元，AI模型与事件直接结算 |
+| 脑力 | `brain` | 60 | 0–100 | 🧠 | 理解/改Bug能力 |
+| 老板满意度 | `bossSatisfy` | 40 | 0–100 | 👔 | 决定结局的核心 |
+| 月薪 | `salary` | 3200 | 600–20000 | 💰 | 每月固定收入，季度评薪调整 |
+| 生活开销 | `living_cost` | 1400 | 200–16000 | 💸 | 每月固定支出，可被事件改动 |
 
 ---
 
@@ -62,7 +62,7 @@
 
 | 属性 | 键名 | 初始值 | 范围 | 说明 |
 |:---|:---|:---|:---|:---|
-| 女朋友好感 | `gf_rel` | 60 | 0–100 | ≤0分手（不可逆），≥90+存款≥3万可求婚 |
+| 女朋友好感 | `gf_rel` | 50 | 0–100 | 主要由女友线事件驱动 |
 | 有女朋友 | `has_girlfriend` | true | bool | 是否有女朋友 |
 | 已婚 | `married` | false | bool | 是否已结婚 |
 
@@ -85,12 +85,21 @@
 每月初自动执行：
 
 ```
-brain += 10（休息恢复，上限100）
-hp    += 5 （自然恢复，上限100）
+if month > 1:
+  money += salary - living_cost
 
-如果上个月有连续加班：
-  brain 恢复量减半
-  hp 恢复量减半
+brainRecoverBase = brain_regen_rate（默认 0）
+hpRecoverBase    = hp_regen_rate（默认 0）
+
+if consecutive_overtime > 0:
+  brainRecover = floor(brainRecoverBase / 2)
+  hpRecover    = floor(hpRecoverBase / 2)
+else:
+  brainRecover = brainRecoverBase
+  hpRecover    = hpRecoverBase
+
+brain += brainRecover（上限100）
+hp    += hpRecover（上限100）
 ```
 
 ---
@@ -100,45 +109,76 @@ hp    += 5 （自然恢复，上限100）
 ```
   hp ≤ 0     → 猝死结局
   brain ≤ 0  → 精神崩溃结局
-  money < 0 连续3月 → 破产结局
-  bossSatisfy < 20 → 被裁→外卖骑手
+  bossSatisfy < 15 → 被裁→外卖骑手
+  months_bankrupt ≥ 3 → 破产结局
 
   brain < 30 → 「脑雾状态」所有代码质量 -20
-  brain < 15 → 无法正常工作
-  brain < 5  → 强制休息
 
-  money 不足模型费用 → 自动切纯人肉（脑力消耗翻倍）
-  money ≤ 0  → "吃泡面"事件
+  模型成本结算：
+    1) 按模型与任务星级取基础 tokensCost
+    2) 叠加模型倍率（gpt54×1.08 / opus46×1.18 / deepseek_v4×1.05）
+    3) debtBuffer = max(600, floor((salary + living_cost) × 0.18))
+    4) 主流模型资金不足时先降载（tokens×0.72）
+    5) 仍不足则 fallback 纯人肉并追加 brain -[6,12]
+
+  月末：
+    if money <= 0: months_bankrupt += 1
+    else: months_bankrupt = 0
 ```
 
 ---
 
-## 六、老板满意度详细规则
+## 六、老板满意度与季度评薪
 
-### 来源
+### 6.1 月末满意度结算（`resolveMonthlySatisfyDelta`）
 
-| 行为 | 变化 |
-|:---|:---|
-| 代码质量 ≥ 90 | +2 |
-| 代码质量 70–89 | +1 |
-| 代码质量 50–69 | 0 |
-| 代码质量 30–49 | -2 |
-| 代码质量 < 30 | -5 |
-| 按时交付 Deadline | +5 |
-| 延期 | -8 |
-| 学AI新技能 | +3 |
-| 接私活被发现 | -5 |
-| 主动加班 | +1 (hp -3) |
+```
+qualityScore（按 avg_quality）：
+  >=88:+4, >=76:+3, >=64:+2, >=54:+1, >=40:0, >=30:-2, <30:-4
 
-### 阈值
+stability = round((hp + brain) / 2)
+stabilityScore：
+  >=80:+2, >=64:+1, >=42:0, >=28:-1, <28:-2
+
+overtimePenalty（overtimeRatio = overtimeDays / totalDays）：
+  >=0.65:-4, >=0.50:-3, >=0.34:-2, >=0.20:-1
+
+bugPenalty（bugRatio = bugDays / totalDays）：
+  >=0.75:-2, >=0.50:-1
+
+baseDelta = qualityScore + stabilityScore + overtimePenalty + bugPenalty
+satisfyDelta = clamp(round(baseDelta × (1 + (charm - 50) / 240)), -7, +6)
+bossSatisfy += satisfyDelta
+```
+
+### 6.2 季度评薪（`resolveQuarterlySalaryReview`）
+
+```
+触发月份：3/6/9/12
+
+score 由以下维度累加：
+- avg_quality：>=85:+3, >=72:+2, >=58:+1, <42:-2, 其余:-1
+- stability：>=78:+2, >=62:+1, <35:-2, <48:-1
+- bossSatisfy：>=72:+2, >=56:+1, <32:-2, <45:-1
+- overtimeRatio：<=0.18:+1, >=0.50:-2, >=0.35:-1
+- 当月满意度结果：settle.delta >= 3:+1, <= -3:-1
+
+salaryDelta：
+  score>=7:+700, >=5:+450, >=3:+250, >=1:+100,
+  <=-5:-450, <=-3:-250, <=-1:-100, 其余0
+
+salaryAfter = clamp(salaryBefore + salaryDelta, 1800, 12000)
+```
+
+### 6.3 满意度阈值
 
 | 满意度 | 状态 |
 |:---|:---|
 | ≥ 80 | 🌟 晋升/大幅加薪 |
 | 60–79 | ✅ 安全区 |
 | 40–59 | ⚠️ 危险，可能被约谈 |
-| 20–39 | 🔴 裁员名单 |
-| < 20 | 💀 立即被裁 |
+| 15–39 | 🔴 裁员名单 |
+| < 15 | 💀 立即被裁 |
 
 ---
 
@@ -162,7 +202,7 @@ hp    += 5 （自然恢复，上限100）
 | Flag | 类型 | 来源系统 | 设置时机 | 影响 |
 |:---|:---|:---|:---|:---|
 | `yimin_ai_convert` | bool | colleagues | 亿民开始学AI事件 | 解锁亿民后续AI事件 |
-| `yimin_cost_discount` | bool | colleagues | 亿民分享渠道 | AI使用费打8折 |
+| `yimin_model_discount` | bool | colleagues | 亿民分享渠道 | 特定模型线事件折扣 |
 
 ### 学习/技能 Flag
 
@@ -181,6 +221,8 @@ hp    += 5 （自然恢复，上限100）
 | `considered_delivery` | bool | choice | 考虑过送外卖 | 解锁骑手相关后续事件 |
 | `gamejam_won` | bool | monthly | GameJam获奖 | 解锁独立开发者结局 |
 | `gamejam_participated` | bool | monthly | GameJam参赛 | 简历加成、解锁后续GameJam事件 |
+| `used_ai` | bool | engine runtime | 开局设为 false；任意使用模型后置 true | 结局判定（禅意程序员） |
+| `only_doubao` | bool | engine runtime | 开局设为 true；若切到非豆包置 false | 结局判定（豆包之神） |
 | `sharedToy` | bool | choice | 分享玩具选择 | 后续社交事件 |
 | `signed_compete_clause` | bool | choice | 签竞业协议拿期权 | 限制跳槽选项 |
 | `opensource_fame` | bool | choice | 开源社区做分享 | 解锁猎头/人脉事件 |
@@ -194,8 +236,8 @@ hp    += 5 （自然恢复，上限100）
 | `gf_breakup_warning` | bool | girlfriend | 分手危机挽留成功 | 标记已触发过分手危机 |
 | `gf_broke_up` | bool | girlfriend | 分手 | 不可逆，禁用所有女朋友事件 |
 | `gf_engaged` | bool | girlfriend | 求婚成功 | 解锁婚礼筹备事件 |
-| `gf_married` | bool | girlfriend | 结婚 | 每月生活费+3000，解锁婚后事件 |
-| `has_dog` | bool | girlfriend | 领养柯基 | 每月开销+500 |
+| `gf_married` | bool | girlfriend | 结婚 | 婚礼选择会带来持续生活费上调（约+180 或 +300），解锁婚后事件 |
+| `has_dog` | bool | girlfriend | 领养柯基 | 持续生活费上调 +120（狗粮/护理） |
 
 ### Flag事件链后续 Flag
 

@@ -14,6 +14,7 @@ const $ = id => document.getElementById(id);
 
 // Module 4: Data loaded at init
 let endingsData = {};   // from data/endings.json
+let latestMonthSummary = null;
 
 
 
@@ -81,6 +82,156 @@ function updateTabs(currentMonth) {
     if (at) at.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
+function safeNumber(value, fallback = 0) {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : fallback;
+}
+
+function formatCurrency(value) {
+    return `¥${Math.round(safeNumber(value)).toLocaleString('zh-CN')}`;
+}
+
+function formatSignedCurrency(value) {
+    const num = Math.round(safeNumber(value));
+    const sign = num >= 0 ? '+' : '-';
+    return `${sign}¥${Math.abs(num).toLocaleString('zh-CN')}`;
+}
+
+function formatLivingCost(value) {
+    const num = Math.round(safeNumber(value));
+    const sign = num >= 0 ? '-' : '+';
+    return `${sign}¥${Math.abs(num).toLocaleString('zh-CN')}`;
+}
+
+function setMoneyClass(el, value, mode = 'auto') {
+    if (!el) return;
+    el.classList.remove('money-positive', 'money-negative', 'money-warn');
+    if (mode === 'warn') {
+        el.classList.add('money-warn');
+        return;
+    }
+    if (safeNumber(value) >= 0) el.classList.add('money-positive');
+    else el.classList.add('money-negative');
+}
+
+function normalizeMonthSummary(summary = {}) {
+    const state = game.property.toJSON();
+    const month = Math.max(1, Math.round(safeNumber(summary.month, state.month || 1)));
+    const salaryBefore = Math.round(safeNumber(summary.salaryBefore, state.salary || 0));
+    const salaryAfterSource = Object.prototype.hasOwnProperty.call(summary, 'salaryAfter')
+        ? summary.salaryAfter
+        : salaryBefore + safeNumber(summary.salaryDelta, 0);
+    const salaryAfter = Math.round(safeNumber(salaryAfterSource, salaryBefore));
+    const salaryDelta = Math.round(safeNumber(summary.salaryDelta, salaryAfter - salaryBefore));
+    const livingCost = Math.round(safeNumber(summary.livingCost, state.living_cost || 0));
+    const monthIncome = Math.round(safeNumber(summary.monthIncome, salaryBefore - livingCost));
+    const monthModelCost = Math.round(safeNumber(summary.monthModelCost, 0));
+    return { month, salaryBefore, salaryDelta, salaryAfter, livingCost, monthIncome, monthModelCost };
+}
+
+function buildInProgressSummary(state) {
+    const month = Math.max(1, Math.round(safeNumber(state.month, 1)));
+    const salary = Math.round(safeNumber(state.salary, 0));
+    const livingCost = Math.round(safeNumber(state.living_cost, 0));
+    const monthIncome = month > 1 ? salary - livingCost : 0;
+    return {
+        month,
+        salaryBefore: salary,
+        salaryDelta: 0,
+        salaryAfter: salary,
+        livingCost,
+        monthIncome,
+        monthModelCost: 0
+    };
+}
+
+function buildSalaryAdjustCopy(summary, settled) {
+    if (!settled) return { text: `待结算（当前 ${formatCurrency(summary.salaryAfter)}）`, tone: 'warn' };
+    if (summary.salaryDelta > 0) {
+        return {
+            text: `${formatSignedCurrency(summary.salaryDelta)}（${formatCurrency(summary.salaryBefore)} → ${formatCurrency(summary.salaryAfter)}）`,
+            tone: 'positive'
+        };
+    }
+    if (summary.salaryDelta < 0) {
+        return {
+            text: `${formatSignedCurrency(summary.salaryDelta)}（${formatCurrency(summary.salaryBefore)} → ${formatCurrency(summary.salaryAfter)}）`,
+            tone: 'negative'
+        };
+    }
+    return { text: `持平（${formatCurrency(summary.salaryAfter)}）`, tone: 'neutral' };
+}
+
+function buildQuarterlyReviewCopy(summary, settled) {
+    if (!settled) return { text: '季度评薪：等待月结算。', tone: '' };
+    if (summary.month % 3 !== 0) return { text: '季度评薪：本月非评薪月，薪资按当前档位执行。', tone: '' };
+    if (summary.salaryDelta > 0) {
+        return { text: `季度评薪结果：表现优秀，月薪上调 ${formatSignedCurrency(summary.salaryDelta)}，调整后 ${formatCurrency(summary.salaryAfter)}。`, tone: 'good' };
+    }
+    if (summary.salaryDelta < 0) {
+        return { text: `季度评薪结果：绩效下滑，月薪下调 ¥${Math.abs(summary.salaryDelta).toLocaleString('zh-CN')}，调整后 ${formatCurrency(summary.salaryAfter)}。`, tone: 'bad' };
+    }
+    return { text: `季度评薪结果：综合得分达标，月薪维持 ${formatCurrency(summary.salaryAfter)}。`, tone: 'neutral' };
+}
+
+function renderMonthFinance(state) {
+    const panel = $('monthFinancePanel');
+    if (!panel || !state) return;
+    const currentMonth = Math.max(1, Math.round(safeNumber(state.month, 1)));
+    const matchedSummary = latestMonthSummary && latestMonthSummary.month === currentMonth
+        ? latestMonthSummary
+        : null;
+    const settled = !!matchedSummary;
+    const summary = matchedSummary || buildInProgressSummary(state);
+
+    const monthLabel = $('mfMonthLabel');
+    if (monthLabel) monthLabel.textContent = settled ? `${summary.month}月结算` : `${summary.month}月进行中`;
+
+    const salaryIncomeEl = $('mfSalaryIncome');
+    if (salaryIncomeEl) {
+        salaryIncomeEl.textContent = formatSignedCurrency(summary.salaryBefore);
+        setMoneyClass(salaryIncomeEl, summary.salaryBefore);
+    }
+
+    const livingCostEl = $('mfLivingCost');
+    if (livingCostEl) {
+        livingCostEl.textContent = formatLivingCost(summary.livingCost);
+        setMoneyClass(livingCostEl, -Math.abs(summary.livingCost), 'warn');
+    }
+
+    const modelCostEl = $('mfModelCost');
+    if (modelCostEl) {
+        modelCostEl.textContent = `-¥${Math.abs(Math.round(summary.monthModelCost)).toLocaleString('zh-CN')}`;
+        setMoneyClass(modelCostEl, -Math.abs(summary.monthModelCost), 'warn');
+    }
+
+    const monthIncomeEl = $('mfMonthIncome');
+    if (monthIncomeEl) {
+        monthIncomeEl.textContent = formatSignedCurrency(summary.monthIncome);
+        setMoneyClass(monthIncomeEl, summary.monthIncome);
+    }
+
+    const adjustEl = $('mfSalaryAdjust');
+    if (adjustEl) {
+        const adjust = buildSalaryAdjustCopy(summary, settled);
+        adjustEl.textContent = adjust.text;
+        if (adjust.tone === 'positive') setMoneyClass(adjustEl, 1);
+        else if (adjust.tone === 'negative') setMoneyClass(adjustEl, -1);
+        else if (adjust.tone === 'warn') setMoneyClass(adjustEl, 0, 'warn');
+        else adjustEl.classList.remove('money-positive', 'money-negative', 'money-warn');
+    }
+
+    const reviewEl = $('mfReviewText');
+    if (reviewEl) {
+        const review = buildQuarterlyReviewCopy(summary, settled);
+        reviewEl.textContent = review.text;
+        reviewEl.classList.remove('review-good', 'review-bad', 'review-neutral');
+        if (review.tone === 'good') reviewEl.classList.add('review-good');
+        else if (review.tone === 'bad') reviewEl.classList.add('review-bad');
+        else if (review.tone === 'neutral') reviewEl.classList.add('review-neutral');
+    }
+}
+
 function updateUI(state, stageName) {
     updateBar('valHp', 'barHp', state.hp, 100);
     updateBar('valBrain', 'barBrain', state.brain, 100);
@@ -91,12 +242,18 @@ function updateUI(state, stageName) {
     const gfRow = $('gfRelRow');
     if (gfRow) gfRow.style.display = state.has_girlfriend === false ? 'none' : '';
     const moneyEl = $('valMoney');
-    moneyEl.textContent = '¥' + Math.floor(state.money).toLocaleString('zh-CN');
+    moneyEl.textContent = formatCurrency(state.money);
+    moneyEl.classList.toggle('money-positive', state.money >= 0);
     moneyEl.classList.toggle('money-negative', state.money < 0);
+    const salaryEl = $('valSalary');
+    if (salaryEl) salaryEl.textContent = formatCurrency(state.salary);
+    const livingCostEl = $('valLivingCost');
+    if (livingCostEl) livingCostEl.textContent = formatLivingCost(state.living_cost);
     const mn = { doubao: '🐳 豆包', gpt54: '🤖 GPT-5.4', opus46: '🎯 Opus 4.6', deepseek_v4: '🔮 DeepSeek V4', cheapgpt: '💀 CheapGPT', fakeopus: '🎪 FakeOpus' };
     $('currentModelDisplay').textContent = mn[state.current_model] || '🐳 豆包';
     $('stageDisplay').textContent = stageName;
     updateTabs(state.month);
+    renderMonthFinance(state);
 
     // Fix 5: Show current model name in editor tab
     const modelName = AI_MODELS[state.current_model]?.name || '🧠 纯人肉';
@@ -495,7 +652,9 @@ game.onGameEnd = (data) => {
     // Module 4b: check achievements on game end
     checkAndShowAchievements();
 };
-game.onMonthSummary = () => {
+game.onMonthSummary = (summary) => {
+    latestMonthSummary = normalizeMonthSummary(summary);
+    renderMonthFinance(game.property.toJSON());
     checkAndShowAchievements();
 };
 game.onDaySummary = (data) => {
@@ -548,6 +707,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Game start
     $('startBtn').addEventListener('click', () => {
+        latestMonthSummary = null;
         if (game.start()) {
             $('eventStream').innerHTML = '';
             lineNum = 1;
@@ -557,6 +717,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Restart → back to start screen
     $('restartBtn').addEventListener('click', () => {
+        latestMonthSummary = null;
         game.backToStart();
         achieveMgr.bind(game.legacy); // re-bind after legacy reload
         showScreen('startScreen');

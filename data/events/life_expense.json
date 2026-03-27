@@ -1,22 +1,22 @@
 {
   "life_expense_rent_01": {
     "month": [1, 12],
-    "text": "房东发来消息：'下个月开始房租涨500。' 康康看了看合同——确实到调价期了。",
+    "text": "房东发来消息：'下个月起先涨200。' 康康看了看合同——确实到调价期了。",
     "type": "bad",
     "system": "economy",
     "weight": 0.5,
     "once": true,
     "include": {"month": ">4"},
-    "effect": {"money": -500},
-    "postEvent": "从此每月多了一笔固定支出。康康开始认真考虑要不要搬到远一点的地方。"
+    "effect": {"living_cost": 200},
+    "postEvent": "从此每月固定支出+200。康康开始认真考虑要不要搬到远一点的地方。"
   },
   "life_expense_emergency_hospital_01": {
     "month": [1, 12],
     "text": "半夜突然牙疼！疼得在床上打滚。第二天一早直奔口腔医院，挂号费+检查+治疗，出来的时候钱包瘦了一大圈。",
     "type": "bad",
     "system": "economy",
-    "weight": 0.8,
-    "effect": {"money": [-500, -1000], "hp": [-3, -7]},
+    "weight": 0.7,
+    "effect": {"money": [-350, -700], "hp": [-3, -7]},
     "postEvent": "医生说：'你这是智齿发炎，早该拔了。' 康康瑟瑟发抖地预约了下次拔牙。"
   },
   "life_expense_phone_broken_01": {
@@ -24,8 +24,8 @@
     "text": "手机从桌上摔下来，屏幕裂成了蜘蛛网。没有手机的程序员就像没有翅膀的鸟——连二维码都扫不了。",
     "type": "bad",
     "system": "economy",
-    "weight": 0.7,
-    "effect": {"money": [-400, -800], "hp": [-1, -3]},
+    "weight": 0.6,
+    "effect": {"money": [-280, -520], "hp": [-1, -3]},
     "postEvent": "康康选择了第三方维修店，便宜是便宜了，但屏幕颜色总感觉有点发绿。"
   },
   "life_expense_double_eleven_01": {
@@ -33,8 +33,8 @@
     "text": "双十一了！康康的购物车里躺着一个人体工学椅、三箱泡面、一个机械键盘和一台显示器。他对自己说：'这都是工作需要。'",
     "type": "bad",
     "system": "economy",
-    "weight": 1.2,
-    "effect": {"money": [-600, -1500], "hp": 0, "brain": [3, 5]},
+    "weight": 1,
+    "effect": {"money": [-400, -950], "hp": 0, "brain": [3, 5]},
     "postEvent": "付完款看到余额的那一刻，康康后悔了三秒钟——然后开始期待快递。"
   },
   "life_expense_air_conditioner_01": {
@@ -91,7 +91,7 @@
     "type": "bad",
     "system": "economy",
     "weight": 0.6,
-    "effect": {"money": -800, "hp": -2, "charm": 3},
+    "effect": {"money": -600, "hp": -2, "charm": 3},
     "postEvent": "婚礼上室友说：'兄弟，下次轮到你我随双份！' 康康心想：我得先找个对象。"
   },
   "life_expense_glasses_01": {
@@ -143,19 +143,20 @@
     "text": "康康下定决心自己做饭！买了一堆菜，花了一个小时做了两菜一汤。虽然卖相不好，但吃着特别香——关键是便宜。",
     "type": "good",
     "system": "economy",
-    "weight": 0.8,
-    "effect": {"money": 100, "hp": 5, "charm": 1},
+    "weight": 1,
+    "include": {"money": "<5000"},
+    "effect": {"money": 140, "hp": 5, "charm": 1},
     "postEvent": "室友尝了一口说：'你这水平可以去食堂应聘了。' 康康选择理解为夸奖。"
   },
   "life_expense_subway_card_01": {
     "month": [1, 12],
-    "text": "地铁卡又没钱了。康康想充50块，手一滑充了500。月底就指望这张卡活着了。",
+    "text": "地铁卡又没钱了。康康想充50块，手一滑充了80。至少这周通勤稳了。",
     "type": "neutral",
     "system": "economy",
     "weight": 0.8,
     "filler": true,
     "effect": {"money": -80},
-    "postEvent": "至少接下来半年不用担心坐不了地铁了。"
+    "postEvent": "至少接下来两周不用担心坐不了地铁了。"
   },
   "life_expense_milk_tea_addiction_01": {
     "month": [1, 12],
@@ -183,7 +184,7 @@
     "system": "economy",
     "weight": 0.5,
     "once": true,
-    "effect": {"money": -600, "hp": 8, "charm": 3},
+    "effect": {"money": -450, "hp": 8, "charm": 3},
     "postEvent": "虽然钱包出血了，但每天回家被一团毛球蹭腿的感觉，无价。",
     "setFlag": "has_pet_cat"
   },
@@ -195,7 +196,7 @@
     "weight": 1,
     "include": {"has_pet_cat": true},
     "filler": true,
-    "effect": {"money": -200, "hp": 3},
+    "effect": {"money": -160, "hp": 3},
     "postEvent": "猫吃饱了在键盘上走了一圈，帮康康写了一行乱码。"
   },
   "life_expense_gym_membership_01": {
@@ -205,7 +206,7 @@
     "system": "economy",
     "weight": 0.6,
     "once": true,
-    "effect": {"money": -800, "hp": 5},
+    "effect": {"money": -550, "hp": 5},
     "branch": [
       {
         "cond": {"hp": ">60"},
@@ -228,7 +229,7 @@
     "system": "economy",
     "weight": 0.5,
     "once": true,
-    "effect": {"money": -1000, "brain": -3},
+    "effect": {"money": -750, "brain": -3},
     "postEvent": "修好之后康康做的第一件事是备份所有数据。亡羊补牢。"
   },
   "life_expense_lucky_refund_01": {
@@ -245,9 +246,9 @@
     "text": "信用卡积分到期提醒！康康赶紧登录兑换，换了一堆超市购物券。虽然都是小钱，但蚊子腿也是肉。",
     "type": "good",
     "system": "economy",
-    "weight": 0.7,
+    "weight": 0.9,
     "filler": true,
-    "effect": {"money": 100},
+    "effect": {"money": 120},
     "postEvent": "康康开始认真研究各种返现和积分薅羊毛策略。"
   },
   "life_expense_parents_birthday_01": {
@@ -257,7 +258,7 @@
     "system": "economy",
     "weight": 0.6,
     "once": true,
-    "effect": {"money": -800, "hp": 5, "charm": 3},
+    "effect": {"money": -600, "hp": 5, "charm": 3},
     "postEvent": "妈妈收到后打了二十分钟电话夸手机好用，然后说：'别乱花钱，攒着娶媳妇。'"
   },
   "life_expense_fridge_empty_01": {
@@ -324,96 +325,96 @@
   },
   "life_salary_review_q1": {
     "month": [3, 3],
-    "text": "第一季度考核结果出来了。",
+    "text": "第一季度绩效复盘结果出来了（本次仅做一次性绩效调整，不改固定月薪）。",
     "type": "neutral",
     "system": "economy",
-    "weight": 90,
+    "weight": 8,
     "once": true,
     "branch": [
       {
         "cond": {"bossSatisfy": ">60"},
-        "text": "考核优秀！老板大手一挥：'涨薪！从下个月起月薪+2000。' 康康差点跪下来磕头。",
+        "text": "复盘优秀！拿到一次性绩效奖金¥400，老板还顺手夸了两句。",
         "type": "good",
-        "effect": {"salary": 500, "bossSatisfy": 3}
+        "effect": {"money": 400, "bossSatisfy": 2}
       },
       {
         "cond": {"bossSatisfy": ">40"},
-        "text": "考核合格。老板说：'保持。' 工资不涨不跌，也算一种稳定。",
+        "text": "复盘合格。没有调薪，但发了¥100鼓励红包。",
         "type": "neutral",
-        "effect": {}
+        "effect": {"money": 100}
       },
       {
         "cond": {},
-        "text": "考核不及格。HR委婉地说：'公司对你的薪资做了调整。' 翻译：降薪500。",
+        "text": "复盘不及预期。绩效补贴被扣回¥150，HR提醒下季度要追进度。",
         "type": "bad",
-        "effect": {"salary": -300, "bossSatisfy": -3}
+        "effect": {"money": -150, "bossSatisfy": -2}
       }
     ]
   },
   "life_salary_review_q2": {
     "month": [6, 6],
-    "text": "半年度考核来了。",
+    "text": "半年度绩效复盘来了（固定月薪维持原规则，本次仅一次性调整）。",
     "type": "neutral",
     "system": "economy",
-    "weight": 90,
+    "weight": 8,
     "once": true,
     "branch": [
       {
         "cond": {"bossSatisfy": ">60"},
-        "text": "半年考核优秀！老板说：'表现不错，涨薪2000。' 康康感觉自己离财务自由又近了一小步。",
+        "text": "半年度表现优秀，拿到一次性绩效奖金¥500。康康终于可以喘口气。",
         "type": "good",
-        "effect": {"salary": 500, "bossSatisfy": 3}
+        "effect": {"money": 500, "bossSatisfy": 2}
       },
       {
         "cond": {"bossSatisfy": ">40"},
-        "text": "半年考核合格。老板点了点头：'继续努力。' 工资不变，至少没降。",
+        "text": "半年度复盘合格，到账一笔¥150绩效补贴。",
         "type": "neutral",
-        "effect": {}
+        "effect": {"money": 150}
       },
       {
         "cond": {},
-        "text": "半年考核不及格。HR约了个会议室谈话：'希望你下半年能有所改善。' 月薪降了500。",
+        "text": "半年度复盘不及预期。绩效被扣回¥180，HR约谈后让你写改进计划。",
         "type": "bad",
-        "effect": {"salary": -300, "bossSatisfy": -3}
+        "effect": {"money": -180, "bossSatisfy": -2}
       }
     ]
   },
   "life_salary_review_q3": {
     "month": [9, 9],
-    "text": "第三季度考核结果出来了。",
+    "text": "第三季度绩效复盘结果公布（不改底薪，仅做一次性绩效结算）。",
     "type": "neutral",
     "system": "economy",
-    "weight": 90,
+    "weight": 8,
     "once": true,
     "branch": [
       {
         "cond": {"bossSatisfy": ">60"},
-        "text": "考核优秀！老板说：'年底再加把劲，涨薪2000！' 康康觉得这一年的加班没白费。",
+        "text": "三季度复盘优秀，拿到¥600一次性奖励。年底冲刺终于有了点底气。",
         "type": "good",
-        "effect": {"salary": 500, "bossSatisfy": 3}
+        "effect": {"money": 600, "bossSatisfy": 2}
       },
       {
         "cond": {"bossSatisfy": ">40"},
-        "text": "考核合格。不好不坏。老板说：'年底冲刺一下。' 工资维持现状。",
+        "text": "三季度复盘合格，发了¥200绩效补贴，算是小幅回血。",
         "type": "neutral",
-        "effect": {}
+        "effect": {"money": 200}
       },
       {
         "cond": {},
-        "text": "考核不及格。老板面色铁青：'再这样下去，你自己想想后果。' 月薪又降了500。",
+        "text": "三季度复盘不达标，绩效扣回¥220。老板脸色不好看。",
         "type": "bad",
-        "effect": {"salary": -300, "bossSatisfy": -3}
+        "effect": {"money": -220, "bossSatisfy": -2}
       }
     ]
   },
   "life_rent_increase_01": {
     "month": [4, 8],
-    "text": "房东发来微信：'小康啊，周边房租都涨了，下个月起涨500吧。' 语气不容商量。",
+    "text": "房东发来微信：'小康啊，周边房租都涨了，下个月起先涨200吧。' 语气不容商量。",
     "type": "bad",
     "system": "economy",
     "weight": 0.6,
     "once": true,
-    "effect": {"living_cost": 300}
+    "effect": {"living_cost": 200}
   },
   "life_raise_bonus_01": {
     "month": [6, 12],
@@ -422,49 +423,49 @@
     "system": "economy",
     "weight": 0.5,
     "include": {"bossSatisfy": ">55"},
-    "effect": {"money": 800},
-    "postEvent": "康康拿到奖金的第一反应是：够交两个月房租了。"
+    "effect": {"money": 600},
+    "postEvent": "康康拿到奖金的第一反应是：够缓一口气，至少这个月房租不用愁。"
   },
   "life_cost_inflation_01": {
     "month": [6, 12],
-    "text": "楼下便利店的三明治从8块涨到了12块。奶茶从15涨到了18。康康感受到了通货膨胀的力量。",
+    "text": "楼下便利店的三明治从8块涨到了10块，奶茶从15涨到了16。康康感受到了通货膨胀的力量。",
     "type": "bad",
     "system": "economy",
     "weight": 0.7,
     "once": true,
-    "effect": {"living_cost": 200},
+    "effect": {"living_cost": 120},
     "postEvent": "康康开始自己带饭了。虽然只会做蛋炒饭。"
   },
   "life_roommate_move_01": {
     "month": [5, 10],
-    "text": "室友突然说下个月要搬走了！房租从合租变成了独租，直接翻倍。康康紧急在小红书上发了找室友帖。",
+    "text": "室友突然说下个月要搬走了！房租压力一下子上来了。康康紧急在小红书上发了找室友帖。",
     "type": "choice",
     "system": "economy",
     "weight": 0.6,
     "once": true,
     "title": "🏠 室友跑路",
-    "desc": "室友搬走了，房租压力骤增。怎么办？",
+    "desc": "室友搬走了，生活成本要重新平衡。怎么办？",
     "choices": [
       {
         "text": "🔍 赶紧找新室友",
         "hint": "碰运气，可能遇到奇葩",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "找到了一个安静的程序员室友，完美！房租恢复正常。", "type": "good", "effect": {"hp": 3, "charm": 2}},
+          {"chance": 60, "result": "找到了一个安静的程序员室友，完美！房租基本回到原来水平。", "type": "good", "effect": {"hp": 3, "charm": 2}},
           {"chance": 40, "result": "新室友每天凌晨打游戏喊麦……康康开始怀念从前安静的日子。", "type": "bad", "effect": {"hp": -5, "brain": -3}}
         ]
       },
       {
         "text": "💪 咬牙独租",
         "hint": "自由是贵的",
-        "result": "独享整个房子！虽然贵了不少，但再也不用抢厕所了。",
-        "effect": {"living_cost": 800, "hp": 5}
+        "result": "独享整个房子！虽然自由了，但每月固定开销大约多了350。",
+        "effect": {"living_cost": 350, "hp": 5}
       },
       {
         "text": "📦 搬去更便宜的地方",
         "hint": "省钱但通勤变长",
-        "result": "搬到了郊区，每天通勤两小时。但房租便宜了一半。",
-        "effect": {"living_cost": -300, "hp": -3, "brain": -2}
+        "result": "搬到了郊区，每天通勤两小时。但每月房租大约能省下200。",
+        "effect": {"living_cost": -200, "hp": -3, "brain": -2}
       }
     ]
   },

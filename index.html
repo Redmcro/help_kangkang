@@ -80,6 +80,16 @@
           <span class="stat-name">Money</span>
           <span class="stat-val stat-val-money" id="valMoney">¥5,000</span>
         </div>
+        <div class="stat-row">
+          <span class="stat-icon">💼</span>
+          <span class="stat-name">Salary</span>
+          <span class="stat-val stat-val-money stat-val-salary" id="valSalary">¥3,200</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-icon">🏠</span>
+          <span class="stat-name">Cost</span>
+          <span class="stat-val stat-val-money stat-val-cost" id="valLivingCost">-¥1,400</span>
+        </div>
 
         <div class="stat-row">
           <span class="stat-icon">👔</span>
@@ -138,6 +148,35 @@
       <div class="editor-tab">
         <span class="editor-tab-icon">📄</span>
         <span id="editorTabName">kangkang_life.log</span>
+      </div>
+      <div class="month-finance" id="monthFinancePanel">
+        <div class="mf-header">
+          <span class="mf-title">📒 月度财务</span>
+          <span class="mf-month" id="mfMonthLabel">1月进行中</span>
+        </div>
+        <div class="mf-grid">
+          <div class="mf-item">
+            <span>工资收入</span>
+            <strong id="mfSalaryIncome">+¥3,200</strong>
+          </div>
+          <div class="mf-item">
+            <span>生活费</span>
+            <strong id="mfLivingCost">-¥1,400</strong>
+          </div>
+          <div class="mf-item">
+            <span>模型支出</span>
+            <strong id="mfModelCost">-¥0</strong>
+          </div>
+          <div class="mf-item">
+            <span>月度净结余</span>
+            <strong id="mfMonthIncome">+¥1,800</strong>
+          </div>
+          <div class="mf-item mf-item-wide">
+            <span>评薪结果</span>
+            <strong id="mfSalaryAdjust">待结算</strong>
+          </div>
+        </div>
+        <div class="mf-review" id="mfReviewText">季度评薪：等待月结算</div>
       </div>
       <div class="event-stream" id="eventStream"></div>
       <div class="choice-panel" id="choicePanel">

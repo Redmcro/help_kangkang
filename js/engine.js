@@ -25,6 +25,46 @@ const TASK_COMPLEXITY = {
 };
 
 function rng(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function clampValue(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+const QUARTERLY_REVIEW_MONTHS = new Set([3, 6, 9, 12]);
+const QUARTERLY_REVIEW_EVENT_PREFIX = 'life_salary_review_q';
+const MAINSTREAM_MODEL_IDS = new Set(['gpt54', 'opus46', 'deepseek_v4']);
+
+const BALANCE_CONFIG = {
+    settlement: {
+        minDelta: -7,
+        maxDelta: 6,
+        charmDivider: 240
+    },
+    overtime: {
+        hardThreshold: 34,
+        softThreshold: 48,
+        softChancePerPoint: 0.035,
+        bugChanceBoost: 0.12,
+        lightHpRange: [2, 5],
+        hardHpRange: [4, 8],
+        extraBrainLoss: 2,
+        fatigueStep: 2,
+        fatigueLossCap: 3,
+        forcedRestAt: 6,
+        forcedRestReset: 2
+    },
+    salaryReview: {
+        minSalary: 1800,
+        maxSalary: 12000
+    },
+    modelCost: {
+        minDebtBuffer: 600,
+        salaryDebtFactor: 0.18,
+        mainstreamThrottleFactor: 0.72,
+        tokenMultiplier: {
+            gpt54: 1.08,
+            opus46: 1.18,
+            deepseek_v4: 1.05
+        }
+    }
+};
 
 const IDLE_DAY_PHRASES = [
     '平平无奇的一天。',
@@ -102,6 +142,7 @@ export class GameEngine {
         // Daily report tracking
         this.dayReport = { tokensUsed: 0, overtime: false, modelName: '', events: [] };
         this.monthQualities = [];
+        this.monthRuntime = this.createMonthRuntimeState(1);
         // Callbacks set by app.js
         this.onEvent = null;
         this.onUpdateUI = null;
@@ -195,6 +236,7 @@ export class GameEngine {
         this.timeline = [];
         this.pauseDepth = 0;
         this.monthQualities = [];
+        this.monthRuntime = this.createMonthRuntimeState(1);
 
         this.selectedBuffs.forEach(id => {
             const b = this.buffs.find(x => x.id === id);
@@ -290,7 +332,7 @@ export class GameEngine {
     }
 
     executeActionPlan(actions, contextLabel = 'runtime') {
-        const summary = { statDelta: {}, tokensCharged: 0 };
+        const summary = { statDelta: {}, tokensCharged: 0, modelCostSpent: 0 };
         if (!Array.isArray(actions) || actions.length === 0) return summary;
 
         for (const action of actions) {
@@ -456,6 +498,7 @@ export class GameEngine {
         if (moneyCost !== 0) {
             const resolved = this.property.applyEffect({ money: -moneyCost });
             this.mergeNumericDelta(summary.statDelta, resolved);
+            summary.modelCostSpent += moneyCost;
         }
         summary.tokensCharged += amount;
     }
@@ -475,16 +518,279 @@ export class GameEngine {
         }
     }
 
+    createMonthRuntimeState(month = 1) {
+        const salary = this.property.get('salary') || 3000;
+        const livingCost = this.property.get('living_cost') || 1500;
+        return {
+            month,
+            salaryBefore: salary,
+            salaryDelta: 0,
+            salaryAfter: salary,
+            livingCost,
+            monthIncome: 0,
+            monthModelCost: 0,
+            totalDays: 0,
+            overtimeDays: 0,
+            lowQualityDays: 0,
+            bugDays: 0
+        };
+    }
+
+    beginMonthRuntime(month) {
+        const salary = this.property.get('salary') || 3000;
+        const livingCost = this.property.get('living_cost') || 1500;
+        this.monthRuntime = {
+            month,
+            salaryBefore: salary,
+            salaryDelta: 0,
+            salaryAfter: salary,
+            livingCost,
+            monthIncome: month > 1 ? salary - livingCost : 0,
+            monthModelCost: 0,
+            totalDays: 0,
+            overtimeDays: 0,
+            lowQualityDays: 0,
+            bugDays: 0
+        };
+    }
+
+    registerModelCostSpent(cost) {
+        if (typeof cost !== 'number' || !Number.isFinite(cost) || cost <= 0) return;
+        if (!this.monthRuntime) {
+            this.monthRuntime = this.createMonthRuntimeState(this.property.get('month') || 1);
+        }
+        this.monthRuntime.monthModelCost += Math.round(cost);
+    }
+
+    isQuarterlyReviewEvent(eventId) {
+        if (typeof eventId !== 'string' || !eventId) return false;
+        return eventId.startsWith(QUARTERLY_REVIEW_EVENT_PREFIX);
+    }
+
+    sanitizeQuarterlyReviewActions(eventId, actions) {
+        if (!this.isQuarterlyReviewEvent(eventId) || !Array.isArray(actions) || actions.length === 0) {
+            return Array.isArray(actions) ? actions : [];
+        }
+
+        const sanitized = [];
+        for (const action of actions) {
+            const normalized = this.sanitizeQuarterlyReviewAction(action);
+            if (normalized) sanitized.push(normalized);
+        }
+        return sanitized;
+    }
+
+    sanitizeQuarterlyReviewAction(action) {
+        if (!action || typeof action !== 'object') return action;
+
+        if (action.type === 'stat_delta') {
+            const delta = this.extractActionObject(action, ['delta', 'effect', 'values', 'stats']);
+            if (delta && typeof delta === 'object') {
+                const nextDelta = { ...delta };
+                if (Object.prototype.hasOwnProperty.call(nextDelta, 'salary')) delete nextDelta.salary;
+                if (Object.keys(nextDelta).length === 0) return null;
+                if (Object.prototype.hasOwnProperty.call(action, 'delta')) return { ...action, delta: nextDelta };
+                if (Object.prototype.hasOwnProperty.call(action, 'effect')) return { ...action, effect: nextDelta };
+                if (Object.prototype.hasOwnProperty.call(action, 'values')) return { ...action, values: nextDelta };
+                if (Object.prototype.hasOwnProperty.call(action, 'stats')) return { ...action, stats: nextDelta };
+                return { ...action, delta: nextDelta };
+            }
+            if (action.key === 'salary') return null;
+        }
+
+        if (action.type === 'set_state') {
+            const statePatch = this.extractActionObject(action, ['state', 'set', 'patch', 'values']);
+            if (statePatch && typeof statePatch === 'object') {
+                const nextState = { ...statePatch };
+                if (Object.prototype.hasOwnProperty.call(nextState, 'salary')) delete nextState.salary;
+                if (Object.keys(nextState).length === 0) return null;
+                if (Object.prototype.hasOwnProperty.call(action, 'state')) return { ...action, state: nextState };
+                if (Object.prototype.hasOwnProperty.call(action, 'set')) return { ...action, set: nextState };
+                if (Object.prototype.hasOwnProperty.call(action, 'patch')) return { ...action, patch: nextState };
+                if (Object.prototype.hasOwnProperty.call(action, 'values')) return { ...action, values: nextState };
+                return { ...action, state: nextState };
+            }
+            if (action.key === 'salary') return null;
+        }
+
+        return action;
+    }
+
+    buildModelCostPlan(modelId, baseTokens) {
+        const model = AI_MODELS[modelId];
+        if (!model) return { mode: 'fallback', tokens: 0, moneyCost: 0, debtBuffer: 0 };
+
+        const normalizedTokens = Math.max(1, Math.round(baseTokens || 1));
+        const mul = BALANCE_CONFIG.modelCost.tokenMultiplier[modelId] || 1;
+        const pressuredTokens = Math.max(1, Math.round(normalizedTokens * mul));
+        const salary = this.property.get('salary') || 3000;
+        const livingCost = this.property.get('living_cost') || 1500;
+        const debtBuffer = Math.max(
+            BALANCE_CONFIG.modelCost.minDebtBuffer,
+            Math.floor((salary + livingCost) * BALANCE_CONFIG.modelCost.salaryDebtFactor)
+        );
+
+        if (model.tokenPrice <= 0) {
+            return { mode: 'free', tokens: pressuredTokens, moneyCost: 0, debtBuffer };
+        }
+
+        const currentMoney = this.property.get('money') || 0;
+        const pressuredCost = pressuredTokens * model.tokenPrice;
+        if (currentMoney + debtBuffer >= pressuredCost) {
+            const mode = currentMoney >= pressuredCost ? 'full' : 'overdraft';
+            return { mode, tokens: pressuredTokens, moneyCost: pressuredCost, debtBuffer };
+        }
+
+        if (MAINSTREAM_MODEL_IDS.has(modelId)) {
+            const throttledTokens = Math.max(
+                1,
+                Math.round(pressuredTokens * BALANCE_CONFIG.modelCost.mainstreamThrottleFactor)
+            );
+            const throttledCost = throttledTokens * model.tokenPrice;
+            if (currentMoney + debtBuffer >= throttledCost) {
+                const mode = currentMoney >= throttledCost ? 'throttled' : 'throttled-overdraft';
+                return { mode, tokens: throttledTokens, moneyCost: throttledCost, debtBuffer };
+            }
+        }
+
+        return { mode: 'fallback', tokens: pressuredTokens, moneyCost: pressuredCost, debtBuffer };
+    }
+
+    evaluateOvertimePlan(quality, hasBug) {
+        if (quality <= BALANCE_CONFIG.overtime.hardThreshold) return { trigger: true, severe: true };
+
+        if (quality >= BALANCE_CONFIG.overtime.softThreshold && !hasBug) {
+            return { trigger: false, severe: false };
+        }
+
+        let chance = Math.max(
+            0,
+            (BALANCE_CONFIG.overtime.softThreshold - quality) * BALANCE_CONFIG.overtime.softChancePerPoint
+        );
+        if (hasBug) chance += BALANCE_CONFIG.overtime.bugChanceBoost;
+        chance = Math.min(0.85, chance);
+        return { trigger: Math.random() < chance, severe: false };
+    }
+
+    resolveMonthlySatisfyDelta(avgQ) {
+        const runtime = this.monthRuntime || this.createMonthRuntimeState(this.property.get('month') || 1);
+        const hp = this.property.get('hp') || 0;
+        const brain = this.property.get('brain') || 0;
+        const totalDays = Math.max(1, runtime.totalDays || this.monthQualities.length || 1);
+        const overtimeRatio = (runtime.overtimeDays || 0) / totalDays;
+        const bugRatio = (runtime.bugDays || 0) / totalDays;
+        const stability = Math.round((hp + brain) / 2);
+
+        let qualityScore = 0;
+        if (avgQ >= 88) qualityScore = 4;
+        else if (avgQ >= 76) qualityScore = 3;
+        else if (avgQ >= 64) qualityScore = 2;
+        else if (avgQ >= 54) qualityScore = 1;
+        else if (avgQ >= 40) qualityScore = 0;
+        else if (avgQ >= 30) qualityScore = -2;
+        else qualityScore = -4;
+
+        let stabilityScore = 0;
+        if (stability >= 80) stabilityScore = 2;
+        else if (stability >= 64) stabilityScore = 1;
+        else if (stability >= 42) stabilityScore = 0;
+        else if (stability >= 28) stabilityScore = -1;
+        else stabilityScore = -2;
+
+        let overtimePenalty = 0;
+        if (overtimeRatio >= 0.65) overtimePenalty = -4;
+        else if (overtimeRatio >= 0.5) overtimePenalty = -3;
+        else if (overtimeRatio >= 0.34) overtimePenalty = -2;
+        else if (overtimeRatio >= 0.2) overtimePenalty = -1;
+
+        let bugPenalty = 0;
+        if (bugRatio >= 0.75) bugPenalty = -2;
+        else if (bugRatio >= 0.5) bugPenalty = -1;
+
+        const baseDelta = qualityScore + stabilityScore + overtimePenalty + bugPenalty;
+        const charm = this.property.get('charm') || 50;
+        const charmFactor = 1 + (charm - 50) / BALANCE_CONFIG.settlement.charmDivider;
+        const delta = clampValue(
+            Math.round(baseDelta * charmFactor),
+            BALANCE_CONFIG.settlement.minDelta,
+            BALANCE_CONFIG.settlement.maxDelta
+        );
+
+        return { delta, qualityScore, stabilityScore, overtimePenalty, bugPenalty, overtimeRatio, bugRatio, stability };
+    }
+
+    resolveQuarterlySalaryReview(month, avgQ, settle) {
+        if (!QUARTERLY_REVIEW_MONTHS.has(month)) {
+            return { triggered: false, delta: 0, score: 0, salaryBefore: this.property.get('salary') || 3000 };
+        }
+
+        const salaryBefore = this.property.get('salary') || 3000;
+        const boss = this.property.get('bossSatisfy') || 0;
+        const hp = this.property.get('hp') || 0;
+        const brain = this.property.get('brain') || 0;
+        const stability = (hp + brain) / 2;
+        const overtimeRatio = settle?.overtimeRatio || 0;
+
+        let score = 0;
+        if (avgQ >= 85) score += 3;
+        else if (avgQ >= 72) score += 2;
+        else if (avgQ >= 58) score += 1;
+        else if (avgQ < 42) score -= 2;
+        else score -= 1;
+
+        if (stability >= 78) score += 2;
+        else if (stability >= 62) score += 1;
+        else if (stability < 35) score -= 2;
+        else if (stability < 48) score -= 1;
+
+        if (boss >= 72) score += 2;
+        else if (boss >= 56) score += 1;
+        else if (boss < 32) score -= 2;
+        else if (boss < 45) score -= 1;
+
+        if (overtimeRatio <= 0.18) score += 1;
+        else if (overtimeRatio >= 0.5) score -= 2;
+        else if (overtimeRatio >= 0.35) score -= 1;
+
+        if (settle?.delta >= 3) score += 1;
+        else if (settle?.delta <= -3) score -= 1;
+
+        let delta = 0;
+        if (score >= 7) delta = 700;
+        else if (score >= 5) delta = 450;
+        else if (score >= 3) delta = 250;
+        else if (score >= 1) delta = 100;
+        else if (score <= -5) delta = -450;
+        else if (score <= -3) delta = -250;
+        else if (score <= -1) delta = -100;
+
+        const salaryAfter = clampValue(
+            salaryBefore + delta,
+            BALANCE_CONFIG.salaryReview.minSalary,
+            BALANCE_CONFIG.salaryReview.maxSalary
+        );
+        return {
+            triggered: true,
+            score,
+            delta: salaryAfter - salaryBefore,
+            salaryBefore,
+            salaryAfter
+        };
+    }
+
     processMonth() {
         const month = this.property.get('month');
         if (month > 12) { this.endGame(); return; }
+        this.beginMonthRuntime(month);
 
         if (month > 1) {
             this.property.monthlyExpense();
-            const salary = this.property.get('salary') || 3000;
-            const cost = this.property.get('living_cost') || 1500;
+            const salary = this.monthRuntime.salaryBefore;
+            const cost = this.monthRuntime.livingCost;
+            const income = this.monthRuntime.monthIncome;
             const costDisplay = cost >= 0 ? `-¥${cost}` : `+¥${Math.abs(cost)}`;
-            this.emitEvent(`月初结算：工资 +¥${salary}，生活费 ${costDisplay}`, 'money');
+            const incomeDisplay = income >= 0 ? `+¥${income}` : `-¥${Math.abs(income)}`;
+            this.emitEvent(`月初结算：工资 +¥${salary}，生活费 ${costDisplay}，净结余 ${incomeDisplay}`, 'money');
         }
         const recovery = this.property.monthlyRecovery();
         if (recovery.brainRecover > 0 || recovery.hpRecover > 0) {
@@ -527,6 +833,7 @@ export class GameEngine {
         const stars = pool[rng(0, pool.length - 1)];
         let modelId = this.getCurrentModelId();
         let model = AI_MODELS[modelId];
+        if (this.monthRuntime) this.monthRuntime.totalDays += 1;
 
         // Track model name for daily report
         this.dayReport.modelName = model ? model.name : '🧠 纯人肉';
@@ -544,6 +851,12 @@ export class GameEngine {
             this.dayReport.events.push('🎯 Opus 拒绝生成！');
             this.monthQualities.push(0);
             this.property.set('is_overtime', true);
+            const overtime = this.property.get('consecutive_overtime') || 0;
+            this.property.set('consecutive_overtime', overtime + 1);
+            if (this.monthRuntime) {
+                this.monthRuntime.overtimeDays += 1;
+                this.monthRuntime.lowQualityDays += 1;
+            }
             this.emitUI();
             this.scheduleNext(() => this.processDayEvent(month, day, totalDays));
             return;
@@ -552,29 +865,34 @@ export class GameEngine {
         const quality = this.calcQuality(model, stars, modelId);
 
         if (model) {
-            let tc = model.cost[stars - 1] || model.cost[0];
+            let baseTokens = model.cost[stars - 1] || model.cost[0];
 
             // 2a: DeepSeek V4 - 12% chance extra 30% token cost
             if (modelId === 'deepseek_v4' && Math.random() < 0.12) {
-                const extraCost = Math.floor(tc * 0.3);
-                tc += extraCost;
+                const extraCost = Math.floor(baseTokens * 0.3);
+                baseTokens += extraCost;
                 this.dayReport.events.push(`🔮 DeepSeek超长 +${extraCost}M`);
             }
 
-            // Calculate money cost = tokens × model price
-            const moneyCost = tc * model.tokenPrice;
-            const currentMoney = this.property.get('money');
-
-            if (currentMoney >= moneyCost) {
-                this.property.applyEffect({ money: -moneyCost });
-                this.dayReport.tokensUsed += tc;
-            } else {
-                // Can't afford → auto-switch to brainpower
-                this.dayReport.events.push(`💸 余额不足！纯人肉写代码`);
-                this.property.applyEffect({ brain: -rng(8, 15) });
-                // Temporarily no model for this task
+            const costPlan = this.buildModelCostPlan(modelId, baseTokens);
+            if (costPlan.mode === 'fallback') {
+                this.dayReport.events.push('💸 预算吃紧！本日改为纯人肉写代码');
+                this.property.applyEffect({ brain: -rng(6, 12) });
                 model = null;
                 modelId = null;
+            } else {
+                if (costPlan.mode === 'throttled' || costPlan.mode === 'throttled-overdraft') {
+                    this.dayReport.events.push(`💸 成本管控触发：${model.name}降载运行`);
+                }
+                if (costPlan.mode === 'overdraft' || costPlan.mode === 'throttled-overdraft') {
+                    this.dayReport.events.push(`📉 本日模型开销透支 ¥${costPlan.moneyCost}`);
+                }
+
+                if (costPlan.moneyCost > 0) {
+                    this.property.applyEffect({ money: -costPlan.moneyCost });
+                    this.registerModelCostSpent(costPlan.moneyCost);
+                }
+                this.dayReport.tokensUsed += costPlan.tokens;
             }
         }
 
@@ -607,39 +925,55 @@ export class GameEngine {
             brainLoss += extraBrainDrain;
             this.property.applyEffect({ brain: -brainLoss });
             this.property.set('total_bugs', this.property.get('total_bugs') + 1);
+            if (this.monthRuntime) this.monthRuntime.bugDays += 1;
         }
 
         this.monthQualities.push(quality);
+        if (this.monthRuntime && quality < BALANCE_CONFIG.overtime.softThreshold) {
+            this.monthRuntime.lowQualityDays += 1;
+        }
 
-        // 2d: overtime mechanism - quality < 40 triggers overtime
-        if (quality < 40) {
+        // 2d: overtime mechanism - softer curve to prevent early snowball
+        const overtimePlan = this.evaluateOvertimePlan(quality, hasBug);
+        if (overtimePlan.trigger) {
             this.property.set('is_overtime', true);
-            let hpLoss = rng(3, 8);
-            // Extra HP drain: 2~5 scaled by overtime intensity
-            const overtime = this.property.get('consecutive_overtime');
-            const extraHpDrain = rng(2, Math.min(5, 2 + overtime));
-            hpLoss += extraHpDrain;
+            const overtime = this.property.get('consecutive_overtime') || 0;
+            const hpRange = overtimePlan.severe ? BALANCE_CONFIG.overtime.hardHpRange : BALANCE_CONFIG.overtime.lightHpRange;
+            let hpLoss = rng(hpRange[0], hpRange[1]);
+            const fatigueLoss = Math.min(
+                BALANCE_CONFIG.overtime.fatigueLossCap,
+                Math.floor(overtime / BALANCE_CONFIG.overtime.fatigueStep)
+            );
+            hpLoss += fatigueLoss;
+            const extraBrainLoss = overtimePlan.severe ? BALANCE_CONFIG.overtime.extraBrainLoss : 0;
+
             this.property.applyEffect({ hp: -hpLoss });
-            this.property.set('consecutive_overtime', this.property.get('consecutive_overtime') + 1);
+            if (extraBrainLoss > 0) this.property.applyEffect({ brain: -extraBrainLoss });
+            this.property.set('consecutive_overtime', overtime + 1);
             this.dayReport.overtime = true;
+            if (this.monthRuntime) this.monthRuntime.overtimeDays += 1;
 
             const overtimeAfter = overtime + 1;
-            if (overtimeAfter >= 5) {
-                this.property.set('consecutive_overtime', 0);
-                const extraHpLoss = rng(3, 6);
-                hpLoss += extraHpLoss;
-                this.property.applyEffect({ hp: -extraHpLoss });
+            if (overtimeAfter >= BALANCE_CONFIG.overtime.forcedRestAt) {
+                const recoverHp = rng(2, 4);
+                const recoverBrain = rng(1, 2);
+                this.property.applyEffect({ hp: recoverHp, brain: recoverBrain });
+                this.property.set('consecutive_overtime', BALANCE_CONFIG.overtime.forcedRestReset);
                 const bugPart = hasBug ? `，期间还修了个Bug 🧠-${brainLoss}` : '';
-                this.dayReport.events.push(`⚠️ 连续加班5天！强制休息（质检${quality}分${bugPart}） ❤️-${hpLoss}`);
-            } else if (overtimeAfter >= 3) {
+                const severePart = overtimePlan.severe ? `，低质量返工额外透支 🧠-${extraBrainLoss}` : '';
+                this.dayReport.events.push(`⚠️ 连续加班${overtimeAfter}天，强制补觉恢复 ❤️+${recoverHp} 🧠+${recoverBrain}${bugPart}${severePart}`);
+            } else if (overtimeAfter >= 4) {
                 const bugPart = hasBug ? `，外加修Bug 🧠-${brainLoss}` : '';
-                this.dayReport.events.push(`⚠️ 代码只有${quality}分，连续加班3天，黑眼圈已经遮不住了${bugPart} ❤️-${hpLoss}`);
+                const severePart = overtimePlan.severe ? `，低质量返工 🧠-${extraBrainLoss}` : '';
+                this.dayReport.events.push(`⚠️ 代码只有${quality}分，连续加班${overtimeAfter}天${bugPart}${severePart} ❤️-${hpLoss}`);
             } else {
-                this.dayReport.events.push(buildOvertimeMsg(quality, hasBug, hpLoss, brainLoss));
+                const severePart = overtimePlan.severe ? `，返工透支 🧠-${extraBrainLoss}` : '';
+                this.dayReport.events.push(buildOvertimeMsg(quality, hasBug, hpLoss, brainLoss) + severePart);
             }
         } else {
             this.property.set('is_overtime', false);
-            this.property.set('consecutive_overtime', 0);
+            const currentOvertime = this.property.get('consecutive_overtime') || 0;
+            this.property.set('consecutive_overtime', Math.max(0, currentOvertime - 1));
             if (hasBug) {
                 const bugDelta = buildDeltaStr({ brain: -brainLoss });
                 const bugMsg = BUG_NARRATIVES[Math.floor(Math.random() * BUG_NARRATIVES.length)];
@@ -669,9 +1003,11 @@ export class GameEngine {
                 if (ev.type === 'choice' && ev.choices) {
                     const result = this.eventMgr.execute(id, ev, state);
                     addToLegacySet(this.legacy, 'events_seen', id);
-                    const promptSummary = this.executeActionPlan(result.actions, `choice-entry:${id}`);
+                    const normalizedActions = this.sanitizeQuarterlyReviewActions(id, result.actions);
+                    const promptSummary = this.executeActionPlan(normalizedActions, `choice-entry:${id}`);
                     this.applyCharmRelationAdjustment(promptSummary.statDelta, state);
                     if (promptSummary.tokensCharged > 0) this.dayReport.tokensUsed += promptSummary.tokensCharged;
+                    if (promptSummary.modelCostSpent > 0) this.registerModelCostSpent(promptSummary.modelCostSpent);
                     const promptDeltaStr = buildDeltaStr(promptSummary.statDelta);
                     this.emitEvent(result.text + promptDeltaStr, 'special');
                     if (result.postEvent) this.dayReport.events.push(result.postEvent);
@@ -683,13 +1019,15 @@ export class GameEngine {
                 }
                 const result = this.eventMgr.execute(id, ev, state);
                 addToLegacySet(this.legacy, 'events_seen', id);
-                const actionSummary = this.executeActionPlan(result.actions, `event:${id}`);
+                const normalizedActions = this.sanitizeQuarterlyReviewActions(id, result.actions);
+                const actionSummary = this.executeActionPlan(normalizedActions, `event:${id}`);
                 this.applyCharmRelationAdjustment(actionSummary.statDelta, state);
                 const deltaStr = buildDeltaStr(actionSummary.statDelta);
                 // Push event text to dayReport only (displayed via emitDayReport)
                 this.dayReport.events.push(result.text + deltaStr);
                 if (result.postEvent) this.dayReport.events.push(result.postEvent);
                 if (actionSummary.tokensCharged > 0) this.dayReport.tokensUsed += actionSummary.tokensCharged;
+                if (actionSummary.modelCostSpent > 0) this.registerModelCostSpent(actionSummary.modelCostSpent);
                 if (['special', 'good'].includes(result.type)) this.timeline.push({ month, day, text: result.text, type: result.type });
                 this.emitUI();
                 const go = this.property.isGameOver();
@@ -706,22 +1044,61 @@ export class GameEngine {
         const avgQ = this.monthQualities.length > 0
             ? Math.round(this.monthQualities.reduce((a, b) => a + b, 0) / this.monthQualities.length) : 50;
 
-        let sd = 0;
-        if (avgQ >= 90) sd = 2; else if (avgQ >= 70) sd = 1; else if (avgQ >= 50) sd = 0;
-        else if (avgQ >= 30) sd = -2; else sd = -5;
-
-        // 2c: charm 微调 bossSatisfy（GAME_DESIGN §二.2.3）
-        const charm = this.property.get('charm') || 50;
-        sd = Math.round(sd * (1 + (charm - 50) / 200));
-
-        this.property.applyEffect({ bossSatisfy: sd });
+        const settle = this.resolveMonthlySatisfyDelta(avgQ);
+        this.property.applyEffect({ bossSatisfy: settle.delta });
         this.property.set('avg_quality', avgQ);
+
+        const review = this.resolveQuarterlySalaryReview(month, avgQ, settle);
+        if (review.triggered && review.delta !== 0) {
+            this.property.applyEffect({ salary: review.delta });
+        }
+
+        if (!this.monthRuntime || this.monthRuntime.month !== month) {
+            this.monthRuntime = this.createMonthRuntimeState(month);
+        }
+        const salaryBefore = review.salaryBefore || this.monthRuntime.salaryBefore || this.property.get('salary') || 3000;
+        const salaryAfter = review.triggered ? (review.salaryAfter || (salaryBefore + review.delta)) : salaryBefore;
+        this.monthRuntime.salaryBefore = salaryBefore;
+        this.monthRuntime.salaryDelta = review.triggered ? review.delta : 0;
+        this.monthRuntime.salaryAfter = salaryAfter;
 
         if (this.property.get('money') <= 0) this.property.set('months_bankrupt', this.property.get('months_bankrupt') + 1);
         else this.property.set('months_bankrupt', 0);
 
-        this.emitEvent(`—— ${month}月结算：平均质量 ${avgQ} · 满意度${sd >= 0 ? '+' : ''}${sd} ——`, 'neutral');
-        if (this.onMonthSummary) this.onMonthSummary({ month, avgQuality: avgQ, satisfyDelta: sd, bossSatisfy: this.property.get('bossSatisfy'), money: this.property.get('money') });
+        const monthIncome = this.monthRuntime.monthIncome || 0;
+        const monthModelCost = this.monthRuntime.monthModelCost || 0;
+        const financePart = `净结余${monthIncome >= 0 ? '+' : '-'}¥${Math.abs(monthIncome)} · 模型支出-¥${monthModelCost}`;
+        this.emitEvent(
+            `—— ${month}月结算：平均质量 ${avgQ} · 满意度${settle.delta >= 0 ? '+' : ''}${settle.delta} · ${financePart} ——`,
+            'neutral'
+        );
+
+        if (review.triggered) {
+            if (review.delta === 0) {
+                this.emitEvent(`📊 季度评薪：综合得分 ${review.score}，薪资维持 ¥${salaryAfter}`, 'money');
+            } else {
+                this.emitEvent(
+                    `📊 季度评薪：综合得分 ${review.score}，月薪${review.delta >= 0 ? '+' : ''}${review.delta} → ¥${salaryAfter}`,
+                    review.delta >= 0 ? 'good' : 'bad'
+                );
+            }
+        }
+
+        if (this.onMonthSummary) {
+            this.onMonthSummary({
+                month,
+                avgQuality: avgQ,
+                satisfyDelta: settle.delta,
+                bossSatisfy: this.property.get('bossSatisfy'),
+                money: this.property.get('money'),
+                salaryBefore: this.monthRuntime.salaryBefore,
+                salaryDelta: this.monthRuntime.salaryDelta,
+                salaryAfter: this.monthRuntime.salaryAfter,
+                livingCost: this.monthRuntime.livingCost,
+                monthIncome: this.monthRuntime.monthIncome,
+                monthModelCost: this.monthRuntime.monthModelCost
+            });
+        }
 
         this.monthQualities = [];
         this.emitUI();
@@ -746,6 +1123,7 @@ export class GameEngine {
         const actionSummary = this.executeActionPlan(result.actions, 'choice');
         this.applyCharmRelationAdjustment(actionSummary.statDelta, state);
         if (actionSummary.tokensCharged > 0) this.dayReport.tokensUsed += actionSummary.tokensCharged;
+        if (actionSummary.modelCostSpent > 0) this.registerModelCostSpent(actionSummary.modelCostSpent);
         const after = this.property.toJSON();
         const deltas = {};
         for (const key of ['hp','brain','money','bossSatisfy','shaoye_rel','yimin_rel','gf_rel']) {

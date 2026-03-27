@@ -28,12 +28,12 @@
   },
   "monthly_m2_new_year_bonus": {
     "month": [2, 2],
-    "text": "过年红包到账！虽然只有一个月工资，但聊胜于无。",
+    "text": "过年红包到账！公司发了¥1200开工补贴，聊胜于无。",
     "type": "good",
     "system": "monthly",
     "weight": 50,
     "once": true,
-    "effect": {"money": 1500}
+    "effect": {"money": 1200}
   },
   "monthly_m3_model_war": {
     "month": [3, 3],
@@ -96,8 +96,8 @@
         "hint": "省时间，但AI痕迹可能露馅",
         "chanceBased": true,
         "branches": [
-          {"chance": 60, "result": "AI生成的PPT意外地很专业！老板还表扬了你的效率。", "type": "good", "effect": {"bossSatisfy": 5, "money": -60}},
-          {"chance": 40, "result": "PPT里出现了'根据上下文分析'这种AI痕迹……老板皱了皱眉。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -60}}
+          {"chance": 60, "result": "AI生成的PPT意外地很专业！老板还表扬了你的效率。你顺手买了¥60的高级模板。", "type": "good", "effect": {"bossSatisfy": 5, "money": -60}},
+          {"chance": 40, "result": "PPT里出现了'根据上下文分析'这种AI痕迹……老板皱了皱眉。¥60模板费也白花了。", "type": "bad", "effect": {"bossSatisfy": -3, "money": -60}}
         ]
       },
       {
@@ -223,20 +223,20 @@
   },
   "monthly_m9_gamejam": {
     "month": [9, 9],
-    "text": "同事发来消息：周末有个48小时GameJam，要不要组队参加？一等奖10000元！",
+    "text": "同事发来消息：周末有个48小时GameJam，要不要组队参加？一等奖3500元！",
     "type": "choice",
     "system": "monthly",
     "once": true,
     "weight": 100,
     "title": "🎮 GameJam 邀请",
-    "desc": "48小时极限开发。冠军奖金10000元，但要牺牲整个周末。",
+    "desc": "48小时极限开发。冠军奖金3500元，但要牺牲整个周末。",
     "choices": [
       {
         "text": "🏆 参加！用AI疯狂输出",
         "hint": "全力以赴，赢了改变命运",
         "chanceBased": true,
         "branches": [
-          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！10000元到手！", "type": "good", "effect": {"money": 5000, "hp": -8, "brain": 10, "bossSatisfy": 5, "charm": 5}},
+          {"chance": 35, "result": "你们的AI+Unity方案惊艳全场，拿下一等奖！¥3500到账！", "type": "good", "effect": {"money": 3500, "hp": -8, "brain": 10, "bossSatisfy": 5, "charm": 5}},
           {"chance": 45, "result": "作品不错但没获奖。收获了经验和几个新朋友。", "type": "neutral", "effect": {"hp": -6, "brain": 5, "charm": 3}},
           {"chance": 20, "result": "48小时只做了个半成品，Demo都跑不起来……", "type": "bad", "effect": {"hp": -6, "brain": -5}}
         ]
@@ -279,7 +279,7 @@
       {
         "text": "🫡 主动值班：拍老板马屁",
         "hint": "牺牲假期，换老板一个好印象",
-        "result": "整个假期就你和老板在公司。老板很感动，多发了2000块加班费。",
+        "result": "整个假期就你和老板在公司。老板很感动，多发了¥1000加班费。",
         "effect": {"bossSatisfy": 8, "hp": -3, "money": 1000}
       },
       {
@@ -494,13 +494,13 @@
       {
         "text": "🧪 每个模型都试一遍，做个对比测试",
         "hint": "专业测评，费钱但能出名",
-        "result": "你花了整整两天，做了一份20页的模型对比报告。发到技术群里被疯传，老板也看到了。",
+        "result": "你花了整整两天，做了一份20页的模型对比报告。发到技术群里被疯传，老板也看到了。测试成本花了¥50。",
         "effect": {"brain": 8, "money": -50, "bossSatisfy": 5, "charm": 3}
       },
       {
         "text": "💰 挑最贵的用——贵的肯定好",
         "hint": "简单粗暴，贵的就是好的",
-        "result": "Opus 4.6质量确实好，但Token烧得飞快。一个月的预算三天就花完了。",
+        "result": "Opus 4.6质量确实好，但Token烧得飞快。你先后花了约¥160做体验，钱包立刻报警。",
         "actions": [
           {
             "type": "unlock_model",
@@ -571,8 +571,8 @@
       {
         "text": "💼 拿赔偿——体面离开",
         "hint": "拿钱走人，但以后的路更难",
-        "result": "你拿了N+1走人。HR递纸巾的手都在抖。走出大楼时阳光很刺眼。",
-        "effect": {"money": 5000, "bossSatisfy": -20, "hp": -8},
+        "result": "你拿了N+1走人。HR递纸巾的手都在抖。走出大楼时阳光很刺眼，补偿金¥3500到账。",
+        "effect": {"money": 3500, "bossSatisfy": -20, "hp": -8},
         "setFlag": "considered_delivery"
       }
     ]
@@ -612,15 +612,15 @@
     "desc": "各大AI平台618大促，Token价格史低。要趁机囤货吗？",
     "choices": [
       {
-        "text": "💎 充3000块——囤他个够",
+        "text": "💎 充1000块——囤他个够",
         "hint": "大手笔囤货，安全感拉满",
-        "result": "一口气充了3000块。看着账户里金灿灿的Token数字，你感受到了前所未有的安全感。",
+        "result": "一口气充了¥1000。看着账户里金灿灿的Token数字，你感受到了前所未有的安全感。",
         "effect": {"money": -1000}
       },
       {
-        "text": "🪙 充500块意思意思",
+        "text": "🪙 充200块意思意思",
         "hint": "理性消费，小囤一点",
-        "result": "理性消费。同事们拿着'充值截图'炫耀时，你默默关上了手机。",
+        "result": "理性消费，只充了¥200。同事们拿着'充值截图'炫耀时，你默默关上了手机。",
         "effect": {"money": -200}
       },
       {
@@ -800,19 +800,19 @@
     "branch": [
       {
         "cond": {"bossSatisfy": ">75"},
-        "text": "【S级】老板亲自打来电话：'恭喜！你是今年转型最成功的员工。明年你带个小组。' 年终奖：3个月工资。你在厕所里偷偷哭了。",
+        "text": "【S级】老板亲自打来电话：'恭喜！你是今年转型最成功的员工。明年你带个小组。' 年终奖：¥6000。你在厕所里偷偷哭了。",
         "type": "good",
         "effect": {"money": 6000, "brain": 10, "hp": 10, "charm": 5}
       },
       {
         "cond": {"bossSatisfy": ">55"},
-        "text": "【B级】评语：'转型进度优秀，尚有提升空间。建议继续深耕AI技术栈。' 年终奖：1.5个月工资。活下来了。",
+        "text": "【B级】评语：'转型进度优秀，尚有提升空间。建议继续深耕AI技术栈。' 年终奖：¥3000。活下来了。",
         "type": "good",
         "effect": {"money": 3000, "brain": 5, "hp": 5}
       },
       {
         "cond": {"bossSatisfy": ">35"},
-        "text": "【C级】评语：'AI转型进度落后于团队平均水平。Q1需提交改进计划。' 年终奖：0.5个月工资。勉强保住饭碗，但头顶的剑更近了。",
+        "text": "【C级】评语：'AI转型进度落后于团队平均水平。Q1需提交改进计划。' 年终奖：¥1000。勉强保住饭碗，但头顶的剑更近了。",
         "type": "neutral",
         "effect": {"money": 1000, "brain": -5}
       },

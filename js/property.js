@@ -5,6 +5,12 @@
 // Hidden: charm, luck
 // Flags: dynamic boolean state (model unlocks, story flags)
 
+const ECONOMY_RAILS = Object.freeze({
+    salary: { defaultValue: 3200, min: 600, max: 20000 },
+    living_cost: { defaultValue: 1400, min: 200, max: 16000 }
+});
+const MONEY_RAIL = Object.freeze({ min: -9999999, max: 9999999 });
+
 export class PropertyManager {
     #data = {};
     #flags = {};
@@ -44,9 +50,9 @@ export class PropertyManager {
             new_bugs_month: 0,
             fixed_bugs_month: 0,
             overtime_hours_month: 0,
-            salary: 3000,
+            salary: ECONOMY_RAILS.salary.defaultValue,
             months_bankrupt: 0,
-            living_cost: 1500,
+            living_cost: ECONOMY_RAILS.living_cost.defaultValue,
 
             // Recovery rates (from buffs)
             hp_regen_rate: 0,
@@ -57,6 +63,7 @@ export class PropertyManager {
 
             ...overrides
         };
+        this.#normalizeRuntimeRails();
         this.#flags = {};
         this.#notifyAll();
     }
@@ -64,9 +71,10 @@ export class PropertyManager {
     get(key) { return this.#data[key]; }
 
     set(key, value) {
+        const normalized = this.#normalizeValue(key, value);
         const old = this.#data[key];
-        this.#data[key] = value;
-        if (old !== value) this.#notify(key, old, value);
+        this.#data[key] = normalized;
+        if (old !== normalized) this.#notify(key, old, normalized);
     }
 
     // ===== Flag System =====
@@ -123,6 +131,33 @@ export class PropertyManager {
         return `model_${normalized}_unlocked`;
     }
 
+    #normalizeRuntimeRails() {
+        this.#data.salary = this.#normalizeEconomyValue('salary', this.#data.salary);
+        this.#data.living_cost = this.#normalizeEconomyValue('living_cost', this.#data.living_cost);
+        this.#data.money = this.#normalizeValue('money', this.#data.money);
+        this.#data.months_bankrupt = this.#normalizeValue('months_bankrupt', this.#data.months_bankrupt);
+    }
+
+    #normalizeEconomyValue(key, value) {
+        const rails = ECONOMY_RAILS[key];
+        if (!rails) return value;
+        return toSafeInt(value, rails.defaultValue, rails.min, rails.max);
+    }
+
+    #normalizeValue(key, value) {
+        if (key === 'salary' || key === 'living_cost') {
+            return this.#normalizeEconomyValue(key, value);
+        }
+        if (key === 'money') {
+            const safeMoney = Math.round(toFiniteNumber(value, 0));
+            return clamp(safeMoney, MONEY_RAIL.min, MONEY_RAIL.max);
+        }
+        if (key === 'months_bankrupt') {
+            return toSafeInt(value, 0, 0, 120);
+        }
+        return value;
+    }
+
     // ===== Effects =====
 
     /**
@@ -138,13 +173,18 @@ export class PropertyManager {
         const clampedKeys = ['hp', 'brain', 'bossSatisfy', 'charm', 'luck', 'shaoye_rel', 'yimin_rel', 'gf_rel'];
         for (const [key, delta] of Object.entries(effect)) {
             let val = delta;
-            if (Array.isArray(delta) && delta.length === 2) {
+            if (
+                Array.isArray(delta)
+                && delta.length === 2
+                && delta.every(n => typeof n === 'number' && Number.isFinite(n))
+            ) {
                 const lo = Math.min(delta[0], delta[1]);
                 const hi = Math.max(delta[0], delta[1]);
                 val = lo + Math.floor(Math.random() * (hi - lo + 1));
             }
-            if (typeof val === 'number') {
-                let newVal = (this.#data[key] || 0) + val;
+            if (typeof val === 'number' && Number.isFinite(val)) {
+                const base = toFiniteNumber(this.#data[key], 0);
+                let newVal = base + val;
                 if (clampedKeys.includes(key)) newVal = clamp(newVal, 0, 100);
                 this.set(key, newVal);
             } else {
@@ -192,12 +232,29 @@ export class PropertyManager {
 
     /**
      * Monthly expense & income.
-     * salary (default 15000), living cost -5000.
+     * Deterministic settlement for runtime:
+     * money += salary - living_cost.
      */
     monthlyExpense() {
-        const salary = this.#data.salary || 3000;
-        const cost = this.#data.living_cost || 1500;
-        this.set('money', this.#data.money + salary - cost);
+        const salary = this.#normalizeEconomyValue('salary', this.#data.salary);
+        const livingCost = this.#normalizeEconomyValue('living_cost', this.#data.living_cost);
+        const moneyBefore = this.#normalizeValue('money', this.#data.money);
+
+        this.set('salary', salary);
+        this.set('living_cost', livingCost);
+        this.set('money', moneyBefore);
+
+        const monthIncome = salary - livingCost;
+        const moneyAfter = this.#normalizeValue('money', moneyBefore + monthIncome);
+        this.set('money', moneyAfter);
+
+        return {
+            salary,
+            livingCost,
+            monthIncome,
+            moneyBefore,
+            moneyAfter
+        };
     }
 
     // ===== Game Over Checks =====
@@ -234,4 +291,14 @@ export class PropertyManager {
 // Utility
 function clamp(v, min = 0, max = 100) {
     return Math.max(min, Math.min(max, v));
+}
+
+function toFiniteNumber(raw, fallback = 0) {
+    const num = typeof raw === 'string' ? Number(raw) : raw;
+    return (typeof num === 'number' && Number.isFinite(num)) ? num : fallback;
+}
+
+function toSafeInt(raw, fallback = 0, min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER) {
+    const num = Math.round(toFiniteNumber(raw, fallback));
+    return clamp(num, min, max);
 }

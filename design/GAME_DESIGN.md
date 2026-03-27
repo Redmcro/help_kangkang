@@ -178,16 +178,16 @@ Bug 率修正：
 | 当前模型 | `current_model` | string | 当前使用的AI模型键名 |
 | 当前月份 | `month` | number | 1–12 |
 | 当前工作日 | `day` | number | 当月工作日序号（1~7） |
-| 是否加班 | `is_overtime` | bool | 当日 `quality < 40` 时为 true，否则为 false |
-| 连续加班天数 | `consecutive_overtime` | number | ≥3进入高压警告，≥5触发额外HP损失后清零 |
+| 是否加班 | `is_overtime` | bool | 低质量命中加班判定时为 true（硬阈值≤34；软阈值48内按概率） |
+| 连续加班天数 | `consecutive_overtime` | number | 累计疲劳计数；触发强制补觉后重置到2 |
 | 平均代码质量 | `avg_quality` | number | 月度/全局统计 |
 | 累计Bug数 | `total_bugs` | number | 统计数据 |
 | Bug积压数 | `bug_backlog` | number | 经济骨干预留字段（已注册，待接入主结算） |
 | 本月新增Bug | `new_bugs_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
 | 本月修复Bug | `fixed_bugs_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
 | 本月加班时长 | `overtime_hours_month` | number | 经济骨干预留字段（已注册，待接入主结算） |
-| 月薪 | `salary` | number | 初始3000，可加薪 |
-| 生活费 | `living_cost` | number | 月初扣除，初始1500 |
+| 月薪 | `salary` | number | 初始3200（运行时护栏 600~20000），季度评薪调整 |
+| 生活费 | `living_cost` | number | 月初扣除，初始1400（运行时护栏 200~16000） |
 | 连续破产月 | `months_bankrupt` | number | 连续3月触发破产结局 |
 
 ### 2.4 Flag 注册表
@@ -210,7 +210,7 @@ Bug 率修正：
 | Flag | 来源 | 说明 |
 |:---|:---|:---|
 | `yimin_ai_convert` | colleagues | 亿民开始学AI |
-| `yimin_cost_discount` | colleagues | AI使用费打8折 |
+| `yimin_model_discount` | colleagues | 特定模型线事件折扣 |
 | `learned_ai_course` | choice | 购买AI课程，brain判定加成 |
 | `switched_to_doubao` | choice | 余额不足切豆包 |
 | `considered_delivery` | choice | 考虑过送外卖 |
@@ -226,9 +226,10 @@ Bug 率修正：
 模型档位选择（质量/价格/bug率）
   → 任务质量与花费
   → Bug触发与脑力消耗（`total_bugs` 累计）
-  → 低质量触发加班与HP流失
-  → 月末 avg_quality 结算 bossSatisfy
-  → bossSatisfy 与 money 决定是否能活到年底
+  → 低质量触发加班与HP流失（含疲劳累加与强制补觉）
+  → 月末按 质量/稳定性/加班比/Bug比 结算 bossSatisfy
+  → 季度月（3/6/9/12）按综合得分评薪（独立于事件）
+  → bossSatisfy 与 months_bankrupt 决定是否能活到年底
   → 通过恢复行为（午休、摸鱼、吃饭、健身等事件）补回 hp/brain 继续循环
 ```
 
@@ -264,9 +265,11 @@ months_bankrupt ≥ 3 → 破产结局
 
 brain < 30    → 质量基础值额外 -20（脑雾）
 
-money 不足当前模型费用
-  → 当天自动切纯人肉
-  → 追加 brain -[8,15]
+模型成本结算：
+  token倍率：gpt54×1.08 / opus46×1.18 / deepseek_v4×1.05
+  debtBuffer = max(600, floor((salary + living_cost) × 0.18))
+  主流模型（gpt54/opus46/deepseek_v4）资金不足时先降载（tokens×0.72）
+  仍不足则 fallback 纯人肉 + brain -[6,12]
 
 月末结算时：
   if money <= 0: months_bankrupt += 1
@@ -292,15 +295,21 @@ finalQuality  = clamp(baseQuality + brainBonus + taskPenalty + randomRoll + luck
 ### 3.4 老板满意度规则
 
 ```
-月末基础变动（按 avg_quality）：
-  avg_quality ≥ 90  → +2
-  avg_quality ≥ 70  → +1
-  avg_quality ≥ 50  → 0
-  avg_quality ≥ 30  → -2
-  avg_quality < 30  → -5
+qualityScore（avg_quality）：
+  >=88:+4, >=76:+3, >=64:+2, >=54:+1, >=40:0, >=30:-2, <30:-4
 
-魅力修正：
-  satisfyDelta = round(baseDelta × (1 + (charm - 50) / 200))
+stability = round((hp + brain) / 2)
+stabilityScore：
+  >=80:+2, >=64:+1, >=42:0, >=28:-1, <28:-2
+
+overtimePenalty（overtimeDays / totalDays）：
+  >=0.65:-4, >=0.50:-3, >=0.34:-2, >=0.20:-1
+
+bugPenalty（bugDays / totalDays）：
+  >=0.75:-2, >=0.50:-1
+
+baseDelta = qualityScore + stabilityScore + overtimePenalty + bugPenalty
+satisfyDelta = clamp(round(baseDelta × (1 + (charm - 50) / 240)), -7, +6)
 ```
 
 | 满意度 | 状态 |
@@ -314,18 +323,18 @@ finalQuality  = clamp(baseQuality + brainBonus + taskPenalty + randomRoll + luck
 ### 3.5 熬夜机制
 
 ```
-当代码质量 < 40 时触发加班：
-    is_overtime = true
-    hp -= random(3, 8) + random(2, min(5, 2 + consecutive_overtime))
-    consecutive_overtime += 1
+硬触发：quality <= 34，直接加班（严重档）
+软触发：quality > 34，chance = max(0, (48 - quality) × 0.035)，有Bug时额外+12%（上限85%）
+无触发：quality >= 48 且无Bug
 
-当代码质量 ≥ 40：
-    is_overtime = false
-    consecutive_overtime = 0
+触发后：
+  hpLoss = random(2,5) 或 random(4,8) + 疲劳附加（上限+3）
+  严重档额外 brain -2
+  consecutive_overtime += 1
 
-连续加班计数器：
-    ≥ 3：触发高压加班提示（风险警告）
-    ≥ 5：额外 hp -random(3, 6) 后清零计数器
+强制补觉：
+  consecutive_overtime >= 6 时，恢复 hp +[2,4] / brain +[1,2]
+  然后计数重置为 2（不是清零）
 ```
 
 ---
@@ -344,9 +353,7 @@ finalQuality  = clamp(baseQuality + brainBonus + taskPenalty + randomRoll + luck
 | 🎪 FakeOpus | `fakeopus` | 5月 | 8/30/70/180M | ¥5 | 35 | 15%~75%（日波动） |
 | 🧠 纯人肉 | — | — | — | — | brain×0.5 | — |
 
-> **费用计算**：每次任务实际花费 = 任务消耗(M) × 单价(¥/M)。
-> 例：用 GPT-5.4 做⭐⭐任务 = 100M × ¥15 = ¥1500，直接从 `money` 扣除。
-> 余额不足时自动降级为纯人肉写代码，并额外 `brain -[8,15]`。
+> **费用计算（运行时）**：先按星级取模型 token，再叠加模型倍率与预算护栏；允许在 debtBuffer 内透支，主流模型会先降载，仍不足才 fallback 纯人肉并追加 `brain -[6,12]`。
 
 ### 4.2 模型特殊效果
 
@@ -384,9 +391,15 @@ if random() < bugRate:
 
 ```
 月初：2~12月执行工资结算(money += salary - living_cost) → 按恢复率恢复 → 模型解锁 → 月份大事件
-工作日(5~7天)：选模型写代码并扣费 → 可能出Bug(掉brain) → 低质量触发加班(掉hp) → 穿插随机/选择/同事事件
-月末：代码质量统计(avg_quality) → 老板满意度变化 → money≤0累计破产月 → 下月预告
+工作日(5~7天)：选模型写代码并扣费 → 可能出Bug(掉brain) → 低质量触发概率加班(掉hp/可能额外掉brain) → 穿插随机/选择/同事事件 → 当日月报（onDaySummary）
+月末：代码质量统计(avg_quality) → 按质量/稳定性/加班比/Bug比结算满意度 → money≤0累计破产月 → 季度月(3/6/9/12)执行评薪 → 下月预告
 ```
+
+可视反馈时序（实现口径）：
+1. 当日事件结算后输出当日月报（`onDaySummary`）。
+2. 月末最后一个工作日先输出当日月报，再触发月结算（`onMonthSummary`）。
+3. 财务面板仅在 `latestMonthSummary.month == 当前月份` 时显示“本月结算”态；否则显示“本月进行中”。
+4. 进入新月份后，旧月结算快照不再覆盖当前月进行中数据。
 
 ---
 
@@ -414,16 +427,17 @@ if random() < bugRate:
 | 来源 | 金额 | 频率 |
 |:---|:---|:---|
 | 开局现金 | 3000 | 开局一次 |
-| 月薪 | 3000（`salary`） | 2~12月月初 |
-| 季度考核调薪 | 常见 +500 / -300（改 `salary`） | 3/6/9月事件 |
+| 月薪 | 初始 3200（`salary`） | 2~12月月初 |
+| 季度评薪（固定月） | +700/+450/+250/+100/0/-100/-250/-450（改 `salary`） | 3/6/9/12 月末 |
+| 季度复盘事件（`life_salary_review_q*`） | 一次性绩效金/扣回（`money`） | 3/6/9 月事件池 |
 | 接私活 | 300~1500 | 主动选择（有风险） |
-| GameJam获奖 | 10000 | 一次性 |
+| GameJam获奖 | 3500（一等奖） | 一次性 |
 
 ### 支出
 
 | 支出项 | 金额 | 频率 | 说明 |
 |:---|:---|:---|:---|
-| 生活费 | 1500（`living_cost`） | 2~12月月初 | 月初自动扣除 |
+| 生活费 | 初始 1400（`living_cost`） | 2~12月月初 | 月初自动扣除，可被事件改动 |
 | AI模型费用 | 任务消耗×单价 | 每个工作日 | 按任务直接从money扣 |
 | 生活开销事件 | 不定 | 随机 | 聚餐、医疗、购物等 |
 | 女友约会 | 不定 | 随机 | 女朋友相关事件消费 |
@@ -434,7 +448,7 @@ if random() < bugRate:
 ### 破产机制
 
 ```
-money 不足当前模型费用：当天自动切纯人肉 + 追加 brain 消耗
+模型费用会先走 debtBuffer 与主流模型降载；仍不足才切纯人肉并追加 brain 消耗
 月末 money ≤ 0：months_bankrupt +1
 月末 money > 0：months_bankrupt 清零
 months_bankrupt ≥ 3：破产结局
@@ -539,7 +553,7 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
 | 同事事件 | ±3~20 | 关系变化范围 |
 | 月份大事件 | ±10~20 | 每月1个 |
 
-> **金额参考基于月薪3000。** 所有金额事件效果按此基准设计。
+> **金额参考基于月薪3200。** 所有金额事件效果按此基准设计。
 
 ### 任务复杂度（按月递增）
 

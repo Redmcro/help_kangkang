@@ -247,7 +247,10 @@ body{
 }
 .stat-val.stat-danger{color:var(--red) !important}
 .stat-val-money{color:var(--green);width:auto;flex:1;text-align:right}
+.stat-val-money.money-positive{color:var(--green)}
 .stat-val-money.money-negative{color:var(--red)}
+.stat-val-salary{color:var(--cyan)}
+.stat-val-cost{color:var(--orange)}
 
 .model-display{
   padding:4px 8px;font-size:12px;color:var(--cyan);
@@ -269,6 +272,65 @@ body{
   font-family:'JetBrains Mono',monospace;flex-shrink:0;
 }
 .editor-tab-icon{font-size:14px}
+
+/* Month Finance Summary */
+.month-finance{
+  padding:10px 14px 12px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(139,233,253,.07),rgba(40,42,54,.24));
+  flex-shrink:0;
+}
+.mf-header{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin-bottom:8px;
+}
+.mf-title{
+  font-size:11px;font-weight:700;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.mf-month{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--cyan);
+}
+.mf-grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;
+}
+.mf-item{
+  padding:6px 8px;border:1px solid var(--border);border-radius:var(--radius);
+  background:rgba(255,255,255,.02);display:flex;flex-direction:column;gap:2px;
+}
+.mf-item span{
+  font-size:10px;color:var(--text3);
+}
+.mf-item strong{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  font-weight:700;color:var(--text);
+}
+.mf-item strong.money-positive{color:var(--green)}
+.mf-item strong.money-negative{color:var(--red)}
+.mf-item strong.money-warn{color:var(--orange)}
+.mf-item-wide{grid-column:1 / -1}
+.mf-review{
+  margin-top:8px;padding:6px 8px;
+  border:1px solid rgba(139,233,253,.2);border-radius:var(--radius);
+  font-size:11px;line-height:1.5;color:var(--text2);
+  background:rgba(139,233,253,.06);
+}
+.mf-review.review-good{
+  border-color:rgba(80,250,123,.3);
+  background:rgba(80,250,123,.08);
+  color:var(--green);
+}
+.mf-review.review-bad{
+  border-color:rgba(255,85,85,.36);
+  background:rgba(255,85,85,.08);
+  color:var(--red);
+}
+.mf-review.review-neutral{
+  border-color:rgba(241,250,140,.28);
+  background:rgba(241,250,140,.07);
+  color:var(--yellow);
+}
 
 /* Event Stream */
 .event-stream{
@@ -432,6 +494,12 @@ body{
 @media(max-width:600px){
   .container{padding:10px}
   .logo h1{font-size:24px}
+
+  .month-finance{padding:8px 10px 10px}
+  .mf-title,.mf-month{font-size:10px}
+  .mf-grid{grid-template-columns:1fr}
+  .mf-item strong{font-size:11px}
+  .mf-item-wide{grid-column:auto}
 
   /* Explorer → slide-out drawer */
   .explorer-toggle{
