@@ -11,7 +11,8 @@ design/
 ├── _global/                  ← 🔒 全局基础（AI 必读）
 │   ├── _schema.md            ← 📐 JSON 格式规范
 │   ├── attributes.md         ← 📊 属性定义 + Flag 注册表
-│   └── ui_style.md           ← 🎨 UI 风格指南
+│   ├── ui_style.md           ← 🎨 UI 风格指南
+│   └── event_runtime_architecture_v3.md ← 🧩 事件运行时架构
 │
 ├── colleagues/               ← 🤝 同事系统
 ├── ai_models/                ← 🤖 AI 模型系统
@@ -69,6 +70,7 @@ design/
 |:---|:---|:---:|:---|
 | 📐 格式规范 | `_global/` | — | 所有事件必须遵循的 JSON 格式 |
 | 📊 属性系统 | `_global/` | — | 属性定义 + Flag 注册表 |
+| 🧩 运行时架构 | `_global/` | — | 事件-规则-状态执行架构（v3） |
 | 🤝 同事系统 | `colleagues/` | ✅ | 少爷、亿民的人设和互动事件 |
 | 🤖 AI模型 | `ai_models/` | ✅ | 模型数据、解锁事件 |
 | 📅 月份事件 | `monthly/` | ✅ | 12月主线事件 |

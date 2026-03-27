@@ -80,6 +80,49 @@ export class PropertyManager {
         return !!this.#flags[key];
     }
 
+    // ===== Model Bridge =====
+
+    getCurrentModel() {
+        const modelId = this.#data.current_model;
+        if (typeof modelId === 'string' && modelId.trim()) return modelId;
+        this.set('current_model', 'doubao');
+        return 'doubao';
+    }
+
+    setCurrentModel(modelId) {
+        if (typeof modelId !== 'string') return this.getCurrentModel();
+        const next = modelId.trim();
+        if (!next) return this.getCurrentModel();
+        this.set('current_model', next);
+        return next;
+    }
+
+    isModelUnlocked(modelId) {
+        const flagKey = this.#toModelUnlockFlagKey(modelId);
+        if (!flagKey) return false;
+        return this.getFlag(flagKey) || !!this.#data[flagKey];
+    }
+
+    unlockModel(modelId) {
+        const flagKey = this.#toModelUnlockFlagKey(modelId);
+        if (!flagKey) return false;
+        this.setFlag(flagKey, true);
+
+        // Keep legacy compatibility when unlock flags were stored in main data.
+        if (Object.prototype.hasOwnProperty.call(this.#data, flagKey) && this.#data[flagKey] !== true) {
+            this.set(flagKey, true);
+        }
+        return true;
+    }
+
+    #toModelUnlockFlagKey(modelId) {
+        if (typeof modelId !== 'string') return '';
+        const normalized = modelId.trim();
+        if (!normalized) return '';
+        if (normalized.startsWith('model_') && normalized.endsWith('_unlocked')) return normalized;
+        return `model_${normalized}_unlocked`;
+    }
+
     // ===== Effects =====
 
     /**

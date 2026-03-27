@@ -4,6 +4,23 @@
 > 依赖：无（本文件是基础定义）
 > 被依赖：所有事件系统
 
+## 零、v3 Authoring/Runtime 合约（必须遵守）
+
+- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
+- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
+- 事件（策划内容）只表达意图（intent）；运行时（engine）负责结算（settlement）与定价（pricing）。
+
+### 0.1 Action 与属性映射口径
+
+| Action | 关键字段 | 本文件约束 |
+|:---|:---|:---|
+| `stat_delta` | `delta` | `delta` 中键名必须来自本文件属性表 |
+| `set_state` | `key`, `value` | `key` 必须是已登记状态键（如 `current_model` / `month`） |
+| `set_flag` | `flag`, `value` | `flag` 必须在“Flag 注册表”登记 |
+| `switch_model` | `modelId` | 只表达“切模型”意图，不写价格与扣费公式 |
+| `unlock_model` | `modelId` | 只表达“解锁模型”意图，不写解锁后的经济结算 |
+| `charge_tokens` | `amount`, `reason` | 只表达扣费意图；运行时按模型规则折算并扣减 `money` |
+
 ---
 
 ## 一、核心属性
@@ -114,7 +131,7 @@ hp    += 5 （自然恢复，上限100）
 
 ## 七、Flag 注册表
 
-> **所有 `setFlag` 设置的 Flag 都必须在此登记，以便 AI 和人类追踪。**
+> **所有 `set_flag`（Legacy: `setFlag`）设置的 Flag 都必须在此登记，以便 AI 和人类追踪。**
 
 ### 模型解锁 Flag
 
@@ -183,5 +200,4 @@ hp    += 5 （自然恢复，上限100）
 | `has_pet_cat` | bool | economy | 捡到流浪猫事件 | 触发宠物相关后续开销事件 |
 
 > [!TIP]
-> **添加新 Flag 时**：在事件中使用 `setFlag`，然后在此表中登记 Flag 名称、类型、来源和影响。
-
+> **添加新 Flag 时**：优先使用 `set_flag`（Legacy: `setFlag`），然后在此表登记 Flag 名称、类型、来源和影响。

@@ -507,6 +507,23 @@
         "text": "🐳 继续用豆包——免费的才是最好的",
         "hint": "省钱是省钱，但别人都在卷",
         "result": "当别人用Opus写出优雅代码时，你的豆包输出了一堆中文注释加面条代码。但至少……不花钱。",
+        "actions": [
+          {
+            "type": "switch_model",
+            "modelId": "doubao"
+          },
+          {
+            "type": "stat_delta",
+            "delta": {
+              "brain": -3
+            }
+          },
+          {
+            "type": "set_flag",
+            "flag": "switched_to_doubao",
+            "value": true
+          }
+        ],
         "effect": {"brain": -3},
         "setFlag": "switched_to_doubao"
       }

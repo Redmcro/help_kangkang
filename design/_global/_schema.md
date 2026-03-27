@@ -2,6 +2,40 @@
 
 > **本文件定义了所有游戏事件的 JSON 格式。任何人/AI 生成的事件都必须符合此规范。**
 
+## 零、v3 Authoring/Runtime 合约（必须遵守）
+
+### 0.1 优先级规则（authoritative）
+
+- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
+- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
+
+### 0.2 领域边界（intent vs settlement）
+
+- 事件（策划内容）只表达意图（intent），例如“切模型”“扣费意图”“加状态”。
+- 运行时（engine）负责结算（settlement）与定价（pricing），例如模型单价、折扣、余额校验与实际 `money` 扣减。
+
+### 0.3 v3 标准动作类型
+
+| `type` | 用途 | 关键字段 |
+|:---|:---|:---|
+| `stat_delta` | 修改数值属性 | `delta` |
+| `set_state` | 设置状态键 | `key`, `value` |
+| `set_flag` | 设置 Flag | `flag`, `value` |
+| `switch_model` | 切换当前模型 | `modelId` |
+| `unlock_model` | 解锁模型 | `modelId` |
+| `charge_tokens` | 表达扣费意图（由运行时结算到 `money`） | `amount`, `reason` |
+
+### 0.4 v3 示例（事件层只写意图）
+
+```jsonc
+"actions": [
+  { "type": "switch_model", "modelId": "gpt54" },
+  { "type": "charge_tokens", "amount": 1500, "reason": "model_usage" },
+  { "type": "stat_delta", "delta": { "brain": -4, "bossSatisfy": 1 } },
+  { "type": "set_flag", "flag": "switched_to_gpt54", "value": true }
+]
+```
+
 ---
 
 ## 一、事件 ID 命名规则
@@ -36,8 +70,14 @@
     "system": "colleague",      // 所属系统标记（colleague/model/economy/daily/random/choice/monthly/girlfriend/life_expense）
     "tags": ["职场", "社交"],    // 主题标签，方便按主题筛选和平衡
 
-    // ========== 可选：效果 ==========
-    "effect": {                 // 对属性的直接修改
+    // ========== 可选：v3语义动作（推荐） ==========
+    "actions": [
+      { "type": "stat_delta", "delta": { "hp": -5, "brain": 3 } },
+      { "type": "set_flag", "flag": "worked_overtime", "value": true }
+    ],
+
+    // ========== 可选：Legacy 兼容字段（仅过渡，不建议新写） ==========
+    "effect": {                 // 对属性的直接修改（旧写法）
       "hp": -5,                 // 固定值
       "money": [-500, -1000],   // [min, max] 随机范围
       "brain": 3,
@@ -46,6 +86,8 @@
       "yimin_rel": -3,
       "gf_rel": [3, 7]          // 女朋友关系值（范围）
     },
+    "setFlag": "legacy_flag_name",
+    "tokenCost": 300,
     "postEvent": "补充文本",     // 事件后追加显示
 
     // ========== 可选：前置条件 ==========
@@ -64,13 +106,17 @@
         "cond": { "brain": ">70" },
         "text": "脑力够，成功修复！",
         "type": "good",
-        "effect": { "bossSatisfy": 3 }
+        "actions": [
+          { "type": "stat_delta", "delta": { "bossSatisfy": 3 } }
+        ]
       },
       {
         "cond": {},              // 空 cond = fallback，必须放最后
         "text": "脑力不够，修了一晚上...",
         "type": "bad",
-        "effect": { "hp": -8, "brain": -5 }
+        "actions": [
+          { "type": "stat_delta", "delta": { "hp": -8, "brain": -5 } }
+        ]
       }
     ],
 
@@ -94,8 +140,10 @@
   "text": "💪 选项文字",
   "hint": "描述性提示，不要写数值",
   "result": "选择后的结果文字",
-  "effect": { "brain": 5, "hp": -3 },
-  "setFlag": "flag_name"         // 可选：设置逻辑标记
+  "actions": [
+    { "type": "stat_delta", "delta": { "brain": 5, "hp": -3 } },
+    { "type": "set_flag", "flag": "flag_name", "value": true }
+  ]
 }
 ```
 
@@ -114,8 +162,8 @@
   "hint": "看运气",
   "chanceBased": true,
   "branches": [
-    { "chance": 60, "result": "成功了！", "type": "good", "effect": { "money": 5000 } },
-    { "chance": 40, "result": "失败了...", "type": "bad", "effect": { "money": -1000 } }
+    { "chance": 60, "result": "成功了！", "type": "good", "actions": [{ "type": "stat_delta", "delta": { "money": 5000 } }] },
+    { "chance": 40, "result": "失败了...", "type": "bad", "actions": [{ "type": "stat_delta", "delta": { "money": -1000 } }] }
   ]
 }
 ```
@@ -128,12 +176,20 @@
   "hint": "需要脑力60+",
   "require": { "brain": 60 },
   "success": "学会了！",
-  "successEffect": { "brain": 10, "bossSatisfy": 3 },
+  "successActions": [
+    { "type": "stat_delta", "delta": { "brain": 10, "bossSatisfy": 3 } },
+    { "type": "set_flag", "flag": "learned_skill", "value": true }
+  ],
   "fail": "学不会...",
-  "failEffect": { "brain": -3 },
-  "setFlag": "learned_skill"     // 成功时设置
+  "failActions": [
+    { "type": "stat_delta", "delta": { "brain": -3 } }
+  ]
 }
 ```
+
+> [!TIP]
+> 在事件、分支、选择项中，凡是原本可写 `effect` 的位置，v3 均优先使用 `actions[]`。
+> 过渡期仍可保留 `effect/setFlag/tokenCost`，但新内容请按 v3 动作写法落版。
 
 ---
 
@@ -154,7 +210,7 @@
 
 ## 五、可用的属性键名
 
-> **生成事件时，effect 和条件中只能使用以下键名：**
+> **生成事件时，`actions[].delta`、Legacy `effect` 和条件中只能使用以下键名：**
 > **完整属性定义见 `_global/attributes.md`**
 
 ### 核心属性
@@ -191,7 +247,7 @@
 | `total_bugs` | number | 累计Bug数 |
 
 > [!TIP]
-> 需要新增 Flag 时，在事件中使用 `setFlag` 设置，然后在其他事件的条件中引用即可。
+> 需要新增 Flag 时，优先使用 `set_flag`（Legacy: `setFlag`）设置，再在其他事件条件中引用。
 > **务必在 `_global/attributes.md` 的 Flag 注册表中登记新 Flag。**
 
 ---
@@ -213,13 +269,17 @@
         "cond": { "brain": ">60" },
         "text": "你和少爷一起排查，全部修好了。少爷露出了满意的微笑。",
         "type": "good",
-        "effect": { "brain": -8, "bossSatisfy": 2, "shaoye_rel": 5 }
+        "actions": [
+          { "type": "stat_delta", "delta": { "brain": -8, "bossSatisfy": 2, "shaoye_rel": 5 } }
+        ]
       },
       {
         "cond": {},
         "text": "你对着Bug列表欲哭无泪，少爷叹了口气帮你改了几个。",
         "type": "bad",
-        "effect": { "brain": -15, "hp": -5, "shaoye_rel": -3 }
+        "actions": [
+          { "type": "stat_delta", "delta": { "brain": -15, "hp": -5, "shaoye_rel": -3 } }
+        ]
       }
     ]
   }

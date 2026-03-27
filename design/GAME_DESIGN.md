@@ -24,6 +24,24 @@
   → 月末结算（平均质量→老板满意度，money≤0累计破产月）
 ```
 
+### 1.1 v3 Authoring/Runtime 合约（策划落版口径）
+
+- 当事件节点存在 `actions[]` 时，运行时只执行 `actions[]` 路径，`actions[]` 是唯一权威语义。
+- `effect` / `setFlag` / `flags` / `tokenCost` 属于过渡兼容字段，仅用于兼容旧事件，不作为 v3 新内容主写法。
+- 事件（策划内容）只表达意图（intent）；运行时（engine）负责结算（settlement）与定价（pricing）。
+- 模型切换、模型解锁、扣费统一写 action 意图，不在事件里硬编码价格、折扣和余额判定公式。
+
+#### v3 示例（只写意图，不写结算公式）
+
+```jsonc
+"actions": [
+  { "type": "switch_model", "modelId": "gpt54" },
+  { "type": "charge_tokens", "amount": 1500, "reason": "model_usage" },
+  { "type": "stat_delta", "delta": { "brain": -4, "bossSatisfy": 1 } },
+  { "type": "set_flag", "flag": "switched_to_gpt54", "value": true }
+]
+```
+
 ---
 
 ## 二、属性系统
@@ -154,7 +172,7 @@ Bug 率修正：
 
 ### 2.4 Flag 注册表
 
-> 所有 `setFlag` 设置的 Flag 都必须在此登记。
+> 所有 `set_flag`（Legacy: `setFlag`）设置的 Flag 都必须在此登记。
 
 #### 模型解锁 Flag
 
@@ -391,6 +409,7 @@ if random() < bugRate:
 | 女友约会 | 不定 | 随机 | 女朋友相关事件消费 |
 
 > **注意**：不再有 Token 属性和 Token 商店。所有 AI 使用费用直接从 `money` 扣除。
+> v3 事件作者侧统一使用 `charge_tokens` 表达扣费意图，由运行时按模型规则结算到 `money`。
 
 ### 破产机制
 

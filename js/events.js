@@ -62,11 +62,11 @@ export class EventManager {
         if (ev.branch && ev.type !== 'choice') {
             for (const b of ev.branch) {
                 if (b.cond && Object.keys(b.cond).length > 0 && this.#checkCondition(b.cond, state)) {
-                    return { text: b.text, effect: b.effect || ev.effect, type: b.type || ev.type || 'neutral', postEvent: b.postEvent || ev.postEvent, setFlag: b.setFlag || ev.setFlag };
+                    return this.#buildEventResult(b, ev);
                 }
             }
         }
-        return { text: ev.text, effect: ev.effect, type: ev.type || 'neutral', postEvent: ev.postEvent, setFlag: ev.setFlag };
+        return this.#buildEventResult(ev);
     }
 
     executeChoice(choice, state) {
@@ -82,17 +82,48 @@ export class EventManager {
 
             const total = branches.reduce((s, b) => s + b.adjustedChance, 0);
             let r = Math.random() * total;
-            for (const b of branches) { r -= b.adjustedChance; if (r <= 0) return { text: b.result, effect: b.effect || {}, type: b.type }; }
+            for (const b of branches) {
+                r -= b.adjustedChance;
+                if (r <= 0) {
+                    return this.#buildChoiceResult({
+                        text: b.result || b.text || choice.result,
+                        effect: b.effect !== undefined ? b.effect : choice.effect || {},
+                        type: b.type || choice.type
+                    }, b, choice);
+                }
+            }
             const last = branches[branches.length - 1];
-            return { text: last.result, effect: last.effect || {}, type: last.type };
+            return this.#buildChoiceResult({
+                text: last.result || last.text || choice.result,
+                effect: last.effect !== undefined ? last.effect : choice.effect || {},
+                type: last.type || choice.type
+            }, last, choice);
         }
         if (choice.require) {
             const met = this.#checkCondition(choice.require, state);
             if (met) {
-                const flags = {}; if (choice.setFlag) flags[choice.setFlag] = true;
-                return { text: choice.success || choice.result, effect: choice.successEffect || choice.effect || {}, flags, type: 'good' };
+                const payload = {
+                    text: choice.success || choice.result,
+                    effect: choice.successEffect || choice.effect || {},
+                    type: 'good'
+                };
+                if (Object.prototype.hasOwnProperty.call(choice, 'setFlag')) payload.setFlag = choice.setFlag;
+                if (Object.prototype.hasOwnProperty.call(choice, 'successFlags')) payload.flags = choice.successFlags;
+                else if (Object.prototype.hasOwnProperty.call(choice, 'flags')) payload.flags = choice.flags;
+                if (Object.prototype.hasOwnProperty.call(choice, 'successTokenCost')) payload.tokenCost = choice.successTokenCost;
+                else if (Object.prototype.hasOwnProperty.call(choice, 'tokenCost')) payload.tokenCost = choice.tokenCost;
+                if (Object.prototype.hasOwnProperty.call(choice, 'successActions')) payload.actions = choice.successActions;
+                return this.#buildChoiceResult(payload, choice);
             } else {
-                return { text: choice.fail || choice.result, effect: choice.failEffect || {}, type: 'bad' };
+                const payload = {
+                    text: choice.fail || choice.result,
+                    effect: choice.failEffect || {},
+                    type: 'bad'
+                };
+                if (Object.prototype.hasOwnProperty.call(choice, 'failFlags')) payload.flags = choice.failFlags;
+                if (Object.prototype.hasOwnProperty.call(choice, 'failTokenCost')) payload.tokenCost = choice.failTokenCost;
+                if (Object.prototype.hasOwnProperty.call(choice, 'failActions')) payload.actions = choice.failActions;
+                return this.#buildChoiceResult(payload, choice);
             }
         }
         // branch — condition-based outcomes (first matching cond wins)
@@ -104,19 +135,32 @@ export class EventManager {
                     if (b.chanceBased && b.branches) {
                         return this.executeChoice(b, state);
                     }
-                    const flags = {};
-                    if (b.setFlag || choice.setFlag) flags[b.setFlag || choice.setFlag] = true;
-                    return {
+                    const payload = {
                         text: b.result || b.text,
                         effect: b.effect || choice.effect || {},
-                        flags,
                         type: b.type || choice.type
                     };
+                    if (Object.prototype.hasOwnProperty.call(b, 'setFlag')) payload.setFlag = b.setFlag;
+                    else if (Object.prototype.hasOwnProperty.call(choice, 'setFlag')) payload.setFlag = choice.setFlag;
+                    if (Object.prototype.hasOwnProperty.call(b, 'flags')) payload.flags = b.flags;
+                    else if (Object.prototype.hasOwnProperty.call(choice, 'flags')) payload.flags = choice.flags;
+                    if (Object.prototype.hasOwnProperty.call(b, 'tokenCost')) payload.tokenCost = b.tokenCost;
+                    else if (Object.prototype.hasOwnProperty.call(choice, 'tokenCost')) payload.tokenCost = choice.tokenCost;
+                    if (Object.prototype.hasOwnProperty.call(b, 'actions')) payload.actions = b.actions;
+                    return this.#buildChoiceResult(payload, b, choice);
                 }
             }
         }
-        const flags = {}; if (choice.setFlag) flags[choice.setFlag] = true;
-        return { text: choice.result, effect: choice.effect || {}, flags, type: choice.type };
+        const payload = {
+            text: choice.result,
+            effect: choice.effect || {},
+            type: choice.type
+        };
+        if (Object.prototype.hasOwnProperty.call(choice, 'setFlag')) payload.setFlag = choice.setFlag;
+        if (Object.prototype.hasOwnProperty.call(choice, 'flags')) payload.flags = choice.flags;
+        if (Object.prototype.hasOwnProperty.call(choice, 'tokenCost')) payload.tokenCost = choice.tokenCost;
+        if (Object.prototype.hasOwnProperty.call(choice, 'actions')) payload.actions = choice.actions;
+        return this.#buildChoiceResult(payload, choice);
     }
 
     isChoiceLocked(choice, state) {
@@ -135,6 +179,108 @@ export class EventManager {
             if (typeof val === 'number') parts.push(`${names[key] || key}${val}`);
         }
         return `🔒 需要${parts.join(' ')}`;
+    }
+
+    #buildEventResult(source, fallback = null) {
+        const effect = this.#resolveLegacyField(source, fallback, 'effect');
+        const setFlag = this.#resolveLegacyField(source, fallback, 'setFlag');
+        const flags = this.#resolveLegacyField(source, fallback, 'flags');
+        const tokenCost = this.#resolveLegacyField(source, fallback, 'tokenCost');
+        return {
+            text: this.#resolveText(source, fallback),
+            effect,
+            type: this.#resolveType(source, fallback, 'neutral'),
+            postEvent: this.#resolveLegacyField(source, fallback, 'postEvent'),
+            setFlag,
+            flags,
+            tokenCost,
+            actions: this.#resolveActions(source, fallback, { effect, setFlag, flags, tokenCost })
+        };
+    }
+
+    #buildChoiceResult(payload, primary = null, fallback = null) {
+        const effect = Object.prototype.hasOwnProperty.call(payload, 'effect')
+            ? payload.effect
+            : this.#resolveLegacyField(primary, fallback, 'effect') || {};
+        const setFlag = Object.prototype.hasOwnProperty.call(payload, 'setFlag')
+            ? payload.setFlag
+            : this.#resolveLegacyField(primary, fallback, 'setFlag');
+        const flags = Object.prototype.hasOwnProperty.call(payload, 'flags')
+            ? payload.flags
+            : this.#resolveLegacyField(primary, fallback, 'flags');
+        const tokenCost = Object.prototype.hasOwnProperty.call(payload, 'tokenCost')
+            ? payload.tokenCost
+            : this.#resolveLegacyField(primary, fallback, 'tokenCost');
+        return {
+            text: payload.text,
+            effect,
+            flags,
+            setFlag,
+            tokenCost,
+            type: payload.type,
+            actions: this.#resolveActions(payload, primary, { effect, setFlag, flags, tokenCost }, fallback)
+        };
+    }
+
+    #resolveActions(source, primary, legacyFields, secondary = null) {
+        const native = this.#pickNativeActions(source, primary, secondary);
+        if (native !== null) return native;
+        return this.#legacyToActions(legacyFields);
+    }
+
+    #pickNativeActions(...objects) {
+        for (const obj of objects) {
+            if (!obj || !Object.prototype.hasOwnProperty.call(obj, 'actions')) continue;
+            if (Array.isArray(obj.actions)) return obj.actions.map(a => (a && typeof a === 'object') ? { ...a } : a);
+            return [];
+        }
+        return null;
+    }
+
+    #legacyToActions({ effect, setFlag, flags, tokenCost }) {
+        const actions = [];
+        if (effect && typeof effect === 'object' && !Array.isArray(effect)) {
+            const delta = {};
+            const setState = {};
+            for (const [key, value] of Object.entries(effect)) {
+                const isRange = Array.isArray(value) && value.length === 2
+                    && value.every(n => typeof n === 'number' && Number.isFinite(n));
+                if (typeof value === 'number' || isRange) delta[key] = value;
+                else setState[key] = value;
+            }
+            if (Object.keys(delta).length > 0) actions.push({ type: 'stat_delta', delta });
+            if (Object.keys(setState).length > 0) actions.push({ type: 'set_state', state: setState });
+        }
+
+        if (typeof setFlag === 'string' && setFlag) actions.push({ type: 'set_flag', key: setFlag, value: true });
+        if (flags && typeof flags === 'object' && !Array.isArray(flags)) {
+            for (const [key, value] of Object.entries(flags)) {
+                actions.push({ type: 'set_flag', key, value: !!value });
+            }
+        }
+
+        if (typeof tokenCost === 'number' && Number.isFinite(tokenCost)) {
+            actions.push({ type: 'charge_tokens', amount: tokenCost });
+        }
+        return actions;
+    }
+
+    #resolveLegacyField(primary, fallback, key) {
+        if (primary && Object.prototype.hasOwnProperty.call(primary, key)) return primary[key];
+        if (fallback && Object.prototype.hasOwnProperty.call(fallback, key)) return fallback[key];
+        return undefined;
+    }
+
+    #resolveText(primary, fallback) {
+        if (primary && Object.prototype.hasOwnProperty.call(primary, 'text')) return primary.text;
+        if (fallback && Object.prototype.hasOwnProperty.call(fallback, 'text')) return fallback.text;
+        return '';
+    }
+
+    #resolveType(primary, fallback, fallbackType = 'neutral') {
+        if (primary && Object.prototype.hasOwnProperty.call(primary, 'type') && primary.type) return primary.type;
+        if (fallback && Object.prototype.hasOwnProperty.call(fallback, 'type') && fallback.type) return fallback.type;
+        return fallbackType;
     }
 
     #checkCondition(cond, state) {

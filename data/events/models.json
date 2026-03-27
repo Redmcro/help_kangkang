@@ -9,6 +9,18 @@
     "system": "model",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "doubao"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "money": 80
+        }
+      }
+    ],
     "effect": {
       "money": 80
     },
@@ -25,6 +37,18 @@
     "system": "model",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "gpt54"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": 5
+        }
+      }
+    ],
     "effect": {
       "brain": 5
     },
@@ -41,6 +65,18 @@
     "system": "model",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "opus46"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": 5
+        }
+      }
+    ],
     "effect": {
       "brain": 5
     },
@@ -57,6 +93,12 @@
     "system": "model",
     "weight": 80,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "cheapgpt"
+      }
+    ],
     "effect": {},
     "setFlag": "model_cheapgpt_unlocked",
     "postEvent": "康康试了试，速度很快但输出质量……emmm。60%的概率猜不到它在写什么。"
@@ -71,6 +113,18 @@
     "system": "model",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "deepseek_v4"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "money": 70
+        }
+      }
+    ],
     "effect": {
       "money": 70
     },
@@ -87,6 +141,12 @@
     "system": "model",
     "weight": 80,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "fakeopus"
+      }
+    ],
     "effect": {},
     "setFlag": "model_fakeopus_unlocked",
     "postEvent": "买了试试？反正不贵。至于质量……代码跑起来才知道。"
@@ -177,6 +237,23 @@
         "cond": {},
         "text": "Opus拒绝干活了。你只好换成GPT凑合。多花了50M Token。",
         "type": "bad",
+        "actions": [
+          {
+            "type": "switch_model",
+            "modelId": "gpt54"
+          },
+          {
+            "type": "charge_tokens",
+            "amount": 1.67,
+            "reason": "fallback_after_opus_refusal"
+          },
+          {
+            "type": "stat_delta",
+            "delta": {
+              "brain": -1
+            }
+          }
+        ],
         "effect": {
           "money": -25,
           "brain": -1
@@ -513,6 +590,19 @@
     "include": {
       "current_model": "=gpt54"
     },
+    "actions": [
+      {
+        "type": "charge_tokens",
+        "amount": 3,
+        "reason": "monthly_token_bill"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": -2
+        }
+      }
+    ],
     "effect": {
       "money": -45,
       "brain": -2
@@ -550,6 +640,19 @@
       "model_opus46_unlocked": true,
       "model_doubao_unlocked": true
     },
+    "actions": [
+      {
+        "type": "switch_model",
+        "modelId": "doubao"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": -3,
+          "bossSatisfy": -2
+        }
+      }
+    ],
     "effect": {
       "brain": -3,
       "bossSatisfy": -2
@@ -851,6 +954,19 @@
     "include": {
       "current_model": "=opus46"
     },
+    "actions": [
+      {
+        "type": "charge_tokens",
+        "amount": 7.2,
+        "reason": "runaway_token_loop"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": -2
+        }
+      }
+    ],
     "effect": {
       "money": -180,
       "brain": -2

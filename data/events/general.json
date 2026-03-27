@@ -69,6 +69,18 @@
     "system": "general",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "gpt54"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": 5
+        }
+      }
+    ],
     "effect": {"brain": 5},
     "include": {}
   },
@@ -130,7 +142,18 @@
         "text": "🐳 切换到豆包省钱",
         "hint": "便宜够用，凑合着来",
         "result": "切回豆包，虽然质量差点但省钱",
-        "effect": {"money": 90},
+        "actions": [
+          {
+            "type": "switch_model",
+            "modelId": "doubao"
+          },
+          {
+            "type": "set_flag",
+            "flag": "switched_to_doubao",
+            "value": true
+          }
+        ],
+        "effect": {},
         "setFlag": "switched_to_doubao"
       },
       {
@@ -148,6 +171,18 @@
     "system": "general",
     "weight": 100,
     "once": true,
+    "actions": [
+      {
+        "type": "unlock_model",
+        "modelId": "opus46"
+      },
+      {
+        "type": "stat_delta",
+        "delta": {
+          "brain": 3
+        }
+      }
+    ],
     "effect": {"brain": 3}
   },
   "month4_layoff_rumor": {

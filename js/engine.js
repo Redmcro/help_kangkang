@@ -201,7 +201,7 @@ export class GameEngine {
             if (b) this.property.applyBuff(b.effect);
         });
 
-        this.property.setFlag('model_doubao_unlocked', true);
+        this.unlockModel('doubao');
 
         // 2b: initialize hidden ending tracking flags
         this.property.setFlag('used_ai', false);
@@ -220,6 +220,243 @@ export class GameEngine {
         this.pendingStep = fn;
         this.clearAutoTimer();
         this.flushPendingStep();
+    }
+
+    getCurrentModelId() {
+        if (typeof this.property.getCurrentModel === 'function') return this.property.getCurrentModel();
+        return this.property.get('current_model');
+    }
+
+    setCurrentModelId(modelId) {
+        if (!modelId) return false;
+        if (typeof this.property.setCurrentModel === 'function') {
+            this.property.setCurrentModel(modelId);
+            return true;
+        }
+        this.property.set('current_model', modelId);
+        return true;
+    }
+
+    isModelUnlocked(modelId) {
+        if (!modelId) return false;
+        if (typeof this.property.isModelUnlocked === 'function') return !!this.property.isModelUnlocked(modelId);
+        return this.property.getFlag(`model_${modelId}_unlocked`);
+    }
+
+    unlockModel(modelId) {
+        if (!modelId) return false;
+        if (typeof this.property.unlockModel === 'function') {
+            this.property.unlockModel(modelId);
+            return true;
+        }
+        this.property.setFlag(`model_${modelId}_unlocked`, true);
+        return true;
+    }
+
+    mergeNumericDelta(target, resolved) {
+        if (!target || !resolved || typeof resolved !== 'object') return;
+        for (const [key, value] of Object.entries(resolved)) {
+            if (typeof value !== 'number' || !Number.isFinite(value)) continue;
+            target[key] = (target[key] || 0) + value;
+        }
+    }
+
+    logActionNoop(action, reason, contextLabel = 'runtime') {
+        console.warn(`[ActionRuntime:${contextLabel}] ${reason}`, action);
+    }
+
+    extractActionObject(action, keys = []) {
+        for (const key of keys) {
+            if (!Object.prototype.hasOwnProperty.call(action, key)) continue;
+            const value = action[key];
+            if (value && typeof value === 'object' && !Array.isArray(value)) return value;
+        }
+        return null;
+    }
+
+    getActionModelId(action) {
+        for (const key of ['model', 'modelId', 'id', 'target']) {
+            if (!Object.prototype.hasOwnProperty.call(action, key)) continue;
+            const value = action[key];
+            if (typeof value === 'string' && value.trim()) return value.trim();
+        }
+        return '';
+    }
+
+    normalizeTokenAmount(raw) {
+        const val = typeof raw === 'string' ? Number(raw) : raw;
+        if (typeof val !== 'number' || !Number.isFinite(val) || val <= 0) return null;
+        return val;
+    }
+
+    executeActionPlan(actions, contextLabel = 'runtime') {
+        const summary = { statDelta: {}, tokensCharged: 0 };
+        if (!Array.isArray(actions) || actions.length === 0) return summary;
+
+        for (const action of actions) {
+            if (!action || typeof action !== 'object') {
+                this.logActionNoop(action, 'invalid action payload (expected object)', contextLabel);
+                continue;
+            }
+            const type = typeof action.type === 'string' ? action.type.trim() : '';
+            switch (type) {
+                case 'stat_delta':
+                    this.handleStatDeltaAction(action, summary, contextLabel);
+                    break;
+                case 'set_state':
+                    this.handleSetStateAction(action, contextLabel);
+                    break;
+                case 'set_flag':
+                    this.handleSetFlagAction(action, contextLabel);
+                    break;
+                case 'switch_model':
+                    this.handleSwitchModelAction(action, contextLabel);
+                    break;
+                case 'unlock_model':
+                    this.handleUnlockModelAction(action, contextLabel);
+                    break;
+                case 'charge_tokens':
+                    this.handleChargeTokensAction(action, summary, contextLabel);
+                    break;
+                default:
+                    this.logActionNoop(action, `unknown action type "${type || 'undefined'}"`, contextLabel);
+                    break;
+            }
+        }
+
+        return summary;
+    }
+
+    handleStatDeltaAction(action, summary, contextLabel) {
+        let delta = this.extractActionObject(action, ['delta', 'effect', 'values', 'stats']);
+        if (!delta && typeof action.key === 'string' && Object.prototype.hasOwnProperty.call(action, 'value')) {
+            delta = { [action.key]: action.value };
+        }
+        if (!delta || Object.keys(delta).length === 0) {
+            this.logActionNoop(action, 'stat_delta missing delta object', contextLabel);
+            return;
+        }
+
+        const safeDelta = {};
+        for (const [key, value] of Object.entries(delta)) {
+            const isNumber = typeof value === 'number' && Number.isFinite(value);
+            const isRange = Array.isArray(value) && value.length === 2
+                && value.every(n => typeof n === 'number' && Number.isFinite(n));
+            if (isNumber || isRange) safeDelta[key] = value;
+        }
+        if (Object.keys(safeDelta).length === 0) {
+            this.logActionNoop(action, 'stat_delta has no numeric payload', contextLabel);
+            return;
+        }
+
+        const resolved = this.property.applyEffect(safeDelta);
+        this.mergeNumericDelta(summary.statDelta, resolved);
+    }
+
+    handleSetStateAction(action, contextLabel) {
+        let statePatch = this.extractActionObject(action, ['state', 'set', 'patch', 'values']);
+        if (!statePatch && typeof action.key === 'string' && Object.prototype.hasOwnProperty.call(action, 'value')) {
+            statePatch = { [action.key]: action.value };
+        }
+        if (!statePatch || Object.keys(statePatch).length === 0) {
+            this.logActionNoop(action, 'set_state missing state payload', contextLabel);
+            return;
+        }
+
+        for (const [key, value] of Object.entries(statePatch)) {
+            if (key === 'current_model' && typeof value === 'string' && value.trim()) this.setCurrentModelId(value.trim());
+            else this.property.set(key, value);
+        }
+    }
+
+    handleSetFlagAction(action, contextLabel) {
+        const flags = this.extractActionObject(action, ['flags', 'map']);
+        if (flags) {
+            for (const [key, value] of Object.entries(flags)) this.property.setFlag(key, !!value);
+            return;
+        }
+
+        const key = typeof action.key === 'string' && action.key.trim()
+            ? action.key.trim()
+            : (typeof action.flag === 'string' && action.flag.trim() ? action.flag.trim() : '');
+        if (!key) {
+            this.logActionNoop(action, 'set_flag missing key/flags', contextLabel);
+            return;
+        }
+        const value = Object.prototype.hasOwnProperty.call(action, 'value') ? !!action.value : true;
+        this.property.setFlag(key, value);
+    }
+
+    handleSwitchModelAction(action, contextLabel) {
+        const modelId = this.getActionModelId(action);
+        if (!modelId) {
+            this.logActionNoop(action, 'switch_model missing model id', contextLabel);
+            return;
+        }
+        if (!AI_MODELS[modelId]) {
+            this.logActionNoop(action, `switch_model unknown model "${modelId}"`, contextLabel);
+            return;
+        }
+        if (!this.isModelUnlocked(modelId)) {
+            this.logActionNoop(action, `switch_model rejected for locked model "${modelId}"`, contextLabel);
+            return;
+        }
+        const current = this.getCurrentModelId();
+        if (current === modelId) return;
+        this.setCurrentModelId(modelId);
+    }
+
+    handleUnlockModelAction(action, contextLabel) {
+        const modelId = this.getActionModelId(action);
+        if (!modelId) {
+            this.logActionNoop(action, 'unlock_model missing model id', contextLabel);
+            return;
+        }
+        if (this.isModelUnlocked(modelId)) return;
+        this.unlockModel(modelId);
+    }
+
+    handleChargeTokensAction(action, summary, contextLabel) {
+        const raw = Object.prototype.hasOwnProperty.call(action, 'amount') ? action.amount
+            : (Object.prototype.hasOwnProperty.call(action, 'tokens') ? action.tokens : action.tokenCost);
+        const amount = this.normalizeTokenAmount(raw);
+        if (amount === null) {
+            this.logActionNoop(action, 'charge_tokens requires a positive amount', contextLabel);
+            return;
+        }
+
+        const modelId = this.getCurrentModelId();
+        if (!modelId) {
+            this.logActionNoop(action, 'charge_tokens skipped without active model', contextLabel);
+            return;
+        }
+        const model = AI_MODELS[modelId];
+        if (!model || typeof model.tokenPrice !== 'number' || !Number.isFinite(model.tokenPrice)) {
+            this.logActionNoop(action, `charge_tokens missing token price for model "${modelId}"`, contextLabel);
+            return;
+        }
+
+        const moneyCost = Math.round(amount * model.tokenPrice);
+        if (moneyCost !== 0) {
+            const resolved = this.property.applyEffect({ money: -moneyCost });
+            this.mergeNumericDelta(summary.statDelta, resolved);
+        }
+        summary.tokensCharged += amount;
+    }
+
+    applyCharmRelationAdjustment(deltaMap, stateSnapshot) {
+        if (!deltaMap || typeof deltaMap !== 'object') return;
+        const charmMod = ((stateSnapshot.charm || 50) - 50) / 100;
+        if (charmMod === 0) return;
+
+        for (const rk of ['shaoye_rel', 'yimin_rel']) {
+            const baseDelta = deltaMap[rk];
+            if (typeof baseDelta !== 'number' || baseDelta === 0) continue;
+            const adj = Math.round(baseDelta * charmMod);
+            if (adj === 0) continue;
+            const resolved = this.property.applyEffect({ [rk]: adj });
+            this.mergeNumericDelta(deltaMap, resolved);
+        }
     }
 
     processMonth() {
@@ -242,9 +479,8 @@ export class GameEngine {
         }
 
         for (const [id, model] of Object.entries(AI_MODELS)) {
-            const fk = `model_${id}_unlocked`;
-            if (model.unlockMonth <= month && !this.property.getFlag(fk)) {
-                this.property.setFlag(fk, true);
+            if (model.unlockMonth <= month && !this.isModelUnlocked(id)) {
+                this.unlockModel(id);
                 this.emitEvent(`🔓 新模型解锁：${model.name}！`, 'special');
             }
         }
@@ -273,7 +509,7 @@ export class GameEngine {
         this.property.set('day', day);
         const pool = TASK_COMPLEXITY[month] || TASK_COMPLEXITY[12];
         const stars = pool[rng(0, pool.length - 1)];
-        let modelId = this.property.get('current_model');
+        let modelId = this.getCurrentModelId();
         let model = AI_MODELS[modelId];
 
         // Track model name for daily report
@@ -424,32 +660,13 @@ export class GameEngine {
                 }
                 const result = this.eventMgr.execute(id, ev, state);
                 addToLegacySet(this.legacy, 'events_seen', id);
-
-                const resolved = this.property.applyEffect(result.effect);
-
-                // 2c: charm 影响关系变化（GAME_DESIGN §二.2.3）
-                if (resolved) {
-                    const charmMod = ((state.charm || 50) - 50) / 100;
-                    for (const rk of ['shaoye_rel', 'yimin_rel']) {
-                        if (resolved[rk]) {
-                            const adj = Math.round(resolved[rk] * charmMod);
-                            if (adj !== 0) this.property.applyEffect({ [rk]: adj });
-                            resolved[rk] += adj;
-                        }
-                    }
-                }
-                const deltaStr = buildDeltaStr(resolved);
-                if (result.setFlag) this.property.setFlag(result.setFlag);
+                const actionSummary = this.executeActionPlan(result.actions, `event:${id}`);
+                this.applyCharmRelationAdjustment(actionSummary.statDelta, state);
+                const deltaStr = buildDeltaStr(actionSummary.statDelta);
                 // Push event text to dayReport only (displayed via emitDayReport)
                 this.dayReport.events.push(result.text + deltaStr);
                 if (result.postEvent) this.dayReport.events.push(result.postEvent);
-                // Event-token linkage: events with tokenCost add to daily usage
-                if (ev.tokenCost) {
-                    this.dayReport.tokensUsed += ev.tokenCost;
-                    const modelId = this.property.get('current_model');
-                    const model = AI_MODELS[modelId];
-                    if (model) this.property.applyEffect({ money: -(ev.tokenCost * model.tokenPrice) });
-                }
+                if (actionSummary.tokensCharged > 0) this.dayReport.tokensUsed += actionSummary.tokensCharged;
                 if (['special', 'good'].includes(result.type)) this.timeline.push({ month, day, text: result.text, type: result.type });
                 this.emitUI();
                 const go = this.property.isGameOver();
@@ -503,8 +720,8 @@ export class GameEngine {
         const state = this.property.toJSON();
         const before = { ...this.property.toJSON() };
         const result = this.eventMgr.executeChoice(choice, state);
-        this.property.applyEffect(result.effect);
-        if (result.flags) for (const [k, v] of Object.entries(result.flags)) this.property.setFlag(k, v);
+        const actionSummary = this.executeActionPlan(result.actions, 'choice');
+        if (actionSummary.tokensCharged > 0) this.dayReport.tokensUsed += actionSummary.tokensCharged;
         const after = this.property.toJSON();
         const deltas = {};
         for (const key of ['hp','brain','money','bossSatisfy','shaoye_rel','yimin_rel','gf_rel']) {
