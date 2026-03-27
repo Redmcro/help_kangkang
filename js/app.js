@@ -101,7 +101,6 @@ function updateUI(state, stageName) {
     // Fix 5: Show current model name in editor tab
     const modelName = AI_MODELS[state.current_model]?.name || '🧠 纯人肉';
     $('editorTabName').textContent = `kangkang_life.log — ${modelName}`;
-    syncRecoveryActionButtons(state);
 }
 
 function updateBar(valId, barId, value, max) {
@@ -167,15 +166,6 @@ const DELTA_LABELS = {
     gf_rel: '💕'
 };
 
-const RECOVERY_BUTTON_IDS = ['teaRoomBtn', 'chatColleaguesBtn', 'powerNapBtn'];
-const RECOVERY_ACTION_RATE_LIMIT_MS = 1200;
-const RECOVERY_ACTION_MAX_PER_DAY = 1;
-
-let recoveryActionDayKey = '';
-let recoveryActionCountToday = 0;
-let recoveryActionCooldownUntil = 0;
-let recoveryActionCooldownTimer = null;
-
 function buildDeltaHtml(deltas, orderedKeys) {
     if (!deltas) return '';
     return orderedKeys
@@ -183,127 +173,6 @@ function buildDeltaHtml(deltas, orderedKeys) {
         .filter(key => deltas[key] !== 0)
         .map(key => colorDelta(DELTA_LABELS[key] || key, deltas[key], key === 'money'))
         .join(' ');
-}
-
-function forEachRecoveryButton(fn) {
-    RECOVERY_BUTTON_IDS.forEach(id => {
-        const btn = $(id);
-        if (btn) fn(btn);
-    });
-}
-
-function clearRecoveryCooldownTimer() {
-    if (!recoveryActionCooldownTimer) return;
-    clearTimeout(recoveryActionCooldownTimer);
-    recoveryActionCooldownTimer = null;
-}
-
-function getRecoveryDayKey(state = game.property.toJSON()) {
-    return `${state.month || 1}-${state.day || 1}`;
-}
-
-function ensureRecoveryDayState(state = game.property.toJSON()) {
-    const dayKey = getRecoveryDayKey(state);
-    if (recoveryActionDayKey !== dayKey) {
-        recoveryActionDayKey = dayKey;
-        recoveryActionCountToday = 0;
-    }
-}
-
-function scheduleRecoveryCooldownRefresh() {
-    clearRecoveryCooldownTimer();
-    const wait = recoveryActionCooldownUntil - Date.now();
-    if (wait <= 0) return;
-    recoveryActionCooldownTimer = setTimeout(() => {
-        recoveryActionCooldownTimer = null;
-        syncRecoveryActionButtons();
-    }, wait + 20);
-}
-
-function syncRecoveryActionButtons(state = game.property.toJSON()) {
-    ensureRecoveryDayState(state);
-    const now = Date.now();
-    const inCooldown = now < recoveryActionCooldownUntil;
-    const dayLimitReached = recoveryActionCountToday >= RECOVERY_ACTION_MAX_PER_DAY;
-    const shouldDisable = inCooldown || dayLimitReached;
-
-    let tip = '';
-    if (inCooldown) {
-        const secLeft = Math.max(1, Math.ceil((recoveryActionCooldownUntil - now) / 1000));
-        tip = `恢复动作冷却中（${secLeft}s）`;
-        scheduleRecoveryCooldownRefresh();
-    } else {
-        clearRecoveryCooldownTimer();
-        if (dayLimitReached) {
-            tip = `本工作日恢复动作已用（每日${RECOVERY_ACTION_MAX_PER_DAY}次）`;
-        }
-    }
-
-    forEachRecoveryButton(btn => {
-        btn.disabled = shouldDisable;
-        btn.title = tip;
-    });
-}
-
-function resetRecoveryActionLimiter() {
-    recoveryActionDayKey = '';
-    recoveryActionCountToday = 0;
-    recoveryActionCooldownUntil = 0;
-    clearRecoveryCooldownTimer();
-    syncRecoveryActionButtons();
-}
-
-function consumeRecoveryActionQuota() {
-    const state = game.property.toJSON();
-    ensureRecoveryDayState(state);
-
-    const now = Date.now();
-    if (recoveryActionCountToday >= RECOVERY_ACTION_MAX_PER_DAY) {
-        showToast(`每个工作日最多恢复${RECOVERY_ACTION_MAX_PER_DAY}次`);
-        syncRecoveryActionButtons(state);
-        return false;
-    }
-
-    if (now < recoveryActionCooldownUntil) {
-        showToast('操作过快，请稍后');
-        syncRecoveryActionButtons(state);
-        return false;
-    }
-
-    recoveryActionCountToday += 1;
-    recoveryActionCooldownUntil = now + RECOVERY_ACTION_RATE_LIMIT_MS;
-    syncRecoveryActionButtons(state);
-    return true;
-}
-
-function applyInstantAction({ text, effect, type = 'good' }) {
-    const before = game.property.toJSON();
-    game.property.applyEffect(effect);
-    const after = game.property.toJSON();
-
-    const displayDeltas = {};
-    for (const key of Object.keys(effect)) {
-        const actual = (after[key] || 0) - (before[key] || 0);
-        if (actual !== 0) {
-            displayDeltas[key] = actual;
-            continue;
-        }
-
-        // Keep explicit +/- output even when value is clamped.
-        const intended = Number(effect[key]);
-        if (Number.isFinite(intended) && intended !== 0) {
-            displayDeltas[key] = intended;
-        }
-    }
-
-    const deltaHtml = buildDeltaHtml(displayDeltas, Object.keys(effect));
-    const html = deltaHtml ? `${text} ${deltaHtml}` : text;
-    addEventLineHTML(after.month || before.month || 1, after.day || before.day || 1, html, type);
-    game.emitUI();
-
-    const go = game.property.isGameOver();
-    if (go) game.endGame(go);
-    syncRecoveryActionButtons(after);
 }
 
 // ===== Choice Panel =====
@@ -683,7 +552,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             $('eventStream').innerHTML = '';
             lineNum = 1;
             showScreen('gameScreen');
-            resetRecoveryActionLimiter();
         }
     });
 
@@ -693,7 +561,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         achieveMgr.bind(game.legacy); // re-bind after legacy reload
         showScreen('startScreen');
         initStart();
-        resetRecoveryActionLimiter();
     });
 
     // ===== Module 4: Overlay button bindings =====
@@ -716,32 +583,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('switchModelBtn').addEventListener('click', () => {
         renderModelSwitch();
         openOverlay('modelSwitchOverlay');
-    });
-
-    // ===== Recovery actions =====
-    $('teaRoomBtn').addEventListener('click', () => {
-        if (!consumeRecoveryActionQuota()) return;
-        applyInstantAction({
-            text: '🍵 Tea Room',
-            effect: { hp: 8, brain: 4, money: -120 },
-            type: 'good'
-        });
-    });
-    $('chatColleaguesBtn').addEventListener('click', () => {
-        if (!consumeRecoveryActionQuota()) return;
-        applyInstantAction({
-            text: '💬 Chat Colleagues',
-            effect: { brain: 3, shaoye_rel: 3, yimin_rel: 3, bossSatisfy: 1 },
-            type: 'good'
-        });
-    });
-    $('powerNapBtn').addEventListener('click', () => {
-        if (!consumeRecoveryActionQuota()) return;
-        applyInstantAction({
-            text: '😴 Power Nap',
-            effect: { hp: 12, brain: 5, bossSatisfy: -2 },
-            type: 'neutral'
-        });
     });
 
 
@@ -767,6 +608,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('explorer').classList.remove('open');
         $('explorerBackdrop').classList.remove('show');
     });
-
-    resetRecoveryActionLimiter();
 });
