@@ -5,22 +5,66 @@
 ```jsonc
 [
   {
-    "id": "buff_python",
-    "icon": "🎓",
-    "name": "学过Python",
-    "desc": "brain +10",
-    "cost": 30,
-    "effect": { "brain": 10 },
-    "unlock": "完成 1 局"
+    "id": "buff_coffee",
+    "icon": "☕",
+    "name": "咖啡成瘾",
+    "desc": "初始脑力+15，但初始HP-10",
+    "cost": 20,
+    "effect": {
+      "brain": 15,
+      "hp": -10
+    },
+    "unlock": "完成1局"
   },
   {
-    "id": "buff_doubao",
+    "id": "buff_trust_fund",
+    "icon": "💎",
+    "name": "家里有矿",
+    "desc": "初始金钱+8000",
+    "cost": 40,
+    "effect": { "money": 8000 },
+    "unlock": "获得任一胜利结局"
+  },
+  {
+    "id": "buff_minimalist",
+    "icon": "🏕️",
+    "name": "极简生活",
+    "desc": "生活费-800（每月结算时生效）",
+    "cost": 35,
+    "effect": { "living_cost": -800 },
+    "unlock": "破产回家结局"
+  },
+  {
+    "id": "buff_hp_regen",
+    "icon": "🧘",
+    "name": "身体调理",
+    "desc": "月初额外恢复HP+6（上月有连续加班则减半）",
+    "cost": 35,
+    "effect": { "hp_regen_rate": 6 },
+    "unlock": "完成1局"
+  },
+  {
+    "id": "buff_social_butterfly",
+    "icon": "🦋",
+    "name": "社交蝴蝶",
+    "desc": "少爷/亿民初始关系+20，女友+10，魅力+15",
+    "cost": 55,
+    "effect": {
+      "shaoye_rel": 20,
+      "yimin_rel": 20,
+      "gf_rel": 10,
+      "charm": 15
+    },
+    "unlock": "铁三角结局"
+  },
+  {
+    "id": "buff_doubao_master",
     "icon": "🐳",
-    "name": "豆包皮肤",
-    "desc": "豆包质量基础 +15",
+    "name": "豆包大师",
+    "desc": "使用豆包时代码质量额外+20",
     "cost": 80,
-    "effect": {},
-    "unlock": "触发\"豆包之神\"结局"
+    "effect": { "doubao_quality_bonus": 20 },
+    "unlock": "豆包之神结局"
   }
 ]
 ```

@@ -25,8 +25,8 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
   "runs": 0,
   "wins": 0,
   "endings_unlocked": [],
-  "total_money_on_ai": 0,
-  "total_bugs_fixed": 0
+  "events_seen": [],
+  "achievements_unlocked": []
 }
 ```
 
@@ -36,19 +36,16 @@ totalCoins   = base + qualityBonus + satisfyBonus + endingBonus
 
 | Buff | ID | 效果 | 花费 | 解锁条件 |
 |:---|:---|:---|:---|:---|
-| 🎓 学过Python | `buff_python` | brain +10 | 30 | 完成 1 局 |
-| 💳 小有积蓄 | `buff_savings` | money +3000 | 50 | 累计赚 ≥ 50000 |
-| 🏋️ 健身习惯 | `buff_fitness` | hp +15, 熬夜hp -30% | 40 | 某局 hp 未 < 50 |
-| 🧠 过目不忘 | `buff_memory` | brain 衰减减半 | 60 | 某局 brain 未 < 60 |
-| 💰 启动资金 | `buff_token` | money +1500 | 50 | 获得任一胜利结局 |
-| 🐳 豆包皮肤 | `buff_doubao` | 豆包质量 +15 | 80 | "豆包之神"结局 |
-| 🤝 人脉王 | `buff_social` | 初始关系 70 | 40 | "铁三角"结局 |
-| ⚡ 内部推荐 | `buff_recommend` | bossSatisfy 初始 60 | 70 | "AI大师"结局 |
-| 🍀 欧皇体质 | `buff_lucky` | 正面概率 +15% | 60 | 完成 5 局 |
-| 🛡️ 工伤保险 | `buff_insurance` | 猝死阈值 hp≤-20 | 50 | "过劳猝死"结局 |
+| ☕ 咖啡成瘾 | `buff_coffee` | brain +15, hp -10 | 20 | 完成1局 |
+| 💎 家里有矿 | `buff_trust_fund` | money +8000 | 40 | 获得任一胜利结局 |
+| 🏕️ 极简生活 | `buff_minimalist` | living_cost -800（每月结算时生效） | 35 | "破产回家"结局 |
+| 🧘 身体调理 | `buff_hp_regen` | hp_regen_rate +6（上月有连续加班则减半） | 35 | 完成1局 |
+| 🦋 社交蝴蝶 | `buff_social_butterfly` | shaoye_rel +20, yimin_rel +20, gf_rel +10, charm +15 | 55 | "铁三角"结局 |
+| 🐳 豆包大师 | `buff_doubao_master` | doubao_quality_bonus +20（仅作用于豆包质量） | 80 | "豆包之神"结局 |
 
-## 四、事件生成约束
+## 四、字段与设计约束
 
-1. 新 Buff 花费在 30~100 之间
-2. 效果有趣但不过于强大
-3. 解锁条件应与某个结局或游戏风格挂钩
+1. Buff 数量固定为 6；每个 Buff 的 `cost` 必须 `> 0`。
+2. `buff_doubao_master` 必须保留，且效果键固定为 `doubao_quality_bonus`。
+3. `effect` 仅允许使用运行时已接入字段：`hp/money/brain/bossSatisfy/shaoye_rel/yimin_rel/gf_rel/charm/luck/hp_regen_rate/brain_regen_rate/living_cost/doubao_quality_bonus`。
+4. 解锁条件文案必须与现有结局或完成局数挂钩，不允许引入未定义成就名。
