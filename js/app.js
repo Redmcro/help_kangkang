@@ -419,10 +419,15 @@ function renderModelSwitch() {
         if (unlocked && !isCurrent) {
             item.addEventListener('click', () => {
                 game.property.set('current_model', id);
+                // Fix: update dayReport model name so current day shows new model
+                game.dayReport.modelName = m.name;
                 addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
                 showToast(`已切换到 ${m.name}`);
                 renderModelSwitch();
-                closeOverlay('modelSwitchOverlay');
+                // Fix: always close+resume after model switch (don't check wasGamePaused)
+                $('modelSwitchOverlay').classList.remove('show');
+                game.paused = false;
+                game.emitUI();
             });
         }
         list.appendChild(item);

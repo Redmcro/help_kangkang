@@ -346,7 +346,9 @@ export class GameEngine {
         const state = this.property.toJSON();
         const pool = this.eventMgr.getPool(month, state);
 
-        if (pool.length > 0 && Math.random() < 0.85) {
+        // Event trigger rate: higher in early months for better first impression
+        const eventRate = month <= 2 ? 1.0 : month <= 4 ? 0.95 : 0.85;
+        if (pool.length > 0 && Math.random() < eventRate) {
             const picked = this.eventMgr.pickPrioritized(pool);
             if (picked) {
                 const { id, ev } = picked;
