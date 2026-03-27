@@ -292,8 +292,25 @@ export class GameEngine {
 
         // luck bug rate correction (GAME_DESIGN 2.3)
         const luck = this.property.get('luck') || 50;
-        const baseBugRate = model ? model.bugRate : 0.3;
+        let baseBugRate = model ? model.bugRate : 0.3;
+
+        // Pirate models: unstable bug rate (random each day)
+        if (modelId === 'cheapgpt') {
+            baseBugRate = 0.10 + Math.random() * 0.70;  // 10%~80%
+        } else if (modelId === 'fakeopus') {
+            baseBugRate = 0.15 + Math.random() * 0.60;  // 15%~75%
+        }
+
         const hasBug = Math.random() < baseBugRate * (1 - (luck - 50) / 200);
+
+        // Pirate model good/bad day report
+        if (modelId === 'cheapgpt' || modelId === 'fakeopus') {
+            if (baseBugRate < 0.20) {
+                this.dayReport.events.push(`🎲 ${model.name} 今天状态爆表！Bug率极低`);
+            } else if (baseBugRate > 0.65) {
+                this.dayReport.events.push(`🎲 ${model.name} 今天拉胯了，Bug满天飞`);
+            }
+        }
         let brainLoss = 0;
         if (hasBug) {
             brainLoss = Math.floor(stars * (1 - (model ? model.quality : 40) / 100) * 3);

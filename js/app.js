@@ -362,21 +362,20 @@ function checkAndShowAchievements() {
 
 // ===== Module 5: Overlay Helpers =====
 
-let wasGamePaused = false;
+let savedPauseDepth = 0;
 
 function openOverlay(overlayId) {
-    wasGamePaused = game.paused;
-    game.paused = true;
+    savedPauseDepth = game.pauseDepth;
+    game.pause();
     clearTimeout(game.autoTimer);
     $(overlayId).classList.add('show');
 }
 
 function closeOverlay(overlayId) {
     $(overlayId).classList.remove('show');
-    if (!wasGamePaused) {
-        game.paused = false;
-        game.emitUI();
-    }
+    // Restore pause state to what it was before overlay opened
+    game.pauseDepth = savedPauseDepth;
+    if (game.pauseDepth === 0) game.emitUI();
 }
 
 
@@ -424,9 +423,8 @@ function renderModelSwitch() {
                 addEventLine(state.month, state.day || 1, `🤖 切换模型：${m.name}`, 'special');
                 showToast(`已切换到 ${m.name}`);
                 renderModelSwitch();
-                // Fix: always close+resume after model switch (don't check wasGamePaused)
-                $('modelSwitchOverlay').classList.remove('show');
-                game.paused = false;
+                // Just close overlay — restores pause state properly
+                closeOverlay('modelSwitchOverlay');
                 game.emitUI();
             });
         }
