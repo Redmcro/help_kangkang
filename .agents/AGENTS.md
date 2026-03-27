@@ -9,13 +9,16 @@
 1. Parse role keywords from the first user message:
    - `大内总管` / `总管` / `Chief Steward` => role = `Chief Steward`
 2. If role = `Chief Steward`, read `.agents/workflows/chief-steward.md` BEFORE task scanning.
-3. Then continue this document's mandatory workflow in order.
+3. If role = `Chief Steward`, STOP this file here and follow `chief-steward.md` only.
+4. Otherwise continue this document's mandatory workflow in order.
 
 ---
 
 ## 🚨 ABSOLUTE BANS
 
 These will result in INSTANT TERMINATION of your work:
+
+> Applies to non-Chief-Steward officials.
 
 - 🚨 **NO opening browser** — no `browser_subagent`, no `read_browser_page`, no screenshots
 - 🚨 **NO starting servers** — no `http-server`, no `npx serve`, no ports
@@ -69,12 +72,12 @@ Append to `.agents/REPORTS.md` under `## 🔍 Pending Reports`:
 
 **Bug/problem found** (if any):
 ```
-[date] [dept emoji] · ⚠️ 发现问题 — [which file, what's wrong]
+[date] [dept] [issue] — [⚠️发现问题] — [which file, what's wrong]
 ```
 
 **Improvement idea** (if any):
 ```
-[date] [dept emoji] · 💡 改进建议 — [which file, what could be better]
+[date] [dept] [proposal] — [💡改进建议] — [which file, what could be better]
 ```
 
 Rules:

@@ -39,11 +39,20 @@ description: Generate game events using design MDs as context for AI content cre
 4. **Validate**
    - [ ] `month`, `text`, `type`, `system` present
    - [ ] Effect keys valid · conditions formatted correctly (`">60"`)
-   - [ ] IDs unique · no ±50 single effects
+   - [ ] IDs unique · no single effect exceeds ±20
    - [ ] New Flags registered in `attributes.md`
 
-5. **Merge into `data/events/{system_key}.json`**
-   - New file → also add to `_manifest.json`
+5. **Merge into target event file (strict mapping)**
+   - `general` → `data/events/general.json`
+   - `colleague` → `data/events/colleagues.json`
+   - `monthly` → `data/events/monthly.json`
+   - `random` → `data/events/random.json`
+   - `choice` → `data/events/choice.json`
+   - `daily` → `data/events/daily.json`
+   - `model` → `data/events/models.json`
+   - `girlfriend` → `data/events/girlfriend.json`
+   - `life_expense` → `data/events/life_expense.json`
+   - New system file → also add to `_manifest.json`
    - New Flags → update `attributes.md` registry
 
 ## ID Convention

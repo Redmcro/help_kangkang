@@ -1,7 +1,7 @@
 # 🐷 康康逆天改命 — 系统架构设计
 
 > **本文件专注于代码架构和模块接口。**
-> 游戏设计（属性、数值、机制、结局等）请见 [GAME_DESIGN.md](./GAME_DESIGN.md)（同目录）。
+> 游戏设计（属性、数值、机制、结局等）请见 [GAME_DESIGN.md](../design/GAME_DESIGN.md)。
 > 最后更新：2026-03-26
 
 ---
@@ -47,13 +47,13 @@ help_kangkang/
 │   ├── endings/            ← 结局系统设计
 │   ├── economy/            ← 经济系统设计
 │   ├── reincarnation/      ← 转世系统设计
-│   ├── girlfriend/         ← 女朋友系统设计（待创建）
-│   └── life_expense/       ← 生活开销系统设计（待创建）
+│   ├── girlfriend/         ← 女朋友系统设计
+│   └── life_expense/       ← 生活开销系统设计
 ├── .agents/workflows/      ← 工作流定义
 ├── DECREES.md              ← 皇上旨意（进度总览）
 └── README.md               ← 项目导航
 
-注：本文件(ARCHITECTURE.md)、GAME_DESIGN.md 均在 design/ 目录下
+注：本文件位于 `.agents/`，`GAME_DESIGN.md` 位于 `design/`。
 ```
 
 ## 二、分层架构
@@ -280,5 +280,4 @@ help_kangkang/
 1. 在 `design/ai_models/settings.md` 写模型设定
 2. 在 `design/_global/attributes.md` 添加对应 Flag
 3. 用 `/generate-events` 工作流生成解锁事件
-
 

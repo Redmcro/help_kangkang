@@ -44,11 +44,11 @@ Emperor says a few words
 3. Acceptance criteria met
 4. Report in REPORTS.md with `🔍待验收` — **if missing, note violation in commit message**
 5. 🚨 **No browser/port** — check for `browser_subagent`, `http-server`
-6. 🚨 **DECREES.md untouched**
+6. 🚨 **DECREES.md untouched by officials**
 
 ## 📨 Post-Review
 
-- Pass → remove pending report line (keep board clean), delete task file, `git add -A && git commit && git push`
+- Pass → remove pending report line (keep board clean), delete task file, sync `DECREES.md` to remove/close completed decree line, then `git add -A && git commit && git push`
 - Pass but no report → accept if work correct, note `⚠️未报告` in commit message
 - Fail → issue rework decree directly (include `MUST submit report` reminder)
 - Report to Emperor: ≤3 lines
